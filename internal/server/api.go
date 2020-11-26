@@ -21,8 +21,6 @@ func (s *Server) HandleRoutes() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/api/login/{username}", s.getUserIDByUsername).Methods("GET")
-
 	r.HandleFunc("/api/user/{id}", s.mainDashboardHandler).Methods("GET")
 	r.HandleFunc("/api/propertyfinder", s.propertiesHandler).Methods("GET")
 	r.HandleFunc("/api/property", s.getProperty).Queries("owner_id", "{owner_id}").Methods("GET")
@@ -30,34 +28,14 @@ func (s *Server) HandleRoutes() {
 
 	r.HandleFunc("/api/property/{id}", s.removePropertyByUser).Queries("property_id", "{property_id}").Methods("DELETE")
 
-	r.HandleFunc("/api/user", s.addUser).Methods("POST")
+	// sign up and login
+	r.HandleFunc("/api/user/signup", s.addUser).Methods("POST")
+	r.HandleFunc("/api/user/login/username", s.loginUserByUsername).Methods("POST")
+	r.HandleFunc("/api/user/login/email", s.loginUserByEmail).Methods("POST")
+
 	r.HandleFunc("/api/property/{id}", s.addPropertyByUser).Methods("POST")
 
 	http.Handle("/", r)
-}
-
-func (s *Server) getUserIDByUsername(w http.ResponseWriter, r *http.Request) {
-	
-	vars := mux.Vars(r)
-	
-	username, ok := vars["username"]
-	if !ok {
-		log.Info().Msg("missing username")
-		http.Error(w, "missing username", http.StatusBadRequest)
-		return
-	}
-
-	ll := log.With().Str("username", username).Logger()
-
-	userID, err := s.DBHandle.GetUserIDByUsername(username)
-	if err != nil {
-		ll.Error().Err(err).Msg("unable to get user id by username")
-		http.Error(w, fmt.Sprintf("unable to get user id by username: %s", username), http.StatusBadRequest)
-		return
-	}
-
-	w.Write([]byte(userID))
-	return
 }
 
 func (s *Server) mainDashboardHandler(w http.ResponseWriter, r *http.Request) {
@@ -129,6 +107,60 @@ func (s *Server) addUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Write([]byte(fmt.Sprintf("created user: %s", user.ID)))
+}
+
+func (s *Server) loginUserByUsername(w http.ResponseWriter, r *http.Request) {
+
+	type usernameLogin struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+
+	decoder := json.NewDecoder(r.Body)
+    var uLogin usernameLogin
+	err := decoder.Decode(&uLogin)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to decode username login")
+		http.Error(w, "unable to decode username login", http.StatusBadRequest)
+		return
+	}
+
+	id, err := s.DBHandle.GetUserIDByUsername(uLogin.Username, uLogin.Password)
+	if err != nil {
+		log.Warn().Err(err).Str("username", uLogin.Username).Msg("unable to log in user by username")
+		http.Error(w, fmt.Sprintf("unable to log in user by username: %s", uLogin.Username), http.StatusForbidden)
+		return
+	}
+
+	w.Write([]byte(id))
+	return
+}
+
+func (s *Server) loginUserByEmail(w http.ResponseWriter, r *http.Request) {
+	
+	type emailLogin struct {
+		Email string `json:"email"`
+		Password string `json:"password"`
+	}
+
+	decoder := json.NewDecoder(r.Body)
+    var eLogin emailLogin
+	err := decoder.Decode(&eLogin)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to decode email login")
+		http.Error(w, "unable to decode email login", http.StatusBadRequest)
+		return
+	}
+
+	id, err := s.DBHandle.GetUserIDByEmail(eLogin.Email, eLogin.Password)
+	if err != nil {
+		log.Warn().Err(err).Str("email", eLogin.Email).Msg("unable to log in user by email")
+		http.Error(w, fmt.Sprintf("unable to log in user by email: %s", eLogin.Email), http.StatusForbidden)
+		return
+	}
+
+	w.Write([]byte(id))
+	return
 }
 
 // addPropertyByUser will add a property to the database associated with a user.
@@ -285,6 +317,7 @@ func validateNewUser(user *db.User) error {
 func sanitizeNewUser(user *db.User) {
 	user.FirstName = strings.ToLower(user.FirstName)
 	user.LastName = strings.ToLower(user.LastName)
+	user.Email = strings.ToLower(user.Email)
 }
 
 // validateNewProperty checks the property that is submitted to our API and makes sure it is valid.

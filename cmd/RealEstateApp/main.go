@@ -41,7 +41,7 @@ func main() {
 		defer wg.Done()
 		
 		// Listen and serve.
-		http.ListenAndServe(":3000", nil)
+		http.ListenAndServe(":8080", nil)
 	}(&wg)
 
 	wg.Wait()

@@ -53,14 +53,39 @@ func (handle *Handle) GetUserByID(id string) (*User, error) {
 }
 
 // GetUserIDByUsername returns the id associated with a username.
-func (handle *Handle) GetUserIDByUsername(username string) (string, error) {
+func (handle *Handle) GetUserIDByUsername(username, password string) (string, error) {
 
 	if username == "" {
 		return "", errors.New("empty username")
 	}
 
+	if password == "" {
+		return "", errors.New("empty password")
+	}
+
 	var users User
-	if err := handle.DB.Select("id").Where("username = ?", username).Find(&users).Error; err != nil {
+	if err := handle.DB.Select("id").Where("username = ?", username).Where("password = ?", password).Find(&users).Error; err != nil {
+		return "", err
+	}
+
+	if users.ID == "" {
+		return "", errors.New("database returned empty user id")
+	}
+	return users.ID, nil
+}
+
+func (handle *Handle) GetUserIDByEmail(email, password string) (string, error) {
+
+	if email == "" {
+		return "", errors.New("empty email")
+	}
+
+	if password == "" {
+		return "", errors.New("empty password")
+	}
+
+	var users User
+	if err := handle.DB.Select("id").Where("email = ?", email).Where("password = ?", password).Find(&users).Error; err != nil {
 		return "", err
 	}
 
