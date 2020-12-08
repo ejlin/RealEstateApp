@@ -1,0 +1,313 @@
+#main_dashboard_parent {
+    display: block;
+    float: left;
+    height: calc(100% - 61px);
+    margin-left: 110px;
+    min-width: 1000px;
+    width: calc(100% - 121px - 22.5%);
+    z-index: -1;
+}
+
+#main_dashboard_title {
+    display: inline-block;
+    width: 100%;
+}
+
+#main_dashboard_welcome_box_date {
+    font-size: 0.92em;
+    margin-top: 5px;
+}
+
+#main_dashboard_welcome_box_name {
+    font-size: 1.675em;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#main_dashboard_welcome_box {
+    margin-left: 80px;
+    margin-top: 80px;
+    width: calc(100% - 160px);
+}
+
+.main_dashboard_title_cards {
+    background-color: white;
+    border: 1px solid #E0E2e4;
+    border-radius: 4px;
+    float: left;
+    height: 130px;
+    margin-left: 40px;
+    margin-top: 40px;
+    width: 260px;
+}
+
+.main_dashboard_title_cards_icon {
+    border-radius: 50%;
+    float: left;
+    height: 35px;
+    margin-left: 25px;
+    margin-top: calc((125px - 50px)/2);
+    padding: 7.5px;
+    width: 35px;
+}
+
+.main_dashboard_title_cards_header {
+    background-color: white;
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.main_dashboard_title_card_right_box {
+    background-color: white;
+    float: left;
+    height: 50px;
+    margin-left: 20px;
+    margin-top: calc((125px - 50px)/2);
+}
+
+
+.main_dashboard_title_cards_summary {
+    background-color: white;
+    font-size: 0.90em;
+    margin-top: 0;
+}
+
+/**** Main Dashboard 2nd tier ****/
+
+#main_dashboard_body {
+    margin-top: 40px;
+    width: 100%;
+}
+
+#main_dashboard_trending_graph {
+    background-color: white;
+    border: 1px solid #E0E2e4;
+    border-radius: 4px;
+    height: 450px;
+    width: 864px; /* 260 + 260 + 260 + 40 + 40 + 4*/
+    margin-left: 40px;
+}
+
+#main_dashboard_right_side_bar {
+    background-color: white;
+    width: calc(520px + 40px + 2px);
+}
+
+#main_dashboard_summary {
+    background-color: #F6F7F9;
+    right: 0;
+    height: 100vh;
+    min-width: 350px;
+    position: fixed;
+    width: 22.5%;
+}
+
+#main_dashboard_summary_estimated_net_worth {
+    background-color: #296CF6;
+    border-radius: 20px;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 12px 40px 0 rgba(0, 0, 0, 0.19);
+    height: 100px;
+    margin-left: 17.5%;
+    margin-top: 80px;
+    width: calc(70%);
+}
+
+#main_dashboard_summary_cards_box {
+    border-radius: 4px;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.09), 0 12px 40px 0 rgba(0, 0, 0, 0.09);
+    height: 125px;
+    margin-left: 80px;
+    margin-top: 25px;
+    min-width: 1000px;
+    width: calc(100% - 160px);
+}
+
+.main_dashboard_summary_cards {
+    float: left;
+    height: 100px;
+    margin-left: 35px;
+    margin-top: 25px;
+    width: calc((100% - 175px) / 4);
+}
+
+.main_dashboard_summary_cards_icon {
+    border-radius: 50px;
+    float: left;
+    height: 35px;
+    margin-top: 8.5px;
+    padding: 12.5px;
+    width: 35px;
+}
+
+.main_dashboard_summary_cards_text_box {
+    float: left;
+    margin-left: 15px;
+    margin-top: 12.5px;    
+}
+
+.main_dashboard_summary_cards_title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 0;
+    margin-top: 0px;
+    padding-bottom: 0;
+}
+
+.main_dashboard_summary_cards_subtitle {
+    font-size: 0.85em;
+    margin-top: 0px;
+    padding-top: 0;
+}
+
+#main_dashboard_summary_cards_icon_properties {
+    background-color: #FBE9E1; 
+    color: #EE9E77;
+}
+
+#main_dashboard_summary_cards_icon_monthly_income {
+    background-color: #dbebd2; 
+    color: #85bb65;
+}
+
+#main_dashboard_summary_cards_icon_monthly_arr {
+    background-color:#eaf5fb;
+    color: #296CF6; 
+}
+
+#main_dashboard_summary_cards_icon_monthly_total_cost {
+    background-color: #ffe9f1;
+    color:#e13f71;
+}
+
+#main_dashboard_summary_estimated_net_worth_subtitle {
+    background-color: transparent !important;
+    color: white;
+    float: left;
+    font-size: 0.9em;
+    margin-left: 25px;
+    margin-right: 25px;
+    margin-top: 17.5px;
+}
+
+#main_dashboard_summary_estimated_net_worth_title {
+    background-color: transparent !important;
+    color: white;
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-left: 25px;
+    margin-top: 5px;
+}
+
+#main_dashboard_summary_notifications {
+    background-color: transparent !important;
+    float: left;
+    margin-left: 10%;
+    margin-top: 60px;
+    width: 80%;
+}
+
+#main_dashboard_summary_notifications_icon {
+    background-color: transparent !important;
+    float: left;
+    height: 25px;
+    width: 25px;
+}
+
+#main_dashboard_summary_notifications_title{
+    background-color: transparent !important;
+    float: left;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-left: 7.5px;
+}
+
+#main_dashboard_summary_notifications_no_notifications {
+    background-color: transparent !important;
+    border-radius: 4px;
+    margin-top: 25px;
+    width: 100%; 
+}
+
+#main_dashboard_summary_notifications_no_notifications_text {
+    background-color: transparent !important;
+    color: grey;
+    text-align: center;
+}
+
+#main_dashboard_bottom_box {
+    margin-left: 80px;
+    margin-right: 80px; 
+    margin-top: 40px;
+    min-width: 1000px;
+    width: calc((100% - 160px));
+}
+
+#main_dashboard_bottom_box_left {
+    float: left;
+    width: 60%;
+}
+
+#main_dashboard_bottom_box_right {
+    float: right;
+    width: 40%;
+}
+
+#main_dashboard_occupied_circle_box {
+    float: right;
+    height: 125px;
+    margin-top: 25px;
+    margin-right: 25px;
+    width: 125px;
+}
+
+#main_dashboard_occupied_circle_text_box {
+    float: left;
+    height: 125px;
+    margin-left: 40px;
+    margin-top: 25px;
+    width: calc(100% - 40px - 20px - 25px - 125px);
+}
+
+#main_dashboard_occupied_circle_text_box_title {
+    font-size: 2.4em;
+    font-weight: bold;
+    margin-bottom: 0;
+    margin-top: 10px;
+    padding-bottom: 0;
+}
+
+#main_dashboard_occupied_circle_text_box_subtitle {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-top: -5px;
+    padding-top: 0;
+}
+
+#main_dashboard_occupied_circle_text_box_footer {
+    color: grey;
+    font-size: 0.85em;
+    margin-top: 5px;
+}
+
+#main_dashboard_occupied_box {
+    border-radius: 4px;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.09), 0 12px 40px 0 rgba(0, 0, 0, 0.09);
+    float: right;
+    height: 350px;
+    min-width: 350px;
+    width: calc(100% - 20px - 20px - 20px);
+}
+
+#main_dashboard_occupied_circle {
+    height: 40px;
+}
+
+.main_dashboard_occupid_circle_parent:first-child {
+    margin-top: 0px;
+}
+
+.main_dashboard_occupid_circle_parent{
+    margin-top: 30px;
+}

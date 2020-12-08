@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import './CSS/Style.css';
 
 class SignUp extends React.Component {
     constructor(props) {

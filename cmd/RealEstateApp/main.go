@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"sync"
 
-	"../../internal/server"
 	"../../internal/db"
+	"../../internal/server"
 
 	"github.com/rs/zerolog/log"
 )
@@ -25,9 +25,9 @@ func main() {
 
 	log.Info().Msg("successfully connected to database")
 
-	s := &server.Server {
+	s := &server.Server{
 		ID: "test",
-		DBHandle: &db.Handle {
+		DBHandle: &db.Handle{
 			DB: dbHandle,
 		},
 	}
@@ -39,11 +39,11 @@ func main() {
 	wg.Add(1)
 	go func(wg *sync.WaitGroup) {
 		defer wg.Done()
-		
+
 		// Listen and serve.
 		http.ListenAndServe(":8080", nil)
 	}(&wg)
 
 	wg.Wait()
-	
+
 }

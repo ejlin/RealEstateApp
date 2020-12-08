@@ -1,0 +1,119 @@
+.properties_dashboard_property_type_box {
+    display: inline-block;
+    height: calc(100vh - 60px - 1px);
+    margin-left: 120px;
+    margin-top: 60px;
+    position: fixed;
+    width: calc(100% - 120px);
+}
+
+#properties_dashboard_property_inner_box {
+    float: left;
+    padding-bottom: 60px;
+    margin-left: 40px;
+    margin-top: 10px;
+    padding-right: 25px;
+    height: calc(90vh - 60px - 60px);
+    min-width: 750px;
+    overflow: scroll;
+    position: relative;
+    width: calc(70%);   
+}
+
+#properties_dashboard_property_inner_box::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+#properties_dashboard_property_inner_box {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+.properties_dashboard_property_type_icon {
+    background-color:  #eee6f9;
+    border-radius: 4px;
+    color: #6532cd;
+    float: left;
+    height: 35px;
+    margin-left: 10px;
+    padding: 10px;
+    width: 30px;
+}
+
+.properties_dashboard_property_type_title {
+    color: grey;
+    float: left;
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-left: 15px;
+    margin-top: 15px;
+}   
+
+.properties_dashboard_property_title_parent {
+    margin-top: 25px;
+}
+
+#properties_dashboard_tags_box {
+    margin-left: 40px;
+    margin-top: 40px;
+    padding: 0;
+}
+
+.properties_dashboard_tags_box_list {
+    background-color:  #eee6f9;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #6532cd;
+    cursor: pointer;
+    float: left;
+    font-size: 1.0em;
+    list-style: none;
+    margin: 0;
+    margin-bottom: 10px;
+    margin-right: 25px;
+    padding: 10px 17.5px 10px 17.5px;
+    transition: 0.5s;
+}
+
+.properties_dashboard_tags_box_list:hover {
+    opacity: 0.7;
+}
+
+#properties_dashboard_right_box {
+    float: left;
+    height: 100px;
+    margin-right: 40px;
+    margin-left: 0;
+    margin-top: 10px;
+    padding-left: 0;
+    width: calc(100% - 70% - 40px - 40px - 40px - 25px);   /* 40px for margin right, 40px for margin left, 40px for inner_box's 40px margin left, 25px for inner_box padding right */
+}
+
+#properties_dashboard_right_box_summary_box {
+    background-color: #6532cd;
+    border-radius: 4px;
+    width: 100%;
+}
+
+#properties_dashboard_right_box_summary_title {
+    background-color: transparent;
+    color: white;
+    font-size: 3.3em;
+    font-weight: bold;
+    margin-left: 50px;
+    margin-top: 35px;
+    padding-top: 15px;
+}
+
+#properties_dashboard_right_box_summary_subtitle {
+    background-color: transparent;
+    font-size: 1.3em;
+    color: white;
+    margin-left: 50px;
+    margin-top: 0;
+}
+
+#piechart {
+    background-color: #6532cd;
+}

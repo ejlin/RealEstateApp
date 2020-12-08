@@ -1,0 +1,14 @@
+body {    
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.clearfix {
+    clear: both;
+}
+
+* {
+    margin: 0;
+    /* font-family: 'Padauk', sans-serif; */
+    font-family: 'Source Sans Pro', sans-serif;
+}

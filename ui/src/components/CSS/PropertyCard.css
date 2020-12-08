@@ -1,0 +1,76 @@
+.propertyCard {
+    background-color: white;
+    border: 1px solid #E0E2e4;
+    border-radius: 4px;
+    float: left;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    padding: 20px 15px 20px 25px;
+    width: calc(100% - 2px - 50px);
+}
+
+.property_card_address {
+    background-color: white;
+    float: left;
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-bottom: 0;
+    margin-top: 0px;
+}
+
+.property_card_delete_button {
+    background-color: #d3d3d3;
+}
+
+.property_card_edit_button {
+    background-color: #eee6f9;
+    color: #6e4ec1;   
+}
+
+.property_card_analytics_button {
+    background-color: #FBE9E1; 
+    color: #EE9E77;
+}
+
+.property_card_file_button {
+    background-color: #dbebd2;
+    color: #85bb65;
+}
+
+.property_card_end_button {
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+    height: 22.5px;
+    margin-right: 10px;
+    padding: 7.5px;
+    transition: 0.5s;
+    width: 37.5px;
+}
+
+.property_card_end_button:hover {
+    opacity: 0.7;
+}
+
+.property_card_title_button {
+    background-color: #dbebd2; 
+    border-radius: 25px;
+    cursor: pointer;
+    float: right;
+    margin-right: 10px;
+    padding: 7.5px 15px 7.5px 15px;
+    transition: 0.5s;
+}
+
+.property_card_title_button:hover {
+    opacity: 0.7;
+}
+
+#property_card_sub_address {
+    background-color: transparent;
+    color: grey;
+    float: left;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 10px;
+}

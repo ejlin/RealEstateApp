@@ -54,8 +54,13 @@ class Login extends React.Component {
         }
         axiosCall.then(response => {
             if (response != null) {
-                this.setState({currUserID: response.data})
-                this.setState({redirect: "/dashboard"})
+                this.setState({
+                    currUserID: response.data["id"],
+                    currUserFirstName: response.data["first_name"],
+                    currUserLastName: response.data["last_name"],
+                    currEmail: response.data["email"],
+                    redirect: "/dashboard"
+                });
             }
             
         }).catch(error => console.error('timeout exceeded'));
@@ -66,7 +71,10 @@ class Login extends React.Component {
             return <Redirect to={{
                 pathname: this.state.redirect,
                 state: {
-                    id: this.state.currUserID
+                    id: this.state.currUserID,
+                    first_name: this.state.currUserFirstName,
+                    last_name: this.state.currUserLastName,
+                    email: this.state.currUserEmail
                 }
             }} />
         }
@@ -80,7 +88,7 @@ class Login extends React.Component {
                     <br></br>
                     <label>
                     Password:
-                    <input type="text" name="password" onChange={this.handlePasswordChange} />
+                    <input type="password" name="password" onChange={this.handlePasswordChange} />
                     </label>
                     <input type="submit" value="Login"></input>
                 </form>

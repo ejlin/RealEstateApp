@@ -1,9 +1,9 @@
 package db
 
 import (
-	_ "github.com/lib/pq"
-	"github.com/jinzhu/gorm"
 	_ "github.com/GoogleCloudPlatform/cloudsql-proxy/proxy/dialers/postgres"
+	"github.com/jinzhu/gorm"
+	_ "github.com/lib/pq"
 )
 
 type Handle struct {
