@@ -4,7 +4,7 @@
     height: calc(100% - 61px);
     margin-left: 110px;
     min-width: 1000px;
-    width: calc(100% - 121px - 22.5%);
+    width: calc(100% - 121px - 20%);
     z-index: -1;
 }
 
@@ -95,24 +95,6 @@
     width: calc(520px + 40px + 2px);
 }
 
-#main_dashboard_summary {
-    background-color: #F6F7F9;
-    right: 0;
-    height: 100vh;
-    min-width: 350px;
-    position: fixed;
-    width: 22.5%;
-}
-
-#main_dashboard_summary_estimated_net_worth {
-    background-color: #296CF6;
-    border-radius: 20px;
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 12px 40px 0 rgba(0, 0, 0, 0.19);
-    height: 100px;
-    margin-left: 17.5%;
-    margin-top: 80px;
-    width: calc(70%);
-}
 
 #main_dashboard_summary_cards_box {
     border-radius: 4px;
@@ -187,7 +169,7 @@
     float: left;
     font-size: 0.9em;
     margin-left: 25px;
-    margin-right: 25px;
+    margin-right: 5px;
     margin-top: 17.5px;
 }
 
@@ -237,6 +219,7 @@
 }
 
 #main_dashboard_bottom_box {
+    padding-bottom: 40px;
     margin-left: 80px;
     margin-right: 80px; 
     margin-top: 40px;
@@ -246,40 +229,44 @@
 
 #main_dashboard_bottom_box_left {
     float: left;
-    width: 60%;
+    height: 350px;
+    width: 62%;
 }
 
 #main_dashboard_bottom_box_right {
     float: right;
-    width: 40%;
+    width: 38%;
+}
+
+.main_dashboard_bottom_box_title {
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
 #main_dashboard_occupied_circle_box {
     float: right;
-    height: 125px;
+    height: 110px;
     margin-top: 25px;
-    margin-right: 25px;
-    width: 125px;
+    width: 110px;
 }
 
 #main_dashboard_occupied_circle_text_box {
     float: left;
-    height: 125px;
-    margin-left: 40px;
+    height: 100px;
     margin-top: 25px;
-    width: calc(100% - 40px - 20px - 25px - 125px);
+    width: calc(100% - 20px - 110px);
 }
 
 #main_dashboard_occupied_circle_text_box_title {
-    font-size: 2.4em;
+    color: #565656;
+    font-size: 2.0em;
     font-weight: bold;
-    margin-bottom: 0;
     margin-top: 10px;
-    padding-bottom: 0;
 }
 
 #main_dashboard_occupied_circle_text_box_subtitle {
-    font-size: 1.3em;
+    color: #565656;
+    font-size: 1.4em;
     font-weight: bold;
     margin-top: -5px;
     padding-top: 0;
@@ -287,27 +274,69 @@
 
 #main_dashboard_occupied_circle_text_box_footer {
     color: grey;
-    font-size: 0.85em;
+    font-size: 1em;
     margin-top: 5px;
 }
 
 #main_dashboard_occupied_box {
     border-radius: 4px;
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.09), 0 12px 40px 0 rgba(0, 0, 0, 0.09);
+    /* box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.09), 0 12px 40px 0 rgba(0, 0, 0, 0.09); */
     float: right;
-    height: 350px;
     min-width: 350px;
-    width: calc(100% - 20px - 20px - 20px);
+    width: 100%;
 }
 
 #main_dashboard_occupied_circle {
     height: 40px;
 }
 
-.main_dashboard_occupid_circle_parent:first-child {
-    margin-top: 0px;
+#main_dashboard_occupied_circle_parent_first_child {
+    margin-top: 5px !important;
 }
 
-.main_dashboard_occupid_circle_parent{
+.main_dashboard_occupied_circle_parent{
     margin-top: 30px;
+}
+
+#main_dashboard_portfolio_growth_parent {
+    margin-top: 50px;
+}
+
+#main_dashboard_yoy_box {
+    float: left;
+    margin-top: 40px;
+    padding: 15px;
+    width: calc(100% - 60px - 30px);
+}
+
+#main_dashboard_yoy_icon {
+    background-color: #F6F7F9;
+    border-radius: 50px;
+    color: #296CF6;
+    float: left;
+    height: 50px;
+    padding: 12.5px;
+    width: 50px;
+}
+
+#main_dashboard_yoy_text_box {
+    float: left;
+    margin-left: 25px;
+    margin-top: 5px;
+}
+
+#main_dashboard_yoy_title {
+    font-size: 1.6em;
+    font-weight: bold;
+}
+
+#main_dashboard_yoy_subtitle {
+    font-size: 1.2em;
+}
+
+#main_dashboard_missing_estimate_icon {
+    color: white;
+    float: left;
+    margin-left: 0px;
+    margin-top: 20px;
 }

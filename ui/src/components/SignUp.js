@@ -1,6 +1,10 @@
 import React from 'react';
 import axios from 'axios';
+
 import './CSS/Style.css';
+import './CSS/SignUp.css';
+
+import { Redirect } from "react-router-dom";
 
 class SignUp extends React.Component {
     constructor(props) {
@@ -11,7 +15,6 @@ class SignUp extends React.Component {
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
         this.handleLastNameChange = this.handleLastNameChange.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
-        this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleConfirmPasswordChange = this.handleConfirmPasswordChange.bind(this);
     }
@@ -26,10 +29,6 @@ class SignUp extends React.Component {
 
     handleEmailChange(e) {
         this.setState({email: e.target.value});
-    }
-
-    handleUsernameChange(e) {
-        this.setState({username: e.target.value});
     }
 
     handlePasswordChange(e) {
@@ -50,49 +49,45 @@ class SignUp extends React.Component {
                 first_name: this.state.firstName,
                 last_name: this.state.lastName,
                 email: this.state.email,
-                username: this.state.username,
                 password: this.state.password,
             }
         })
         .then(response => {
-            console.log(response);
+            if (response != null) {
+                this.setState({
+                    currUserID: response.data["id"],
+                    currUserFirstName: response.data["first_name"],
+                    currUserLastName: response.data["last_name"],
+                    currUserEmail: response.data["email"],
+                    currUserUsername: response.data["username"],
+                    redirect: "/dashboard"
+                });
+            }
         }).catch(error => console.error('timeout exceeded'));
     }
 
     render() {
+        if (this.state.redirect) {
+            return <Redirect to={{
+                pathname: this.state.redirect,
+                state: {
+                    id: this.state.currUserID,
+                    firstName: this.state.currUserFirstName,
+                    lastName: this.state.currUserLastName,
+                    email: this.state.currUserEmail,
+                    username: this.state.currUserUsername
+                }
+            }} />
+        }
         return (
             <div className="App">
                 <form onSubmit={this.handleSubmit}>
-                    <label>
-                    First Name:
-                    <input type="text" name="first_name" onChange={this.handleFirstNameChange}/>
-                    </label>
-                    <br></br>
-                    <label>
-                    Last Name:
-                    <input type="text" name="last_name" onChange={this.handleLastNameChange}/>
-                    </label>
-                    <br></br>
-                    <label>
-                    Email:
-                    <input type="text" name="email" onChange={this.handleEmailChange}/>
-                    </label>
-                    <br></br><label>
-                    Username:
-                    <input type="text" name="username" onChange={this.handleUsernameChange} />
-                    </label>
-                    <br></br>
-                    <label>
-                    Password:
-                    <input type="text" name="password" onChange={this.handlePasswordChange} />
-                    </label>
-                    <br></br>
-                    <label>
-                    Confirm Password:
-                    <input type="text" name="confirm_password" onChange={this.handleConfirmPasswordChange} />
-                    </label>
-                    <br></br>
-                    <input type="submit" value="Sign Up"></input>
+                    <input className="signup_input" placeholder="First Name" type="text" name="first_name" onChange={this.handleFirstNameChange}/>
+                    <input className="signup_input" placeholder="Last Name" type="text" name="last_name" onChange={this.handleLastNameChange}/>
+                    <input className="signup_input" placeholder="Email" type="text" name="email" onChange={this.handleEmailChange}/>
+                    <input className="signup_input" placeholder="Password" type="password" name="password" onChange={this.handlePasswordChange} />
+                    <input className="signup_input" placeholder="Confirm Password" type="password" name="confirm_password" onChange={this.handleConfirmPasswordChange} />
+                    <input id="signup_submit" type="submit" value="Sign Up"></input>
                 </form>
             </div>
         )

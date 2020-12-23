@@ -20,10 +20,20 @@ type User struct {
 	// External fields.
 	FirstName string `json:"first_name",sql:"type:varchar(90)"`
 	LastName  string `json:"last_name",sql:"type:varchar(90)"`
-	Username  string `json:"username",sql:"type:varchar(50)"`
 	Password  string `json:"password",sql:"type:varchar(50)"`
 	Email     string `json:"email",sql:"type:varchar(50)"`
+
+	Plan PlanType `json:"plan",sql:"type:ENUM('Free', 'Basic', 'Business', 'Enterprise')"`
 }
+
+type PlanType string
+
+const (
+	Free         PropertyType = "Free"
+	Basic PropertyType = "Basic"
+	Business      PropertyType = "Business"
+	Enterprise  PropertyType = "Enterprise"
+)
 
 // AddUser will add a new user to the database.
 func (handle *Handle) AddUser(user *User) error {

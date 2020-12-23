@@ -21,16 +21,22 @@ func (s *Server) HandleRoutes() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/api/user/{id}", s.mainDashboardHandler).Methods("GET")
+	r.HandleFunc("/api/user/{id}", s.getUser).Methods("GET")
 	r.HandleFunc("/api/propertyfinder", s.propertiesHandler).Methods("GET")
 
 	r.HandleFunc("/api/user/property/{id}", s.getProperties).Methods("GET")
 	r.HandleFunc("/api/user/property/{id}", s.removePropertyByUser).Queries("property_id", "{property_id}").Methods("DELETE")
 	r.HandleFunc("/api/user/property/{id}", s.addPropertyByUser).Methods("POST")
 
+	// Order matters. Routing is done sequentially, so the first one must be the one that doesn't satisfy the second one.
+	r.HandleFunc("/api/user/files/{id}/{property_id}/{file_name}", s.getFile).Queries("request", "{request}").Methods("GET")
+	r.HandleFunc("/api/user/files/{id}/{property_id}/{file_name}", s.deleteFile).Methods("DELETE")
+	r.HandleFunc("/api/user/files/{id}/{property_id}", s.getPropertyFileslistByUser).Methods("GET")
+	r.HandleFunc("/api/user/files/{id}", s.getFileslistByUser).Methods("GET")
+	r.HandleFunc("/api/user/files/upload/{id}", s.uploadFileByUser).Methods("POST")
+
 	// sign up and login
 	r.HandleFunc("/api/user/signup", s.addUser).Methods("POST")
-	r.HandleFunc("/api/user/login/username", s.loginUserByUsername).Methods("POST")
 	r.HandleFunc("/api/user/login/email", s.loginUserByEmail).Methods("POST")
 
 	r.HandleFunc("/api/property/{property_id}", s.getProperty).Methods("GET")
@@ -38,7 +44,7 @@ func (s *Server) HandleRoutes() {
 	http.Handle("/", r)
 }
 
-func (s *Server) mainDashboardHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Server) getUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
@@ -106,7 +112,15 @@ func (s *Server) addUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write([]byte(fmt.Sprintf("created user: %s", user.ID)))
+	mUser, err := json.Marshal(user)
+	if err != nil {
+		log.Warn().Err(err).Str("name", user.FirstName + " " + user.LastName).Msg("unable to marshal created user")
+		http.Error(w, "unable to marshal created user", http.StatusForbidden)
+		return
+	}
+
+	w.Write(mUser)
+	return
 }
 
 // ResponseUser is a user struct that we can send back in our API that is stripped of internal information like
@@ -117,42 +131,6 @@ type ResponseUser struct {
 	Username  string `json:"username"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
-}
-
-func (s *Server) loginUserByUsername(w http.ResponseWriter, r *http.Request) {
-
-	type usernameLogin struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}
-
-	decoder := json.NewDecoder(r.Body)
-	var uLogin usernameLogin
-	err := decoder.Decode(&uLogin)
-	if err != nil {
-		log.Error().Err(err).Msg("unable to decode username login")
-		http.Error(w, "unable to decode username login", http.StatusBadRequest)
-		return
-	}
-
-	user, err := s.DBHandle.GetUserByUsername(uLogin.Username, uLogin.Password)
-	if err != nil {
-		log.Warn().Err(err).Str("username", uLogin.Username).Msg("unable to log in user by username")
-		http.Error(w, fmt.Sprintf("unable to log in user by username: %s", uLogin.Username), http.StatusForbidden)
-		return
-	}
-
-	rUser := convertToResponseUser(user)
-
-	mUser, err := json.Marshal(rUser)
-	if err != nil {
-		log.Warn().Err(err).Str("username", uLogin.Username).Msg("unable to marshal user returned by username")
-		http.Error(w, fmt.Sprintf("unable to marshal user returned by username: %s", uLogin.Username), http.StatusForbidden)
-		return
-	}
-
-	w.Write(mUser)
-	return
 }
 
 func (s *Server) loginUserByEmail(w http.ResponseWriter, r *http.Request) {
@@ -195,10 +173,234 @@ func convertToResponseUser(user *db.User) ResponseUser {
 	return ResponseUser{
 		ID:        user.ID,
 		Email:     user.Email,
-		Username:  user.Username,
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
 	}
+}
+
+func (s *Server) getFileslistByUser(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Info().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	files, err := s.getCloudFileslistByUser(ctx, userID)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to get fileslist by user")
+		http.Error(w, "unable to get fileslist by user", http.StatusBadRequest)
+		return
+	}
+
+	if len(files) == 0 {
+		ll.Warn().Msg("no files found for user")
+		http.Error(w, "no files found for user", http.StatusNotFound)
+		return
+	}
+	
+	RespondToRequest(w, files)
+	return
+}
+
+type File struct {
+	UserID string `json:"user_id"`
+	Test string `json:"file"`
+}
+
+type FormData struct {
+	Data File `json:"form_data"`
+}
+
+func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
+
+	err := r.ParseMultipartForm(32 << 20) // maxMemory 32MB
+	if err != nil {
+		log.Error().Err(err).Msg("failed to parse multipart message")
+		http.Error(w, "failed to parse multipart message", http.StatusBadRequest)
+		return
+	}
+
+	file, handler, err := r.FormFile("file")
+    if err != nil {
+		log.Error().Err(err).Msg("error retrieving the file")
+		http.Error(w, "error retrieving the file", http.StatusBadRequest)
+        return
+    }
+	defer file.Close()
+
+	propertyID := r.FormValue("property_id")
+	if propertyID == "" {
+		log.Error().Msg("missing property id")
+		http.Error(w, "missing property id", http.StatusBadRequest)
+        return
+	}
+
+	fileType := r.FormValue("file_type")
+	if fileType == "" {
+		log.Error().Msg("missing file type")
+		http.Error(w, "missing file type", http.StatusBadRequest)
+        return
+	}
+	
+	fmt.Printf("PropertyId: %+v\n", val)
+    fmt.Printf("Uploaded File: %+v\n", handler.Filename)
+    fmt.Printf("File Size: %+v\n", handler.Size)
+    fmt.Printf("MIME Header: %+v\n", handler.Header)
+	RespondToRequest(w, "success")
+	return
+
+}
+
+// getFile either downloads an individual file or returns a signed URl.
+func (s *Server) getFile(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Info().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	propertyID, ok := vars["property_id"]
+	if !ok {
+		ll.Warn().Msg("property id not set")
+		http.Error(w, "property id not set", http.StatusBadRequest)
+		return
+	}
+
+	ll = ll.With().Str("property_id", propertyID).Logger()
+
+	fileName, ok := vars["file_name"]
+	if !ok {
+		ll.Warn().Msg("file name not set")
+		http.Error(w, "file name not set", http.StatusBadRequest)
+		return
+	}
+
+	ll = ll.With().Str("file_name", fileName).Logger()
+
+	request, ok := vars["request"]
+	if !ok {
+		ll.Warn().Msg("file type not set")
+		http.Error(w, "file type not set", http.StatusBadRequest)
+		return
+	}
+
+	ll = ll.With().Str("request", request).Logger()
+
+	switch(request) {
+	case "download":
+		s.getFileData(ctx, userID, propertyID, fileName, w, r)
+		return
+	case "signed_url":
+		url, err := s.getSignedURL(ctx, userID, propertyID, fileName)
+		if err != nil {
+			ll.Warn().Err(err).Msg("error getting signed url")
+			http.Error(w, "error getting signed url", http.StatusBadRequest)
+		}
+		RespondToRequest(w, url)
+		return
+	}
+
+	return
+}
+
+func (s *Server) deleteFile(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Info().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	propertyID, ok := vars["property_id"]
+	if !ok {
+		ll.Warn().Msg("property id not set")
+		http.Error(w, "property id not set", http.StatusBadRequest)
+		return
+	}
+
+	ll = ll.With().Str("property_id", propertyID).Logger()
+
+	fileName, ok := vars["file_name"]
+	if !ok {
+		ll.Warn().Msg("file name not set")
+		http.Error(w, "file name not set", http.StatusBadRequest)
+		return
+	}
+
+	ll = ll.With().Str("file_name", fileName).Logger()
+
+	err := s.deleteStorageFile(ctx, userID, propertyID, fileName)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to delete file")
+		http.Error(w, "unable to delete file", http.StatusInternalServerError)
+		return
+	}
+
+	ll.Info().Msg("file deleted successfully")
+	w.Write([]byte("success"))
+	return
+}
+
+// getPropertyFileslistByUser returns all the files associated with a user.
+func (s *Server) getPropertyFileslistByUser(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Info().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+
+	propertyID, ok := vars["property_id"]
+	if !ok {
+		ll.Warn().Msg("property id not set")
+		http.Error(w, "property id not set", http.StatusBadRequest)
+		return
+	}
+
+	ll = ll.With().Str("property_id", propertyID).Logger()
+
+	files, err := s.getFileslistByUserAndPropertyId(ctx, userID, propertyID)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to get fileslist by user and property id")
+		http.Error(w, "unable to get fileslist by user and property id", http.StatusBadRequest)
+		return
+	}
+
+	if len(files) == 0 {
+		ll.Warn().Msg("no files found for property")
+		http.Error(w, "no files found for property", http.StatusNotFound)
+		return
+	}
+	
+	RespondToRequest(w, files)
+	return
 }
 
 // addPropertyByUser will add a property to the database associated with a user.
@@ -354,7 +556,7 @@ func validateNewUser(user *db.User) error {
 		return errors.New("user created at is already set")
 	}
 
-	if user.FirstName == "" || user.LastName == "" || user.Username == "" || user.Password == "" || user.Email == "" {
+	if user.FirstName == "" || user.LastName == "" || user.Password == "" || user.Email == "" {
 		return errors.New("missing required information at user creation")
 	}
 	return nil
@@ -388,4 +590,16 @@ func validateNewProperty(property *db.Property) error {
 
 func sanitizeNewProperty(property *db.Property) {
 	// TOOD: sanitize new property
+}
+
+func RespondToRequest(w http.ResponseWriter, response interface{}) {
+	data, err := json.Marshal(response)
+	if err != nil {
+		log.Warn().Err(err).Msg("unable to marshal response data")
+		http.Error(w, "unable to marshal response data", http.StatusBadRequest)
+		return
+	}
+
+	w.Write(data)
+	return
 }

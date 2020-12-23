@@ -1,0 +1,115 @@
+#pricing_page_parent {
+    height: 100vh;
+    width: 100%;
+}
+
+#pricing_page_top_box {
+    margin-left: 18%;
+    margin-top: 75px;
+    min-width: 1100px;
+    width: calc(100% - 18% - 18%);
+}
+
+#pricing_page_title_box {
+    margin-top: 125px;
+    width: 100%;
+}
+
+#pricing_page_title {
+    font-size: 3em;
+    font-weight: bold;
+    text-align: center;
+}
+
+#pricing_page_subtitle {
+    font-size: 1.5em;
+    margin-left: calc((100% - 600px)/2);
+    margin-top: 25px;
+    text-align: center;
+    width: 600px;
+}
+
+#pricing_page_prices_box {
+    margin-top: 75px;
+    width: 100%;
+}
+
+.pricing_page_prices_element {
+    background-color:  #EEF0F3;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.05), 0 6px 10px 0 rgba(0, 0, 0, 0.09) !important;
+    float: left;
+    height: 450px;
+    margin-left: 20px;
+    width: calc((100% - 40px)/3);
+}
+
+.pricing_page_prices_element:first-child {
+    margin-left: 0px !important;
+}
+
+.pricing_page_prices_title_box {
+    height: 100px;
+    width: 100%;
+}
+
+.pricing_page_prices_title {
+    color:  #296CF6;
+    font-size: 2em;
+    font-weight: bold;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.pricing_page_prices_subtitle {
+    font-size: 1.0em;
+    margin-top: 10px;
+    text-align: center;
+}
+
+#pricing_page_prices_element_second {
+    box-shadow: 0 4px 4px 0 #296CF6, 0 6px 10px 0 #296CF6 !important;
+    background-color: #296CF6;
+    transform: scale(1.1);
+}
+
+#pricing_page_prices_title_second {
+    color: white;
+}
+
+.pricing_page_features_box {
+    margin-top: -10px;
+    width: 100%;
+}
+
+.pricing_page_bullet {
+    margin-left: 12%;
+    margin-bottom: 15px;
+    height: 30px;
+    width: 76%;
+}
+
+.pricing_page_bullet_icon {
+    float: left;
+    height: 30px;
+    width: 30px;
+}
+
+.pricing_page_bullet_text {
+    float: left;
+    font-size: 1.1em;
+    font-weight: bold;
+    line-height: 30px;
+    margin-left: 10px;
+}
+
+.white {
+    color: white;
+}
+
+.blue {
+    color: #296CF6;
+}
+
+.large {
+    font-size: 1.5em;
+}

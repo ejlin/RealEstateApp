@@ -15,12 +15,13 @@ class NewPropertyForm extends React.Component {
 
         this.state = {
             userID: this.props.location.state.id,
-            firstName: this.props.location.state.first_name,
-            lastName: this.props.location.state.last_name,
+            firstName: this.props.location.state.firstName,
+            lastName: this.props.location.state.lastName,
             email: this.props.location.state.email,
             properties: []
         };
 
+        console.log(this.state.email);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleFieldChange = this.handleFieldChange.bind(this);
     }
@@ -66,8 +67,8 @@ class NewPropertyForm extends React.Component {
                 pathname: this.state.redirect,
                 state: {
                     id: this.state.userID,
-                    first_name: this.state.firstName,
-                    last_name: this.state.lastName,
+                    firstName: this.state.firstName,
+                    lastName: this.state.lastName,
                     email: this.state.email
                 }
             }} />
@@ -77,12 +78,17 @@ class NewPropertyForm extends React.Component {
                 <DashboardSidebar data={{
                     state: {
                         id: this.state.userID,
-                        first_name: this.state.firstName,
-                        last_name: this.state.lastName,
+                        firstName: this.state.firstName,
+                        lastName: this.state.lastName,
                         email: this.state.email
                     }
                 }}/>
                 <div id="new_property_form_box">
+                    <div id="new_property_dashboard_title_box">
+                        <p id="new_property_dashboard_title_box_title">
+                            Add a new Property
+                        </p>
+                    </div>
                     <div id="new_property_form_inner_box">
                         <form onSubmit={this.handleSubmit} id="new_property_form">
                             <p className="new_property_form_subtitle">

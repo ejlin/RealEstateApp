@@ -6,11 +6,9 @@ import './CSS/Style.css';
 
 import PropertyCard from './PropertyCard.js';
 import DashboardSidebar from './DashboardSidebar.js';
+import NotificationSidebar from './NotificationSidebar.js';
 
-import { PieChart } from 'react-minimal-pie-chart';
-
-import { FaHome } from 'react-icons/fa';
-import { RiBuilding4Fill, RiBuilding2Fill } from 'react-icons/ri';
+import { IoMdAdd } from 'react-icons/io';
 
 class PropertiesDashboard extends React.Component {
     
@@ -19,8 +17,9 @@ class PropertiesDashboard extends React.Component {
 
         this.state = {
             userID: this.props.location.state.id,
-            firstName: this.props.location.state.first_name,
-            lastName: this.props.location.state.last_name,
+            firstName: this.props.location.state.firstName,
+            lastName: this.props.location.state.lastName,
+            email: this.props.location.state.email,
             sfhProperties: [],
             manufacturedProperties: [],
             condoOpsProperties: [],
@@ -31,9 +30,9 @@ class PropertiesDashboard extends React.Component {
             commercialProperties: [],
             tags: ['SFH', 'Manufactured', 'Condo/Op', 'Multi-Family', 'Apartment', 'Lot/Land', 'Townhome', 'Commercial'],
             tagsToToggledMap: [],
-            propertiesMap: []
+            propertiesMap: [],
+            isLoading: true
         };
-
         this.numberWithCommas = this.numberWithCommas.bind(this);
         this.removePropertyFromState = this.removePropertyFromState.bind(this);
         this.handleTagsListClick = this.handleTagsListClick.bind(this);
@@ -46,9 +45,11 @@ class PropertiesDashboard extends React.Component {
             url: url,
         }).then(response => {
             var properties = response.data;
-            var totalEstimateWorth = 0;
             var totalNetWorth = 0;
             var totalRent = 0;
+
+            var totalEstimateWorth = 0;
+            var missingEstimate = false;
 
             var propMap = this.state.propertiesMap;
             // initialize our map with empty arrays for every tag.
@@ -56,12 +57,20 @@ class PropertiesDashboard extends React.Component {
                 propMap[this.state.tags[j]] = [];
             }
             for (var i = 0; i < properties.length; i++) {
-                totalEstimateWorth += properties[i]["price_estimate"];
-                totalNetWorth += properties[i]["price_bought"];
-                totalRent += properties[i]["price_rented"];
-                propMap[properties[i]["property_type"]].push(properties[i]);
+                var property = properties[i];
+                totalNetWorth += property["price_bought"];
+                totalRent += property["price_rented"];
+                propMap[property["property_type"]].push(property);
+
+                if (property["price_estimate"] && property["price_estimate"] !== 0.00) { 
+                    totalEstimateWorth += property["price_estimate"];
+                } else {
+                    totalEstimateWorth += property["price_bought"];
+                    missingEstimate = true;
+                }
             }
 
+            console.log(propMap['SFH']);
             this.setState({
                 sfhProperties: propMap['SFH'].map((property, i) =>
                     <div key={i}>
@@ -167,11 +176,13 @@ class PropertiesDashboard extends React.Component {
                     }}/>
                 </div>
                 ),
-                totalEstimateWorth: this.numberWithCommas(totalEstimateWorth),
                 totalNetWorth: this.numberWithCommas(totalNetWorth),
                 totalRent: this.numberWithCommas(totalRent),
                 propertiesMap: propMap,
-                totalProperties: properties.length
+                totalProperties: properties.length,
+                totalEstimateWorth: this.numberWithCommas(totalEstimateWorth),
+                missingEstimate: missingEstimate,
+                isLoading: false
             });
         }).catch(error => console.log(error));
 
@@ -185,7 +196,7 @@ class PropertiesDashboard extends React.Component {
 
         var elementsMap;
 
-        var tags = ['SFH', 'Manufactured', 'Condo/Ops', 'Multi-Family', 'Apartment', 'Lot/Land', 'Townhome', 'Commercial'];
+        // var tags = ['SFH', 'Manufactured', 'Condo/Ops', 'Multi-Family', 'Apartment', 'Lot/Land', 'Townhome', 'Commercial'];
 
         switch (propertyType) {
             case 'SFH':
@@ -217,7 +228,7 @@ class PropertiesDashboard extends React.Component {
         }
         if (elementsMap !== null ) {
             for (var i = 0; i < elementsMap.length; i++) {
-                if (id == elementsMap[i].props.children.props.data.state.property_details["id"]){
+                if (id === elementsMap[i].props.children.props.data.state.property_details["id"]){
                     delete elementsMap[i];
                     break;
                 }
@@ -274,11 +285,11 @@ class PropertiesDashboard extends React.Component {
         var toggledMap = this.state.tagsToToggledMap;
         if (!toggledMap[e.target.value]){
             e.target.style.color = "white";
-            e.target.style.backgroundColor = "#6532cd";
+            e.target.style.backgroundColor = "#296CF6";
             toggledMap[e.target.value] = true;
         } else {
-            e.target.style.color = "#6532cd";
-            e.target.style.backgroundColor = "#eee6f9";
+            e.target.style.color = "#296CF6";
+            e.target.style.backgroundColor = "#eaf5fb";
             toggledMap[e.target.value] = false;
         }
         this.setState({
@@ -290,129 +301,68 @@ class PropertiesDashboard extends React.Component {
     render() {
         return (
             <div>
-                <DashboardSidebar data={{
-                    state: {
-                        id: this.state.userID,
-                        first_name: this.state.firstName,
-                        last_name: this.state.lastName
-                    }
-                }}/>
-                <div className="properties_dashboard_property_type_box">
-                    <div id="properties_dashboard_tags_box">
-                        <button value="Single Family Homes" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
-                            Single Family Homes
-                        </button>
-                        <button value="Manufactured" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
-                            Manufactured
-                        </button>
-                        <button value="Condos/Ops" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
-                            Condos/Ops
-                        </button>
-                        <button value="Multi-Family" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
-                            Multi-Family
-                        </button>
-                        <button value="Apartments" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
-                            Apartments
-                        </button>
-                        <button value="Lots/Land" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
-                            Lots/Land
-                        </button>
-                        <button value="Townhomes" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
-                            Townhomes
-                        </button>
-                        <button value="Commercial" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
-                            Commercial
-                        </button>
-                    </div>
-                    <div className="clearfix"/>
-                    <div id="properties_dashboard_property_inner_box">
-                        <div className="clearfix"/>
-                        <div className="properties_dashboard_property_title_parent">
-                            <FaHome className="properties_dashboard_property_type_icon"/>
-                            <p className="properties_dashboard_property_type_title">
-                                Single Family Homes
-                            </p>
+                <div>
+                    <DashboardSidebar data={{
+                        state: {
+                            id: this.state.userID,
+                            firstName: this.state.firstName,
+                            lastName: this.state.lastName,
+                            email: this.state.email,
+                            totalEstimateWorth: this.state.totalEstimateWorth,
+                            missingEstimate: this.state.missingEstimate,
+                            currentPage: "properties"
+                        }
+                    }}/>
+                    {this.state.isLoading ? <div></div> : 
+                    <div>
+                        <div className="properties_dashboard_property_type_box">
+                            <div id="properties_dashboard_title_box">
+                                <p id="properties_dashboard_title_box_title">
+                                    Properties
+                                </p>
+                                <IoMdAdd id="properties_dashboard_upload_file_icon"></IoMdAdd>
+                                <input id="properties_dashboard_search_bar" placeholder="Search...">
+                                </input>
+                            </div>
+                            <div className="clearfix"/>
+                            <div id="properties_dashboard_tags_box">
+                                <button value="Single Family Homes" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
+                                    Single Family Homes
+                                </button>
+                                <button value="Manufactured" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
+                                    Manufactured
+                                </button>
+                                <button value="Condos/Ops" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
+                                    Condos/Ops
+                                </button>
+                                <button value="Multi-Family" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
+                                    Multi-Family
+                                </button>
+                                <button value="Apartments" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
+                                    Apartments
+                                </button>
+                                <button value="Lots/Land" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
+                                    Lots/Land
+                                </button>
+                                <button value="Townhomes" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
+                                    Townhomes
+                                </button>
+                                <button value="Commercial" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
+                                    Commercial
+                                </button>
+                            </div>
+                            <div className="clearfix"/>
+                            <div id="properties_dashboard_property_inner_box">
+                                {this.state.sfhProperties}
+                            </div>
                         </div>
-                        
-                        <div className="clearfix"/>
-                        {this.state.sfhProperties}
-                        <div className="clearfix"/>
-                        <div className="properties_dashboard_property_title_parent">
-                            <RiBuilding4Fill className="properties_dashboard_property_type_icon"/>
-                            <p className="properties_dashboard_property_type_title">
-                                Manufactured
-                            </p>
-                        </div>
-                        {this.state.manufacturedProperties}
-                        <div className="clearfix"/>
-                        <div className="properties_dashboard_property_title_parent">
-                            <RiBuilding4Fill className="properties_dashboard_property_type_icon"/>
-                            <p className="properties_dashboard_property_type_title">
-                                Condos/Ops
-                            </p>
-                        </div>
-                        {this.state.condoOpsProperties}
-                        <div className="clearfix"/>
-                        <div className="properties_dashboard_property_title_parent">
-                            <RiBuilding2Fill className="properties_dashboard_property_type_icon"/>
-                            <p className="properties_dashboard_property_type_title">
-                                Multi-Family
-                            </p>
-                        </div>
-                        {this.state.multiFamilyProperties}
-                        <div className="clearfix"/>
-                        <div className="properties_dashboard_property_title_parent">
-                            <RiBuilding4Fill className="properties_dashboard_property_type_icon"/>
-                            <p className="properties_dashboard_property_type_title">
-                                Apartments
-                            </p>
-                        </div>
-                        {this.state.apartmentProperties}
-                        <div className="clearfix"/>
-                        <div className="properties_dashboard_property_title_parent">
-                            <RiBuilding4Fill className="properties_dashboard_property_type_icon"/>
-                            <p className="properties_dashboard_property_type_title">
-                                Lots/Land
-                            </p>
-                        </div>
-                        {this.state.lotLandProperties}
-                        <div className="clearfix"/>
-                        <div className="properties_dashboard_property_title_parent">
-                            <RiBuilding4Fill className="properties_dashboard_property_type_icon"/>
-                            <p className="properties_dashboard_property_type_title">
-                                Townhomes
-                            </p>
-                        </div>
-                        {this.state.townhomeProperties}
-                        <div className="clearfix"/>
-                        <div className="properties_dashboard_property_title_parent">
-                            <RiBuilding4Fill className="properties_dashboard_property_type_icon"/>
-                            <p className="properties_dashboard_property_type_title">
-                                Commercial
-                            </p>
-                        </div>
-                        {this.state.commercialProperties}
-                    </div>
-                    <div id="properties_dashboard_right_box">
-                        {/* <div id="properties_dashboard_right_box_summary_box">
-                            <p id="properties_dashboard_right_box_summary_title">
-                                {this.state.totalProperties}
-                            </p>
-                            <p id="properties_dashboard_right_box_summary_subtitle">
-                                total properties
-                            </p>
-                            <PieChart id="piechart"
-                                data={[
-                                    { title: 'One', value: 10, color: '#e9dcf8' },
-                                    { title: 'Two', value: 15, color: '#d2b9f0' },
-                                    { title: 'Three', value: 20, color: '#ba98e8' },
-                                ]}
-                                lineWidth={25}
-                                background={'#6532cd'}
-                                radius={15}
-                                />
-                        </div> */}
-                    </div>
+                        <NotificationSidebar data={{
+                            state: {
+                                totalEstimateWorth: this.state.totalEstimateWorth,
+                                missingEstimate: this.state.missingEstimate 
+                            }
+                        }}/>
+                    </div>}
                 </div>
             </div>
         )

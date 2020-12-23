@@ -57,7 +57,7 @@
     height: 40px;
     margin-left: calc((120px - 40px) / 2);
     margin-top: 80px;
-    margin-bottom: 0px;
+    margin-bottom: 25px;
     padding-bottom: 0px;
 }
 
@@ -95,6 +95,11 @@ button:focus {
     margin-top: 60px;
 }
 
+.dashboard_sidebar_link_icon_on {
+    color: #296CF6 !important;
+    font-weight: bold;
+}
+
 .dashboard_sidebar_link_icon {
     background-color: #F9FAFB !important;
     color:grey;
@@ -112,4 +117,20 @@ button:focus {
     margin-top: 5px;
     text-align: center;
     text-decoration: none !important;
+}
+
+#dashboard_last {
+    margin-top: 75px;
+}
+
+#dashboard_sidebar_version {
+    bottom: 0;
+    height: 50px;
+    position: absolute;
+    width: 100%;
+}
+
+#dashboard_sidebar_version_text {
+    line-height: 50px;
+    text-align: center;
 }

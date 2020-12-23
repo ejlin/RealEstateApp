@@ -1,8 +1,15 @@
 import './App.css';
-import SignUp from './components/SignUp.js';
+import HomePage from './components/HomePage.js';
+import PricingPage from './components/PricingPage.js';
+import SignUpPage from './components/SignUpPage.js';
 import Login from './components/Login.js';
 import MainDashboard from './components/MainDashboard.js';
 import PropertiesDashboard from './components/PropertiesDashboard.js';
+import AnalysisDashboard from './components/AnalysisDashboard.js';
+import FilesDashboard from './components/FilesDashboard.js';
+import ExploreDashboard from './components/ExploreDashboard.js';
+import SettingsDashboard from './components/SettingsDashboard.js';
+
 import NewPropertyForm from './components/NewPropertyForm.js';
 import {
   BrowserRouter as Router,
@@ -17,24 +24,25 @@ function App() {
 
     <Router>
       <div>
-        {/* <Link to="/signup">
-          Sign Up
-        </Link>
-        <Link to="/login">
-          Login
-        </Link> */}
         <Switch>
           <Route path="/signup">
-            <SignUp />
+            <SignUpPage />
           </Route>
           <Route path="/login">
             <Login />
           </Route>
+          <Route path="/pricing">
+            <PricingPage/>
+          </Route>
           <Route path="/addproperty" render={(props) => <NewPropertyForm {...props}/>}/>
           <Route path="/dashboard" render={(props) => <MainDashboard {...props}/>}/>
           <Route path="/properties" render={(props) => <PropertiesDashboard {...props}/>}/>
+          <Route path="/analysis" render={(props) => <AnalysisDashboard {...props}/>}/>
+          <Route path="/files" render={(props) => <FilesDashboard {...props}/>}/>
+          <Route path="/explore" render={(props) => <ExploreDashboard {...props}/>}/>
+          <Route path="/settings" render={(props) => <SettingsDashboard {...props}/>}/>
           <Route path="/">
-            <Login />
+            <HomePage/>
           </Route>
         </Switch>
       </div>

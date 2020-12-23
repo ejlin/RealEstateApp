@@ -2,18 +2,20 @@ import React from 'react';
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
 
+import './CSS/Login.css';
+
 class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {redirect: null};
 
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleUsernameOrEmailChange = this.handleUsernameOrEmailChange.bind(this);
+        this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
     }
 
-    handleUsernameOrEmailChange(e) {
-        this.setState({usernameOrEmail: e.target.value});
+    handleEmailChange(e) {
+        this.setState({email: e.target.value});
     }
 
     handlePasswordChange(e) {
@@ -28,37 +30,23 @@ class Login extends React.Component {
     }
 
     handleSubmit(event) {
-        event.preventDefault();
-
-        var axiosCall;
-        if (!this.validateEmail(this.state.usernameOrEmail)) {
-            axiosCall = axios({
-                method: 'post',
-                url: '/api/user/login/username',
-                timeout: 5000,  // 5 seconds timeout
-                data: {
-                    username: this.state.usernameOrEmail,
-                    password: this.state.password,
-                }
-            })
-        } else {
-            axiosCall = axios({
-                method: 'post',
-                url: '/api/user/login/email',
-                timeout: 5000,  // 5 seconds timeout
-                data: {
-                    email: this.state.usernameOrEmail,
-                    password: this.state.password,
-                }
-            })  
-        }
-        axiosCall.then(response => {
+        event.preventDefault();    
+        
+        axios({
+            method: 'post',
+            url: '/api/user/login/email',
+            timeout: 5000,  // 5 seconds timeout
+            data: {
+                email: this.state.email,
+                password: this.state.password,
+            }
+        }).then(response => {
             if (response != null) {
                 this.setState({
                     currUserID: response.data["id"],
                     currUserFirstName: response.data["first_name"],
                     currUserLastName: response.data["last_name"],
-                    currEmail: response.data["email"],
+                    currUserEmail: response.data["email"],
                     redirect: "/dashboard"
                 });
             }
@@ -72,27 +60,23 @@ class Login extends React.Component {
                 pathname: this.state.redirect,
                 state: {
                     id: this.state.currUserID,
-                    first_name: this.state.currUserFirstName,
-                    last_name: this.state.currUserLastName,
+                    firstName: this.state.currUserFirstName,
+                    lastName: this.state.currUserLastName,
                     email: this.state.currUserEmail
                 }
             }} />
         }
         return (
-            <div className="App">
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                    Username or Email:
-                    <input type="text" name="username_or_email" onChange={this.handleUsernameOrEmailChange}/>
-                    </label>
-                    <br></br>
-                    <label>
-                    Password:
-                    <input type="password" name="password" onChange={this.handlePasswordChange} />
-                    </label>
-                    <input type="submit" value="Login"></input>
-                </form>
-            </div>
+            <form onSubmit={this.handleSubmit}>
+                <input className="login_input" placeholder="Email" type="text" name="email" onChange={this.handleEmailChange}/>
+                <input className="login_input" placeholder="Password" type="password" name="password" onChange={this.handlePasswordChange} />
+                <input id="login_submit" type="submit" value="Log In"></input>
+                <div id="login_forgot_password_box">
+                    <p id="login_forgot_password_text">
+                        Forgot Password?
+                    </p>
+                </div>
+            </form>
         )
     }
 }

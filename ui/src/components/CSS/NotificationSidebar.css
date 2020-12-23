@@ -1,0 +1,20 @@
+
+#main_dashboard_summary {
+    background-color: #F6F7F9;
+    right: 0;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    user-select: none;
+    width: 20%;
+}
+
+#main_dashboard_summary_estimated_net_worth {
+    background-color: #296CF6;
+    border-radius: 20px;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 12px 40px 0 rgba(0, 0, 0, 0.19);
+    height: 100px;
+    margin-left: 17.5%;
+    margin-top: 80px;
+    width: calc(70%);
+}

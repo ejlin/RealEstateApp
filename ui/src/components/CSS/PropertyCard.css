@@ -1,16 +1,20 @@
+::-webkit-scrollbar {
+    width: 0px;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
 .propertyCard {
-    background-color: white;
-    border: 1px solid #E0E2e4;
+    background-color:  #F6F7F9;
+    /* border: 1px solid #E0E2e4; */
     border-radius: 4px;
     float: left;
-    margin-bottom: 10px;
-    margin-top: 20px;
-    padding: 20px 15px 20px 25px;
-    width: calc(100% - 2px - 50px);
+    margin-top: 25px;
+    min-width: 1000px;
+    padding: 20px 15px 50px 25px;
+    width: calc(100% - 40px - 2px);
 }
 
 .property_card_address {
-    background-color: white;
     float: left;
     font-size: 1.6em;
     font-weight: bold;
@@ -18,6 +22,33 @@
     margin-top: 0px;
 }
 
+#rented_check_icon {
+    color: #85bb65;
+    float: left;
+    margin-top: 3px;
+}
+
+#estimate_warning_icon {
+    height: 17.5px;
+    margin-left: 5px;
+    margin-top: -10px;
+    position: relative;
+    width: 17.5px;
+}
+
+#property_rented_text {
+    color: #85bb65; 
+    float: left;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+#property_rented_box {
+    float: left;
+    margin-left: 10px;
+    margin-top: 6px;
+}
+    
 .property_card_delete_button {
     background-color: #d3d3d3;
 }
@@ -27,14 +58,24 @@
     color: #6e4ec1;   
 }
 
-.property_card_analytics_button {
+.property_card_analytics_button_off {
     background-color: #FBE9E1; 
     color: #EE9E77;
 }
 
-.property_card_file_button {
+.property_card_analytics_button_on {
+    background-color: #EE9E77; 
+    color: #FBE9E1;
+}
+
+.property_card_file_button_off {
     background-color: #dbebd2;
     color: #85bb65;
+}
+
+.property_card_file_button_on {
+    background-color: #85bb65;
+    color:  #dbebd2;
 }
 
 .property_card_end_button {
@@ -49,28 +90,160 @@
 }
 
 .property_card_end_button:hover {
-    opacity: 0.7;
+    transform: scale(1.1);
 }
 
-.property_card_title_button {
-    background-color: #dbebd2; 
-    border-radius: 25px;
-    cursor: pointer;
-    float: right;
-    margin-right: 10px;
-    padding: 7.5px 15px 7.5px 15px;
-    transition: 0.5s;
+#property_card_sub_info_subaddress { 
+    font-size: 0.85em;
 }
 
-.property_card_title_button:hover {
-    opacity: 0.7;
-}
-
-#property_card_sub_address {
-    background-color: transparent;
-    color: grey;
+#property_card_sub_info_box {
+    color: black;
     float: left;
     font-size: 1.2em;
     font-weight: bold;
+    margin-top: -5px;
+    width: 300px;
+}
+
+.property_card_sub_info_text {
+    color: black;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 0px;
+}
+
+#property_card_sub_info_subtext_box {
+    color: grey;
+    margin-top: 5px;
+}
+
+.property_card_sub_info_estimate {
+    color: black;
+    font-size: 1.7em;
+    font-weight: bold;
+    margin-bottom: 0;
+    margin-top: 0px;
+}
+
+.property_card_sub_info_bed_bath {
+    color: grey;
+    font-size: 1.0em;
+}
+
+.property_card_sub_info_subtext_title {
+    color: black;
+    float: left;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.property_card_sub_info_subtext_subtitle {
+    float: left;
+    margin-left: 5px;
+    margin-top: 2.5px;
+}
+
+.property_card_sub_info_subbox {
+    border-radius: 50px;
+    float: left;
+}
+
+.property_card_sub_info_icon {
+    float: left;
+    height: 25px;
+    margin-right: 10px;
+    width: 25px;
+}
+
+#property_card_graphics_box {
+    margin-top: 60px;
+}
+
+#property_card_graphics_padding_left_box {
+    padding-left: 100px;
+}
+
+.property_card_graphics_parent_title_box {
+    float: right;
+    width: calc(100% - 350px) !important;
+}
+
+.property_card_graphics_box_circular_graph {
+    height: 100px;
+    margin-left: 25px;
+    width: 100px;
+}
+
+.property_card_graphics_parent_box {
+    float: left;
+    margin-left: calc((100% - 600px) / 5);
+    width: 150px;
+}
+
+.property_card_graphics_box_label {
+    font-weight: bold;
     margin-top: 10px;
+    text-align: center;
+}
+
+/***** Files ****/
+
+#property_card_files_box {
+    margin-top: 30px;
+    width: 20%;
+}
+
+#property_card_files_overall_tag {
+    float: right;
+    padding-right: 10px;
+    width: 100%;
+}
+
+.property_card_files_tag {
+    border-radius: 50px;
+    cursor: pointer;
+    float: right;
+    font-size: 1.0em;
+    list-style: none;
+    margin-left: 19px;
+    margin-right: 0px;
+    margin-top: 5px;
+    padding: 7.5px 13px 7.5px 13px;
+    transition: 0.5s;
+}
+
+.property_card_files_tag:hover {
+    background-color: #296CF6;
+    color: white;
+}
+
+.property_card_files_tag_off {
+    background-color: #eaf5fb;
+    border: 1px solid #296CF6;
+    color: #296CF6;
+}
+
+.property_card_files_tag_on {
+    background-color: #296CF6;
+    border: 1px solid #296CF6;  
+    color: white;
+}
+
+.property_card_add_file_icon {
+    background-color: #296CF6;
+    color: white;
+}
+
+#property_card_files_box {
+    width: 100%;
+}
+
+#property_card_files_graphic {
+    border: 1px solid #d3d3d3;
+    border-radius: 4px;
+    float: left;
+    margin-left: 15px;
+    margin-top: 20px;
+    width: calc((100% - 60px) / 3);
 }

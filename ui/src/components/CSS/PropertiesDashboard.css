@@ -1,23 +1,63 @@
 .properties_dashboard_property_type_box {
     display: inline-block;
-    height: calc(100vh - 60px - 1px);
     margin-left: 120px;
-    margin-top: 60px;
-    position: fixed;
-    width: calc(100% - 120px);
+    padding-bottom: 100px;
+    position: absolute;
+    width: calc(100% - 120px - 20%);
+}
+
+#properties_dashboard_title_box {
+    margin-left: 80px;
+    margin-top: 80px;
+}
+
+#properties_dashboard_title_box_title {
+    float: left;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+#properties_dashboard_upload_file_icon {
+    background-color: #eaf5fb;
+    border-radius: 50px;
+    color: #296CF6;
+    cursor: pointer;
+    float: right;
+    height: 27.5px;
+    margin-right: 80px;
+    padding: 7.5px;
+    transition: 0.5s;
+    width: 27.5px;
+}
+
+#properties_dashboard_upload_file_icon:hover {
+    color: white;
+    background-color: #296CF6;
+}
+
+#properties_dashboard_search_bar {
+    border: 1px solid #d3d3d3;
+    border-radius: 50px;
+    float: right;
+    font-size: 1.1em;
+    margin-right: 15px;
+    padding: 7.5px 15px 7.5px 15px;
+    width: 500px;
+}
+
+#properties_dashboard_search_bar:focus {
+    outline: none;
 }
 
 #properties_dashboard_property_inner_box {
     float: left;
-    padding-bottom: 60px;
-    margin-left: 40px;
-    margin-top: 10px;
-    padding-right: 25px;
-    height: calc(90vh - 60px - 60px);
+    margin-left: 80px;
+    margin-right: 80px;
+    margin-top: 15px;
     min-width: 750px;
     overflow: scroll;
     position: relative;
-    width: calc(70%);   
+    width: calc(100% - 160px);   
 }
 
 #properties_dashboard_property_inner_box::-webkit-scrollbar {
@@ -55,23 +95,23 @@
 }
 
 #properties_dashboard_tags_box {
-    margin-left: 40px;
+    margin-left: 80px;
     margin-top: 40px;
     padding: 0;
 }
 
 .properties_dashboard_tags_box_list {
-    background-color:  #eee6f9;
+    background-color:  #eaf5fb;
     border: 1px solid transparent;
     border-radius: 4px;
-    color: #6532cd;
+    color: #296CF6;
     cursor: pointer;
     float: left;
-    font-size: 1.0em;
+    font-size: 0.95em;
     list-style: none;
     margin: 0;
     margin-bottom: 10px;
-    margin-right: 25px;
+    margin-right: 20px;
     padding: 10px 17.5px 10px 17.5px;
     transition: 0.5s;
 }
