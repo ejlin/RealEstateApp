@@ -47,7 +47,7 @@ func main() {
 	googleApplicationCredentialsFilePath := os.Getenv("GOOGLE_APPLICATION_CREDENTIALS")
 	if googleApplicationCredentialsFilePath == "" {
 		log.Error().Err(errors.New("invalid google application credentials")).Msg("unable to fetch google application credentials")
-		return 
+		return
 	}
 
 	pkey, err := ioutil.ReadFile(googleApplicationCredentialsFilePath)
@@ -57,7 +57,7 @@ func main() {
 	}
 
 	type GoogleApplicationCredentials struct {
-		AccessID string `json:"client_email"`
+		AccessID   string `json:"client_email"`
 		PrivateKey string `json:"private_key"`
 	}
 
@@ -73,9 +73,9 @@ func main() {
 		DBHandle: &db.Handle{
 			DB: dbHandle,
 		},
-		StorageClient: client,
-		UsersBucket: UsersBucket,
-		GoogleAccessID:  creds.AccessID,
+		StorageClient:    client,
+		UsersBucket:      UsersBucket,
+		GoogleAccessID:   creds.AccessID,
 		GooglePrivateKey: creds.PrivateKey,
 	}
 

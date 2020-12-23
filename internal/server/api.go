@@ -114,7 +114,7 @@ func (s *Server) addUser(w http.ResponseWriter, r *http.Request) {
 
 	mUser, err := json.Marshal(user)
 	if err != nil {
-		log.Warn().Err(err).Str("name", user.FirstName + " " + user.LastName).Msg("unable to marshal created user")
+		log.Warn().Err(err).Str("name", user.FirstName+" "+user.LastName).Msg("unable to marshal created user")
 		http.Error(w, "unable to marshal created user", http.StatusForbidden)
 		return
 	}
@@ -204,56 +204,94 @@ func (s *Server) getFileslistByUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "no files found for user", http.StatusNotFound)
 		return
 	}
-	
+
 	RespondToRequest(w, files)
 	return
 }
 
-type File struct {
-	UserID string `json:"user_id"`
-	Test string `json:"file"`
-}
-
-type FormData struct {
-	Data File `json:"form_data"`
-}
-
 func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Info().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
 
 	err := r.ParseMultipartForm(32 << 20) // maxMemory 32MB
 	if err != nil {
-		log.Error().Err(err).Msg("failed to parse multipart message")
+		ll.Error().Err(err).Msg("failed to parse multipart message")
 		http.Error(w, "failed to parse multipart message", http.StatusBadRequest)
 		return
 	}
 
 	file, handler, err := r.FormFile("file")
-    if err != nil {
-		log.Error().Err(err).Msg("error retrieving the file")
+	if err != nil {
+		ll.Error().Err(err).Msg("error retrieving the file")
 		http.Error(w, "error retrieving the file", http.StatusBadRequest)
-        return
-    }
+		return
+	}
 	defer file.Close()
 
 	propertyID := r.FormValue("property_id")
 	if propertyID == "" {
-		log.Error().Msg("missing property id")
+		ll.Error().Msg("missing property id")
 		http.Error(w, "missing property id", http.StatusBadRequest)
-        return
+		return
+	}
+
+	ll = ll.With().Str("property_id", propertyID).Logger()
+
+	fileCategory := r.FormValue("file_category")
+	if fileCategory == "" {
+		ll.Error().Msg("missing file category")
+		http.Error(w, "missing file category", http.StatusBadRequest)
+		return
+	}
+
+	address := r.FormValue("address")
+	if address == "" {
+		ll.Error().Msg("missing file address")
+		http.Error(w, "missing file address", http.StatusBadRequest)
+		return
+	}
+
+	fileName := r.FormValue("file_name")
+	if fileName == "" {
+		fileName = handler.Filename
 	}
 
 	fileType := r.FormValue("file_type")
 	if fileType == "" {
-		log.Error().Msg("missing file type")
-		http.Error(w, "missing file type", http.StatusBadRequest)
-        return
+		fileType = "unknown"
 	}
-	
-	fmt.Printf("PropertyId: %+v\n", val)
-    fmt.Printf("Uploaded File: %+v\n", handler.Filename)
-    fmt.Printf("File Size: %+v\n", handler.Size)
-    fmt.Printf("MIME Header: %+v\n", handler.Header)
-	RespondToRequest(w, "success")
+
+	year := r.FormValue("year")
+	if year == "" {
+		y := time.Now().Year()
+		year = fmt.Sprint(y)
+	}
+
+	ll = ll.With().Str("file_category", fileCategory).Str("file_name", fileName).Logger()
+
+	fInfo, err := s.addStorageFile(ctx, file, userID, propertyID, fileName, fileType, fileCategory, year)
+	if err != nil {
+		ll.Error().Err(err).Msg("unable to add file to cloudstorage")
+		http.Error(w, "unable to add file to cloudstorage", http.StatusBadRequest)
+		return
+	}
+
+	// fmt.Printf("PropertyId: %+v\n", val)
+	// fmt.Printf("Uploaded File: %+v\n", handler.Filename)
+	// fmt.Printf("File Size: %+v\n", handler.Size)
+	// fmt.Printf("MIME Header: %+v\n", handler.Header)
+	ll.Info().Msg("successfully stored file in GCS")
+	RespondToRequest(w, fInfo)
 	return
 
 }
@@ -300,7 +338,7 @@ func (s *Server) getFile(w http.ResponseWriter, r *http.Request) {
 
 	ll = ll.With().Str("request", request).Logger()
 
-	switch(request) {
+	switch request {
 	case "download":
 		s.getFileData(ctx, userID, propertyID, fileName, w, r)
 		return
@@ -376,7 +414,6 @@ func (s *Server) getPropertyFileslistByUser(w http.ResponseWriter, r *http.Reque
 
 	ll := log.With().Str("user_id", userID).Logger()
 
-
 	propertyID, ok := vars["property_id"]
 	if !ok {
 		ll.Warn().Msg("property id not set")
@@ -398,7 +435,7 @@ func (s *Server) getPropertyFileslistByUser(w http.ResponseWriter, r *http.Reque
 		http.Error(w, "no files found for property", http.StatusNotFound)
 		return
 	}
-	
+
 	RespondToRequest(w, files)
 	return
 }

@@ -29,10 +29,10 @@ type User struct {
 type PlanType string
 
 const (
-	Free         PropertyType = "Free"
-	Basic PropertyType = "Basic"
-	Business      PropertyType = "Business"
-	Enterprise  PropertyType = "Enterprise"
+	Free       PropertyType = "Free"
+	Basic      PropertyType = "Basic"
+	Business   PropertyType = "Business"
+	Enterprise PropertyType = "Enterprise"
 )
 
 // AddUser will add a new user to the database.

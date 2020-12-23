@@ -61,7 +61,8 @@ class FilesDashboard extends React.Component {
                             userID: this.state.userID,
                             file: file,
                             setActiveFileAttributes: this.setActiveFileAttributes,
-                            openSignedURL: this.openSignedURL
+                            openSignedURL: this.openSignedURL, 
+                            mapFileTypeToIcon: this.mapFileTypeToIcon
                         }                       
                     }}/>
                 ),
@@ -164,7 +165,6 @@ class FilesDashboard extends React.Component {
             method: 'delete',
             url: url,
         }).then(response => {
-            console.log(response);
             if (response.status === 200) {
                 success = true;
                 return success;
@@ -186,9 +186,7 @@ class FilesDashboard extends React.Component {
                     var file = currFiles[i].props.data.state.file;
                     var fKey = file["property_id"] + "/" + file["name"];
                     if (key === fKey) {
-                        console.log("here");
                         currFiles.splice(i, 1);
-                        console.log(currFiles.length);
                         continue;
                     }
                 }
@@ -197,8 +195,6 @@ class FilesDashboard extends React.Component {
         }
         this.setState({
             files: [...currFiles]
-        }, () => {
-            console.log(this.state.files);
         });
     }
 
@@ -212,23 +208,33 @@ class FilesDashboard extends React.Component {
     }
 
     handleFileUpload() {
-        console.log(this.state.fileToUpload);
         var file = this.state.fileToUpload;
         if (file === null || file === undefined) {
             return;
         }
 
+        var nameInput = document.getElementById("files_dashboard_upload_file_name_input");
+        var nameInputValue = nameInput.value;
+
         var propertySelect = document.getElementById("files_dashboard_upload_file_property_select");
         var propertySelectValue = propertySelect.value;
+        var propertySelectAddress = propertySelect.name;
 
-        var fileTypeSelect = document.getElementById("files_dashboard_upload_file_file_type_select");
-        var fileTypeSelectValue = fileTypeSelect.value;
+        var fileCategorySelect = document.getElementById("files_dashboard_upload_file_category_select");
+        var fileCategorySelectValue = fileCategorySelect.value;
 
         var formData = new FormData();
         formData.append('file', file);
         formData.append('property_id', propertySelectValue);
-        formData.append('file_type', fileTypeSelectValue);
-        
+        formData.append('file_category', fileCategorySelectValue);
+        formData.append('file_type', file["type"]);
+        formData.append('address', propertySelectAddress);
+
+        // If user wants to override the default name.
+        if (nameInputValue !== "") {
+            formData.append('file_name', nameInputValue);
+        }
+
         axios({
             method: 'post',
             url: 'api/user/files/upload/' + this.state.userID,
@@ -239,7 +245,20 @@ class FilesDashboard extends React.Component {
             },
             data: formData
         }).then(response => {
-            console.log(response);
+            var currFiles = this.state.files;
+
+            currFiles.push(<FileCard key={currFiles.length + 1} data={{
+                state: {
+                    userID: this.state.userID,
+                    file: response.data,
+                    setActiveFileAttributes: this.setActiveFileAttributes,
+                    openSignedURL: this.openSignedURL, 
+                    mapFileTypeToIcon: this.mapFileTypeToIcon,
+                }                       
+            }}/>);
+            this.setState({
+                files: currFiles
+            })
         }).catch(error => console.log(error));
     }
 
@@ -251,7 +270,7 @@ class FilesDashboard extends React.Component {
     }
 
     mapFileTypeToIcon(imageType) {
-        if (imageType === null) {
+        if (imageType === null || imageType === undefined) {
             return (
                 <div>
                     <AiFillFileExclamation className="files_dashboard_upload_image_type grey"></AiFillFileExclamation>
@@ -453,6 +472,7 @@ class FilesDashboard extends React.Component {
                                     </MdFileUpload>
                                 </div>
                                 <input 
+                                    id="files_dashboard_upload_file_name_input"
                                     placeholder={this.state.fileToUpload && this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "File Name"} 
                                     className={this.state.fileToUpload && this.state.fileToUpload["name"] ? "upload_file_input dark_placeholder" : "upload_file_input"}>
                                 </input>
@@ -463,7 +483,7 @@ class FilesDashboard extends React.Component {
                                     {this.renderFileUploadPropertiesSelection()}
                                 </select>
                                 <br></br>
-                                <select id="files_dashboard_upload_file_file_type_select" className="upload_file_select">
+                                <select id="files_dashboard_upload_file_category_select" className="upload_file_select">
                                     <option value="" disabled selected>File Type</option>
                                     <option name="mortgage" value="mortgage">Mortgage</option>
                                     <option name="contracting" value="contracting">Contracting</option>

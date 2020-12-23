@@ -8,5 +8,5 @@ package db
 // type Summary struct {
 // 	UserID string `json:"id",sql:"type:uuid; primary key"`
 
-// 	PortfolioGrowth 
+// 	PortfolioGrowth
 // }

@@ -26,9 +26,9 @@ type Property struct {
 	PriceDownPayment     float64 `json:"price_down_payment",sql:"type:NUMERIC(12,2)"`
 	PricePropertyManager float64 `json:"price_property_manager",sql:"type:NUMERIC(12,2)"`
 
-	MortgageCompany string `json:"mortgage_company",sql:"type:VARCHAR(64)"`
-	MortgageInterestRate float64 `json:"mortgage_interest_rate",sql:"type:NUMERIC(5,1)"`
-	PropertyType PropertyType `json:"property_type",sql:"type:ENUM('SFH', 'Manufactured', 'Condo/Op', 'Multi-family', 'Apartment', 'Lot/Land', 'Townhome', 'Commercial')"`
+	MortgageCompany      string       `json:"mortgage_company",sql:"type:VARCHAR(64)"`
+	MortgageInterestRate float64      `json:"mortgage_interest_rate",sql:"type:NUMERIC(5,1)"`
+	PropertyType         PropertyType `json:"property_type",sql:"type:ENUM('SFH', 'Manufactured', 'Condo/Op', 'Multi-family', 'Apartment', 'Lot/Land', 'Townhome', 'Commercial')"`
 
 	OwnerID string `json:"owner_id",sql:"type:uuid; foreign key"`
 }

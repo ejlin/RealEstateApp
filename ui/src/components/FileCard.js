@@ -19,6 +19,7 @@ class FileCard extends React.Component {
             file: this.props.data.state.file,
             setActiveFileAttributes: this.props.data.state.setActiveFileAttributes,
             openSignedURL: this.props.data.state.openSignedURL,
+            mapFileTypeToIcon: this.props.data.state.mapFileTypeToIcon,
             timeClicked: null,
             isClicked: false
         };
@@ -65,13 +66,14 @@ class FileCard extends React.Component {
         if (this.state.isClicked) {
             return;
         }
-        console.log("doble click");
         var key = this.state.file["property_id"] + '/' + this.state.file["name"];
         this.state.openSignedURL(key)
     }  
 
     componentDidMount() {
         this.clickTimeout = null;
+
+        console.log(this.state.file);
     }
 
     // onClickHandler = event => {
@@ -98,6 +100,7 @@ class FileCard extends React.Component {
                 // onDoubleClick={() => this.doubleClickCard()}
                 onMouseDown={() => this.clickCard()}
                 >
+                {this.state.mapFileTypeToIcon(this.state.file["file_type"])}
                 <div className="file_card_individual_file_footer">
                     <p className="file_card_individual_file_footer_title" title={this.state.file["name"] ? this.state.file["name"] : "Unknown File"}>
                         {this.state.file["name"] ? this.trimTrailingFileName(this.state.file["name"]) : "Unknown File"}

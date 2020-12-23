@@ -17,6 +17,6 @@ type Server struct {
 	// UsersBucket is where users information is stored.
 	UsersBucket string
 
-	GoogleAccessID string
+	GoogleAccessID   string
 	GooglePrivateKey string
 }
