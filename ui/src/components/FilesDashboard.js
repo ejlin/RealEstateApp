@@ -8,14 +8,15 @@ import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 import FileCard from './FileCard.js';
 
+import ProgressBar from './../utility/ProgressBar.js';
+
 import { MdFileDownload, MdFileUpload, MdEdit } from 'react-icons/md';
 import { IoMdTrash } from 'react-icons/io';
 import { IoCloseSharp } from 'react-icons/io5';
-import { AiFillFileImage, AiFillFileExclamation, AiFillFilePdf, AiFillFileExcel, AiFillFilePpt, AiFillFileText, AiFillFileWord, AiFillFileZip } from 'react-icons/ai';
-import { FaFileAudio, FaFileVideo } from 'react-icons/fa';
+import { AiFillFile, AiFillFileImage, AiFillFileExclamation, AiFillFilePdf, AiFillFileExcel, AiFillFilePpt, AiFillFileText, AiFillFileWord, AiFillFileZip } from 'react-icons/ai';
 
 class FilesDashboard extends React.Component {
-    
+        
     constructor(props) {
         super(props);
 
@@ -30,7 +31,9 @@ class FilesDashboard extends React.Component {
             files: [],
             properties: new Map(),
             activeFiles: new Map(),
+            activeSearchFiles: [],
             displayUploadFileBox: false,
+            fileUploadProgressBar: 0,
             isFileLoading: true,
             isPropertiesLoading: true,
         };
@@ -41,6 +44,7 @@ class FilesDashboard extends React.Component {
         this.downloadFile = this.downloadFile.bind(this);
         this.deleteActiveFiles = this.deleteActiveFiles.bind(this);
         this.deleteFile = this.deleteFile.bind(this);
+        this.handleSearchBar = this.handleSearchBar.bind(this);
         this.handleFileUploadChange = this.handleFileUploadChange.bind(this);
         this.handleFileUpload = this.handleFileUpload.bind(this);
         this.trimTrailingFileName = this.trimTrailingFileName.bind(this);
@@ -69,6 +73,10 @@ class FilesDashboard extends React.Component {
                 isFileLoading: false
             });
         }).catch(error => {
+            this.setState({
+                isFileLoading: false
+            })
+            console.log(error);
         });
 
         // Load our properties list.
@@ -89,6 +97,10 @@ class FilesDashboard extends React.Component {
                 isPropertiesLoading: false
             });
         }).catch(error => {
+            console.log(error);
+            this.setState({
+                isPropertiesLoading: false
+            })
         });
     }
 
@@ -175,13 +187,15 @@ class FilesDashboard extends React.Component {
 
     async deleteActiveFiles() {
         var currFiles = this.state.files;
-        var activeFilesIterator = this.state.activeFiles.entries();
+        var activeFiles = this.state.activeFiles
+        var activeFilesIterator = activeFiles.entries();
 
         var nextElem = activeFilesIterator.next();
         while (nextElem !== null && nextElem.value !== undefined) {
             var key = nextElem.value[0];
             var success = await this.deleteFile(key);
             if (success === true) {
+                activeFiles.delete(key);
                 for (var i = 0; i < currFiles.length; i++) {
                     var file = currFiles[i].props.data.state.file;
                     var fKey = file["property_id"] + "/" + file["name"];
@@ -194,7 +208,8 @@ class FilesDashboard extends React.Component {
             nextElem = activeFilesIterator.next();
         }
         this.setState({
-            files: [...currFiles]
+            files: [...currFiles],
+            activeFiles: [...activeFiles]
         });
     }
 
@@ -206,7 +221,7 @@ class FilesDashboard extends React.Component {
             })
         }
     }
-
+     
     handleFileUpload() {
         var file = this.state.fileToUpload;
         if (file === null || file === undefined) {
@@ -216,12 +231,35 @@ class FilesDashboard extends React.Component {
         var nameInput = document.getElementById("files_dashboard_upload_file_name_input");
         var nameInputValue = nameInput.value;
 
+        var fileName = file["name"];
+        if (nameInputValue !== "") {
+            fileName = nameInputValue;
+        }
+
         var propertySelect = document.getElementById("files_dashboard_upload_file_property_select");
         var propertySelectValue = propertySelect.value;
-        var propertySelectAddress = propertySelect.name;
+        var propertySelectAddress = propertySelect.options[propertySelect.selectedIndex].text;
 
         var fileCategorySelect = document.getElementById("files_dashboard_upload_file_category_select");
         var fileCategorySelectValue = fileCategorySelect.value;
+
+        // var signedURL;
+        // axios({
+        //     method: 'get',
+        //     url: 'api/user/files/upload/' + this.state.userID + '/' + propertySelectValue + '?file_name=' + fileName,
+        // }).then(response => {
+        //     signedURL = response.data;
+        //     axios({
+        //         method: 'put',
+        //         url: signedURL,
+        //         data: file
+        //     }).then(signedURLResponse => {
+        //         console.log(signedURLResponse);
+        //     }).catch(signedURLError => {
+        //         console.log(signedURLError);
+        //     });
+        // }).catch(error => {
+        // });
 
         var formData = new FormData();
         formData.append('file', file);
@@ -229,6 +267,7 @@ class FilesDashboard extends React.Component {
         formData.append('file_category', fileCategorySelectValue);
         formData.append('file_type', file["type"]);
         formData.append('address', propertySelectAddress);
+
 
         // If user wants to override the default name.
         if (nameInputValue !== "") {
@@ -241,7 +280,16 @@ class FilesDashboard extends React.Component {
             config: {
                 headers: {
                     'Content-Type': 'multipart/form-data'
-                }
+                },
+            },
+            onUploadProgress: (progressEvent) => {
+                // Use Math.min because we currently upload to the server, then upload to GCS. The GCS step can take a while,
+                // but this only tracks progress from client -> server. Stop it at 90, then finish the last 10 once we 
+                // successfully write to GCS.
+                var progressCompleted = Math.min(Math.round((progressEvent.loaded * 100) / progressEvent.total), 98);
+                this.setState({
+                    fileUploadProgressBar: progressCompleted
+                })
             },
             data: formData
         }).then(response => {
@@ -257,7 +305,10 @@ class FilesDashboard extends React.Component {
                 }                       
             }}/>);
             this.setState({
-                files: currFiles
+                files: currFiles,
+                displayUploadFileBox: false,
+                fileToUpload: null,
+                fileUploadProgressBar: 0,
             })
         }).catch(error => console.log(error));
     }
@@ -269,11 +320,18 @@ class FilesDashboard extends React.Component {
         return fileName;
     }
 
-    mapFileTypeToIcon(imageType) {
+    // isSmall is used for small icons
+    mapFileTypeToIcon(imageType, isSmall) {
         if (imageType === null || imageType === undefined) {
             return (
                 <div>
-                    <AiFillFileExclamation className="files_dashboard_upload_image_type grey"></AiFillFileExclamation>
+                    <AiFillFileExclamation 
+                        className={
+                            isSmall ? 
+                            "files_dashboard_upload_image_type_mini_icon grey" : 
+                            "files_dashboard_upload_image_type grey"
+                        }>
+                    </AiFillFileExclamation>
                 </div>
             )
         }
@@ -281,61 +339,121 @@ class FilesDashboard extends React.Component {
         if (imageType.includes("image")){
             return (
                 <div>
-                    <AiFillFileImage className="files_dashboard_upload_image_type blue"></AiFillFileImage>
+                    <AiFillFileImage 
+                        className={
+                            isSmall ? 
+                            "files_dashboard_upload_image_type_mini_icon blue": 
+                            "files_dashboard_upload_image_type blue"
+                    }>
+                    </AiFillFileImage>
                 </div>
             );
         } else if (imageType.includes("pdf")) {
             return (
                 <div>
-                    <AiFillFilePdf className="files_dashboard_upload_image_type red"></AiFillFilePdf>
+                    <AiFillFilePdf
+                        className={
+                            isSmall ? 
+                            "files_dashboard_upload_image_type_mini_icon red": 
+                            "files_dashboard_upload_image_type red"
+                    }>
+                    </AiFillFilePdf>
                 </div>
             )
         } else if (imageType.includes("video")) {
             return (
                 <div>
-                    <FaFileVideo className="files_dashboard_upload_image_type_small blue"></FaFileVideo>
+                    <AiFillFile 
+                        className={
+                            isSmall ? 
+                            "files_dashboard_upload_image_type_mini_icon blue": 
+                            "files_dashboard_upload_image_type blue"
+                    }>
+                    </AiFillFile>
                 </div>
             )
         } else if (imageType.includes("audio")) {
             return (
                 <div>
-                    <FaFileAudio className="files_dashboard_upload_image_type_small blue"></FaFileAudio>
+                    <AiFillFile 
+                        className={
+                            isSmall ? 
+                            "files_dashboard_upload_image_type_mini_icon blue": 
+                            "files_dashboard_upload_image_type blue"
+                    }>
+                    </AiFillFile>
                 </div>
             )
         } else if (imageType.includes("zip")) {
             return (
                 <div>
-                    <AiFillFileZip className="files_dashboard_upload_image_type grey"></AiFillFileZip>
+                    <AiFillFileZip
+                        className={
+                            isSmall ? 
+                            "files_dashboard_upload_image_type_mini_icon grey": 
+                            "files_dashboard_upload_image_type grey"
+                    }>
+                    </AiFillFileZip>
                 </div>
             )
         } else if (imageType.includes("text")) {
             return (
                 <div>
-                    <AiFillFileText className="files_dashboard_upload_image_type grey"></AiFillFileText>
+                    <AiFillFileText
+                        className={
+                            isSmall ? 
+                            "files_dashboard_upload_image_type_mini_icon grey": 
+                            "files_dashboard_upload_image_type grey"
+                    }>
+                    </AiFillFileText>
                 </div>
             )
         } else if (imageType.includes("presentation")) {
             return (
                 <div>
-                    <AiFillFilePpt className="files_dashboard_upload_image_type orange"></AiFillFilePpt>
+                    <AiFillFilePpt
+                        className={
+                            isSmall ? 
+                            "files_dashboard_upload_image_type_mini_icon orange": 
+                            "files_dashboard_upload_image_type orange"
+                    }>
+                    </AiFillFilePpt>
                 </div>
             )
         } else if (imageType.includes("spreadsheet")) {
             return (
                 <div>
-                    <AiFillFileExcel className="files_dashboard_upload_image_type green"></AiFillFileExcel>
+                    <AiFillFileExcel
+                        className={
+                            isSmall ? 
+                            "files_dashboard_upload_image_type_mini_icon green": 
+                            "files_dashboard_upload_image_type green"
+                    }>
+                    </AiFillFileExcel>
                 </div>
             )
         } else if (imageType.includes("doc")) {
             return (
                 <div>
-                    <AiFillFileWord className="files_dashboard_upload_image_type blue"></AiFillFileWord>
+                    <AiFillFileWord
+                        className={
+                            isSmall ? 
+                            "files_dashboard_upload_image_type_mini_icon blue": 
+                            "files_dashboard_upload_image_type blue"
+                    }>
+                    </AiFillFileWord>
                 </div>
             )
         } else {
             return (
                 <div>
-                    <AiFillFileExclamation className="files_dashboard_upload_image_type grey"></AiFillFileExclamation>
+                    <AiFillFileExclamation
+                        className={
+                            isSmall ? 
+                            "files_dashboard_upload_image_type_mini_icon grey": 
+                            "files_dashboard_upload_image_type grey"
+                    }>
+                    </AiFillFileExclamation>
                 </div>
             )
         }
@@ -346,6 +464,15 @@ class FilesDashboard extends React.Component {
             this.state.properties.map((property, i) => 
             <option name={property[1]} key={i} value={property[0]}>{property[1]}</option>
         ))
+    }
+
+    handleSearchBar(e) {
+        var searchValue = e.target.value.toLowerCase();
+        this.setState({
+            activeSearchFiles: this.state.files.filter(file => {
+                return file.props.data.state.file["name"].toLowerCase().startsWith(searchValue);
+            })
+        })
     }
 
     render() {
@@ -367,7 +494,7 @@ class FilesDashboard extends React.Component {
                         <p id="files_dashboard_welcome_box_title">
                             Files
                         </p>
-                        <input id="files_dashboard_search_bar" placeholder="Search...">
+                        <input id="files_dashboard_search_bar" placeholder="Search..." onChange={this.handleSearchBar}>
                         </input>
                     </div>
                     <div className="clearfix"/>
@@ -442,7 +569,7 @@ class FilesDashboard extends React.Component {
                                     {this.state.fileToUpload ? 
                                         <div alt={this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "Unknown File"}>
                                             <div>
-                                                {this.mapFileTypeToIcon(this.state.fileToUpload["type"])}
+                                                {this.mapFileTypeToIcon(this.state.fileToUpload["type"], false)}
                                             </div>
                                             <p id="files_dashboard_uploaded_file_name">
                                                 {this.state.fileToUpload["name"] ? this.trimTrailingFileName(this.state.fileToUpload["name"]) : "Unable to Upload File"}
@@ -494,10 +621,27 @@ class FilesDashboard extends React.Component {
                                     <option name="other" value="other">Other</option>
                                 </select>
                             </div>
+                            <div className="clearfix"></div>
+                            <ProgressBar id="upload_file_progress_bar" bgColor="#296CF6" completed={this.state.fileUploadProgressBar}></ProgressBar>
                         </div> : <div></div>}
                         <div className="clearfix"/>
                         <div id="files_dashboard_files_box">
-                            {this.state.isLoading ? <div></div> : this.state.files}
+                            {
+                                this.state.isLoading ? 
+                                <div></div> : 
+                                (
+                                    this.state.activeSearchFiles.length > 0 ? 
+                                    this.state.activeSearchFiles :
+                                    (this.state.files ?
+                                    this.state.files : 
+                                    <div id="files_dashboard_no_files_box">
+                                        <p id="files_dashboard_no_files_box_title">
+                                            No Files
+                                        </p>
+                                    </div>
+                                    )
+                                )
+                            }
                         </div>
                     </div>}
                     <NotificationSidebar data={{

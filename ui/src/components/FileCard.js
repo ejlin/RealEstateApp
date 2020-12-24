@@ -30,8 +30,8 @@ class FileCard extends React.Component {
     }
 
     trimTrailingFileName(fileName) {
-        if (fileName.length > 28) {
-            return fileName.substring(0,28) + "...";
+        if (fileName.length > 18) {
+            return fileName.substring(0,18) + "...";
         }
         return fileName;
     }
@@ -72,8 +72,6 @@ class FileCard extends React.Component {
 
     componentDidMount() {
         this.clickTimeout = null;
-
-        console.log(this.state.file);
     }
 
     // onClickHandler = event => {
@@ -100,7 +98,7 @@ class FileCard extends React.Component {
                 // onDoubleClick={() => this.doubleClickCard()}
                 onMouseDown={() => this.clickCard()}
                 >
-                {this.state.mapFileTypeToIcon(this.state.file["file_type"])}
+                {this.state.mapFileTypeToIcon(this.state.file["metadata"]["file_type"], true)}
                 <div className="file_card_individual_file_footer">
                     <p className="file_card_individual_file_footer_title" title={this.state.file["name"] ? this.state.file["name"] : "Unknown File"}>
                         {this.state.file["name"] ? this.trimTrailingFileName(this.state.file["name"]) : "Unknown File"}

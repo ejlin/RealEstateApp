@@ -33,6 +33,7 @@ func (s *Server) HandleRoutes() {
 	r.HandleFunc("/api/user/files/{id}/{property_id}/{file_name}", s.deleteFile).Methods("DELETE")
 	r.HandleFunc("/api/user/files/{id}/{property_id}", s.getPropertyFileslistByUser).Methods("GET")
 	r.HandleFunc("/api/user/files/{id}", s.getFileslistByUser).Methods("GET")
+	// r.HandleFunc("/api/user/files/upload/{id}/{property_id}", s.getStoreFileSignedURL).Queries("file_name", "{file_name}").Methods("GET")
 	r.HandleFunc("/api/user/files/upload/{id}", s.uploadFileByUser).Methods("POST")
 
 	// sign up and login
@@ -209,6 +210,48 @@ func (s *Server) getFileslistByUser(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func (s *Server) getStoreFileSignedURL(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Info().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	propertyID, ok := vars["property_id"]
+	if !ok {
+		log.Info().Msg("missing property id")
+		http.Error(w, "missing property id", http.StatusBadRequest)
+		return
+	}
+
+	ll = log.With().Str("property_id", propertyID).Logger()
+
+	fileName, ok := vars["file_name"]
+	if !ok {
+		log.Info().Msg("missing file name")
+		http.Error(w, "missing file name", http.StatusBadRequest)
+		return
+	}
+
+	ll = log.With().Str("file_name", fileName).Logger()
+
+	url, err := s.generateStoreFileSignedURL(ctx, userID, propertyID, fileName)
+	if err != nil {
+		ll.Error().Err(err).Msg("unable to generate put signed url")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	w.Write([]byte(url))
+	return
+}
+
 func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
@@ -279,7 +322,7 @@ func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
 
 	ll = ll.With().Str("file_category", fileCategory).Str("file_name", fileName).Logger()
 
-	fInfo, err := s.addStorageFile(ctx, file, userID, propertyID, fileName, fileType, fileCategory, year)
+	fInfo, err := s.addStorageFile(ctx, file, userID, propertyID, fileName, fileType, fileCategory, address, year)
 	if err != nil {
 		ll.Error().Err(err).Msg("unable to add file to cloudstorage")
 		http.Error(w, "unable to add file to cloudstorage", http.StatusBadRequest)

@@ -16,11 +16,11 @@ import (
 )
 
 const (
-	address      = "address"
-	fileCategory = "file_category"
-	year         = "year"
+	addressLabel      = "address"
+	fileCategoryLabel = "file_category"
+	yearLabel         = "year"
 
-	fileType = "file_type"
+	fileTypeLabel = "file_type"
 )
 
 type FileInfo struct {
@@ -32,7 +32,7 @@ type FileInfo struct {
 
 	FileCategory string `json:"file_category"`
 
-	Metadata FileMetadata `json:"file_metadata"`
+	Metadata FileMetadata `json:"metadata"`
 }
 
 // FileMetadata contains metadata information about the file. Note, this is NOT the same as
@@ -132,7 +132,7 @@ func (s *Server) getFileData(ctx context.Context, userID, propertyID, fileName s
 }
 
 // addStorageFile adds a new file to cloudstorage bucket.
-func (s *Server) addStorageFile(ctx context.Context, f io.Reader, userID, propertyID, fileName, fileType, fileCategory, year string) (*FileInfo, error) {
+func (s *Server) addStorageFile(ctx context.Context, f io.Reader, userID, propertyID, fileName, fileType, fileCategory, address, year string) (*FileInfo, error) {
 
 	tCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
@@ -147,6 +147,7 @@ func (s *Server) addStorageFile(ctx context.Context, f io.Reader, userID, proper
 		"property_id": propertyID,
 		"year":        year,
 		"file_type":   fileType,
+		"address": address,
 	}
 
 	if _, err := io.Copy(wc, f); err != nil {
@@ -188,6 +189,29 @@ func (s *Server) deleteStorageFile(ctx context.Context, userID, propertyID, file
 	return nil
 }
 
+// generateStoreFileSignedURL creates a signed URL that allows users to upload directly to the bucket.
+func (s *Server) generateStoreFileSignedURL(ctx context.Context, userID, propertyID, fileName string) (string, error) {
+
+	key := path.Join(userID, propertyID, fileName)
+
+	ll := log.With().Str("key", key).Logger()
+	
+	url, err := storage.SignedURL(s.UsersBucket, key, &storage.SignedURLOptions{
+		GoogleAccessID: s.GoogleAccessID,
+		PrivateKey:     []byte(s.GooglePrivateKey),
+		Method:         "PUT",
+		Expires:        time.Now().Add(15 * time.Minute),
+	})
+
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to generate put signed url")
+		return "", err
+	}
+
+	ll.Info().Msg("generated put signed url")
+	return url, nil
+}
+
 // getSignedURL returns a signed url.
 func (s *Server) getSignedURL(ctx context.Context, userID, propertyID, fileName string) (string, error) {
 
@@ -203,11 +227,11 @@ func (s *Server) getSignedURL(ctx context.Context, userID, propertyID, fileName 
 	})
 
 	if err != nil {
-		ll.Warn().Err(err).Msg("unable to generate signed url")
+		ll.Warn().Err(err).Msg("unable to generate get signed url")
 		return "", err
 	}
 
-	ll.Info().Msg("generated signed url")
+	ll.Info().Msg("generated get signed url")
 	return url, nil
 }
 
@@ -252,19 +276,19 @@ func getFileInfoFromAttrs(attrs *storage.ObjectAttrs, prefix string) *FileInfo {
 
 		metadata := attrs.Metadata
 
-		if fileCategory, ok := metadata[fileCategory]; ok {
+		if fileCategory, ok := metadata[fileCategoryLabel]; ok {
 			fInfo.FileCategory = fileCategory
 		}
 
-		if address, ok := metadata[address]; ok {
+		if address, ok := metadata[addressLabel]; ok {
 			fInfo.Address = address
 		}
 
-		if year, ok := metadata[year]; ok {
+		if year, ok := metadata[yearLabel]; ok {
 			fInfo.Year = year
 		}
 
-		if fileType, ok := metadata[fileType]; ok {
+		if fileType, ok := metadata[fileTypeLabel]; ok {
 			fInfo.Metadata.FileType = fileType
 		}
 		return fInfo
