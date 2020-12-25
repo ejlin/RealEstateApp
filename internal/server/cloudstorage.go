@@ -16,6 +16,7 @@ import (
 )
 
 const (
+	propertyIDLabel = "property_id"
 	addressLabel      = "address"
 	fileCategoryLabel = "file_category"
 	yearLabel         = "year"
@@ -46,7 +47,7 @@ type FileMetadata struct {
 // Files are store in the following directory format in our bucket.
 // `{bucket_name}/{user_id}/{property}`
 
-// getFileslistByUser will return all files associated with this user.
+// getCloudFileslistByUser will return all files associated with this user.
 func (s *Server) getCloudFileslistByUser(ctx context.Context, userID string) ([]*FileInfo, error) {
 
 	tCtx, cancel := context.WithTimeout(ctx, 60*time.Second)
@@ -74,6 +75,9 @@ func (s *Server) getCloudFileslistByUser(ctx context.Context, userID string) ([]
 
 		sanitizedFilesInfo = append(sanitizedFilesInfo, &FileInfo{
 			Name:       name,
+			Address: fileInfo.Address,
+			Year: fileInfo.Year,
+			FileCategory: fileInfo.FileCategory,
 			PropertyID: dir[0],
 			Metadata:   fileInfo.Metadata,
 		})
@@ -144,10 +148,11 @@ func (s *Server) addStorageFile(ctx context.Context, f io.Reader, userID, proper
 	wc := o.NewWriter(tCtx)
 
 	wc.Metadata = map[string]string{
-		"property_id": propertyID,
-		"year":        year,
-		"file_type":   fileType,
-		"address": address,
+		propertyIDLabel: propertyID,
+		yearLabel:        year,
+		fileTypeLabel:   fileType,
+		addressLabel: address,
+		fileCategoryLabel: fileCategory,
 	}
 
 	if _, err := io.Copy(wc, f); err != nil {
@@ -276,6 +281,10 @@ func getFileInfoFromAttrs(attrs *storage.ObjectAttrs, prefix string) *FileInfo {
 
 		metadata := attrs.Metadata
 
+		if propertyID, ok := metadata[propertyIDLabel]; ok {
+			fInfo.PropertyID = propertyID
+		}
+
 		if fileCategory, ok := metadata[fileCategoryLabel]; ok {
 			fInfo.FileCategory = fileCategory
 		}
@@ -291,6 +300,7 @@ func getFileInfoFromAttrs(attrs *storage.ObjectAttrs, prefix string) *FileInfo {
 		if fileType, ok := metadata[fileTypeLabel]; ok {
 			fInfo.Metadata.FileType = fileType
 		}
+		log.Info().Interface("info", fInfo).Msg("fileinfo")
 		return fInfo
 	}
 	return nil

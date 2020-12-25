@@ -18,6 +18,54 @@
     font-weight: bold;
 }
 
+#files_dashboard_filter_and_sort_box {
+    float: left;
+}
+
+#files_dashboard_sort {
+    background-color: #eaf5fb;
+    border-radius: 8px;
+    color: #296CF6;
+    cursor: pointer;
+    height: 24px;
+    line-height: 24px;
+    padding: 7.5px 15px 7.5px 15px;
+    transition: 0.2s;
+    user-select: none;
+}
+
+#files_dashboard_sort:hover {
+    background-color: #296CF6;
+    color: white;
+}
+
+.files_dashboard_sort_focus {
+    background-color: #296CF6 !important;
+    color: white !important;
+}
+
+.files_dashboard_sort_text {
+    float: left;
+    font-weight: bold;
+}
+
+.square_bottom_borders {
+    border-radius: 8px 8px 0px 0px !important;
+    transition: 0s !important;
+}
+
+#files_dashboard_sort_icon {
+    float: left;
+    height: 20px;
+    margin-left: 5px;   
+    margin-top: 3px;
+    width: 20px;
+}
+
+.files_dashboard_sort_icon_up {
+    transform: rotate(180deg);
+}
+
 #files_dashboard_icons_box {
     margin-left: 80px;
     margin-right: 80px;
@@ -26,44 +74,69 @@
 }
 
 #files_dashboard_upload_file_text_button {
-    background-color:#296CF6;
+    /* background-color:#296CF6; */
     /* background-color: #F1F1F1; */
-    border: 1px solid #296CF6;
-    border-radius: 4px;
+    background-color: #eaf5fb;
+    border-radius: 8px;
     /* color: black; */
-    color: white;
+    /* color: white; */
+    color: #296CF6;
     cursor: pointer;
     font-weight: bold;
-    float: left;
-    height: 20px;
-    line-height: 20px;
+    float: right;
+    height: 24px;
+    line-height: 24px;
     margin-bottom: 10px;
+    margin-left: 15px;
     padding: 7.5px 15px 7.5px 15px;
     transition: 0.3s;
     user-select: none;
 }
 
-#files_dashboard_upload_file_icon:hover, .files_dashboard_icons:hover {
+#files_dashboard_upload_file_text_button:hover {
+    background-color:#296CF6;
+    color: white;
+}
+
+#files_dashboard_upload_file_icon:hover  {
     transform: scale(1.05);
 }
 
 .files_dashboard_icons {
-    background-color:  #296CF6;
-    border: 1px solid #296CF6;
-    border-radius: 4px;
-    color: white;
+    border: 2px solid transparent;
+    border-radius: 8px;
     cursor: pointer;
     float: right;
     height: 25px;
-    margin-left: 15px;
+    margin-left: 10px;
     padding: 5px;
     width: 25px;
     transition: 0.3s;
 }
 
+.files_dashboard_icons:hover {
+   opacity: 0.85;
+}
+
+#download_file_icon {
+    background-color: #eee6f9;
+    border-radius: 4px;
+    color: #6e4ec1; 
+}
+
+#trash_file_icon {
+    background-color: #d3d3d3;
+    border-radius: 4px;
+}
+
+#edit_file_icon {
+    background-color: #dbebd2;
+    color: #85bb65;
+}
+
 #files_dashboard_search_bar {
-    border: 2px solid #d3d3d3;
-    border-radius: 50px;
+    border: 1px solid #d3d3d3;
+    border-radius: 8px;
     float: right;
     font-size: 1.1em;
     margin-right: 80px;
@@ -89,6 +162,33 @@
     font-size: 1.25em;
     font-weight: bold;
     width: 50px;
+}
+
+.files_dashboard_sort_options_list {
+    background-color: #eaf5fb;
+    color: #296CF6;
+    cursor: pointer;
+    padding: 10px 10px 10px 10px;
+    text-align: center;
+    transition: 0.5s;
+    width: 100%;
+}
+
+#files_dashboard_sort_options_box {
+    border-radius: 0px 8px 8px 8px !important;
+    margin-top: 39px;
+    position: absolute;
+    z-index: 5;
+}
+
+.display_sort_box {
+    background-color:  #296CF6 !important;
+    color: white !important;
+}
+
+.files_dashboard_sort_options_list:hover {
+    background-color: #296CF6;
+    color: white;
 }
 
 #files_dashboard_sort_box_list {
@@ -268,7 +368,7 @@
 .files_dashboard_upload_image_type {
     height: 80px;
     margin-left: calc((100% - 70px)/2);
-    margin-top: 15px;
+    margin-top: 40px;
     width: 70px;
 }
 
@@ -365,4 +465,22 @@
     font-weight: bold;
     line-height: 150px;
     text-align: center;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.files_dashboard_property_sort_title {
+    color: black;
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-top: 25px;
 }

@@ -333,7 +333,7 @@ func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
 	// fmt.Printf("Uploaded File: %+v\n", handler.Filename)
 	// fmt.Printf("File Size: %+v\n", handler.Size)
 	// fmt.Printf("MIME Header: %+v\n", handler.Header)
-	ll.Info().Msg("successfully stored file in GCS")
+	ll.Info().Interface("info", fInfo).Msg("successfully stored file in GCS")
 	RespondToRequest(w, fInfo)
 	return
 

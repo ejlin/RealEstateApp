@@ -11,7 +11,7 @@ import FileCard from './FileCard.js';
 import ProgressBar from './../utility/ProgressBar.js';
 
 import { MdFileDownload, MdFileUpload, MdEdit } from 'react-icons/md';
-import { IoMdTrash } from 'react-icons/io';
+import { IoMdTrash, IoMdArrowDropdown } from 'react-icons/io';
 import { IoCloseSharp } from 'react-icons/io5';
 import { AiFillFile, AiFillFileImage, AiFillFileExclamation, AiFillFilePdf, AiFillFileExcel, AiFillFilePpt, AiFillFileText, AiFillFileWord, AiFillFileZip } from 'react-icons/ai';
 
@@ -28,12 +28,20 @@ class FilesDashboard extends React.Component {
             totalEstimateWorth: this.props.location.state.totalEstimateWorth,
             missingEstimate: this.props.location.state.missingEstimate,
             sortToggleMap: [['A-Z', false]],
+            // files is the main point with how files are displayed.
             files: [],
+            originalLoadedFiles: [],
+            propertyToFilesMap: new Map(),
             properties: new Map(),
+            // activeFiles are files that the user has currently selected.
             activeFiles: new Map(),
             activeSearchFiles: [],
+            filesToDisplay: null,
             displayUploadFileBox: false,
             fileUploadProgressBar: 0,
+            displayUploadFileBox: false,
+            sortType: null,
+            sortTypeArrowDown: true,
             isFileLoading: true,
             isPropertiesLoading: true,
         };
@@ -61,18 +69,57 @@ class FilesDashboard extends React.Component {
             filesList.sort(function(a,b){
                 return new Date(b["metadata"]["last_edited_at"]) - new Date(a["metadata"]["last_edited_at"]);
             })
+
+            var loadedFiles = [];
+            var propertyToFilesMap = new Map();
+
+            for (var i = 0; i < filesList.length; i++) {
+
+                var file = filesList[i];
+
+                var fileCard = <FileCard key={i} data={{
+                    state: {
+                        userID: this.state.userID,
+                        file: file,
+                        setActiveFileAttributes: this.setActiveFileAttributes,
+                        openSignedURL: this.openSignedURL, 
+                        mapFileTypeToIcon: this.mapFileTypeToIcon
+                    }                       
+                }}/>;
+                loadedFiles.push(fileCard);
+
+                var propertyID = file["property_id"];
+                var propertyAddress = file["address"];
+                // property does not exist yet. Add it.
+                if (!propertyToFilesMap.has(propertyID)) {
+                    // Add our title as the first element. 
+                    propertyToFilesMap.set(propertyID, [
+                        <div key={propertyID + i}>
+                            <div className="files_dashboard_property_sort_title">
+                                {propertyAddress}
+                            </div>
+                            <div className="clearfix"/>
+                        </div>
+                    ]);
+                }
+
+                var filesArrAtProperty = propertyToFilesMap.get(propertyID);
+                filesArrAtProperty.push(fileCard);
+                propertyToFilesMap.set(propertyID, filesArrAtProperty);
+            }  
+
+            this.renderFiles(filesList)
+
             this.setState({
-                files: filesList.map((file, i) => 
-                    <FileCard key={i} data={{
-                        state: {
-                            userID: this.state.userID,
-                            file: file,
-                            setActiveFileAttributes: this.setActiveFileAttributes,
-                            openSignedURL: this.openSignedURL, 
-                            mapFileTypeToIcon: this.mapFileTypeToIcon
-                        }                       
-                    }}/>
-                ),
+                files: filesList,
+                originalLoadedFiles: loadedFiles.slice(),
+                // sort our properties map by alphabetical order, except leave General as last.
+                propertyToFilesMap: new Map([...propertyToFilesMap].sort((a,b) => {
+                    if (a[1] === "General") {
+                        return -1;
+                    }
+                    return b[1] - a[1];
+                })),
                 isFileLoading: false
             });
         }).catch(error => {
@@ -109,12 +156,18 @@ class FilesDashboard extends React.Component {
 
     // file Key = propertyID + '/' + fileName
     setActiveFileAttributes(fileKey, toRemove) {
+        console.log(fileKey);
         var currentActiveFiles = this.state.activeFiles;
+        if (currentActiveFiles === null || currentActiveFiles === undefined || currentActiveFiles.length === 0) {
+            currentActiveFiles = new Map();
+        }
         if (currentActiveFiles.size >= 25 && !toRemove) {
             return false
         }
+        console.log(currentActiveFiles);
         if (!toRemove) {
             currentActiveFiles.set(fileKey, true);
+            console.log(currentActiveFiles);
         } else {
             // Remove from active ("unclicked")
             currentActiveFiles.delete(fileKey);
@@ -198,9 +251,14 @@ class FilesDashboard extends React.Component {
             var key = nextElem.value[0];
             var success = await this.deleteFile(key);
             if (success === true) {
+                console.log(key);
+                console.log(activeFiles);
                 activeFiles.delete(key);
+                console.log(activeFiles);
                 for (var i = 0; i < currFiles.length; i++) {
-                    var file = currFiles[i].props.data.state.file;
+                    // When we filter by properties, we inject <div> elements which do not have a state.
+                    // Add this check to filter them out. 
+                    var file = currFiles[i];
                     var fKey = file["property_id"] + "/" + file["name"];
                     if (key === fKey) {
                         currFiles.splice(i, 1);
@@ -210,10 +268,12 @@ class FilesDashboard extends React.Component {
             }
             nextElem = activeFilesIterator.next();
         }
+        this.renderFiles(currFiles);
+
         this.setState({
             files: [...currFiles],
-            activeFiles: [...activeFiles]
-        });
+            activeFiles: [...activeFiles],
+        }, () => console.log(this.state.activeFiles));
     }
 
     handleFileUploadChange(event) {
@@ -246,6 +306,11 @@ class FilesDashboard extends React.Component {
         var fileCategorySelect = document.getElementById("files_dashboard_upload_file_category_select");
         var fileCategorySelectValue = fileCategorySelect.value;
 
+        var yearInput = document.getElementById("files_dashboard_upload_file_year_input");
+
+        // Year sanitization is handled server side. If empty, server will fill in with current year. 
+        var yearInputValue = yearInput.value;
+
         // var signedURL;
         // axios({
         //     method: 'get',
@@ -270,6 +335,7 @@ class FilesDashboard extends React.Component {
         formData.append('file_category', fileCategorySelectValue);
         formData.append('file_type', file["type"]);
         formData.append('address', propertySelectAddress);
+        formData.append('year', yearInputValue);
 
 
         // If user wants to override the default name.
@@ -297,18 +363,21 @@ class FilesDashboard extends React.Component {
             data: formData
         }).then(response => {
             var currFiles = this.state.files;
+            currFiles.push(response.data);
+            // currFiles.push(<FileCard key={currFiles.length + 1} data={{
+            //     state: {
+            //         userID: this.state.userID,
+            //         file: response.data,
+            //         setActiveFileAttributes: this.setActiveFileAttributes,
+            //         openSignedURL: this.openSignedURL, 
+            //         mapFileTypeToIcon: this.mapFileTypeToIcon,
+            //     }                       
+            // }}/>);
 
-            currFiles.push(<FileCard key={currFiles.length + 1} data={{
-                state: {
-                    userID: this.state.userID,
-                    file: response.data,
-                    setActiveFileAttributes: this.setActiveFileAttributes,
-                    openSignedURL: this.openSignedURL, 
-                    mapFileTypeToIcon: this.mapFileTypeToIcon,
-                }                       
-            }}/>);
+            this.renderFiles(currFiles);
+
             this.setState({
-                files: currFiles,
+                files: [...currFiles],
                 displayUploadFileBox: false,
                 fileToUpload: null,
                 fileUploadProgressBar: 0,
@@ -473,21 +542,13 @@ class FilesDashboard extends React.Component {
         var searchValue = e.target.value.toLowerCase();
         this.setState({
             activeSearchFiles: this.state.files.filter(file => {
-                return file.props.data.state.file["name"].toLowerCase().startsWith(searchValue);
+                return file.props.data ? file.props.data.state.file["name"].toLowerCase().startsWith(searchValue) : 0;
             })
         })
     }
 
     renderActiveSearchFiles() {
-        if (this.state.activeSearchFiles.length > 0) {
-            return (
-                this.state.activeSearchFiles
-            );
-        } else {
-            return (
-                this.renderNoFiles()
-            );
-        }
+        return this.state.activeSearchFiles.length > 0 ? this.state.activeSearchFiles : this.renderNoFiles();
     }
 
     renderNoFiles() {
@@ -498,6 +559,130 @@ class FilesDashboard extends React.Component {
                 </p>
             </div>
         );
+    }
+
+    enforceYearInput(e) {
+        if (e.target.value > 4) {
+            e.target.value = e.target.value.slice(0, 4);
+        }
+    }
+
+    convertPropertyToFilesMapToElements(propertyToFilesMap) {
+
+        var files = [];
+        propertyToFilesMap.forEach(function(key, value, map) {
+            // value is an array of html elements.
+            files = files.concat(key);
+            files = files.concat(
+                <div className="clearfix"/>
+            );
+        })
+        return files;
+    }
+
+    handleSortOptionsHelper(files, sortType, arrowDown) {
+        switch (sortType) {
+            case "A-Z":
+                files = this.state.originalLoadedFiles;
+                files.sort(function(a,b) {
+                    if (a.props.data.state.file["name"] > b.props.data.state.file["name"]) {
+                        return arrowDown ? 1 : -1;
+                    } else if (b.props.data.state.file["name"] > a.props.data.state.file["name"]){
+                        return arrowDown ? -1 : 1;
+                    }
+                    return 0;
+                })
+                break;
+            case "Uploaded Date":
+                files = this.state.originalLoadedFiles;
+                files.sort(function(a,b) {
+                    return arrowDown ? 
+                    new Date(a.props.data.state.file["metadata"]["uploaded_at"]) - new Date(b.props.data.state.file["metadata"]["uploaded_at"]) :
+                    new Date(b.props.data.state.file["metadata"]["uploaded_at"]) - new Date(a.props.data.state.file["metadata"]["uploaded_at"]);
+                })
+                break;
+            case "Last Edited Date":
+                files.sort(function(a,b) {
+                    return arrowDown ?
+                    new Date(a.props.data.state.file["metadata"]["last_edited_at"]) - new Date(b.props.data.state.file["metadata"]["last_edited_at"]) :
+                    new Date(b.props.data.state.file["metadata"]["last_edited_at"]) - new Date(a.props.data.state.file["metadata"]["last_edited_at"]);
+                })
+                break;
+            case "Property":
+                files = this.convertPropertyToFilesMapToElements();
+                break;
+        }
+        return files;
+    }
+
+    /* handleSortOptions is a state machine handler. There are three possible 
+    /* states that our Sort button can be in. 
+    /* State 1: Default: (Sort V) (V is the down Arrow)
+    /* State 2: After click: (SORT_TYPE V), for example (A-Z V)
+    /* State 3: After secondary click: (SORT_TYPE ^) (^ is the up Arrow)
+    /* We cycle between these states */
+    handleSortOptions(sortType) {
+
+        var sortTypeArrowDown = this.state.sortTypeArrowDown;
+        var files = this.state.files;
+        var newFiles;
+
+        if (this.state.sortType === null || this.state.sortType === undefined || this.state.sortType !== sortType) {
+            newFiles = this.handleSortOptionsHelper(files, sortType, true);
+            sortTypeArrowDown = true;
+        } else if (sortTypeArrowDown){
+            newFiles = this.handleSortOptionsHelper(files, sortType, false);
+            sortTypeArrowDown = false;
+        } else if (!sortTypeArrowDown) {
+            newFiles = this.state.originalLoadedFiles;
+            sortType = null;
+            sortTypeArrowDown = true;
+        }
+        this.setState({
+            sortType: sortType,
+            displaySortBox: false,
+            files: [...newFiles.slice()],
+            sortTypeArrowDown: sortTypeArrowDown
+        })
+    }
+
+    renderFiles(files) {
+        var propertyToFilesMap = new Map();
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var propertyID = file["property_id"];
+            var propertyAddress = file["address"];
+            
+            if (!propertyToFilesMap.has(propertyID)) {
+                // Add our title as the first element. 
+                propertyToFilesMap.set(propertyID, [
+                    <div key={propertyID + i}>
+                        <div className="files_dashboard_property_sort_title">
+                            {propertyAddress}
+                        </div>
+                        <div className="clearfix"/>
+                    </div>
+                ]);
+            }
+
+            var fileCard = <FileCard key={i} data={{
+                state: {
+                    userID: this.state.userID,
+                    file: file,
+                    setActiveFileAttributes: this.setActiveFileAttributes,
+                    openSignedURL: this.openSignedURL, 
+                    mapFileTypeToIcon: this.mapFileTypeToIcon
+                }                       
+            }}/>;
+
+            var filesArrAtProperty = propertyToFilesMap.get(propertyID);
+            filesArrAtProperty.push(fileCard);
+            propertyToFilesMap.set(propertyID, filesArrAtProperty);
+        }
+
+        this.setState({
+            filesToDisplay: this.convertPropertyToFilesMapToElements(propertyToFilesMap)
+        })
     }
 
 
@@ -561,7 +746,13 @@ class FilesDashboard extends React.Component {
                         <option name="taxes" value="taxes">Taxes</option>
                         <option name="other" value="other">Other</option>
                     </select>
-                    <input className="upload_file_input_half_right" placeholder="Year">
+                    <input 
+                        id="files_dashboard_upload_file_year_input" 
+                        className="upload_file_input_half_right" 
+                        type="number" 
+                        maxlength="4"
+                        onChange={this.enforceYearInput}
+                        placeholder="Year">
                     </input>
                     <div className="clearfix"/>
                 </div>
@@ -622,38 +813,72 @@ class FilesDashboard extends React.Component {
                             </li>
                         </ul>
                         <div className="clearfix"/>
-                        <p id="files_dashboard_sort_box_title">
-                            Sort: 
-                        </p>
-                        <ul id ="files_dashboard_sort_box_list">
-                            <li className={this.state.sortToggleMap['A-Z'] ? "files_dashboard_sort_box_type_list_on files_dashboard_sort_box_type_list" : "files_dashboard_sort_box_type_list_off files_dashboard_sort_box_type_list"}>
-                                A - Z
-                            </li>
-                            <li className={this.state.sortToggleMap['Date'] ? "files_dashboard_sort_box_type_list_on files_dashboard_sort_box_type_list" : "files_dashboard_sort_box_type_list_off files_dashboard_sort_box_type_list"}>
-                                Uploaded Date
-                            </li>
-                            <li className={this.state.sortToggleMap['Date'] ? "files_dashboard_sort_box_type_list_on files_dashboard_sort_box_type_list" : "files_dashboard_sort_box_type_list_off files_dashboard_sort_box_type_list"}>
-                                Last Edited Date
-                            </li>
-                            <li className={this.state.sortToggleMap['Property'] ? "files_dashboard_sort_box_type_list_on files_dashboard_sort_box_type_list" : "files_dashboard_sort_box_type_list_off files_dashboard_sort_box_type_list"}>
-                                Property
-                            </li>
-                            <BsCaretDownFill id="files_dashboard_sort_box_arrow_icon"></BsCaretDownFill>
-                        </ul>
                     </div> */}
                     {this.state.isFileLoading || this.state.isPropertiesLoading ? <div></div> : 
                     <div>
                         <div id="files_dashboard_icons_box">
+                            <div id="files_dashboard_filter_and_sort_box" onMouseEnter={() => this.setState({displaySortBox: true})} onMouseLeave={() => this.setState({displaySortBox: false})}>
+                                <div 
+                                    id="files_dashboard_sort" 
+                                    className={
+                                            this.state.displaySortBox ? 
+                                            "square_bottom_borders display_sort_box" : 
+                                            (
+                                                this.state.sortType ? 
+                                                "display_sort_box" : 
+                                                ""
+                                            )}
+                                    onClick={() => {
+                                        if (this.state.sortType) {
+                                            this.handleSortOptions(this.state.sortType);
+                                            }}
+                                        }
+                                        >
+                                    <p className="files_dashboard_sort_text">
+                                        {this.state.sortType ? this.state.sortType : "Sort"}
+                                    </p>
+                                    <IoMdArrowDropdown id="files_dashboard_sort_icon" className={this.state.sortTypeArrowDown ? "" : "files_dashboard_sort_icon_up"}></IoMdArrowDropdown>
+                                    
+                                </div>
+                            </div>
+                            {
+                                        this.state.displaySortBox ? 
+                                        <div id="files_dashboard_sort_options_box" onMouseEnter={() => this.setState({displaySortBox: true})} onMouseLeave={() => this.setState({displaySortBox: false})}>
+                                            <li className={
+                                                    this.state.sortType === "A-Z" ? 
+                                                    "files_dashboard_sort_options_list files_dashboard_sort_focus" : 
+                                                    "files_dashboard_sort_options_list"
+                                                } 
+                                                onClick={() => this.handleSortOptions("A-Z")}>
+                                                A-Z
+                                            </li>
+                                            <li className={
+                                                    this.state.sortType === "Uploaded Date" ? 
+                                                    "files_dashboard_sort_options_list files_dashboard_sort_focus" :
+                                                    "files_dashboard_sort_options_list"
+                                                } 
+                                                onClick={() => this.handleSortOptions("Uploaded Date")}>
+                                                Uploaded Date
+                                            </li>
+                                            <li className={
+                                                    this.state.sortType === "Last Edited Date" ?
+                                                    "files_dashboard_sort_options_list files_dashboard_sort_focus" :
+                                                    "files_dashboard_sort_options_list"
+                                             } onClick={() => this.handleSortOptions("Last Edited Date")}>
+                                                Last Edited Date
+                                            </li>
+                                        </div> : 
+                                        <div></div>}
                             <div id="files_dashboard_upload_file_text_button" onClick={() => this.setState({displayUploadFileBox: true})}>Add File</div>
+                            {this.state.activeFiles.size >= 1 ?
+                                <IoMdTrash id="trash_file_icon" className="files_dashboard_icons" onClick={() => this.deleteActiveFiles()}></IoMdTrash> : 
+                                <div></div>}
                             {this.state.activeFiles.size >= 1 ? 
-                                <MdFileDownload className="files_dashboard_icons" onClick={() => this.downloadActiveFiles()}></MdFileDownload> : 
+                                <MdFileDownload id="download_file_icon" className="files_dashboard_icons" onClick={() => this.downloadActiveFiles()}></MdFileDownload> : 
                                 <div></div>
                             }
-                            {this.state.activeFiles.size >= 1 ?
-                                <IoMdTrash className="files_dashboard_icons" onClick={() => this.deleteActiveFiles()}></IoMdTrash> : 
-                                <div></div>}
                             {this.state.activeFiles.size === 1 ? 
-                                <MdEdit className="files_dashboard_icons"></MdEdit> : 
+                                <MdEdit id="edit_file_icon" className="files_dashboard_icons"></MdEdit> : 
                                 <div></div>
                             }
                         </div>
@@ -670,7 +895,7 @@ class FilesDashboard extends React.Component {
                                     (this.state.activeSearchFiles.length > 0 || document.getElementById("files_dashboard_search_bar").value !== "") ? 
                                     this.renderActiveSearchFiles() :
                                     (this.state.files ?
-                                    this.state.files : 
+                                    this.state.filesToDisplay : 
                                     this.renderNoFiles()
                                     )
                                 )
