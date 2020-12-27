@@ -55,11 +55,7 @@ class SignUp extends React.Component {
         .then(response => {
             if (response != null) {
                 this.setState({
-                    currUserID: response.data["id"],
-                    currUserFirstName: response.data["first_name"],
-                    currUserLastName: response.data["last_name"],
-                    currUserEmail: response.data["email"],
-                    currUserUsername: response.data["username"],
+                    currUser: response.data,
                     redirect: "/dashboard"
                 });
             }
@@ -71,11 +67,7 @@ class SignUp extends React.Component {
             return <Redirect to={{
                 pathname: this.state.redirect,
                 state: {
-                    id: this.state.currUserID,
-                    firstName: this.state.currUserFirstName,
-                    lastName: this.state.currUserLastName,
-                    email: this.state.currUserEmail,
-                    username: this.state.currUserUsername
+                    user: this.state.currUser,
                 }
             }} />
         }

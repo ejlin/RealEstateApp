@@ -18,13 +18,13 @@ type Property struct {
 	City    string `json:"city",sql:"type:VARCHAR(50)"`
 	ZipCode string `json:"zip_code",sql:"type:VARCHAR(10)"`
 
-	BoughtDate           string  `json:"bought_date",sql:"type:VARCHAR(5)"`
-	PriceBought          float64 `json:"price_bought",sql:"type:NUMERIC(16,2)"`
-	PriceRented          float64 `json:"price_rented",sql:"type:NUMERIC(10,2)"`
-	PriceEstimate        float64 `json:"price_estimate",sql:"type:NUMERIC(16,2)"`
-	PriceMortgage        float64 `json:"price_mortgage",sql:"type:NUMERIC(12,2)"`
-	PriceDownPayment     float64 `json:"price_down_payment",sql:"type:NUMERIC(12,2)"`
-	PricePropertyManager float64 `json:"price_property_manager",sql:"type:NUMERIC(12,2)"`
+	BoughtDate           string  `json:"bought_date,omitempty",sql:"type:VARCHAR(5)"`
+	PriceBought          float64 `json:"price_bought,omitempty",sql:"type:NUMERIC(16,2)"`
+	PriceRented          float64 `json:"price_rented,omitempty",sql:"type:NUMERIC(10,2)"`
+	PriceEstimate        float64 `json:"price_estimate,omitempty",sql:"type:NUMERIC(16,2)"`
+	PriceMortgage        float64 `json:"price_mortgage,omitempty",sql:"type:NUMERIC(12,2)"`
+	PriceDownPayment     float64 `json:"price_down_payment,omitempty",sql:"type:NUMERIC(12,2)"`
+	PricePropertyManager float64 `json:"price_property_manager,omitempty",sql:"type:NUMERIC(12,2)"`
 
 	MortgageCompany      string       `json:"mortgage_company",sql:"type:VARCHAR(64)"`
 	MortgageInterestRate float64      `json:"mortgage_interest_rate",sql:"type:NUMERIC(5,1)"`

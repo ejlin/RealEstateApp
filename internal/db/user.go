@@ -1,6 +1,7 @@
 package db
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
@@ -14,16 +15,20 @@ type User struct {
 	// Internal fields.
 	ID string `json:"id",sql:"type:uuid; primary key"`
 
-	CreatedAt *time.Time `json:"created_at",sql:"type:timestamp"`
-	LastLogin *time.Time `json:"last_login",sql:"type:timestamp"`
+	CreatedAt *time.Time `json:"created_at,omitempty",sql:"type:timestamp"`
+	LastLogin *time.Time `json:"last_login,omitempty",sql:"type:timestamp"`
 
 	// External fields.
-	FirstName string `json:"first_name",sql:"type:varchar(90)"`
-	LastName  string `json:"last_name",sql:"type:varchar(90)"`
-	Password  string `json:"password",sql:"type:varchar(50)"`
-	Email     string `json:"email",sql:"type:varchar(50)"`
+	FirstName string `json:"first_name,omitempty",sql:"type:varchar(90)"`
+	LastName  string `json:"last_name,omitempty",sql:"type:varchar(90)"`
+	Password  string `json:"password,omitempty",sql:"type:varchar(50)"`
+	Email     string `json:"email,omitempty",sql:"type:varchar(50)"`
 
-	Plan PlanType `json:"plan",sql:"type:ENUM('Free', 'Basic', 'Business', 'Enterprise')"`
+	Plan PlanType `json:"plan,omitempty",sql:"type:ENUM('Free', 'Basic', 'Business', 'Enterprise')"`
+
+	// User settings, corresponds to the "Settings page" in the UI. Contains information about
+	// about stuff like "whether to receive marketing emails, etc."
+	Settings *json.RawMessage `json:"settings,omitempty",sql:"type:jsonb"`
 }
 
 type PlanType string
@@ -60,25 +65,6 @@ func (handle *Handle) GetUserByID(id string) (*User, error) {
 	return &user, nil
 }
 
-// GetUserIDByUsername returns the id associated with a username.
-func (handle *Handle) GetUserByUsername(username, password string) (*User, error) {
-
-	if username == "" {
-		return nil, errors.New("empty username")
-	}
-
-	if password == "" {
-		return nil, errors.New("empty password")
-	}
-
-	var users User
-	if err := handle.DB.Where("username = ?", username).Where("password = ?", password).Find(&users).Error; err != nil {
-		return nil, err
-	}
-
-	return &users, nil
-}
-
 func (handle *Handle) GetUserByEmail(email, password string) (*User, error) {
 
 	if email == "" {
@@ -95,4 +81,19 @@ func (handle *Handle) GetUserByEmail(email, password string) (*User, error) {
 	}
 
 	return &users, nil
+}
+
+// GetSettingsByUserID returns a user's individual settings.
+func (handle *Handle) GetSettingsByUserID(id string) (*json.RawMessage, error) {
+	_, err := uuid.Parse(id)
+	if err != nil {
+		return nil, fmt.Errorf("invalid UUID: %w", err)
+	}
+
+	var user User
+	if err := handle.DB.Select("settings").Where("id = ?", id).Find(&user).Error; err != nil {
+		return nil, err
+	}
+
+	return user.Settings, nil
 }

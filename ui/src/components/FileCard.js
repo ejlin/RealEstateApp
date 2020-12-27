@@ -43,7 +43,7 @@ class FileCard extends React.Component {
 
         if (this.state.timeClicked === null || (now - this.state.timeClicked) > 200) { 
             // Let parent know this file was clicked
-            var success = this.state.setActiveFileAttributes(key, this.state.isClicked);
+            var success = this.state.setActiveFileAttributes(key, this.state.file, this.state.isClicked);
             if (success) {
                 this.setState({
                     isClicked: !this.state.isClicked,
@@ -52,10 +52,10 @@ class FileCard extends React.Component {
             }
         } else {
             this.state.openSignedURL(key)
-            var success = this.state.setActiveFileAttributes(key, false);
+            var success = this.state.setActiveFileAttributes(key, this.state.file, false);
             if (success) {
                 this.setState({
-                    isClicked: true,
+                    isClicked: false,
                     timeClicked: Date.now()
                 })
             }
@@ -73,20 +73,6 @@ class FileCard extends React.Component {
     componentDidMount() {
         this.clickTimeout = null;
     }
-
-    // onClickHandler = event => {
-    //     if (this.state.isClicked) {
-    //         this.clickCard();
-    //         return;
-    //     }
-    //     clearTimeout(timer);
-    //     if (event.detail === 1) {
-    //         timer = setTimeout(() => {
-    //             this.clickCard()}, 100)
-    //     } else if (event.detail === 2 ) {
-    //         this.doubleClickCard()
-    //     }
-    // }
 
     render() {
         return (

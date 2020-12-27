@@ -18,17 +18,18 @@
     font-weight: bold;
 }
 
-#files_dashboard_filter_and_sort_box {
+.files_dashboard_filter_and_sort_box {
     float: left;
 }
 
-#files_dashboard_sort {
+.files_dashboard_category_and_sort {
     background-color: #eaf5fb;
     border-radius: 8px;
     color: #296CF6;
     cursor: pointer;
     height: 24px;
     line-height: 24px;
+    margin-right: 20px;
     padding: 7.5px 15px 7.5px 15px;
     transition: 0.2s;
     user-select: none;
@@ -174,7 +175,26 @@
     width: 100%;
 }
 
+#files_dashboard_category_parent {
+    margin-left: 0px;
+    position: absolute;
+}
+
+#files_dashboard_sort_parent {
+    margin-left: 135px;
+    position: absolute;
+}
+
 #files_dashboard_sort_options_box {
+    margin-left: 135px;
+}
+
+#files_dashboard_category_options_box {
+    margin-left: 0px;
+   
+}
+
+.files_dashboard_category_and_sort_options_box {
     border-radius: 0px 8px 8px 8px !important;
     margin-top: 39px;
     position: absolute;
@@ -483,4 +503,5 @@ input[type=number] {
     font-size: 1.3em;
     font-weight: bold;
     margin-top: 25px;
+    user-select: none;
 }

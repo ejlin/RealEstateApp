@@ -7,7 +7,10 @@ import './CSS/Login.css';
 class Login extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {redirect: null};
+        this.state = {
+            user: null,
+            redirect: null
+        };
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -43,12 +46,9 @@ class Login extends React.Component {
         }).then(response => {
             if (response != null) {
                 this.setState({
-                    currUserID: response.data["id"],
-                    currUserFirstName: response.data["first_name"],
-                    currUserLastName: response.data["last_name"],
-                    currUserEmail: response.data["email"],
+                    user: response.data,
                     redirect: "/dashboard"
-                });
+                }, () => console.log(this.state.user));
             }
             
         }).catch(error => console.error('timeout exceeded'));
@@ -59,10 +59,7 @@ class Login extends React.Component {
             return <Redirect to={{
                 pathname: this.state.redirect,
                 state: {
-                    id: this.state.currUserID,
-                    firstName: this.state.currUserFirstName,
-                    lastName: this.state.currUserLastName,
-                    email: this.state.currUserEmail
+                    user: this.state.user,
                 }
             }} />
         }

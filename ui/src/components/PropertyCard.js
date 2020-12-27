@@ -32,8 +32,7 @@ class PropertyCard extends React.Component {
                 ['other', false]]);
 
         this.state = {
-            userID: this.props.data.state.userID,
-            username: this.props.data.state.username,
+            user: this.props.data.state.user,
             propertyID: propDetails["id"],
             address: propDetails["address"],
             city: propDetails["city"],
@@ -63,7 +62,7 @@ class PropertyCard extends React.Component {
     }
     
     deletePropertyByUser() {
-        var axiosDeletePropertyByUserURL = '/api/user/property/' + this.state.userID;
+        var axiosDeletePropertyByUserURL = '/api/user/property/' + this.state.user["id"];
         axios({
             method: 'delete',
             url: axiosDeletePropertyByUserURL,
@@ -114,7 +113,7 @@ class PropertyCard extends React.Component {
         var loan = this.state.priceBought - this.state.downPayment;
         var ltvRatio = loan / estimate * 100;
 
-        var url = 'api/user/files/' + this.state.userID + '/' + this.state.propertyID;
+        var url = 'api/user/files/' + this.state.user["id"] + '/' + this.state.propertyID;
         console.log(this.state.propertyID);
         console.log(url);
         var files;

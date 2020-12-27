@@ -36,6 +36,9 @@ func (s *Server) HandleRoutes() {
 	// r.HandleFunc("/api/user/files/upload/{id}/{property_id}", s.getStoreFileSignedURL).Queries("file_name", "{file_name}").Methods("GET")
 	r.HandleFunc("/api/user/files/upload/{id}", s.uploadFileByUser).Methods("POST")
 
+	r.HandleFunc("/api/user/settings/{id}", s.getSettings).Methods("GET")
+	r.HandleFunc("/api/user/settings/{id}", s.updateSettings).Methods("PATCH")
+
 	// sign up and login
 	r.HandleFunc("/api/user/signup", s.addUser).Methods("POST")
 	r.HandleFunc("/api/user/login/email", s.loginUserByEmail).Methods("POST")
@@ -107,6 +110,10 @@ func (s *Server) addUser(w http.ResponseWriter, r *http.Request) {
 	user.ID = uuid.New().String()
 	user.CreatedAt = &createdAt
 
+	// Load user settings with the defaults.
+	defaultSettings := createDefaultSettings()
+	user.Settings = &defaultSettings
+
 	if err := s.DBHandle.AddUser(&user); err != nil {
 		log.Error().Err(err).Msg("error creating user")
 		http.Error(w, fmt.Sprintf("error creating user: %s", err.Error()), http.StatusBadRequest)
@@ -129,9 +136,11 @@ func (s *Server) addUser(w http.ResponseWriter, r *http.Request) {
 type ResponseUser struct {
 	ID        string `json:"id"`
 	Email     string `json:"email"`
-	Username  string `json:"username"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
+	CreatedAt *time.Time `json:"created_at"`
+	LastLogin *time.Time `json:"last_login"`
+	Plan db.PlanType `json:"plan"`
 }
 
 func (s *Server) loginUserByEmail(w http.ResponseWriter, r *http.Request) {
@@ -176,6 +185,9 @@ func convertToResponseUser(user *db.User) ResponseUser {
 		Email:     user.Email,
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
+		CreatedAt: user.CreatedAt,
+		LastLogin: user.LastLogin,
+		Plan: user.Plan,
 	}
 }
 

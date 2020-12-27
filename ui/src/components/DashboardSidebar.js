@@ -17,10 +17,7 @@ class DashboardSidebar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: this.props.data.state.id,
-            firstName: this.props.data.state.firstName,
-            lastName: this.props.data.state.lastName,
-            email: this.props.data.state.email,
+            user: this.props.data.state.user,
             totalEstimateWorth: this.props.data.state.totalEstimateWorth,
             missingEstimate: this.props.data.state.missingEstimate,
             currentPage: this.props.data.state.currentPage
@@ -34,10 +31,7 @@ class DashboardSidebar extends React.Component {
                         <Link id="dashboard_new_property_button" to={{
                             pathname: "/addproperty",
                             state: {
-                                id: this.state.id,
-                                firstName: this.state.firstName,
-                                lastName: this.state.lastName,
-                                email: this.state.email,
+                                user: this.state.user,
                                 totalEstimateWorth: this.state.totalEstimateWorth,
                                 missingEstimate: this.state.missingEstimate,
                             }
@@ -50,10 +44,7 @@ class DashboardSidebar extends React.Component {
                             <Link className="dashboard_sidebar_inner_link" to={{
                                 pathname: "/dashboard",
                                 state: {
-                                    id: this.state.id,
-                                    firstName: this.state.firstName,
-                                    lastName: this.state.lastName,
-                                    email: this.state.email,
+                                    user: this.state.user,
                                     totalEstimateWorth: this.state.totalEstimateWorth,
                                     missingEstimate: this.state.missingEstimate,
                                 }
@@ -70,10 +61,7 @@ class DashboardSidebar extends React.Component {
                             <Link className="dashboard_sidebar_inner_link" to={{
                                 pathname: "/properties",
                                 state: {
-                                    id: this.state.id,
-                                    firstName: this.state.firstName,
-                                    lastName: this.state.lastName,
-                                    email: this.state.email,
+                                    user: this.state.user,
                                     totalEstimateWorth: this.state.totalEstimateWorth,
                                     missingEstimate: this.state.missingEstimate,
                                 }
@@ -90,10 +78,7 @@ class DashboardSidebar extends React.Component {
                             <Link className="dashboard_sidebar_inner_link" to={{
                                 pathname: "/analysis",
                                 state: {
-                                    id: this.state.id,
-                                    firstName: this.state.firstName,
-                                    lastName: this.state.lastName,
-                                    email: this.state.email,
+                                    user: this.state.user,
                                     totalEstimateWorth: this.state.totalEstimateWorth,
                                     missingEstimate: this.state.missingEstimate,
                                 }
@@ -110,10 +95,7 @@ class DashboardSidebar extends React.Component {
                             <Link className="dashboard_sidebar_inner_link" to={{
                                 pathname: "/files",
                                 state: {
-                                    id: this.state.id,
-                                    firstName: this.state.firstName,
-                                    lastName: this.state.lastName,
-                                    email: this.state.email,
+                                    user: this.state.user,
                                     totalEstimateWorth: this.state.totalEstimateWorth,
                                     missingEstimate: this.state.missingEstimate,
                                 }
@@ -150,10 +132,7 @@ class DashboardSidebar extends React.Component {
                             <Link className="dashboard_sidebar_inner_link" to={{
                                 pathname: "/settings",
                                 state: {
-                                    id: this.state.id,
-                                    firstName: this.state.firstName,
-                                    lastName: this.state.lastName,
-                                    email: this.state.email,
+                                    user: this.state.user,
                                     totalEstimateWorth: this.state.totalEstimateWorth,
                                     missingEstimate: this.state.missingEstimate,
                                 }
@@ -170,10 +149,7 @@ class DashboardSidebar extends React.Component {
                             <Link className="dashboard_sidebar_inner_link" to={{
                                 pathname: "/report",
                                 state: {
-                                    id: this.state.id,
-                                    firstName: this.state.firstName,
-                                    lastName: this.state.lastName,
-                                    email: this.state.email,
+                                    user: this.state.user,
                                     totalEstimateWorth: this.state.totalEstimateWorth,
                                     missingEstimate: this.state.missingEstimate,
                                 }

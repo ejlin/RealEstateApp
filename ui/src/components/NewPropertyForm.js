@@ -14,10 +14,7 @@ class NewPropertyForm extends React.Component {
         };
 
         this.state = {
-            userID: this.props.location.state.id,
-            firstName: this.props.location.state.firstName,
-            lastName: this.props.location.state.lastName,
-            email: this.props.location.state.email,
+            user: this.state.user,
             properties: []
         };
 
@@ -66,10 +63,7 @@ class NewPropertyForm extends React.Component {
             return <Redirect to={{
                 pathname: this.state.redirect,
                 state: {
-                    id: this.state.userID,
-                    firstName: this.state.firstName,
-                    lastName: this.state.lastName,
-                    email: this.state.email
+                    user: this.state.user,
                 }
             }} />
         }
@@ -77,10 +71,7 @@ class NewPropertyForm extends React.Component {
             <div>
                 <DashboardSidebar data={{
                     state: {
-                        id: this.state.userID,
-                        firstName: this.state.firstName,
-                        lastName: this.state.lastName,
-                        email: this.state.email
+                        user: this.state.user,
                     }
                 }}/>
                 <div id="new_property_form_box">

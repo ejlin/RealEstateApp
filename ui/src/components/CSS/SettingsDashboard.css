@@ -64,32 +64,31 @@
     border-radius: 4px;
     float: left;
     height: 675px;
-    width: 400px;
+    width: 275px;
 }
 
 #settings_dashboard_user_information_profile_picture {
     background-color: white;
     border-radius: 50%;
     float: left;
-    height: 250px;
-    margin-left: calc((400px - 250px)/2);
-    margin-top: 40px;
-    width: 250px;
+    height: 225px;
+    margin-left: calc((100% - 225px)/2);
+    width: 225px;
 }
 
 #settings_dashboard_user_information_profile_picture_edit_icon {
     background-color:#d3d3d3;
-    border: 4px solid white;
+    border: 2px solid white;
     border-radius: 50%;
     cursor: pointer;
     float: left;
-    height: 30px;
-    margin-left: -70px;
-    margin-top: 235px;
+    height: 25px;
+    margin-left: -55px;
+    margin-top: 170px;
     padding: 7.5px;
     position: relative;
     transition: 0.5s;
-    width: 30px;
+    width: 25px;
 }
 
 #settings_dashboard_user_information_profile_picture_edit_icon:hover {
@@ -101,6 +100,37 @@
     margin-left: 40px;
     margin-top: 50px;
     width: calc((100% - 80px));
+}
+
+#settings_dasboard_user_information_inner_box {
+    margin-top: 25px;
+}
+
+.settings_dashboard_user_information_inner_box_title {
+    color: black;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.settings_dashboard_user_information_bullet_box {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.settings_dashboard_user_information_icon {
+    color: grey;
+    float: left;
+    height: 25px;
+    width: 25px;
+}
+
+.settings_dashboard_user_information_inner_box_text {
+    bottom: 0;
+    float: left;
+    font-size: 1.2em;
+    margin-left: 10px;
+    width: calc(100% - 25px - 10px);
+    word-break: break-all;
 }
 
 .settings_dashboard_user_information_input {
@@ -145,7 +175,6 @@
 
 #settings_dashboard_parent_inner_box {
     border-radius: 4px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.10), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
     float: left;
     margin-left: 80px;
     margin-top: 50px;
@@ -153,11 +182,9 @@
 }
 
 #settings_dashboard_right_box {
-    
     float: left;
     height: 675px;
-    margin-top: 50px;
-    width: calc(100% - 400px);
+    width: calc(100% - 275px);
 }
 
 .settings_dashboard_right_box_title {
@@ -204,4 +231,213 @@
 
 .settings_dashboard_right_box_icon:hover {
     transform: scale(1.1);
+}
+
+#settings_dashboard_right_box_nav_bar {
+    float: left;
+    height: 675px;
+    width: 250px;
+}
+
+.settings_dashboard_right_box_nav_bar_list {
+    border-radius: 8px;
+    cursor: pointer;
+    float: left;
+    height: 50px;
+    margin-left: 10%;
+    margin-right: 10%;
+    transition: 0.5s;
+    width: 80%;
+}
+
+.settings_dashboard_right_box_nav_bar_list:hover, .settings_dashboard_right_box_nav_bar_active_list {
+    background-color: #f1f1f1;
+}
+
+.settings_dashboard_right_box_nav_bar_list_icon {
+    float: left;
+    height: 25px;
+    margin-left: 10px;
+    margin-top: 12.5px;
+    width: 25px;
+}
+
+.settings_dashboard_right_box_nav_bar_list_text {
+    float: left;
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 50px;
+    margin-left: 10px;
+}
+
+.right_box_page_inner_box {
+    float: left;
+    margin-left: 20px;
+    min-width: 400px;
+    width: calc(100% - 250px - 20px);
+}
+
+.right_box_page_title {
+    float: left;
+    font-size: 1.4em;
+    font-weight: bold;
+    user-select: none;
+}
+
+.right_box_page_edit_button {
+    background-color: #f1f1f1;
+    border-radius: 4px;
+    color:  #296CF6;
+    cursor: pointer;
+    float: right;
+    font-weight: bold;
+    padding: 7.5px 15px 7.5px 15px;
+    transition: 0.5s;
+}
+
+.right_box_page_edit_button:hover {
+    transform: scale(1.1);
+}
+
+.right_box_page_content_inner_box {
+    border-top: 1px solid #d3d3d3;
+    float: left;
+    margin-top: 25px;
+    width: 100%;
+}
+
+.right_box_page_content_inner_box_list {
+    border-bottom: 1px solid #d3d3d3;
+    height: 50px;
+    width: 100%;
+}
+
+.right_box_page_content_inner_box_list_text {
+    float: left;
+    font-size: 1.0em;
+    font-weight: bold;
+    line-height: 50px;
+}
+
+.right_box_page_content_inner_box_list_value_text {
+    float: right;
+    font-size: 1.0em;
+    line-height: 50px;
+}
+
+.right_box_page_content_inner_box_list_edit_text {
+    color:  #296CF6;
+    cursor: pointer;
+    float: right;
+    font-weight: bold;
+    line-height: 50px;
+    margin-left: 15px;
+}
+
+.right_box_page_content_inner_box_list_edit_text:hover {
+    text-decoration: underline;
+}
+
+.right_box_page_content_save_edits_button {
+    background-color: #296CF6;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    float: right;
+    margin-top: 25px;
+    padding: 7.5px 15px 7.5px 15px;
+}
+
+.right_box_page_content_save_edits_button:hover {
+    opacity: 0.8;
+}
+
+.right_box_page_content_inner_box_list_input {
+    border: 1px solid #d3d3d3;
+    border-radius: 4px;
+    font-size: 1.0em;
+    padding: 7.5px 15px 7.5px 15px;
+    width: 200px;
+}
+
+.right_box_page_content_inner_box_list_input::placeholder {
+    color: grey;
+}
+
+.right_box_page_title_unsubscribe_all_button {
+    color: #296CF6;
+    cursor: pointer;
+    float: right;
+    line-height: 35px;
+    margin-right: 25px;
+}
+
+.right_box_page_title_unsubscribe_all_button:hover {
+    text-decoration: underline;
+}
+
+#email_fyi_text {
+    color: red;
+    margin-top: 15px;
+}
+
+
+/**** SWITCH CSS ****/
+.switch {
+    position: relative;
+    float: right;
+    margin-top: calc((50px - 25px)/2);
+    width: 40px;
+    height: 25px;
+}
+  
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 19px;
+    width: 19px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color:  #296CF6;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(14.5px);
+    -ms-transform: translateX(14.5px);
+    transform: translateX(14.5px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
 }

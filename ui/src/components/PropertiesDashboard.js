@@ -16,10 +16,7 @@ class PropertiesDashboard extends React.Component {
         super(props);
 
         this.state = {
-            userID: this.props.location.state.id,
-            firstName: this.props.location.state.firstName,
-            lastName: this.props.location.state.lastName,
-            email: this.props.location.state.email,
+            user: this.props.location.state.user,
             sfhProperties: [],
             manufacturedProperties: [],
             condoOpsProperties: [],
@@ -39,7 +36,7 @@ class PropertiesDashboard extends React.Component {
     }
 
     componentDidMount() {
-        var url = '/api/user/property/' + this.state.userID;
+        var url = '/api/user/property/' + this.state.user["id"];
         axios({
             method: 'get',
             url: url,
@@ -79,7 +76,7 @@ class PropertiesDashboard extends React.Component {
                             }
                             data={{
                             state: {
-                                userID: this.state.userID,
+                                user: this.state.user,
                                 property_details: property,
                             }                       
                         }}/>
@@ -92,7 +89,7 @@ class PropertiesDashboard extends React.Component {
                         }
                         data={{
                         state: {
-                            userID: this.state.userID,
+                            user: this.state.user,
                             property_details: property,
                         }                       
                     }}/>
@@ -105,7 +102,7 @@ class PropertiesDashboard extends React.Component {
                         }
                         data={{
                         state: {
-                            userID: this.state.userID,
+                            user: this.state.user,
                             property_details: property,
                         }                       
                     }}/>
@@ -118,7 +115,7 @@ class PropertiesDashboard extends React.Component {
                         }
                         data={{
                         state: {
-                            userID: this.state.userID,
+                            user: this.state.user,
                             property_details: property,
                         }                       
                     }}/>
@@ -131,7 +128,7 @@ class PropertiesDashboard extends React.Component {
                         }
                         data={{
                         state: {
-                            userID: this.state.userID,
+                            user: this.state.user,
                             property_details: property,
                         }                       
                     }}/>
@@ -144,7 +141,7 @@ class PropertiesDashboard extends React.Component {
                         }
                         data={{
                         state: {
-                            userID: this.state.userID,
+                            user: this.state.user,
                             property_details: property,
                         }                       
                     }}/>
@@ -157,7 +154,7 @@ class PropertiesDashboard extends React.Component {
                         }
                         data={{
                         state: {
-                            userID: this.state.userID,
+                            user: this.state.user,
                             property_details: property,
                         }                       
                     }}/>
@@ -170,7 +167,7 @@ class PropertiesDashboard extends React.Component {
                         }
                         data={{
                         state: {
-                            userID: this.state.userID,
+                            user: this.state.user,
                             property_details: property,
                         }                       
                     }}/>
@@ -304,10 +301,7 @@ class PropertiesDashboard extends React.Component {
                 <div>
                     <DashboardSidebar data={{
                         state: {
-                            id: this.state.userID,
-                            firstName: this.state.firstName,
-                            lastName: this.state.lastName,
-                            email: this.state.email,
+                            user: this.state.user,
                             totalEstimateWorth: this.state.totalEstimateWorth,
                             missingEstimate: this.state.missingEstimate,
                             currentPage: "properties"
