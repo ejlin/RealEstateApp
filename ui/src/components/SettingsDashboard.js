@@ -10,9 +10,9 @@ import { MdEdit, MdEmail } from 'react-icons/md';
 import { ImUser } from 'react-icons/im';
 import { AiFillClockCircle } from 'react-icons/ai';
 import { BsFillAwardFill } from 'react-icons/bs';
-import { IoMdSettings, IoMdNotifications } from 'react-icons/io';
-
-import testProfile from './profile_picture_test.jpg';
+import { RiUser3Fill } from 'react-icons/ri';
+import { IoMdSettings, IoMdNotifications, IoIosSend } from 'react-icons/io';
+import { FaUserTie, FaBuilding } from 'react-icons/fa';
 
 const general = "general";
 const email = "email";
@@ -46,21 +46,26 @@ class SettingsDashboard extends React.Component {
                 {'receive_mortgage_pay_date': true},
                 {'receive_property_value': true}]),
             originalCheckboxStates: new Map(),
+            starterPlanActive: false,
+            professionalPlanActive: false,
+            enterprisePlanActive: false,
             isLoading: true
         };
 
         this.handleFieldChange = this.handleFieldChange.bind(this);
+        this.handleProfilePictureChange = this.handleProfilePictureChange.bind(this);
         this.capitalizeName = this.capitalizeName.bind(this);
-        this.editProfilePicture = this.editProfilePicture.bind(this);
         this.getJoinedAt = this.getJoinedAt.bind(this);
         this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+        this.convertCheckboxMapToObject = this.convertCheckboxMapToObject.bind(this);
         this.deepCopyMap = this.deepCopyMap.bind(this);
-        this.updateUserSettings = this.updateUserSettings.bind(this);
+        this.updateUserSettingsProfile = this.updateUserSettingsProfile.bind(this);
+        this.updateUserSettingsPreferences = this.updateUserSettingsPreferences.bind(this);
         this.mapsAreEqual = this.mapsAreEqual.bind(this);
     }
 
     componentDidMount() {
-        var url = '/api/user/settings/' + this.state.user["id"];
+        var url = '/api/user/settings/preferences/' + this.state.user["id"];
         axios({
             method: 'get',
             url: url,
@@ -105,21 +110,76 @@ class SettingsDashboard extends React.Component {
             });
         });
 
-        // var url = '/api/user/' + this.state.user["id"];
-        // axios({
-        //     method: 'get',
-        //     url: url,
-        // }).then(response => {
-        //     var data = response.data;
-        //     this.setState({
-        //         user: data,
-        //         isLoading: false
-        //     });
-        // }).catch(error => console.log(error));
+        axios({
+            method: 'get',
+            url: '/api/user/settings/profile/picture/' + this.state.user["id"],
+        }).then(response => {
+            var src = response.data;
+            this.setState({
+                profilePicture: src
+            })
+        }).catch(error => console.log(error))
+    }
+
+    updateUserSettingsProfile() {
+
+        var editFirstNameInput = document.getElementById("edit_first_name_input")
+        var editLastNameInput = document.getElementById("edit_last_name_input")
+        var editEmailInput = document.getElementById("edit_email_input")
+        var editPasswordInput = document.getElementById("edit_password_input")
+
+        var editFirstNameInputValue = editFirstNameInput.value;
+        var editLastNameInputValue = editLastNameInput.value;
+        var editEmailInputValue = editEmailInput.value;
+        var editPasswordInputValue = editPasswordInput.value;
+
+        let formData = new FormData();
+        
+        if (editFirstNameInputValue !== "") {
+            formData.append("first_name", editFirstNameInputValue)
+        }
+        if (editLastNameInputValue !== "") {
+            formData.append("last_name", editLastNameInputValue)
+        }
+        if (editEmailInputValue !== "") {
+            formData.append("email", editEmailInputValue)
+        }
+        if (editPasswordInputValue !== "") {
+            formData.append("password", editPasswordInputValue)
+        }
+
+        var url = 'api/user/settings/profile/' + this.state.user["id"];
+        axios({
+            method: 'put',
+            url: url,
+            data: formData
+        }).then(response => {
+            console.log(response);
+            if (response.status === 200) {
+                // response.data contains the fields which were successfully changed.
+
+                var editedFields = response.data;
+                var user = this.mergeUser(this.state.user, editedFields);
+                
+                this.setState({
+                    user: user,
+                    editGeneral: false,
+                })
+            }
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+
+    mergeUser(originalUser, editedFields) {
+        for (const [key, value] of Object.entries(editedFields)) {
+            originalUser[key] = value;
+        }
+        return originalUser;
     }
     
-    // updateUserSettings updates the 'settings' field within the users table.
-    updateUserSettings() {
+    // updateUserSettingsPreferences updates the 'settings' field within the users table.
+    updateUserSettingsPreferences() {
 
         // No changes to the settings made by the user, just return. 
         if (this.mapsAreEqual(this.state.checkboxStates, this.state.originalCheckboxStates)) {
@@ -130,15 +190,23 @@ class SettingsDashboard extends React.Component {
             return;
         }
 
-        var url = 'api/user/settings/' + this.state.user["id"];
+        let formData = new FormData();
+
+        var checkboxStatesObject = this.convertCheckboxMapToObject(this.state.checkboxStates);
+        formData.append('settings', JSON.stringify(checkboxStatesObject));
+
+        var url = 'api/user/settings/preferences/' + this.state.user["id"];
         axios({
-            method: 'patch',
+            method: 'put',
             url: url,
-            data: {
-                settings: this.state.checkboxStates,
-            }
+            data: formData
         }).then(response => {
-            console.log(response);
+            if (response.status === 200) {
+                this.setState({
+                    editEmail: false,
+                    editNotifications: false
+                })
+            }
         }).catch(error => {
             console.log(error);
         });
@@ -161,6 +229,25 @@ class SettingsDashboard extends React.Component {
         return true;
     }
 
+    convertCheckboxMapToObject(checkboxMap) {
+
+        // TODO: el (do we need to convert our response to a map, then back to object? Maybe we can just keep it as an
+        // object).
+        var obj = {
+            "emails": {
+                "receive_digest": checkboxMap.get("receive_digest"),
+                "receive_marketing": checkboxMap.get("receive_marketing"),
+                "receive_newsletter": checkboxMap.get("receive_newsletter")
+            },
+            "notifications": {
+                "rent_pay_date": checkboxMap.get("rent_pay_date"),
+                "mortgage_pay_date": checkboxMap.get("mortgage_pay_date"),
+                "property_value": checkboxMap.get("property_value")
+            }
+        };
+        return obj;
+    }
+
     // deepCopyMap will create a deep copy of the input map.
     deepCopyMap(originalMap) {
         var newMap = new Map();
@@ -170,16 +257,36 @@ class SettingsDashboard extends React.Component {
         return newMap;
     }
 
+    handleProfilePictureChange(e) {
+        var file = e.target.files[0];
+        var url = '/api/user/settings/profile/picture/' + this.state.user["id"];
+        let formData = new FormData();
+        formData.append('file', file);
+
+        axios({
+            method: 'post',
+            url: url,
+            data: formData
+        }).then(response => {
+            if (response.status === 200) {
+                var src = URL.createObjectURL(file);
+                console.log(src);
+                this.setState({
+                    profilePicture: src
+                })
+            }
+        }).catch(error => {
+            console.log(error);
+        })
+        
+    }
+
     handleFieldChange(e) {
         this.setState({ [e.target.name]: e.target.value })
     }
 
     capitalizeName(x) {
         return x.charAt(0).toUpperCase() + x.slice(1);
-    }
-
-    editProfilePicture(e) {
-        console.log("here");
     }
 
     getJoinedAt() {
@@ -197,6 +304,10 @@ class SettingsDashboard extends React.Component {
         this.setState({ 
             checkboxStates: checkboxMap
         });
+    }
+
+    renderChangePlanWarningText() {
+        // Depending on the current user's plans and the plan they have selected, we want to display different warning texts. 
     }
     
     renderRightBoxPage() {
@@ -220,6 +331,7 @@ class SettingsDashboard extends React.Component {
                                 <p className="right_box_page_content_inner_box_list_value_text">
                                     {this.state.editGeneral ? 
                                     <input
+                                        id="edit_first_name_input"
                                         className="right_box_page_content_inner_box_list_input"
                                         placeholder={this.capitalizeName(this.state.user["first_name"])}></input>: 
                                     this.capitalizeName(this.state.user["first_name"])}
@@ -230,8 +342,9 @@ class SettingsDashboard extends React.Component {
                                     Last Name
                                 </p>
                                 <p className="right_box_page_content_inner_box_list_value_text">
-                                    {this.state.editGeneral ? 
+                                    {this.state.editGeneral && this.state.toDisplay === general ? 
                                     <input
+                                        id="edit_last_name_input"
                                         className="right_box_page_content_inner_box_list_input"
                                         placeholder={this.capitalizeName(this.state.user["last_name"])}></input>: 
                                     this.capitalizeName(this.state.user["last_name"])}
@@ -244,24 +357,26 @@ class SettingsDashboard extends React.Component {
                                 <p className="right_box_page_content_inner_box_list_value_text">
                                     {this.state.editGeneral ? 
                                     <input
+                                        id="edit_email_input"
                                         className="right_box_page_content_inner_box_list_input"
                                         placeholder={this.state.user["email"]}></input>: 
                                         this.state.user["email"]}
                                 </p>
                             </div>
-                            <div className="right_box_page_content_inner_box_list">
+                            {/* <div className="right_box_page_content_inner_box_list">
                                 <p className="right_box_page_content_inner_box_list_text">
                                     Phone Number
                                 </p>
                                 <p className="right_box_page_content_inner_box_list_value_text">
                                     {this.state.editGeneral ? 
                                     <input
+                                        id="edit_phone_number_input"
                                         type="number"
                                         className="right_box_page_content_inner_box_list_input"
                                         placeholder={this.state.phoneNumber ? this.state.phoneNumber : "(XXX) XXX - XXXX"}></input>:
                                     (this.state.phoneNumber ? this.state.phoneNumber : "(XXX) XXX - XXXX")}
                                 </p>
-                            </div>
+                            </div> */}
                             <div className="right_box_page_content_inner_box_list">
                                 <p className="right_box_page_content_inner_box_list_text">
                                     Password
@@ -269,6 +384,7 @@ class SettingsDashboard extends React.Component {
                                 <p className="right_box_page_content_inner_box_list_value_text">
                                     {this.state.editGeneral ? 
                                     <input
+                                        id="edit_password_input"
                                         type="password"
                                         className="right_box_page_content_inner_box_list_input"
                                         placeholder={"********"}></input>:
@@ -277,7 +393,9 @@ class SettingsDashboard extends React.Component {
                             </div>
                             <div className="clearfix"/>
                             {this.state.editGeneral ? 
-                            <div className="right_box_page_content_save_edits_button">
+                            <div 
+                                onClick={this.updateUserSettingsProfile}
+                                className="right_box_page_content_save_edits_button">
                                 Save
                             </div> :
                             <div></div>}
@@ -363,7 +481,7 @@ class SettingsDashboard extends React.Component {
                             <div className="clearfix"/>
                             {this.state.editEmail ? 
                             <div 
-                                onClick={this.updateUserSettings}
+                                onClick={this.updateUserSettingsPreferences}
                                 className="right_box_page_content_save_edits_button">
                                 Save
                             </div> :
@@ -445,7 +563,7 @@ class SettingsDashboard extends React.Component {
                             <div className="clearfix"/>
                             {this.state.editNotifications ? 
                             <div 
-                                onClick={this.updateUserSettings}
+                                onClick={this.updateUserSettingsPreferences}
                                 className="right_box_page_content_save_edits_button">
                                 Save
                             </div> :
@@ -462,22 +580,109 @@ class SettingsDashboard extends React.Component {
                         <p 
                             className="right_box_page_edit_button"
                             onClick={() => this.setState({editPlan: !this.state.editPlan})}>
-                            {this.state.editPlan ? "Cancel" : "Edit"}
+                            {this.state.editPlan ? "Cancel" : "Change"}
                         </p>
                         <div className="right_box_page_content_inner_box">
-                            <div className="right_box_page_content_inner_box_list">
+                            <div 
+                                className={
+                                    this.state.editPlan ? 
+                                    "edit_plan_class right_box_page_content_inner_box_list" : 
+                                    "right_box_page_content_inner_box_list"
+                                }>
                                 <p className="right_box_page_content_inner_box_list_text">
                                     Plan
                                 </p>
                                 <p className="right_box_page_content_inner_box_list_value_text">
-                                    {this.state.editPlan ? 
-                                    <input
-                                        className="right_box_page_content_inner_box_list_input"
-                                        placeholder={this.capitalizeName(this.state.user["plan"])}></input>: 
-                                    (this.state.user["plan"] ? this.capitalizeName(this.state.user["plan"]) : "Starter")}
+                                    {this.state.user["plan"] ? this.capitalizeName(this.state.user["plan"]) : "Starter"}
                                 </p>
+                                <div className="clearfix"/>
+                                {this.state.editPlan ? 
+                                    <div className="edit_plan_class_inside_box">
+                                        <div 
+                                            onClick={() => {
+                                                this.setState({
+                                                    starterPlanActive: !this.state.starterPlanActive,
+                                                    professionalPlanActive: false,
+                                                    enterprisePlanActive: false,
+                                                })
+                                            }}
+                                            className={
+                                                this.state.user["plan"] === "starter" ? 
+                                                "edit_plan_class_inside_box_card edit_plan_class_inside_box_card_active" :
+                                                (this.state.starterPlanActive ? "edit_plan_class_inside_box_card edit_plan_class_inside_box_card_selected" : 
+                                                "edit_plan_class_inside_box_card")}>
+                                            <IoIosSend className={
+                                                this.state.user["plan"] === "starter" ? 
+                                                "edit_plan_class_inside_box_card_icon edit_plan_class_inside_box_card_icon_active" :
+                                                "edit_plan_class_inside_box_card_icon"}></IoIosSend>
+                                            <p className="edit_plan_class_inside_box_card_title">
+                                                Starter
+                                            </p>
+                                        </div>
+                                        <div 
+                                            onClick={() => {
+                                                this.setState({
+                                                    starterPlanActive: false,
+                                                    professionalPlanActive: !this.state.professionalPlanActive,
+                                                    enterprisePlanActive: false,
+                                                })
+                                            }}
+                                            className={
+                                                this.state.user["plan"] === "professional" ? 
+                                                "edit_plan_class_inside_box_card edit_plan_class_inside_box_card_active" :
+                                                (this.state.professionalPlanActive ? "edit_plan_class_inside_box_card edit_plan_class_inside_box_card_selected" :
+                                                "edit_plan_class_inside_box_card")}>
+                                                <FaUserTie 
+                                                    className={
+                                                    this.state.user["plan"] === "professional" ? 
+                                                    "edit_plan_class_inside_box_card_icon edit_plan_class_inside_box_card_icon_active" :
+                                                    "edit_plan_class_inside_box_card_icon"}></FaUserTie>
+                                                <p className="edit_plan_class_inside_box_card_title">
+                                                    Professional
+                                                </p>
+                                        </div>
+                                        <div 
+                                            onClick={() => {
+                                                this.setState({
+                                                    starterPlanActive: false,
+                                                    professionalPlanActive: false,
+                                                    enterprisePlanActive: !this.state.enterprisePlanActive,
+                                                })
+                                            }}
+                                            className={
+                                                this.state.user["plan"] === "enterprise" ? 
+                                                "edit_plan_class_inside_box_card edit_plan_class_inside_box_card_active" :
+                                                "edit_plan_class_inside_box_card"}>
+                                                <FaBuilding 
+                                                    className={
+                                                    this.state.user["plan"] === "enterprise" ? 
+                                                    "edit_plan_class_inside_box_card_icon edit_plan_class_inside_box_card_icon_active" :
+                                                    "edit_plan_class_inside_box_card_icon"}></FaBuilding>
+                                                <p className={
+                                                    this.state.user["plan"] === "enterprise" ?
+                                                    "edit_plan_class_inside_box_card_title edit_plan_class_inside_box_card_title_active" : 
+                                                    "edit_plan_class_inside_box_card_title"}>
+                                                    Enterprise
+                                                </p>
+                                        </div>
+                                        <div className="clearfix"/>
+                                        {this.state.initialChangeButtonPressed ? 
+                                        this.renderChangePlanWarningText() : 
+                                        <div>
+                                        </div>}
+                                        <div 
+                                            onClick={() => this.setState({
+                                                initialChangeButtonPressed: true
+                                            })}
+                                            className="edit_plan_submit_button">
+                                            Change
+                                        </div>
+                                    </div> :
+                                    <div></div>
+                                }
                             </div>
                         </div>
+                        
                     </div>
                 );
         }
@@ -514,8 +719,20 @@ class SettingsDashboard extends React.Component {
                     <div className="clearfix"></div>
                     <div id="settings_dashboard_parent_inner_box">
                         <div id="settings_dashboard_user_information_box">
-                            <img id="settings_dashboard_user_information_profile_picture" src={testProfile} alt={"logo"}/> 
-                            <MdEdit id="settings_dashboard_user_information_profile_picture_edit_icon" onClick={this.editProfilePicture}></MdEdit>
+                            
+                            {this.state.profilePicture ? 
+                            <img id="settings_dashboard_user_information_profile_picture" src={this.state.profilePicture} alt={"logo"}/> :
+                            <RiUser3Fill id="settings_dashboard_user_information_profile_picture_default"></RiUser3Fill>}
+
+                            <label htmlFor="settings_dashboard_upload_profile_picture_button">
+                                <MdEdit id="settings_dashboard_user_information_profile_picture_edit_icon"></MdEdit>
+                            </label>
+                            <input 
+                                id="settings_dashboard_upload_profile_picture_button" 
+                                type="file" 
+                                accept=".png,.jpg,.heic"
+                                onChange={this.handleProfilePictureChange}></input>
+
                             <div className="clearfix"/>
                             <div id="settings_dasboard_user_information_inner_box">
                                 <p className="settings_dashboard_user_information_inner_box_title">
@@ -560,7 +777,13 @@ class SettingsDashboard extends React.Component {
                         <div id="settings_dashboard_right_box">
                             <div id="settings_dashboard_right_box_nav_bar">
                                 <li 
-                                    onClick={() => this.setState({toDisplay: general})}
+                                    onClick={() => 
+                                        this.setState({
+                                            toDisplay: general,
+                                            editEmail: false,
+                                            editNotifications: false,
+                                            editPlan: false
+                                        })}
                                     className={
                                         this.state.toDisplay === general ? 
                                         "settings_dashboard_right_box_nav_bar_list settings_dashboard_right_box_nav_bar_active_list" : 
@@ -572,7 +795,13 @@ class SettingsDashboard extends React.Component {
                                 </li>
                                 <div className="clearfix"/>
                                 <li 
-                                    onClick={() => this.setState({toDisplay: email})}
+                                    onClick={() => 
+                                        this.setState({
+                                            toDisplay: email,
+                                            editGeneral: false,
+                                            editNotifications: false,
+                                            editPlan: false
+                                        })}
                                     className={
                                         this.state.toDisplay === email ? 
                                         "settings_dashboard_right_box_nav_bar_list settings_dashboard_right_box_nav_bar_active_list" : 
@@ -584,7 +813,13 @@ class SettingsDashboard extends React.Component {
                                 </li>
                                 <div className="clearfix"/>
                                 <li 
-                                    onClick={() => this.setState({toDisplay: notifications})}
+                                    onClick={() => 
+                                        this.setState({
+                                            toDisplay: notifications,
+                                            editGeneral: false,
+                                            editEmail: false,
+                                            editPlan: false
+                                        })}
                                     className={
                                         this.state.toDisplay === notifications ? 
                                         "settings_dashboard_right_box_nav_bar_list settings_dashboard_right_box_nav_bar_active_list" : 
@@ -596,7 +831,13 @@ class SettingsDashboard extends React.Component {
                                 </li>
                                 <div className="clearfix"/>
                                 <li 
-                                    onClick={() => this.setState({toDisplay: plan})}
+                                    onClick={() => 
+                                        this.setState({
+                                            toDisplay: plan,
+                                            editGeneral: false,
+                                            editEmail: false,
+                                            editNotifications: false
+                                        })}
                                     className={
                                         this.state.toDisplay === plan ? 
                                         "settings_dashboard_right_box_nav_bar_list settings_dashboard_right_box_nav_bar_active_list" : 

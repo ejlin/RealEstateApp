@@ -147,17 +147,17 @@ class DashboardSidebar extends React.Component {
                         <div className="clearfix"/>
                         <div className="dashboard_sidebar_link" id="dashboard_last">
                             <Link className="dashboard_sidebar_inner_link" to={{
-                                pathname: "/report",
+                                pathname: "/feedback",
                                 state: {
                                     user: this.state.user,
                                     totalEstimateWorth: this.state.totalEstimateWorth,
                                     missingEstimate: this.state.missingEstimate,
                                 }
                             }}>
-                                <MdFeedback className={this.state.currentPage === "report" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
+                                <MdFeedback className={this.state.currentPage === "feedback" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
                                 <div className="clearfix"/>
-                                <p className={this.state.currentPage === "report" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
-                                    Report
+                                <p className={this.state.currentPage === "feedback" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
+                                    Feedback
                                 </p>
                             </Link>
                         </div>

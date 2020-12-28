@@ -9,6 +9,9 @@ import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 
 import { IoMdAdd } from 'react-icons/io';
+import { BsFillHouseFill } from 'react-icons/bs';
+import { FaBuilding, FaWarehouse, FaCity } from 'react-icons/fa';
+import { ImMap } from 'react-icons/im';
 
 class PropertiesDashboard extends React.Component {
     
@@ -314,12 +317,11 @@ class PropertiesDashboard extends React.Component {
                                 <p id="properties_dashboard_title_box_title">
                                     Properties
                                 </p>
-                                <IoMdAdd id="properties_dashboard_upload_file_icon"></IoMdAdd>
                                 <input id="properties_dashboard_search_bar" placeholder="Search...">
                                 </input>
                             </div>
                             <div className="clearfix"/>
-                            <div id="properties_dashboard_tags_box">
+                            {/* <div id="properties_dashboard_tags_box">
                                 <button value="Single Family Homes" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
                                     Single Family Homes
                                 </button>
@@ -344,10 +346,63 @@ class PropertiesDashboard extends React.Component {
                                 <button value="Commercial" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
                                     Commercial
                                 </button>
-                            </div>
-                            <div className="clearfix"/>
-                            <div id="properties_dashboard_property_inner_box">
-                                {this.state.sfhProperties}
+                            </div> */}
+                            <div id="properties_dashboard_property_parent_box">
+                                <div id="properties_dashboard_property_navigation_bar">
+                                    <li className="properties_dashboard_property_navigation_bar_list">
+                                        <p className="properties_dashboard_property_navigation_bar_list_title">
+                                            All Properties  
+                                        </p>
+                                    </li>
+                                    <li className="properties_dashboard_property_navigation_bar_list">
+                                        <BsFillHouseFill className="properties_dashboard_right_box_nav_bar_list_icon"></BsFillHouseFill>
+                                        <p className="properties_dashboard_property_navigation_bar_list_title">
+                                            Single Family Homes
+                                        </p>
+                                    </li>
+                                    <li className="properties_dashboard_property_navigation_bar_list">
+                                        <FaWarehouse className="properties_dashboard_right_box_nav_bar_list_icon"></FaWarehouse>
+                                        <p className="properties_dashboard_property_navigation_bar_list_title">
+                                            Manufactured  
+                                        </p>
+                                    </li>
+                                    <li className="properties_dashboard_property_navigation_bar_list">
+                                        <p className="properties_dashboard_property_navigation_bar_list_title">
+                                            Condos/Ops
+                                        </p>
+                                    </li>
+                                    <li className="properties_dashboard_property_navigation_bar_list">
+                                        <p className="properties_dashboard_property_navigation_bar_list_title">
+                                            Multi-Family
+                                        </p>
+                                    </li>
+                                    <li className="properties_dashboard_property_navigation_bar_list">
+                                        <FaBuilding className="properties_dashboard_right_box_nav_bar_list_icon"></FaBuilding>
+                                        <p className="properties_dashboard_property_navigation_bar_list_title">
+                                            Apartments
+                                        </p>
+                                    </li>
+                                    <li className="properties_dashboard_property_navigation_bar_list">
+                                        <ImMap className="properties_dashboard_right_box_nav_bar_list_icon"></ImMap>
+                                        <p className="properties_dashboard_property_navigation_bar_list_title">
+                                            Lots/Land
+                                        </p>
+                                    </li>
+                                    <li className="properties_dashboard_property_navigation_bar_list">
+                                        <p className="properties_dashboard_property_navigation_bar_list_title">
+                                            Townhomes  
+                                        </p>
+                                    </li>
+                                    <li className="properties_dashboard_property_navigation_bar_list">
+                                        <FaCity className="properties_dashboard_right_box_nav_bar_list_icon"></FaCity>
+                                        <p className="properties_dashboard_property_navigation_bar_list_title">
+                                            Commercial
+                                        </p>
+                                    </li>
+                                </div>
+                                <div id="properties_dashboard_property_inner_box">
+                                    {this.state.sfhProperties}
+                                </div>
                             </div>
                         </div>
                         <NotificationSidebar data={{

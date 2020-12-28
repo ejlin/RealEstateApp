@@ -97,3 +97,23 @@ func (handle *Handle) GetSettingsByUserID(id string) (*json.RawMessage, error) {
 
 	return user.Settings, nil
 }
+
+func (handle *Handle) UpdateSettingsProfileByUser(id string, m map[string]interface{}) error {
+	_, err := uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("invalid UUID: %w", err)
+	}
+
+	var user User
+	return handle.DB.Model(&user).Updates(m).Error
+}
+
+func (handle *Handle) UpdateSettingsPreferencesByUser(id string, settings *json.RawMessage) error {
+	_, err := uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("invalid UUID: %w", err)
+	}
+
+	var user User
+	return handle.DB.Model(&user).UpdateColumn("settings", settings).Error
+}

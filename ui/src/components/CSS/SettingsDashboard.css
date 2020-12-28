@@ -76,6 +76,18 @@
     width: 225px;
 }
 
+#settings_dashboard_user_information_profile_picture_default {
+    background-color: #f1f1f1;
+    border: 6px solid #f1f1f1;
+    border-radius: 50%;
+    color:  #296CF6;
+    float: left;
+    height: 150px;
+    margin-left: calc((100% - 225px)/2);
+    padding: 30.5px;
+    width: 150px;
+}
+
 #settings_dashboard_user_information_profile_picture_edit_icon {
     background-color:#d3d3d3;
     border: 2px solid white;
@@ -440,4 +452,89 @@ input:checked + .slider:before {
 
 .slider.round:before {
     border-radius: 50%;
+}
+
+.edit_plan_class {
+    height: 225px;
+}
+
+.edit_plan_class_inside_box {
+}
+
+.edit_plan_class_inside_box_card {
+    background-color:  #f1f1f1;
+    border: 2px solid #f1f1f1;
+    border-radius: 4px;
+    cursor: pointer;
+    float: left;
+    height: 75px;
+    margin-left: 30px;
+    margin-top: 15px;
+    width: calc((100% - 60px - 12px) / 3);
+    transition: 0.5s;
+}
+
+.edit_plan_class_inside_box_card:hover {
+    opacity: 0.7;
+}
+
+.edit_plan_class_inside_box_card:first-child {
+    margin-left: 0px;
+}
+
+.edit_plan_class_inside_box_card_active {
+    background-color: #296CF6;
+    border: 2px solid #296CF6;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.05), 0 6px 10px 0 rgba(0, 0, 0, 0.09) !important;
+}
+
+.edit_plan_class_inside_box_card_selected {
+    border: 2px solid #296CF6;
+}
+
+.edit_plan_class_inside_box_card_title {
+    color: #296CF6;
+    float: left;
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 75px;
+    margin-left: 15px;
+    user-select: none;
+}
+
+.edit_plan_class_inside_box_card_title_active {
+    color: white;
+}
+
+.edit_plan_class_inside_box_card_icon {
+    color: #296CF6;
+    float: left;
+    height: 25px;
+    margin-left: 50px;
+    margin-top: calc((75px - 25px) / 2);
+    width: 25px;
+}
+
+.edit_plan_class_inside_box_card_icon_active {
+    color: white;
+}
+
+.edit_plan_submit_button {
+    background-color: #296CF6;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    float: right;
+    margin-top: 20px;
+    padding: 10px 15px 10px 15px;
+}
+
+.edit_plan_submit_button:hover {
+    opacity: 0.9;
+}
+
+#settings_dashboard_upload_profile_picture_button {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
 }

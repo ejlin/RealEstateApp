@@ -15,7 +15,7 @@ class FileCard extends React.Component {
         super(props);
 
         this.state = {
-            userID: this.props.data.state.userID,
+            user: this.props.data.state.user,
             file: this.props.data.state.file,
             setActiveFileAttributes: this.props.data.state.setActiveFileAttributes,
             openSignedURL: this.props.data.state.openSignedURL,

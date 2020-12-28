@@ -159,7 +159,7 @@ class FilesDashboard extends React.Component {
     }
 
     openSignedURL(fileKey) {
-        var url = "api/user/files/" + this.state.userID + "/" + fileKey;
+        var url = "api/user/files/" + this.state.user["id"] + "/" + fileKey;
         axios({
             method: 'get',
             url: url,
@@ -175,7 +175,7 @@ class FilesDashboard extends React.Component {
     }
 
     downloadFile(value, key, map) {
-        var url = "api/user/files/" + this.state.userID + "/" + key;
+        var url = "api/user/files/" + this.state.user["id"] + "/" + key;
         axios({
             method: 'get',
             url: url,
@@ -207,7 +207,7 @@ class FilesDashboard extends React.Component {
     }
 
     async deleteFile(key) {
-        var url = "api/user/files/" + this.state.userID + "/" + key;
+        var url = "api/user/files/" + this.state.user["id"] + "/" + key;
         var success = false;
         await axios({
             method: 'delete',
@@ -306,7 +306,7 @@ class FilesDashboard extends React.Component {
         // var signedURL;
         // axios({
         //     method: 'get',
-        //     url: 'api/user/files/upload/' + this.state.userID + '/' + propertySelectValue + '?file_name=' + fileName,
+        //     url: 'api/user/files/upload/' + this.state.user["id"] + '/' + propertySelectValue + '?file_name=' + fileName,
         // }).then(response => {
         //     signedURL = response.data;
         //     axios({
@@ -337,7 +337,7 @@ class FilesDashboard extends React.Component {
 
         axios({
             method: 'post',
-            url: 'api/user/files/upload/' + this.state.userID,
+            url: 'api/user/files/upload/' + this.state.user["id"],
             config: {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -650,7 +650,7 @@ class FilesDashboard extends React.Component {
                 tempElementsArr.push(
                     <FileCard key={propertyID + "/" + propertyName} data={{
                         state: {
-                            userID: this.state.userID,
+                            user: this.state.user,
                             file: file,
                             setActiveFileAttributes: this.setActiveFileAttributes,
                             openSignedURL: this.openSignedURL, 

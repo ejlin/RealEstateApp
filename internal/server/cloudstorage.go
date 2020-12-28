@@ -22,6 +22,9 @@ const (
 	yearLabel         = "year"
 
 	fileTypeLabel = "file_type"
+
+	profile = "profile"
+	picture = "picture"
 )
 
 type FileInfo struct {
@@ -178,6 +181,43 @@ func (s *Server) addStorageFile(ctx context.Context, f io.Reader, userID, proper
 		},
 	}, nil
 }
+
+// addStorageProfilePictureFile stores the user's profile picture in the cloud at their directory. 
+// `{bucket_name}/{user_id}/{profile}/picture` 
+func (s *Server) addStorageProfilePictureFile(ctx context.Context, f io.Reader, userID string) error {
+
+	tCtx, cancel := context.WithTimeout(ctx, 30 * time.Second)
+	defer cancel()
+
+	prefix := path.Join(userID, profile)
+	key := path.Join(prefix, picture)
+
+	o := s.StorageClient.Bucket(s.UsersBucket).Object(key)
+	wc := o.NewWriter(tCtx)
+
+	if _, err := io.Copy(wc, f); err != nil {
+		return err
+	}
+
+	if err := wc.Close(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *Server) getProfilePictureData(userID string) (string, error) {
+	prefix := path.Join(userID, profile)
+	key := path.Join(prefix, picture)
+
+	return storage.SignedURL(s.UsersBucket, key, &storage.SignedURLOptions{
+		GoogleAccessID: s.GoogleAccessID,
+		PrivateKey:     []byte(s.GooglePrivateKey),
+		Method:         "GET",
+		Expires:        time.Now().Add(7 * 24 * time.Hour),
+	})
+}
+
 
 // deleteFile removes a file from cloudstorage bucket.
 func (s *Server) deleteStorageFile(ctx context.Context, userID, propertyID, fileName string) error {

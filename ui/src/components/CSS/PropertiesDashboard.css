@@ -17,19 +17,6 @@
     font-weight: bold;
 }
 
-#properties_dashboard_upload_file_icon {
-    background-color: #eaf5fb;
-    border-radius: 50px;
-    color: #296CF6;
-    cursor: pointer;
-    float: right;
-    height: 27.5px;
-    margin-right: 80px;
-    padding: 7.5px;
-    transition: 0.5s;
-    width: 27.5px;
-}
-
 #properties_dashboard_upload_file_icon:hover {
     color: white;
     background-color: #296CF6;
@@ -37,10 +24,10 @@
 
 #properties_dashboard_search_bar {
     border: 1px solid #d3d3d3;
-    border-radius: 50px;
+    border-radius: 4px;
     float: right;
     font-size: 1.1em;
-    margin-right: 15px;
+    margin-right: 80px;
     padding: 7.5px 15px 7.5px 15px;
     width: 500px;
 }
@@ -49,15 +36,55 @@
     outline: none;
 }
 
-#properties_dashboard_property_inner_box {
-    float: left;
+#properties_dashboard_property_parent_box {
     margin-left: 80px;
     margin-right: 80px;
-    margin-top: 15px;
+    margin-top: 40px;
+    width: calc((100% - 160px));
+}
+
+#properties_dashboard_property_navigation_bar {
+    float: left;
+    height: 400px;
+    width: 275px;
+}
+
+.properties_dashboard_right_box_nav_bar_list_icon {
+    float: left;
+    height: 25px;
+    margin-left: 10px;
+    margin-top: 12.5px;
+    width: 25px;
+}
+
+.properties_dashboard_property_navigation_bar_list {
+    border-radius: 8px;
+    cursor: pointer;
+    float: left;
+    height: 50px;
+    margin-right: 10%;
+    transition: 0.5s;
+    width: 90%;
+}
+
+.properties_dashboard_property_navigation_bar_list:hover, .properties_dashboard_property_navigation_bar_list_active {
+    background-color: #f1f1f1;
+}
+
+.properties_dashboard_property_navigation_bar_list_title {
+    float: left;
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 50px;
+    margin-left: 10px;
+}
+
+#properties_dashboard_property_inner_box {
+    float: left;
     min-width: 750px;
     overflow: scroll;
     position: relative;
-    width: calc(100% - 160px);   
+    width: calc(100% - 275px);   
 }
 
 #properties_dashboard_property_inner_box::-webkit-scrollbar {

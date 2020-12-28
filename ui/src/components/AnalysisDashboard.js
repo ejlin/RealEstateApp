@@ -12,11 +12,7 @@ class AnalysisDashboard extends React.Component {
         super(props);
 
         this.state = {
-            userID: this.props.location.state.id,
-            firstName: this.props.location.state.firstName,
-            lastName: this.props.location.state.lastName,
-            email: this.props.location.state.email,
-            username: this.props.location.state.username,
+            user: this.props.location.state.user,
             totalEstimateWorth: this.props.location.state.totalEstimateWorth,
             missingEstimate: this.props.location.state.missingEstimate
         };
@@ -30,11 +26,7 @@ class AnalysisDashboard extends React.Component {
             <div>
                 <DashboardSidebar data={{
                     state: {
-                        id: this.state.userID,
-                        firstName: this.state.firstName,
-                        lastName: this.state.lastName,
-                        email: this.state.email,
-                        username: this.state.username,
+                        user: this.state.user,
                         totalEstimateWorth: this.state.totalEstimateWorth,
                         missingEstimate: this.state.missingEstimate,
                         currentPage: "analysis"

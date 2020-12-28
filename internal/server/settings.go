@@ -3,8 +3,6 @@ package server
 import (
 	"encoding/json"
 	"net/http"
-	"io/ioutil"
-	"fmt"
 
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
@@ -30,7 +28,8 @@ func createDefaultSettings() json.RawMessage {
 	return marshalledSettings
 }
 
-func (s *Server) updateSettings(w http.ResponseWriter, r *http.Request) {
+func (s *Server) updateSettingsProfile(w http.ResponseWriter, r *http.Request) {
+
 	// ctx := r.Context()
 	vars := mux.Vars(r)
 
@@ -43,27 +42,132 @@ func (s *Server) updateSettings(w http.ResponseWriter, r *http.Request) {
 
 	ll := log.With().Str("user_id", userID).Logger()
 
-	type Settings struct {
-		Data map[string]map[string]interface{} `json:"data,omitempty"`
+	firstName := r.FormValue("first_name")
+	lastName := r.FormValue("last_name")
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+	plan := r.FormValue("plan")
+
+	changed := make(map[string]string)
+
+	m := make(map[string]interface{})
+	if firstName != "" {
+		m["first_name"] = firstName
+		changed["first_name"] = firstName
+	}
+	if lastName != "" {
+		m["last_name"] = lastName
+		changed["last_name"] = lastName
+	}
+	if email != "" {
+		m["email"] = email
+		changed["email"] = email
+	}
+	if password != "" {
+		m["password"] = password
+		changed["password"] = password
+	}
+	if plan != "" {
+		m["plan"] = plan
+		changed["plan"] = plan
 	}
 
-	decoder := json.NewDecoder(r.Body)
-
-	fmt.Println(decoder)
-	body, err := ioutil.ReadAll(r.Body)
+	err := s.DBHandle.UpdateSettingsProfileByUser(userID, m)
 	if err != nil {
+		ll.Warn().Err(err).Msg("unable to store user profile settings")
+		http.Error(w, "unable to store user profile settings", http.StatusInternalServerError)
 		return
 	}
 
-	fmt.Println(string(body))
+	mChanged, err := json.Marshal(changed)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to marshal changed")
+		http.Error(w, "unable to marshal changed", http.StatusInternalServerError)
+		return
+	}
+	w.Write(mChanged)
+	return
+}
 
-	var setting Settings
-	err = decoder.Decode(&setting)
+func (s *Server) updateSettingsPreferences(w http.ResponseWriter, r *http.Request) {
+	// ctx := r.Context()
+	vars := mux.Vars(r)
 
-	ll.Info().Msg("decoded new settings")
+	userID, ok := vars["id"]
+	if !ok {
+		log.Info().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
 
-	fmt.Println(setting.Data, err)
-	// err := s.DBHandle.UpdateSettingsByUser(userID, )
+	ll := log.With().Str("user_id", userID).Logger()
+
+	settingsVal := r.FormValue("settings")
+
+	jsonSettingsVal := json.RawMessage(settingsVal)
+	
+	err := s.DBHandle.UpdateSettingsPreferencesByUser(userID, &jsonSettingsVal)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to store user preference settings")
+		http.Error(w, "unable to store user preference settings", http.StatusInternalServerError)
+		return
+	}
+	return
+}
+
+func (s *Server) uploadProfilePictureByUser(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Info().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	file, _, err := r.FormFile("file")
+	if err != nil {
+		ll.Error().Err(err).Msg("error retrieving profile picture file")
+		http.Error(w, "error retrieving profile picture file", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+
+	if err := s.addStorageProfilePictureFile(ctx, file, userID); err != nil {
+		ll.Error().Err(err).Msg("error storing profile picture in cloud storage")
+		http.Error(w, "error storing profile picture in cloud storage", http.StatusInternalServerError)
+		return
+	}
+
+	return
+}
+
+func (s *Server) getProfilePictureByUser(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Info().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	url, err := s.getProfilePictureData(userID)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to get profile picture data by user")
+		http.Error(w, "unable to get profile picture data by user", http.StatusInternalServerError)
+		return
+	}
+	
+	w.Write([]byte(url))
+	return
 }
 
 // getSettings returns an individual users settings.
