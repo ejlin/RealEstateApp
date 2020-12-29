@@ -1,8 +1,8 @@
 #settings_dashboard_parent_box {
     float: left;
     height: 100vh;
-    margin-left: 120px;
-    width: calc(100% - 120px);
+    margin-left: 220px;
+    width: calc(100% - 220px);
 }
 
 #settings_dashboard_title_box {
@@ -233,12 +233,12 @@
     border-radius: 50px;
     cursor: pointer;
     float: right;
-    height: 25px;
+    height: 20px;
     margin-right: 50px;
-    margin-top: 5px;
+    margin-top: 7.5px;
     padding: 10px;
     transition: 0.5s;
-    width: 25px;
+    width: 20px;
 }
 
 .settings_dashboard_right_box_icon:hover {
@@ -268,16 +268,15 @@
 
 .settings_dashboard_right_box_nav_bar_list_icon {
     float: left;
-    height: 25px;
+    height: 20px;
     margin-left: 10px;
-    margin-top: 12.5px;
-    width: 25px;
+    margin-top: 15px;
+    width: 20px;
 }
 
 .settings_dashboard_right_box_nav_bar_list_text {
     float: left;
-    font-size: 1.2em;
-    font-weight: bold;
+    font-size: 1.1em;
     line-height: 50px;
     margin-left: 10px;
 }

@@ -25,6 +25,8 @@ const (
 
 	profile = "profile"
 	picture = "picture"
+
+	propertyDelimiter = "properties"
 )
 
 type FileInfo struct {
@@ -57,7 +59,7 @@ func (s *Server) getCloudFileslistByUser(ctx context.Context, userID string) ([]
 	defer cancel()
 
 	// sanitize the input.
-	prefix := strings.Trim(userID, "/")
+	prefix := path.Join(strings.Trim(userID, "/"), propertyDelimiter)
 
 	filesInfo, err := getFilesAtPrefix(tCtx, s.StorageClient, s.UsersBucket, prefix)
 	if err != nil {
@@ -94,7 +96,7 @@ func (s *Server) getFileslistByUserAndPropertyId(ctx context.Context, userID, pr
 	tCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
 
-	prefix := path.Join(userID, propertyID)
+	prefix := path.Join(userID, propertyDelimiter, propertyID)
 	return getFilesAtPrefix(tCtx, s.StorageClient, s.UsersBucket, prefix)
 }
 
@@ -104,7 +106,7 @@ func (s *Server) getFileData(ctx context.Context, userID, propertyID, fileName s
 	tCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
 
-	filePath := path.Join(userID, propertyID, fileName)
+	filePath := path.Join(userID, propertyDelimiter, propertyID, fileName)
 
 	ll := log.With().Str("file_path", filePath).Logger()
 
@@ -144,7 +146,7 @@ func (s *Server) addStorageFile(ctx context.Context, f io.Reader, userID, proper
 	tCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
 
-	prefix := path.Join(userID, propertyID)
+	prefix := path.Join(userID, propertyDelimiter, propertyID)
 	key := path.Join(prefix, fileName)
 
 	o := s.StorageClient.Bucket(s.UsersBucket).Object(key)
@@ -225,7 +227,7 @@ func (s *Server) deleteStorageFile(ctx context.Context, userID, propertyID, file
 	tCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
-	key := path.Join(userID, propertyID, fileName)
+	key := path.Join(userID, propertyDelimiter, propertyID, fileName)
 
 	o := s.StorageClient.Bucket(s.UsersBucket).Object(key)
 	if err := o.Delete(tCtx); err != nil {
@@ -237,7 +239,7 @@ func (s *Server) deleteStorageFile(ctx context.Context, userID, propertyID, file
 // generateStoreFileSignedURL creates a signed URL that allows users to upload directly to the bucket.
 func (s *Server) generateStoreFileSignedURL(ctx context.Context, userID, propertyID, fileName string) (string, error) {
 
-	key := path.Join(userID, propertyID, fileName)
+	key := path.Join(userID, propertyDelimiter, propertyID, fileName)
 
 	ll := log.With().Str("key", key).Logger()
 	
@@ -260,7 +262,7 @@ func (s *Server) generateStoreFileSignedURL(ctx context.Context, userID, propert
 // getSignedURL returns a signed url.
 func (s *Server) getSignedURL(ctx context.Context, userID, propertyID, fileName string) (string, error) {
 
-	key := path.Join(userID, propertyID, fileName)
+	key := path.Join(userID, propertyDelimiter, propertyID, fileName)
 
 	ll := log.With().Str("key", key).Logger()
 

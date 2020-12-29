@@ -33,6 +33,7 @@ class FilesDashboard extends React.Component {
             user: this.props.location.state.user,
             totalEstimateWorth: this.props.location.state.totalEstimateWorth,
             missingEstimate: this.props.location.state.missingEstimate,
+            profilePicture: this.props.location.state.profilePicture,
             sortToggleMap: [['A-Z', false]],
             // files is the main point with how files are displayed.
             files: [],
@@ -798,6 +799,7 @@ class FilesDashboard extends React.Component {
                         user: this.state.user,
                         totalEstimateWorth: this.state.totalEstimateWorth,
                         missingEstimate: this.state.missingEstimate,
+                        profilePicture: this.state.profilePicture,
                         currentPage: "files"
                     }
                 }}/>

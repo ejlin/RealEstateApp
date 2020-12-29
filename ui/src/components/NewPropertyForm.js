@@ -14,7 +14,8 @@ class NewPropertyForm extends React.Component {
         };
 
         this.state = {
-            user: this.state.user,
+            user: this.props.location.state.user,
+            profilePicture: this.props.location.state.profilePicture,
             properties: []
         };
 
@@ -75,11 +76,9 @@ class NewPropertyForm extends React.Component {
                     }
                 }}/>
                 <div id="new_property_form_box">
-                    <div id="new_property_dashboard_title_box">
-                        <p id="new_property_dashboard_title_box_title">
-                            Add a new Property
-                        </p>
-                    </div>
+                    <p className="new_property_dashboard_title_box_title">
+                        New Property
+                    </p>
                     <div id="new_property_form_inner_box">
                         <form onSubmit={this.handleSubmit} id="new_property_form">
                             <p className="new_property_form_subtitle">

@@ -33,7 +33,8 @@ class MainDashboard extends React.Component {
             vacantProperties: 0,
             yearAgoTotalEstimateWorth: 0,
             properties: [],
-            isLoading: true
+            isLoading: true,
+            profilePicture: this.props.location.state.profilePicture
         };
 
         this.numberWithCommas = this.numberWithCommas.bind(this);
@@ -109,6 +110,16 @@ class MainDashboard extends React.Component {
             });
 
         }).catch(error => console.log(error));
+
+        axios({
+            method: 'get',
+            url: '/api/user/settings/profile/picture/' + this.state.user["id"],
+        }).then(response => {
+            var src = response.data;
+            this.setState({
+                profilePicture: src
+            })
+        }).catch(error => console.log(error))
     }
 
     numberWithCommas(x) {
@@ -186,7 +197,8 @@ class MainDashboard extends React.Component {
                             user: this.state.user,
                             totalEstimateWorth: this.state.totalEstimateWorth,
                             missingEstimate: this.state.missingEstimate,
-                            currentPage: "overview"
+                            currentPage: "overview",
+                            profilePicture: this.state.profilePicture
                         }
                     }}/>
                     {this.state.isLoading ? <div></div> : 

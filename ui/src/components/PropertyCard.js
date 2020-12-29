@@ -70,7 +70,6 @@ class PropertyCard extends React.Component {
                 property_id: this.state.propertyID
             }
         }).then(response => {
-            console.log(response);
             this.removePropertyFromParentState(this.state.propertyID);
         }).catch(error => console.log(error));
 
@@ -114,8 +113,6 @@ class PropertyCard extends React.Component {
         var ltvRatio = loan / estimate * 100;
 
         var url = 'api/user/files/' + this.state.user["id"] + '/' + this.state.propertyID;
-        console.log(this.state.propertyID);
-        console.log(url);
         var files;
         axios({
             method: 'get',
@@ -143,7 +140,6 @@ class PropertyCard extends React.Component {
                 ),
                 isLoading: false
             })
-            console.log(this.state.files);
         }).catch(error => {
             if (error.response.status === 404) {
                 files = [];

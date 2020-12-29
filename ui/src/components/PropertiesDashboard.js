@@ -20,6 +20,7 @@ class PropertiesDashboard extends React.Component {
 
         this.state = {
             user: this.props.location.state.user,
+            profilePicture: this.props.location.state.profilePicture,
             sfhProperties: [],
             manufacturedProperties: [],
             condoOpsProperties: [],
@@ -307,7 +308,8 @@ class PropertiesDashboard extends React.Component {
                             user: this.state.user,
                             totalEstimateWorth: this.state.totalEstimateWorth,
                             missingEstimate: this.state.missingEstimate,
-                            currentPage: "properties"
+                            profilePicture: this.state.profilePicture,
+                            currentPage: "properties",
                         }
                     }}/>
                     {this.state.isLoading ? <div></div> : 
@@ -348,7 +350,7 @@ class PropertiesDashboard extends React.Component {
                                 </button>
                             </div> */}
                             <div id="properties_dashboard_property_parent_box">
-                                <div id="properties_dashboard_property_navigation_bar">
+                                {/* <div id="properties_dashboard_property_navigation_bar">
                                     <li className="properties_dashboard_property_navigation_bar_list">
                                         <p className="properties_dashboard_property_navigation_bar_list_title">
                                             All Properties  
@@ -399,7 +401,7 @@ class PropertiesDashboard extends React.Component {
                                             Commercial
                                         </p>
                                     </li>
-                                </div>
+                                </div> */}
                                 <div id="properties_dashboard_property_inner_box">
                                     {this.state.sfhProperties}
                                 </div>

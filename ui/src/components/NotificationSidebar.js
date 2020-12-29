@@ -28,7 +28,7 @@ class NotificationSidebar extends React.Component {
                     }
                     <div className="clearfix"/>
                     <p id="main_dashboard_summary_estimated_net_worth_title">
-                        ${this.state.totalEstimateWorth ? this.state.totalEstimateWorth : 0}
+                        ${this.state.totalEstimateWorth && !Number.isNaN(this.state.totalEstimateWorth) ? this.state.totalEstimateWorth : 0}
                     </p>
                 </div>
                 <div id="main_dashboard_summary_notifications">

@@ -1,8 +1,8 @@
 #feedback_form_box {
     float: left;
     height: 100vh;
-    margin-left: 120px;
-    width: calc(100% - 120px);
+    margin-left: 220px;
+    width: calc(100% - 220px);
 }
 
 #feedback_form_inner_box {
@@ -35,7 +35,7 @@
 }
 
 .feedback_form_inner_lower_box_nav_bar_list {
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     float: left;
     height: 50px;
@@ -50,7 +50,7 @@
 .feedback_form_inner_lower_box_nav_bar_list_title {
     color:  black;
     float: left;
-    font-size: 1.2em;
+    font-size: 1.0em;
     font-weight: bold;
     line-height: 50px;
     margin-left: 10px;
@@ -59,10 +59,10 @@
 .feedback_form_inner_lower_box_nav_bar_list_icon {
     color:  black;
     float: left;
-    height: 25px;
+    height: 20px;
     margin-left: 10px;
-    margin-top: calc((50px - 25px)/2);
-    width: 25px;
+    margin-top: calc((50px - 20px)/2);
+    width: 20px;
 }
 
 #feedback_form_inner_lower_box_right_box {
@@ -79,13 +79,105 @@
     width: calc((100% - 275px - 20px));
 }
 
+.feedback_form_actual_form_title_border_bottom {
+    background-color: #296CF6;
+    height: 5px;
+    margin-top: 5px;
+}
+
 .feedback_form_actual_form_title {
+    border-bottom: 5px solid #296CF6;
+    float: left;
     font-size: 1.4em;
     font-weight: bold;
+    padding-bottom: 5px;
 }
 
 .feedback_form_actual_form_subtitle {
     font-size: 1em;
     font-weight: bold;
+    margin-top: 15px;
+}
+
+.feedback_form_actual_form_title_input {
+    border: 2px solid black;
+    border-radius: 4px;
+    font-size: 1.1em;
+    margin-top: 25px;
+    padding: 7.5px 15px 7.5px 15px;
+    width: calc(100% - 30px);
+}
+
+.feedback_form_actual_form_title_input::placeholder, .feedback_form_actual_form_title_textarea::placeholder {
+    color: grey;
+}
+
+.feedback_form_actual_form_title_input:focus, .feedback_form_actual_form_title_textarea:focus {
+    border: 2px solid  #296CF6;
+    outline: none;
+}
+
+.feedback_form_actual_form_title_textarea {
+    border: 2px solid black;
+    border-radius: 4px;
+    font-size: 1.1em;
+    height: 200px;
+    margin-top: 25px;
+    padding: 7.5px 15px 7.5px 15px;
+    resize: none;
+    width: calc(100% - 30px);
+}
+
+.feedback_form_actual_form_submit_button {
+    background-color: #296cf6;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    float: right;
+    padding: 10px 15px 10px 15px;
+}
+
+.feedback_form_actual_form_submit_button:hover {
+    opacity: 0.9;
+}
+
+.feedback_form_actual_form_checkbox {
+    border: 2px solid black;
+    border-radius: 4px;
+    float: left;
+}
+
+#feedback_form_actual_form_checkbox_box {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.feedback_form_actual_form_checkbox_inner_box {
+    height: 12px;
+    margin: 3px;
+    width: 12px;
+}
+
+.feedback_form_actual_form_checkbox_text {
+    float: left;
+    font-size: 1em;
+    margin-left: 10px;
+    width: 400px;
+}
+
+.feedback_form_actual_form_checkbox_inner_box_active {
+    background-color: #296CF6;
+}
+
+.feedback_form_select_input {
+    border: 2px solid black;
+    border-radius: 4px;
+    float: left;
+    font-size: 1.1em;
+    margin-right: 15px;
+    padding: 10px 15px 10px 15px;
+}
+
+#feedback_form_actual_form_select_box {
     margin-top: 15px;
 }

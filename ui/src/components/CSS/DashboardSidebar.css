@@ -40,34 +40,31 @@
 }
 
 #dashboard_sidebar_parent {
-    background-color: #F9FAFB;
+    background-color: #f1f1f1;
+    /* background-color: #F9FAFB; */
     display: block;
     float: left;
     height: 100vh;
     position: fixed;
-    width: 120px;
+    width: 220px;
 }
 
 #dashboard_new_property_button {
     background-color: #296CF6;
     border: none;
     border-radius: 4px;
+    color: white;
     cursor: pointer;
     float: left;
-    height: 40px;
-    margin-left: calc((120px - 40px) / 2);
-    margin-top: 80px;
-    margin-bottom: 25px;
+    font-weight: bold;
+    height: 45px;
+    line-height: 45px;
+    margin-left: 40px;
+    margin-top: 25px;
     padding-bottom: 0px;
-}
-
-#BsFillPlusSquareFill {
-    color: #296CF6;
-    background-color: white;
-    height: 40px;
-    margin-bottom: 0px;
-    width: 40px;
-    padding: 0px !important;
+    text-align: center;
+    text-decoration: none;
+    width: calc((100% - 80px));
 }
 
 #dashboard_new_property_button:hover {
@@ -79,9 +76,10 @@ button:focus {
 }
 
 .dashboard_sidebar_link {
-    background-color: #F9FAFB !important;
+    background-color:transparent!important;
     font-size: 1.1em;
-    margin-top: 30px;
+    height: 30px;
+    margin-top: 20px;
     text-decoration: none !important;
     transition: 0.5s;
     width: 100%;
@@ -101,21 +99,22 @@ button:focus {
 }
 
 .dashboard_sidebar_link_icon {
-    background-color: #F9FAFB !important;
+    background-color: #f1f1f1 !important;
     color:grey;
     float: left;
     height: 22.5px;
-    margin-left: calc((100% - 22.5px)/2);
-    text-align: center;
+    margin-left: 40px;
+    margin-top: calc((30px - 22.5px)/2);
     width: 22.5px;
 }
 
 .dashboard_sidebar_link_text {   
-    background-color: #F9FAFB !important;
+    background-color: #f1f1f1 !important;
     color: grey;
+    float: left;
     font-size: 0.9em;
-    margin-top: 5px;
-    text-align: center;
+    line-height: 30px;
+    margin-left: 20px;
     text-decoration: none !important;
 }
 
@@ -133,4 +132,49 @@ button:focus {
 #dashboard_sidebar_version_text {
     line-height: 50px;
     text-align: center;
+}
+
+#dashboard_sidebar_profile_pic {
+    border-radius: 50px;
+    height: 100px;
+    margin-left: calc((100% - 100px)/2);
+    margin-top: 80px;
+    width: 100px;
+}
+
+.dashboard_sidebar_profile_pic_title {
+    font-weight: bold;
+    text-align: center;
+}
+
+.dashboard_sidebar_profile_pic_icon {
+    cursor: pointer;
+    margin-left: 5px;
+    margin-top: 3px;
+    position: absolute;
+}
+
+#dashboard_sidebar_profile_pic_text_box {
+    margin-top: 15px;
+}
+
+#dashboard_sidebar_profile_tooltip {
+    background-color: white;
+    border-radius: 4px;
+    margin-left: calc((100% - 120px)/2);
+    margin-top: 5px;
+    position: absolute;
+    width: 120px;
+}
+
+.dashboard_sidebar_profile_tooltip_list {
+    cursor: pointer;
+    padding: 7.5px 15px 7.5px 15px;
+    text-align: center;
+    transition: 0.5s;
+}
+
+.dashboard_sidebar_profile_tooltip_list:hover {
+    background-color: #d3d3d3;
+    opacity: 0.7;
 }

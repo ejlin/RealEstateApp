@@ -36,6 +36,7 @@ class SettingsDashboard extends React.Component {
             user: this.props.location.state.user,
             totalEstimateWorth: this.props.location.state.totalEstimateWorth,
             missingEstimate: this.props.location.state.missingEstimate,
+            profilePicture: this.props.location.state.profilePicture,
             toDisplay: general,
             editGeneral: false,
             checkboxStates: new Map(
@@ -110,15 +111,15 @@ class SettingsDashboard extends React.Component {
             });
         });
 
-        axios({
-            method: 'get',
-            url: '/api/user/settings/profile/picture/' + this.state.user["id"],
-        }).then(response => {
-            var src = response.data;
-            this.setState({
-                profilePicture: src
-            })
-        }).catch(error => console.log(error))
+        // axios({
+        //     method: 'get',
+        //     url: '/api/user/settings/profile/picture/' + this.state.user["id"],
+        // }).then(response => {
+        //     var src = response.data;
+        //     this.setState({
+        //         profilePicture: src
+        //     })
+        // }).catch(error => console.log(error))
     }
 
     updateUserSettingsProfile() {
@@ -699,11 +700,12 @@ class SettingsDashboard extends React.Component {
             //     }
             // }}/>
             <div>
-                <DashboardSidebar data={{
+                <DashboardSidebar key={this.state.profilePicture} data={{
                     state: {
                         user: this.state.user,
                         totalEstimateWorth: this.state.totalEstimateWorth,
                         missingEstimate: this.state.missingEstimate,
+                        profilePicture: this.state.profilePicture,
                         currentPage: "settings"
                     }
                 }}/>

@@ -9,11 +9,13 @@ import DashboardSidebar from './DashboardSidebar.js';
 import { BsFillHouseFill } from 'react-icons/bs';
 import { RiFileWarningFill, RiVipCrown2Fill } from 'react-icons/ri';
 import { AiTwotoneSecurityScan } from 'react-icons/ai';
+import { MdAccountCircle } from 'react-icons/md';
 
 const general = "general";
 const featureRequest = "feature_request";
 const bugReport = "bug_report";
 const securityIssue = "security_issue";
+const accountIssue = "account_issue";
 
 class FeedbackForm extends React.Component {
     constructor(props) {
@@ -23,6 +25,7 @@ class FeedbackForm extends React.Component {
             user: this.props.location.state.user,
             totalEstimateWorth: this.props.location.state.totalEstimateWorth,
             missingEstimate: this.props.location.state.missingEstimate,
+            profilePicture: this.props.location.state.profilePicture,
             toDisplay: general,
         };
 
@@ -74,10 +77,21 @@ class FeedbackForm extends React.Component {
                         <p className="feedback_form_actual_form_title">
                             General Feedback
                         </p>
+                        <div className="clearfix"/>
                         <p className="feedback_form_actual_form_subtitle">
                             You are submitting this form as {this.state.user["first_name"]} {this.state.user["last_name"]}, {this.state.user["email"]}
                         </p>
-                        
+                        <input type="text" placeholder="Title" className="feedback_form_actual_form_title_input"></input>
+                        <div className="clearfix"/>
+                        <textarea 
+                            type="textarea" 
+                            placeholder="Please describe your general feedback." 
+                            className="feedback_form_actual_form_title_textarea"></textarea>
+                        <div id="feedback_form_actual_form_checkbox_box">
+                            <div className="feedback_form_actual_form_submit_button">
+                                Submit
+                            </div>
+                        </div>
                     </div>
                 )
             case featureRequest:
@@ -86,10 +100,41 @@ class FeedbackForm extends React.Component {
                         <p className="feedback_form_actual_form_title">
                             Feature Request
                         </p>
+                        <div className="clearfix"/>
                         <p className="feedback_form_actual_form_subtitle">
                             You are submitting this form as {this.state.user["first_name"]} {this.state.user["last_name"]}, {this.state.user["email"]}
                         </p>
-                        
+                        <input type="text" placeholder="Title" className="feedback_form_actual_form_title_input"></input>
+                        <div className="clearfix"/>
+                        <textarea 
+                            type="textarea" 
+                            placeholder="Please describe your feature request. The more details you can provide, the more we can understand how this feature will help you and your investments." 
+                            className="feedback_form_actual_form_title_textarea"></textarea>
+                        <div id="feedback_form_actual_form_checkbox_box">
+                            <div
+                                className={
+                                    this.state.featureRequestCheckbox ? 
+                                    "feedback_form_actual_form_checkbox" : 
+                                    "feedback_form_actual_form_checkbox"}
+                                onClick={() => this.setState({
+                                    featureRequestCheckbox: !this.state.featureRequestCheckbox
+                                })}>
+                                <div
+                                    className={
+                                        this.state.featureRequestCheckbox ? 
+                                        "feedback_form_actual_form_checkbox_inner_box feedback_form_actual_form_checkbox_inner_box_active" : 
+                                        "feedback_form_actual_form_checkbox_inner_box"
+                                    }>
+                                </div>
+                            </div>
+                            <p className="feedback_form_actual_form_checkbox_text">
+                                I consent to being contacted regarding any follow up work required for this feature request.
+                            </p>
+                            <div className="feedback_form_actual_form_submit_button">
+                                Submit
+                            </div>
+                        </div>
+                        <div className="clearfix"/>
                     </div>
                 )
             case bugReport:
@@ -98,10 +143,29 @@ class FeedbackForm extends React.Component {
                         <p className="feedback_form_actual_form_title">
                             Bug Report
                         </p>
+                        <div className="clearfix"/>
                         <p className="feedback_form_actual_form_subtitle">
                             You are submitting this form as {this.state.user["first_name"]} {this.state.user["last_name"]}, {this.state.user["email"]}
                         </p>
-                        
+                        <input type="text" placeholder="Title" className="feedback_form_actual_form_title_input"></input>
+                        <div className="clearfix"/>
+                        <textarea 
+                            type="textarea" 
+                            placeholder="Please describe your bug report. The more details you can provide, the more we can quickly identify and fix this bug." 
+                            className="feedback_form_actual_form_title_textarea"></textarea>
+                        <div className="clearfix"/>
+                        <div id="feedback_form_actual_form_select_box">
+                            <select className="feedback_form_select_input">
+                                <option value="" disabled selected>Severity</option>
+                                <option>Business Critical</option>
+                                <option>Severely impacting majority of operations</option>
+                                <option>Operation efficiency impacted</option>
+                                <option>Minor annoyance</option>
+                            </select>
+                            <div className="feedback_form_actual_form_submit_button">
+                                Submit
+                            </div>
+                        </div>
                     </div>
                 )
             case securityIssue:
@@ -110,10 +174,58 @@ class FeedbackForm extends React.Component {
                         <p className="feedback_form_actual_form_title">
                             Security Issue
                         </p>
+                        <div className="clearfix"/>
                         <p className="feedback_form_actual_form_subtitle">
                             You are submitting this form as {this.state.user["first_name"]} {this.state.user["last_name"]}, {this.state.user["email"]}
                         </p>
-                        
+                        <input type="text" placeholder="Title" className="feedback_form_actual_form_title_input"></input>
+                        <div className="clearfix"/>
+                        <textarea 
+                            type="textarea" 
+                            placeholder="Please describe the security issue. The more details you can provide, the more we can quickly identify and fix this vulnerability." 
+                            className="feedback_form_actual_form_title_textarea"></textarea>
+                        <div className="clearfix"/>
+                        <div id="feedback_form_actual_form_select_box">
+                            <select className="feedback_form_select_input">
+                                <option value="" disabled selected>Severity</option>
+                                <option>Critical</option>
+                                <option>High</option>
+                                <option>Medium</option>
+                                <option>Low</option>
+                            </select>
+                            <div className="feedback_form_actual_form_submit_button">
+                                Submit
+                            </div>
+                        </div>
+                    </div>
+                )
+            case accountIssue:
+                return (
+                    <div className="feedback_form_actual_form_box">
+                        <p className="feedback_form_actual_form_title">
+                            Account Issue
+                        </p>
+                        <div className="clearfix"/>
+                        <p className="feedback_form_actual_form_subtitle">
+                            You are submitting this form as {this.state.user["first_name"]} {this.state.user["last_name"]}, {this.state.user["email"]}
+                        </p>
+                        <input type="text" placeholder="Title" className="feedback_form_actual_form_title_input"></input>
+                        <div className="clearfix"/>
+                        <textarea 
+                            type="textarea" 
+                            placeholder="Please describe the security issue. The more details you can provide, the more we can quickly identify and fix this vulnerability." 
+                            className="feedback_form_actual_form_title_textarea"></textarea>
+                        <div className="clearfix"/>
+                        <div id="feedback_form_actual_form_select_box">
+                            <select className="feedback_form_select_input">
+                                <option value="" disabled selected>I have an issue with...</option>
+                                <option>Billing</option>
+                                <option>Cancellation</option>
+                            </select>
+                            <div className="feedback_form_actual_form_submit_button">
+                                Submit
+                            </div>
+                        </div>
                     </div>
                 )
         }
@@ -135,6 +247,7 @@ class FeedbackForm extends React.Component {
                         user: this.state.user,
                         totalEstimateWorth: this.state.totalEstimateWorth,
                         missingEstimate: this.state.missingEstimate,
+                        profilePicture: this.state.profilePicture,
                         currentPage: "feedback"
                     }
                 }}/>
@@ -198,6 +311,19 @@ class FeedbackForm extends React.Component {
                                     <AiTwotoneSecurityScan className="feedback_form_inner_lower_box_nav_bar_list_icon"></AiTwotoneSecurityScan>
                                     <p className="feedback_form_inner_lower_box_nav_bar_list_title">
                                         Security Issue
+                                    </p>
+                                </li>
+                                <li 
+                                    onClick={() => this.setState({
+                                        toDisplay: accountIssue,
+                                    })}
+                                    className={
+                                        this.state.toDisplay === accountIssue ? 
+                                        "feedback_form_inner_lower_box_nav_bar_list feedback_form_inner_lower_box_nav_bar_list_active" : 
+                                        "feedback_form_inner_lower_box_nav_bar_list"}>
+                                    <MdAccountCircle className="feedback_form_inner_lower_box_nav_bar_list_icon"></MdAccountCircle>
+                                    <p className="feedback_form_inner_lower_box_nav_bar_list_title">
+                                        Account Issue
                                     </p>
                                 </li>
                             </div>
