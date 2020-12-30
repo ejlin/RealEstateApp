@@ -6,7 +6,7 @@
 }
 
 #settings_dashboard_title_box {
-    margin-left: 80px;
+    margin-left: 60px;
     margin-top: 80px;
 }
 
@@ -188,9 +188,10 @@
 #settings_dashboard_parent_inner_box {
     border-radius: 4px;
     float: left;
-    margin-left: 80px;
+    margin-left: 60px;
+    margin-right: 80px;
     margin-top: 50px;
-    width: calc(100% - 80px - 80px);
+    width: calc(100% - 140px);
 }
 
 #settings_dashboard_right_box {

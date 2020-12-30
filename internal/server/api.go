@@ -28,6 +28,9 @@ func (s *Server) HandleRoutes() {
 	r.HandleFunc("/api/user/property/{id}", s.removePropertyByUser).Queries("property_id", "{property_id}").Methods("DELETE")
 	r.HandleFunc("/api/user/property/{id}", s.addPropertyByUser).Methods("POST")
 
+	// Used to display our main dashboard page. Provides a summary for users. 
+	r.HandleFunc("/api/user/property/summary/{id}", s.getPropertiesSummary).Methods("GET")
+
 	// Order matters. Routing is done sequentially, so the first one must be the one that doesn't satisfy the second one.
 	r.HandleFunc("/api/user/files/{id}/{property_id}/{file_name}", s.getFile).Queries("request", "{request}").Methods("GET")
 	r.HandleFunc("/api/user/files/{id}/{property_id}/{file_name}", s.deleteFile).Methods("DELETE")
@@ -280,6 +283,36 @@ func (s *Server) addPropertyByUser(w http.ResponseWriter, r *http.Request) {
 
 	w.Write([]byte(fmt.Sprintf("added property: %s by user: %s", property.ID, property.OwnerID)))
 	w.WriteHeader(http.StatusOK)
+}
+
+func (s *Server) getPropertiesSummary(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	userID, ok := vars["id"]
+	if !ok {
+		log.Warn().Str("func", "getPropertiesSummary").Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	propertiesSummary, err := s.calculatePropertiesSummary(userID)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to calculate properties summary")
+		http.Error(w, "unable to calculate properties summary", http.StatusInternalServerError)
+		return
+	}
+
+	mPropertiesSummary, err := json.Marshal(propertiesSummary)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to marshal properties summary")
+		http.Error(w, "unable to marshal properties summary", http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(mPropertiesSummary)
+	return
 }
 
 func (s *Server) getProperties(w http.ResponseWriter, r *http.Request) {

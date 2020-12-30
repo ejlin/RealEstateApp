@@ -60,10 +60,9 @@ class DashboardSidebar extends React.Component {
                             <p className="dashboard_sidebar_profile_pic_title">
                                 {this.state.user["first_name"]} {this.state.user["last_name"]}
                                 <GrFormDown 
-                                    onClick={() => this.setState({
+                                    onMouseDown={() => this.setState({
                                         displayAccountTooltip: !this.state.displayAccountTooltip
                                     })}
-                                   
                                     className="dashboard_sidebar_profile_pic_icon"></GrFormDown>
                             </p>
                             {this.state.displayAccountTooltip ? 

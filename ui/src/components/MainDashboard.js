@@ -47,65 +47,22 @@ class MainDashboard extends React.Component {
     }
 
     componentDidMount() {
-        var url = '/api/user/property/' + this.state.user["id"];
+        var url = '/api/user/property/summary/' + this.state.user["id"];
         axios({
             method: 'get',
             url: url,
         }).then(response => {
-            var properties = response.data;
-            var totalEstimateWorth = 0;
-            var totalNetWorth = 0;
-            var totalRent = 0;
-            var totalCost = 0;
-            var totalDownPayment = 0;
-            var totalLoan = 0;
-            var totalProperties = properties.length;
-            var missingEstimate = false;
-
-            for (var i = 0; i < properties.length; i++) {
-                var property = properties[i];
-                totalEstimateWorth += property["price_estimate"];
-                totalNetWorth += property["price_bought"];
-                totalRent += property["price_rented"];
-                totalCost += property["price_mortgage"] + (property["price_property_manager"] * property["price_rented"] / 100.0);
-                totalDownPayment += property["price_down_payment"];
-
-                var loan = property["price_bought"] - property["price_down_payment"];
-                totalLoan += loan;
-
-                if (property["price_estimate"] && property["price_estimate"] != 0.00) { 
-                    totalEstimateWorth += property["price_estimate"];
-                } else {
-                    totalEstimateWorth += property["price_bought"];
-                    missingEstimate = true;
-                }
-            }
-
-            var averageLTV = totalLoan / totalEstimateWorth * 100;
-            var userMonthlySalary = this.state.userSalary ? this.state.userSalary / 12 : 0;
-            var averageDTI = totalCost / (totalRent + userMonthlySalary) * 100;
-
-            var annualRateOfReturn = totalDownPayment === 0 ? 0 : (totalRent - totalCost) / totalDownPayment * 100 * 12
-
+            var propertiesSummary = response.data;
             this.setState({
-                properties: properties.map((property, i) => 
-                <div key={i}>
-                    <PropertyCard data={{
-                        state: {
-                            property_details: property
-                        }
-                    }}/>
-                </div>
-                ),
-                totalEstimateWorth: this.numberWithCommas(totalEstimateWorth),
-                totalNetWorth: this.numberWithCommas(totalNetWorth),
-                totalRent: this.numberWithCommas(totalRent),
-                totalCost: this.numberWithCommas(Number(totalCost.toFixed(2))),
-                annualRateOfReturn: Number(annualRateOfReturn.toFixed(3)),
-                totalProperties: this.numberWithCommas(totalProperties),
-                averageLTV: Number(averageLTV.toFixed(2)),
-                averageDTI: Number(averageDTI.toFixed(2)),
-                missingEstimate: missingEstimate,
+                totalEstimateWorth: this.numberWithCommas(propertiesSummary["total_estimate_worth"]),
+                totalNetWorth: this.numberWithCommas(propertiesSummary["total_net_worth"]),
+                totalRent: this.numberWithCommas(propertiesSummary["total_rent"]),
+                totalCost: this.numberWithCommas(Number(propertiesSummary["total_cost"].toFixed(2))),
+                annualRateOfReturn: Number(propertiesSummary["annual_rate_of_return"].toFixed(3)),
+                totalProperties: this.numberWithCommas(propertiesSummary["total_properties"]),
+                averageLTV: Number(propertiesSummary["average_ltv"].toFixed(2)),
+                averageDTI: Number(propertiesSummary["average_dti"].toFixed(2)),
+                missingEstimate: propertiesSummary["missing_estimate"],
                 isLoading: false
             });
 
@@ -265,7 +222,7 @@ class MainDashboard extends React.Component {
                                             Portfolio Growth
                                         </p>
                                         <div id="main_dashboard_portfolio_growth_parent">
-                                            <BarChart width={630} height={275} barSize={25}
+                                            <BarChart width={600} height={275} barSize={25}
                                             data={[
                                                 {name: 'Jan', uv: 423},
                                                 {name: 'Feb', uv: 423},

@@ -73,6 +73,7 @@ class NewPropertyForm extends React.Component {
                 <DashboardSidebar data={{
                     state: {
                         user: this.state.user,
+                        profilePicture: this.state.profilePicture
                     }
                 }}/>
                 <div id="new_property_form_box">

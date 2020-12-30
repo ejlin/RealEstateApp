@@ -350,58 +350,6 @@ class PropertiesDashboard extends React.Component {
                                 </button>
                             </div> */}
                             <div id="properties_dashboard_property_parent_box">
-                                {/* <div id="properties_dashboard_property_navigation_bar">
-                                    <li className="properties_dashboard_property_navigation_bar_list">
-                                        <p className="properties_dashboard_property_navigation_bar_list_title">
-                                            All Properties  
-                                        </p>
-                                    </li>
-                                    <li className="properties_dashboard_property_navigation_bar_list">
-                                        <BsFillHouseFill className="properties_dashboard_right_box_nav_bar_list_icon"></BsFillHouseFill>
-                                        <p className="properties_dashboard_property_navigation_bar_list_title">
-                                            Single Family Homes
-                                        </p>
-                                    </li>
-                                    <li className="properties_dashboard_property_navigation_bar_list">
-                                        <FaWarehouse className="properties_dashboard_right_box_nav_bar_list_icon"></FaWarehouse>
-                                        <p className="properties_dashboard_property_navigation_bar_list_title">
-                                            Manufactured  
-                                        </p>
-                                    </li>
-                                    <li className="properties_dashboard_property_navigation_bar_list">
-                                        <p className="properties_dashboard_property_navigation_bar_list_title">
-                                            Condos/Ops
-                                        </p>
-                                    </li>
-                                    <li className="properties_dashboard_property_navigation_bar_list">
-                                        <p className="properties_dashboard_property_navigation_bar_list_title">
-                                            Multi-Family
-                                        </p>
-                                    </li>
-                                    <li className="properties_dashboard_property_navigation_bar_list">
-                                        <FaBuilding className="properties_dashboard_right_box_nav_bar_list_icon"></FaBuilding>
-                                        <p className="properties_dashboard_property_navigation_bar_list_title">
-                                            Apartments
-                                        </p>
-                                    </li>
-                                    <li className="properties_dashboard_property_navigation_bar_list">
-                                        <ImMap className="properties_dashboard_right_box_nav_bar_list_icon"></ImMap>
-                                        <p className="properties_dashboard_property_navigation_bar_list_title">
-                                            Lots/Land
-                                        </p>
-                                    </li>
-                                    <li className="properties_dashboard_property_navigation_bar_list">
-                                        <p className="properties_dashboard_property_navigation_bar_list_title">
-                                            Townhomes  
-                                        </p>
-                                    </li>
-                                    <li className="properties_dashboard_property_navigation_bar_list">
-                                        <FaCity className="properties_dashboard_right_box_nav_bar_list_icon"></FaCity>
-                                        <p className="properties_dashboard_property_navigation_bar_list_title">
-                                            Commercial
-                                        </p>
-                                    </li>
-                                </div> */}
                                 <div id="properties_dashboard_property_inner_box">
                                     {this.state.sfhProperties}
                                 </div>

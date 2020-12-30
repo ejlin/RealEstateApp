@@ -7,9 +7,9 @@
 
 #feedback_form_inner_box {
     height: 100vh;
-    margin-left: 80px;
+    margin-left: 60px;
     margin-top: 80px;
-    width: calc((100% - 160px));
+    width: calc((100% - 120px));
 }
  
 .feedback_form_inner_box_title { 

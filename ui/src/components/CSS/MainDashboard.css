@@ -1,7 +1,8 @@
 #main_dashboard_parent {
+    /* background-color: #F5F5FA; */
     display: block;
     float: left;
-    height: calc(100% - 61px);
+    height: calc(100vh);
     margin-left: 220px;
     min-width: 1000px;
     width: calc(100% - 221px - 20%);
@@ -10,7 +11,8 @@
 
 #main_dashboard_title {
     display: inline-block;
-    width: 100%;
+    margin-left: 60px;
+    width: calc(100% - 120px);
 }
 
 #main_dashboard_welcome_box_date {
@@ -25,7 +27,6 @@
 }
 
 #main_dashboard_welcome_box {
-    margin-left: 80px;
     margin-top: 80px;
     width: calc(100% - 160px);
 }
@@ -97,13 +98,12 @@
 
 
 #main_dashboard_summary_cards_box {
+    background-color: white;
     border-radius: 4px;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.09), 0 12px 40px 0 rgba(0, 0, 0, 0.09);
     height: 125px;
-    margin-left: 80px;
     margin-top: 25px;
-    min-width: 1000px;
-    width: calc(100% - 160px);
+    width: calc(100%);
 }
 
 .main_dashboard_summary_cards {
@@ -220,11 +220,10 @@
 
 #main_dashboard_bottom_box {
     padding-bottom: 40px;
-    margin-left: 80px;
-    margin-right: 80px; 
+    margin-right: 60px; 
     margin-top: 40px;
     min-width: 1000px;
-    width: calc((100% - 160px));
+    width: 100%;
 }
 
 #main_dashboard_bottom_box_left {
@@ -245,9 +244,9 @@
 
 #main_dashboard_occupied_circle_box {
     float: right;
-    height: 110px;
-    margin-top: 25px;
-    width: 110px;
+    height: 100px;
+    margin-top: 30px;
+    width: 100px;
 }
 
 #main_dashboard_occupied_circle_text_box {
@@ -299,14 +298,13 @@
 }
 
 #main_dashboard_portfolio_growth_parent {
-    margin-top: 50px;
+    margin-top: 0px;
 }
 
 #main_dashboard_yoy_box {
     float: left;
-    margin-top: 40px;
-    padding: 15px;
-    width: calc(100% - 60px - 30px);
+    margin-top: 30px;
+    width: calc(100%);
 }
 
 #main_dashboard_yoy_icon {
@@ -323,6 +321,7 @@
     float: left;
     margin-left: 25px;
     margin-top: 5px;
+    width: calc((100% - 25px - 50px - 25px));
 }
 
 #main_dashboard_yoy_title {

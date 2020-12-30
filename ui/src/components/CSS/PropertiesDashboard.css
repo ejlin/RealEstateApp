@@ -1,13 +1,13 @@
 .properties_dashboard_property_type_box {
     display: inline-block;
-    margin-left: 200px;
+    margin-left: 220px;
     padding-bottom: 100px;
     position: absolute;
-    width: calc(100% - 200px - 20%);
+    width: calc(100% - 220px - 20%);
 }
 
 #properties_dashboard_title_box {
-    margin-left: 80px;
+    margin-left: 60px;
     margin-top: 80px;
 }
 
@@ -27,7 +27,7 @@
     border-radius: 4px;
     float: right;
     font-size: 1.1em;
-    margin-right: 80px;
+    margin-right: 60px;
     padding: 7.5px 15px 7.5px 15px;
     width: 500px;
 }
@@ -37,10 +37,10 @@
 }
 
 #properties_dashboard_property_parent_box {
-    margin-left: 80px;
-    margin-right: 80px;
+    margin-left: 60px;
+    margin-right: 60px;
     margin-top: 40px;
-    width: calc((100% - 160px));
+    width: calc((100% - 120px));
 }
 
 #properties_dashboard_property_navigation_bar {
@@ -81,10 +81,9 @@
 
 #properties_dashboard_property_inner_box {
     float: left;
-    min-width: 750px;
     overflow: scroll;
     position: relative;
-    width: calc(100% - 275px);   
+    width: 100%;   
 }
 
 #properties_dashboard_property_inner_box::-webkit-scrollbar {

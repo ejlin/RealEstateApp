@@ -8,7 +8,7 @@
 }
 
 #files_dashboard_welcome_box {
-    margin-left: 80px;
+    margin-left: 60px;
     margin-top: 80px;
 }
 
@@ -68,10 +68,10 @@
 }
 
 #files_dashboard_icons_box {
-    margin-left: 80px;
+    margin-left: 60px;
     margin-right: 80px;
     margin-top: 25px;
-    width: calc(100% - 160px);
+    width: calc(100% - 120px);
 }
 
 #files_dashboard_upload_file_text_button {
@@ -140,7 +140,7 @@
     border-radius: 8px;
     float: right;
     font-size: 1.1em;
-    margin-right: 80px;
+    margin-right: 60px;
     padding: 7.5px 15px 7.5px 15px;
     width: 500px;
 }
@@ -154,7 +154,7 @@
 }
 
 #files_dashboard_sort_box {
-    margin-left: 80px;
+    margin-left: 60px;
     margin-top: 40px;
 }
 
@@ -260,9 +260,9 @@
 }
 
 #files_dashboard_files_box {
-    margin-left: 80px;
-    margin-right: 80px;
-    width: calc(100% - 130px);
+    margin-left: 60px;
+    margin-right: 60px;
+    width: calc(100% - 120px);
 }
 
 #files_dashboard_upload_file_box {

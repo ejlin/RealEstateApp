@@ -6,10 +6,10 @@
 }
 
 #analysis_dashboard_parent_inner_box {
-    margin-left: 80px;
-    margin-right: 80px;
+    margin-left: 60px;
+    margin-right: 60px;
     margin-top: 80px;
-    width: calc((100% - 160px));
+    width: calc((100% - 120px));
 }
 
 .analysis_dashboard_parent_inner_box_title {

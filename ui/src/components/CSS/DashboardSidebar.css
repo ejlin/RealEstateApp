@@ -1,46 +1,9 @@
-
-#dashboard_topbar_parent {
-    background-color:#F9FAFB;
-    float: right;
-    height: 60px;
-    position: fixed;
-    width: 100%;
-}
-
-#dashboard_topbar_account_button {
-    background-color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    float: right;
-    margin-right: 25px !important;
-    padding: 10px !important;
-    transition: 0.5s;
-}
-
-#dashboard_topbar_account_button:hover {
-    background-color:  #f3f5fa;
-}
-
-#dashboard_topbar_account_button:hover #dashboard_topbar_account_button_icon {
-    background-color: #f3f5fa;
-}
-
-#dashboard_topbar_account_button_icon {
-    background-color: white;
-    float: left;
-    height: 20px;
-    margin-right: 10px;
-    width: 20px;
-    transition: 0.5s;
-}
-
 .dashboard_sidebar_inner_link {
     text-decoration: none !important;
 }
 
 #dashboard_sidebar_parent {
-    background-color: #f1f1f1;
+    background-color: white; 
     /* background-color: #F9FAFB; */
     display: block;
     float: left;
@@ -76,7 +39,7 @@ button:focus {
 }
 
 .dashboard_sidebar_link {
-    background-color:transparent!important;
+    background-color: transparent!important;
     font-size: 1.1em;
     height: 30px;
     margin-top: 20px;
@@ -99,7 +62,7 @@ button:focus {
 }
 
 .dashboard_sidebar_link_icon {
-    background-color: #f1f1f1 !important;
+    background-color:transparent !important;
     color:grey;
     float: left;
     height: 22.5px;
@@ -109,7 +72,7 @@ button:focus {
 }
 
 .dashboard_sidebar_link_text {   
-    background-color: #f1f1f1 !important;
+    background-color: transparent !important;
     color: grey;
     float: left;
     font-size: 0.9em;
@@ -165,6 +128,7 @@ button:focus {
     margin-top: 5px;
     position: absolute;
     width: 120px;
+    z-index: 5;
 }
 
 .dashboard_sidebar_profile_tooltip_list {
