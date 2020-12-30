@@ -14,7 +14,7 @@ import { IoSettingsSharp } from 'react-icons/io5';
 import { BsFillPlusSquareFill } from 'react-icons/bs';
 import { MdFeedback, MdDashboard } from 'react-icons/md';
 import { RiDashboardFill } from 'react-icons/ri';
-import { GrFormDown } from 'react-icons/gr';
+import { FiChevronDown } from 'react-icons/fi';
 
 class DashboardSidebar extends React.Component {
     
@@ -59,11 +59,11 @@ class DashboardSidebar extends React.Component {
                         <div id="dashboard_sidebar_profile_pic_text_box">
                             <p className="dashboard_sidebar_profile_pic_title">
                                 {this.state.user["first_name"]} {this.state.user["last_name"]}
-                                <GrFormDown 
+                                <FiChevronDown
                                     onMouseDown={() => this.setState({
                                         displayAccountTooltip: !this.state.displayAccountTooltip
                                     })}
-                                    className="dashboard_sidebar_profile_pic_icon"></GrFormDown>
+                                    className="dashboard_sidebar_profile_pic_icon"></FiChevronDown>
                             </p>
                             {this.state.displayAccountTooltip ? 
                             <div id="dashboard_sidebar_profile_tooltip">

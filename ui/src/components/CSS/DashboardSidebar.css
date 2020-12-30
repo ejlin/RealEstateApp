@@ -3,7 +3,7 @@
 }
 
 #dashboard_sidebar_parent {
-    background-color: white; 
+    background-color: #32384D; 
     /* background-color: #F9FAFB; */
     display: block;
     float: left;
@@ -40,6 +40,7 @@ button:focus {
 
 .dashboard_sidebar_link {
     background-color: transparent!important;
+    color: white;
     font-size: 1.1em;
     height: 30px;
     margin-top: 20px;
@@ -63,7 +64,8 @@ button:focus {
 
 .dashboard_sidebar_link_icon {
     background-color:transparent !important;
-    color:grey;
+    color: white;
+    /* color:grey; */
     float: left;
     height: 22.5px;
     margin-left: 40px;
@@ -73,7 +75,8 @@ button:focus {
 
 .dashboard_sidebar_link_text {   
     background-color: transparent !important;
-    color: grey;
+    color: white;
+    /* color: grey; */
     float: left;
     font-size: 0.9em;
     line-height: 30px;
@@ -93,6 +96,7 @@ button:focus {
 }
 
 #dashboard_sidebar_version_text {
+    color: white;
     line-height: 50px;
     text-align: center;
 }
@@ -106,11 +110,13 @@ button:focus {
 }
 
 .dashboard_sidebar_profile_pic_title {
+    color: white;
     font-weight: bold;
     text-align: center;
 }
 
 .dashboard_sidebar_profile_pic_icon {
+    color: white !important;
     cursor: pointer;
     margin-left: 5px;
     margin-top: 3px;
