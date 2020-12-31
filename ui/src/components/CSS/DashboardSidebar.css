@@ -89,6 +89,7 @@ button:focus {
 }
 
 #dashboard_sidebar_version {
+    background-color:  #32384D;
     bottom: 0;
     height: 50px;
     position: absolute;

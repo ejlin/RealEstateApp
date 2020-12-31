@@ -1,6 +1,6 @@
 .file_card_individual_file {
-    background-color: #F1F1F1;
-    border: 2px solid #F1F1F1;
+    background-color: white;
+    border: 2px solid white;
     border-radius: 8px;
     display: inline-block;
     height: calc(40px + 12px);

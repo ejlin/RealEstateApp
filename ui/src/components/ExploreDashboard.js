@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 
 import './CSS/ExploreDashboard.css';
 import './CSS/Style.css';

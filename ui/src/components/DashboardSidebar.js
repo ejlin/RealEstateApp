@@ -7,14 +7,13 @@ import './CSS/Style.css';
 
 import { Link, Redirect } from 'react-router-dom';
 
-import { BsFillGrid1X2Fill, BsFillHouseFill } from 'react-icons/bs';
+import { BsFillHouseFill } from 'react-icons/bs';
 import { GoFileDirectory } from 'react-icons/go';
 import { SiGoogleanalytics } from 'react-icons/si';
 import { IoSettingsSharp } from 'react-icons/io5';
-import { BsFillPlusSquareFill } from 'react-icons/bs';
 import { MdFeedback, MdDashboard } from 'react-icons/md';
-import { RiDashboardFill } from 'react-icons/ri';
 import { FiChevronDown } from 'react-icons/fi';
+import { FaMoneyCheck } from 'react-icons/fa';
 
 class DashboardSidebar extends React.Component {
     
@@ -137,6 +136,22 @@ class DashboardSidebar extends React.Component {
                                 <SiGoogleanalytics className={this.state.currentPage === "analysis" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
                                 <p className={this.state.currentPage === "analysis" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
                                     Analysis
+                                </p>
+                            </Link>
+                        </div>
+                        <div className="dashboard_sidebar_link">
+                            <Link className="dashboard_sidebar_inner_link" to={{
+                                pathname: "/expenses",
+                                state: {
+                                    user: this.state.user,
+                                    totalEstimateWorth: this.state.totalEstimateWorth,
+                                    missingEstimate: this.state.missingEstimate,
+                                    profilePicture: this.state.profilePicture
+                                }
+                            }}>
+                                <FaMoneyCheck className={this.state.currentPage === "expenses" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
+                                <p className={this.state.currentPage === "expenses" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
+                                    Expenses
                                 </p>
                             </Link>
                         </div>

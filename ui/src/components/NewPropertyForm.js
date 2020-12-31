@@ -6,6 +6,14 @@ import './CSS/NewPropertyForm.css';
 
 import DashboardSidebar from './DashboardSidebar.js';
 
+import { BsFillHouseFill } from 'react-icons/bs';
+import { AiTwotonePushpin } from 'react-icons/ai';
+import { FaDollarSign } from 'react-icons/fa';
+
+const generalInformation = "general_information";
+const purchaseInformation = "purchase_information";
+const incomeInformation = "income_information";
+    
 class NewPropertyForm extends React.Component {
     constructor(props) {
         super(props);
@@ -16,6 +24,7 @@ class NewPropertyForm extends React.Component {
         this.state = {
             user: this.props.location.state.user,
             profilePicture: this.props.location.state.profilePicture,
+            toDisplay: generalInformation,
             properties: []
         };
 
@@ -59,6 +68,113 @@ class NewPropertyForm extends React.Component {
         }).catch(error => console.error('timeout exceeded'));
     }
 
+    renderFormParts() {
+        switch (this.state.toDisplay) {
+            case generalInformation:
+                return (
+                    <div>
+                        <p className="form_title">
+                            Property Information
+                        </p>
+                        <div className="clearfix"/>
+                        <p className="form_inner_box_subtitle">
+                            Please input your property's general information
+                        </p>
+                        <div className="form_box">
+                            {/* <label className="new_property_form_label">
+                                Address: 
+                            </label>
+                            <p className="new_property_form_required">*</p>
+                            <div className="clearfix"/> */}
+                            <input 
+                                placeholder="Address Line 1" 
+                                className="new_property_form_input new_property_form_input_long" 
+                                type="text" 
+                                name="addressOne" 
+                                onChange={this.handleFieldChange}/>
+                            {/* <p className="new_property_form_required">*</p> */}
+                            <input 
+                                placeholder="Address Line 2" 
+                                className="new_property_form_input new_property_form_input_long" 
+                                type="text" 
+                                name="addressTwo" 
+                                onChange={this.handleFieldChange}/>
+                            <div className="clearfix"/>
+                            <div className="">
+                                <input 
+                                    placeholder="City" 
+                                    className="new_property_form_input_triple" 
+                                    type="text" 
+                                    name="city" 
+                                    onChange={this.handleFieldChange} />
+                                <input 
+                                    placeholder="State" 
+                                    className="new_property_form_input_triple" 
+                                    type="text" 
+                                    name="state" 
+                                    onChange={this.handleFieldChange} />
+                                <input 
+                                    placeholder="Zip Code" 
+                                    className="new_property_form_input_triple" 
+                                    type="text" 
+                                    name="zip_code" 
+                                    onChange={this.handleFieldChange} />
+                            </div>
+                            <div className="clearfix"/>
+                            <div className="form_footer_box">
+                                <select className="form_select_input">
+                                    <option>
+                                        Single Family Home
+                                    </option>
+                                    <option>
+                                        Manufactured
+                                    </option>
+                                    <option>
+                                        Condo/Ops
+                                    </option>
+                                    <option>
+                                        Multi-Family
+                                    </option>
+                                    <option>
+                                        Apartment
+                                    </option>
+                                    <option>
+                                        Lot/Land
+                                    </option>
+                                    <option>
+                                        Townhome
+                                    </option>
+                                    <option>
+                                        Commercial
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                );
+            case purchaseInformation:
+                return (
+                    <div>
+                        <p className="form_title">
+                            Purchase Information
+                        </p>
+
+                    </div>
+                );
+            case incomeInformation:
+                return(
+                    <div>
+                        <p className="form_title">
+                            Income Information
+                        </p>
+
+                    </div>
+                );
+            default: 
+                break;
+        }
+    }
+
     render() {
         if (this.state.redirect) {
             return <Redirect to={{
@@ -77,11 +193,57 @@ class NewPropertyForm extends React.Component {
                     }
                 }}/>
                 <div id="new_property_form_box">
-                    <p className="new_property_dashboard_title_box_title">
-                        New Property
-                    </p>
-                    <div id="new_property_form_inner_box">
-                        <form onSubmit={this.handleSubmit} id="new_property_form">
+                    <div className="new_property_form_inner_box">
+                        <p className="new_property_dashboard_title_box_title">
+                            New Property
+                        </p>
+                        <div className="new_property_dashboard_bottom_box">
+                            <div className="new_property_dashboard_bottom_left_box">
+                                <li 
+                                    onClick={() => this.setState({
+                                        toDisplay: generalInformation
+                                    })}
+                                    className={
+                                    this.state.toDisplay === generalInformation ?
+                                    "new_property_dashboard_bottom_left_box_list new_property_dashboard_bottom_left_box_list_active" :
+                                    "new_property_dashboard_bottom_left_box_list"}>
+                                    <BsFillHouseFill className="new_property_dashboard_bottom_left_box_list_icon"></BsFillHouseFill>
+                                    <p className="new_property_dashboard_bottom_left_box_list_text">
+                                        Property
+                                    </p>
+                                </li>
+                                <li onClick={() => this.setState({
+                                        toDisplay: purchaseInformation
+                                    })}
+                                    className={
+                                    this.state.toDisplay === purchaseInformation ?
+                                    "new_property_dashboard_bottom_left_box_list new_property_dashboard_bottom_left_box_list_active" :
+                                    "new_property_dashboard_bottom_left_box_list"}>
+                                    <AiTwotonePushpin className="new_property_dashboard_bottom_left_box_list_icon"></AiTwotonePushpin>
+                                    <p className="new_property_dashboard_bottom_left_box_list_text">
+                                        Purchase Information
+                                    </p>
+                                </li>
+                                <li onClick={() => this.setState({
+                                        toDisplay: incomeInformation
+                                    })}
+                                    className={
+                                    this.state.toDisplay === incomeInformation ?
+                                    "new_property_dashboard_bottom_left_box_list new_property_dashboard_bottom_left_box_list_active" :
+                                    "new_property_dashboard_bottom_left_box_list"}>
+                                    <FaDollarSign className="new_property_dashboard_bottom_left_box_list_icon"></FaDollarSign>
+                                    <p className="new_property_dashboard_bottom_left_box_list_text">
+                                        Income Information
+                                    </p>
+                                </li>
+                            </div>
+                            <div className="new_property_dashboard_bottom_right_box">
+                                {this.renderFormParts()}
+                            </div>
+                        </div>
+                    </div>
+                    
+                        {/* <form onSubmit={this.handleSubmit} id="new_property_form">
                             <p className="new_property_form_subtitle">
                                 Property Information
                             </p>
@@ -242,8 +404,7 @@ class NewPropertyForm extends React.Component {
                             </div>
                             <div className="clearfix"/>
                             <input id="new_property_submit_button" type="submit" value="Add Property"></input>
-                        </form>
-                    </div>
+                        </form> */}
                 </div>
             </div>
         )

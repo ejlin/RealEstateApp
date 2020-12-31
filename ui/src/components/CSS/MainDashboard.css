@@ -1,18 +1,21 @@
+body { 
+    background-color: #F5F5FA;
+}
+
 #main_dashboard_parent {
-    /* background-color: #F5F5FA; */
+    background-color: #F5F5FA;
     display: block;
     float: left;
     height: calc(100vh);
     margin-left: 220px;
-    min-width: 1000px;
-    width: calc(100% - 221px - 20%);
+    width: calc(100% - 220px - 20%);
     z-index: -1;
 }
 
 #main_dashboard_title {
     display: inline-block;
     margin-left: 60px;
-    width: calc(100% - 120px);
+    width: calc(100% - 90px);
 }
 
 #main_dashboard_welcome_box_date {
@@ -28,7 +31,8 @@
 
 #main_dashboard_welcome_box {
     margin-top: 80px;
-    width: calc(100% - 160px);
+    height: 60px;
+    width: calc(100% - 120px);
 }
 
 .main_dashboard_title_cards {
@@ -98,9 +102,10 @@
 
 
 #main_dashboard_summary_cards_box {
-    background-color: white;
-    border-radius: 4px;
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.09), 0 12px 40px 0 rgba(0, 0, 0, 0.09);
+    background-color: #296CF6;
+    border-radius: 8px;
+    border: 1px solid #d3d3d3;
+    /* box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09); */
     height: 125px;
     margin-top: 25px;
     width: calc(100%);
@@ -117,10 +122,10 @@
 .main_dashboard_summary_cards_icon {
     border-radius: 50px;
     float: left;
-    height: 35px;
+    height: 30px;
     margin-top: 8.5px;
-    padding: 12.5px;
-    width: 35px;
+    padding: 15px;
+    width: 30px;
 }
 
 .main_dashboard_summary_cards_text_box {
@@ -130,6 +135,7 @@
 }
 
 .main_dashboard_summary_cards_title {
+    color: white;
     font-size: 1.5em;
     font-weight: bold;
     margin-bottom: 0;
@@ -138,84 +144,37 @@
 }
 
 .main_dashboard_summary_cards_subtitle {
+    color: white;
     font-size: 0.85em;
     margin-top: 0px;
     padding-top: 0;
 }
 
 #main_dashboard_summary_cards_icon_properties {
-    background-color: #FBE9E1; 
-    color: #EE9E77;
+    background-color: white;
+    /* background-color: #FBE9E1;  */
+    /* color: #EE9E77; */
+    color: #296CF6; 
 }
 
 #main_dashboard_summary_cards_icon_monthly_income {
-    background-color: #dbebd2; 
-    color: #85bb65;
+    background-color: white;
+    /* background-color: #dbebd2;  */
+    /* color: #85bb65; */
+    color: #296CF6; 
 }
 
 #main_dashboard_summary_cards_icon_monthly_arr {
-    background-color:#eaf5fb;
+    background-color: white;
+    /* background-color:#eaf5fb; */
     color: #296CF6; 
 }
 
 #main_dashboard_summary_cards_icon_monthly_total_cost {
-    background-color: #ffe9f1;
-    color:#e13f71;
-}
-
-#main_dashboard_summary_estimated_net_worth_subtitle {
-    background-color: transparent !important;
-    color: white;
-    float: left;
-    font-size: 0.9em;
-    margin-left: 25px;
-    margin-right: 5px;
-    margin-top: 17.5px;
-}
-
-#main_dashboard_summary_estimated_net_worth_title {
-    background-color: transparent !important;
-    color: white;
-    font-size: 1.6em;
-    font-weight: bold;
-    margin-left: 25px;
-    margin-top: 5px;
-}
-
-#main_dashboard_summary_notifications {
-    background-color: transparent !important;
-    float: left;
-    margin-left: 10%;
-    margin-top: 60px;
-    width: 80%;
-}
-
-#main_dashboard_summary_notifications_icon {
-    background-color: transparent !important;
-    float: left;
-    height: 25px;
-    width: 25px;
-}
-
-#main_dashboard_summary_notifications_title{
-    background-color: transparent !important;
-    float: left;
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-left: 7.5px;
-}
-
-#main_dashboard_summary_notifications_no_notifications {
-    background-color: transparent !important;
-    border-radius: 4px;
-    margin-top: 25px;
-    width: 100%; 
-}
-
-#main_dashboard_summary_notifications_no_notifications_text {
-    background-color: transparent !important;
-    color: grey;
-    text-align: center;
+    background-color: white;
+    /* background-color: #ffe9f1; */
+    /* color:#e13f71; */
+    color: #296CF6; 
 }
 
 #main_dashboard_bottom_box {
@@ -227,19 +186,24 @@
 }
 
 #main_dashboard_bottom_box_left {
+    border: 2px solid #d3d3d3;
+    border-radius: 8px;
     float: left;
     height: 350px;
-    width: 62%;
 }
 
 #main_dashboard_bottom_box_right {
+    border: 2px solid #d3d3d3;
+    border-radius: 8px;
     float: right;
     width: 38%;
 }
 
 .main_dashboard_bottom_box_title {
-    font-size: 1.5em;
+    font-size: 1.3em;
     font-weight: bold;
+    margin-left: 25px;
+    margin-top: 15px;
 }
 
 #main_dashboard_occupied_circle_box {
@@ -258,14 +222,14 @@
 
 #main_dashboard_occupied_circle_text_box_title {
     color: #565656;
-    font-size: 2.0em;
+    font-size: 1.4em;
     font-weight: bold;
     margin-top: 10px;
 }
 
 #main_dashboard_occupied_circle_text_box_subtitle {
     color: #565656;
-    font-size: 1.4em;
+    font-size: 1.2em;
     font-weight: bold;
     margin-top: -5px;
     padding-top: 0;
@@ -290,6 +254,7 @@
 }
 
 #main_dashboard_occupied_circle_parent_first_child {
+    margin-left: 15px;
     margin-top: 5px !important;
 }
 
@@ -299,22 +264,13 @@
 
 #main_dashboard_portfolio_growth_parent {
     margin-top: 0px;
+    padding: 15px;
 }
 
 #main_dashboard_yoy_box {
     float: left;
     margin-top: 30px;
     width: calc(100%);
-}
-
-#main_dashboard_yoy_icon {
-    background-color: #F6F7F9;
-    border-radius: 50px;
-    color: #296CF6;
-    float: left;
-    height: 50px;
-    padding: 12.5px;
-    width: 50px;
 }
 
 #main_dashboard_yoy_text_box {
@@ -329,13 +285,254 @@
     font-weight: bold;
 }
 
-#main_dashboard_yoy_subtitle {
-    font-size: 1.2em;
-}
 
 #main_dashboard_missing_estimate_icon {
     color: white;
     float: left;
     margin-left: 0px;
     margin-top: 20px;
+}
+
+#main_dashboard_bottom_left_box {
+    float: left;
+    min-width: 800px;
+    width: calc(100% - 250px - 40px);
+}
+
+.main_dashboard_bottom_left_box_top {
+    background-color: white;
+    border: 1px solid #f1f1f1;
+    border-radius: 8px;
+    height: 300px;
+    width: calc(100% - 2px);
+}
+
+.main_dashboard_bottom_left_box_bottom {
+    margin-top: 40px;
+    width: 1005;
+}
+
+.main_dashboard_bottom_left_box_bottom_inner_box {
+    background-color: white;
+    border: 1px solid #f1f1f1;
+    border-radius: 8px;
+    float: left;
+    height: 170px;
+    margin-bottom: 25px;
+    margin-right: 30px;
+    min-width: 250px;
+    width: calc((100% - 60px - 6px)/3);
+}
+
+.main_dashboard_bottom_left_box_bottom_inner_box:last-child {
+    margin-right: 0px !important;
+}
+
+
+.main_dashboard_bottom_left_box_bottom_inner_box_text_box {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 10px;
+    width: calc((100% - 40px));
+}
+
+.main_dashboard_bottom_left_box_bottom_inner_box_text_box_icon {
+    float: left;
+    height: 50px;
+    margin-top: 10px;
+    width: 50px;
+}
+
+.main_dashboard_bottom_left_box_bottom_inner_box_text_box_title {
+    float: left;
+    font-size: 3.3em;
+    font-weight: bold;
+}
+
+.main_dashboard_bottom_left_box_bottom_inner_box_text_box_title_two {
+    font-size: 2.5em;
+    font-weight: bold;
+    text-align: center;
+}
+
+
+.main_dashboard_bottom_left_box_bottom_inner_box_text_box_subtitle {
+    float: left;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-top: 15px;
+    width: calc((100% - 70px));
+}
+
+.main_dashboard_bottom_left_box_bottom_inner_box_text_box_subtitle_two {
+    font-weight: bold;
+    text-align: center;
+    width: calc((100%));
+}
+
+#main_dashboard_bottom_right_box {
+    float: right;
+    height: 300px;
+    width: 250px;
+}
+
+#main_dashboard_yoy_growth_box {
+    background-color: #296CF6;
+    border-radius: 8px;
+    height: 190px;
+    margin-top: 40px;
+    padding-bottom: 25px;
+    width: 100%;
+}
+
+.main_dashboard_yoy_growth_toggle_box {
+    float: left;
+    height: 27.5px;
+    margin-left: calc((100% - 125px)/2);
+    margin-right: calc((100% - 125px)/2);
+    margin-top: 25px;
+    width: 125px;
+}
+
+.main_dashboard_yoy_growth_toggle_element {
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 8px;
+    color: #296CF6;
+    cursor: pointer;
+    float: left;
+    transition: 0.5s;
+    width: calc(50% - 4px);
+    line-height: 27.5px;
+    text-align: center;
+}
+
+.main_dashboard_yoy_growth_toggle_element_active, .main_dashboard_yoy_growth_toggle_element:hover {
+    background-color: #296CF6;
+    color: white;
+}
+
+.main_dashboard_yoy_growth_toggle_element:first-child {
+    border-right: none;
+    border-radius: 4px 0px 0px 4px;
+}
+
+.main_dashboard_yoy_growth_toggle_element:last-child {
+    border-radius: 0px 4px 4px 0px;
+}
+
+#main_dashboard_yoy_icon {
+    background-color: #F6F7F9;
+    border-radius: 50px;
+    color: #296CF6;
+    float: left;
+    height: 30px;
+    margin-left: 25px;
+    margin-top: 25px;
+    padding: 10px;
+    width: 30px;
+}
+
+.main_dashboard_yoy_growth_title {
+    color: white;
+    float: left;
+    font-size: 3em;
+    font-weight: bold;
+    line-height: 50px;
+    margin-left: 10px;
+    margin-top: 22.5px;
+}
+
+.main_dashboard_yoy_subtitle {
+    color: white;
+    font-size: 1.0em;
+    margin-left: 25px;
+    margin-top: 7.5px;
+    width: calc(100% - 50px);
+}
+
+.main_dashboard_key_insights_box {
+    background-color: white;
+    border: 1px solid #f1f1f1;
+    border-radius: 8px;
+    padding-bottom: 30px;
+    overflow: hidden;
+    width: calc(100% - 2px);
+}
+
+.main_dashboard_box_title {
+    color: black;
+    float: left;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.main_dashboard_box_icon {
+    color: #296CF6;
+    cursor: pointer;
+    float: right;
+    height: 25px;
+    margin-right: 20px;
+    margin-top: 20px;
+    width: 25px;
+}
+
+.main_dashboard_box_icon:hover {
+    opacity: 0.8;
+}
+
+.main_dashboard_key_insight_card {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.main_dashboard_key_insight_card_title {
+    float: left;
+    font-size: 2.2zem;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+.main_dashboard_occupied_circle_text_box_subtitle {
+    float: left;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-top: 10px;
+    width: 150px;
+}
+
+.rent_schedule_bullet_point_box {
+    margin-top: 20px;
+    height: 40px;
+}
+
+.rent_schedule_bullet_point {
+    background-color: #296CF6;
+    border-radius: 8px;
+    float: left;
+    height: 10px;
+    margin-left: 20px;
+    margin-top: calc((40px - 10px)/2);
+    width: 10px;
+}
+
+.rent_schedule_bullet_point_text {
+    float: left;
+    font-weight: bold;
+    margin-left: 15px;
+    margin-right: 20px;
+    width: calc((100% - 10px - 20px - 15px - 20px));
+}
+
+.rent_schedule_bullet_point_no_more_text {
+    color: grey;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-left: 20px;
+    padding-top: 10px;
+    text-align: center;
+    width: calc((100% - 40px));
 }

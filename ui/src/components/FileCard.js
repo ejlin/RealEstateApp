@@ -1,13 +1,7 @@
 import React from 'react';
 
-import axios from 'axios';
-
 import './CSS/FileCard.css';
 import './CSS/Style.css';
-
-import { IoMdDownload } from 'react-icons/io';
-
-let timer;
 
 class FileCard extends React.Component {
     
@@ -43,8 +37,7 @@ class FileCard extends React.Component {
 
         if (this.state.timeClicked === null || (now - this.state.timeClicked) > 200) { 
             // Let parent know this file was clicked
-            var success = this.state.setActiveFileAttributes(key, this.state.file, this.state.isClicked);
-            if (success) {
+            if (this.state.setActiveFileAttributes(key, this.state.file, this.state.isClicked)) {
                 this.setState({
                     isClicked: !this.state.isClicked,
                     timeClicked: Date.now()
@@ -52,8 +45,7 @@ class FileCard extends React.Component {
             }
         } else {
             this.state.openSignedURL(key)
-            var success = this.state.setActiveFileAttributes(key, this.state.file, false);
-            if (success) {
+            if (this.state.setActiveFileAttributes(key, this.state.file, false)) {
                 this.setState({
                     isClicked: false,
                     timeClicked: Date.now()

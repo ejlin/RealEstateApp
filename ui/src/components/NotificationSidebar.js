@@ -14,7 +14,14 @@ class NotificationSidebar extends React.Component {
             totalEstimateWorth: this.props.data.state.totalEstimateWorth,
             missingEstimate: this.props.data.state.missingEstimate
         };
+
+        this.numberWithCommas = this.numberWithCommas.bind(this);
     }
+
+    numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     render() {
         return (
             <div id="main_dashboard_summary">
@@ -28,7 +35,7 @@ class NotificationSidebar extends React.Component {
                     }
                     <div className="clearfix"/>
                     <p id="main_dashboard_summary_estimated_net_worth_title">
-                        ${this.state.totalEstimateWorth && !Number.isNaN(this.state.totalEstimateWorth) ? this.state.totalEstimateWorth : 0}
+                        ${this.state.totalEstimateWorth && !Number.isNaN(this.state.totalEstimateWorth) ? this.numberWithCommas(this.state.totalEstimateWorth) : 0}
                     </p>
                 </div>
                 <div id="main_dashboard_summary_notifications">

@@ -30,8 +30,12 @@ type Property struct {
 	MortgageInterestRate float64      `json:"mortgage_interest_rate,omitempty",sql:"type:NUMERIC(5,1)"`
 	PropertyType         PropertyType `json:"property_type,omitempty",sql:"type:ENUM('SFH', 'Manufactured', 'Condo/Op', 'Multi-family', 'Apartment', 'Lot/Land', 'Townhome', 'Commercial')"`
 
+	// The day the user can expect rent to come in for this property.
+	RentPaymentDate int `json:"rent_payment_date,omitempty",sql:"type:INT"`
+	MortgagePaymentDate int `json:"mortgage_payment_data,omitempty",sql:"type:INT"`
+
 	CurrentlyRented bool `json:"currently_rented,omitempty",sql:"type:BOOLEAN"`
-	
+
 	OwnerID string `json:"owner_id,omitempty",sql:"type:uuid; foreign key"`
 }
 

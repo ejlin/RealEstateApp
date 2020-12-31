@@ -8,10 +8,6 @@ import PropertyCard from './PropertyCard.js';
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 
-import { IoMdAdd } from 'react-icons/io';
-import { BsFillHouseFill } from 'react-icons/bs';
-import { FaBuilding, FaWarehouse, FaCity } from 'react-icons/fa';
-import { ImMap } from 'react-icons/im';
 
 class PropertiesDashboard extends React.Component {
     
@@ -71,7 +67,6 @@ class PropertiesDashboard extends React.Component {
                 }
             }
 
-            console.log(propMap['SFH']);
             this.setState({
                 sfhProperties: propMap['SFH'].map((property, i) =>
                     <div key={i}>

@@ -16,7 +16,14 @@ import { AiTwotonePushpin } from 'react-icons/ai';
 import { FaDollarSign } from 'react-icons/fa';
 import { RiPercentFill } from 'react-icons/ri';
 import { BsFillHouseFill } from 'react-icons/bs';
-import { MdTrendingUp, MdTrendingDown } from 'react-icons/md';
+import { ImArrowUp2, ImArrowDown2 } from 'react-icons/im';
+import { IoIosWarning } from 'react-icons/io';
+
+import { IoMdAddCircle } from 'react-icons/io';
+
+import { LineChart, PieChart } from 'react-chartkick'
+import 'chart.js'
+import { VictoryLine, VictoryAxis } from "victory";
 
 import { BarChart, XAxis, Bar } from 'recharts';
 
@@ -31,10 +38,11 @@ class MainDashboard extends React.Component {
         this.state = {
             user: this.props.location.state.user,
             vacantProperties: 0,
-            yearAgoTotalEstimateWorth: 0,
+            yearAgoTotalEstimateWorth: 0.0,
             properties: [],
             isLoading: true,
-            profilePicture: this.props.location.state.profilePicture
+            profilePicture: this.props.location.state.profilePicture,
+            yoyGrowthToggleIsYear: true
         };
 
         this.numberWithCommas = this.numberWithCommas.bind(this);
@@ -53,8 +61,10 @@ class MainDashboard extends React.Component {
             url: url,
         }).then(response => {
             var propertiesSummary = response.data;
+            console.log(propertiesSummary);
             this.setState({
-                totalEstimateWorth: this.numberWithCommas(propertiesSummary["total_estimate_worth"]),
+                // totalEstimateWorth: propertiesSummary["total_estimate_worth"] this.numberWithCommas(propertiesSummary["total_estimate_worth"]),
+                totalEstimateWorth: propertiesSummary["total_estimate_worth"],
                 totalNetWorth: this.numberWithCommas(propertiesSummary["total_net_worth"]),
                 totalRent: this.numberWithCommas(propertiesSummary["total_rent"]),
                 totalCost: this.numberWithCommas(Number(propertiesSummary["total_cost"].toFixed(2))),
@@ -63,6 +73,9 @@ class MainDashboard extends React.Component {
                 averageLTV: Number(propertiesSummary["average_ltv"].toFixed(2)),
                 averageDTI: Number(propertiesSummary["average_dti"].toFixed(2)),
                 missingEstimate: propertiesSummary["missing_estimate"],
+                totalCurrentlyRented: propertiesSummary["total_currently_rented"],
+                rentPaymentDateMap: propertiesSummary["rent_payment_date_map"],
+                mortgagePaymentDateMap: propertiesSummary["mortgage_payment_date_map"],
                 isLoading: false
             });
 
@@ -140,6 +153,138 @@ class MainDashboard extends React.Component {
         return trailingMonths;
     }
 
+    getDaysInMonth(month, year) {
+        return new Date(year, month+1, 0).getDate();
+    }
+
+    renderRentCollected() {
+        return (
+            <div className="main_dashboard_bottom_left_box_bottom_inner_box_text_box">
+                <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_title_two">
+                    $6,600
+                </p>
+                <div className="clearfix"/>
+                <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_subtitle_two">
+                    total rent collected this month!
+                </p>
+            </div>  
+        )
+    }
+
+    renderAdditionalExpensesCollected() {
+        return (
+            <div className="main_dashboard_bottom_left_box_bottom_inner_box_text_box">
+                <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_title_two">
+                    $400
+                </p>
+                <div className="clearfix"/>
+                <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_subtitle_two">
+                    in expenses this month
+                </p>
+            </div>  
+        )
+    }
+
+    renderMortgagePaymentDateMap(expandedView) {
+        var mortgagePaymentDateMap = this.state.mortgagePaymentDateMap;
+        
+        var today = new Date();
+        var date = today.getDate();
+        var year = today.getFullYear();
+        var month = today.getMonth();
+        var timeline = [];
+
+        var numDaysInMonth = this.getDaysInMonth(month, year);
+        var daysUntilEndOfMonth = numDaysInMonth - date;
+
+        for (const [key, value] of Object.entries(mortgagePaymentDateMap)) {
+            var daysUntil;
+            var iKey = parseInt(key);
+            if (iKey < date) {
+                daysUntil = daysUntilEndOfMonth + iKey;
+            } else {
+                daysUntil = iKey - date;
+            }
+            timeline.push(
+                <div className="main_dashboard_bottom_left_box_bottom_inner_box_text_box">
+                    {daysUntil === 0 ? 
+                    <div>
+                        <IoIosWarning 
+                            className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_icon"
+                        ></IoIosWarning>
+                        <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_subtitle">
+                            You have mortgage(s) due today
+                        </p>
+                    </div> :
+                    <div>
+                        <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_title">
+                            {daysUntil < 10 ? "0" : ""}{daysUntil} 
+                        </p>
+                        <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_subtitle">
+                            {daysUntil === 1 ? "day" : "days"} until your next Mortgage Payment
+                        </p>
+                    </div>}
+                </div>
+            );
+        }
+
+        var sortedTimeline = timeline.sort();
+
+        if (!expandedView) {
+            return sortedTimeline.slice(0, 1);
+        }
+        return sortedTimeline;
+    }
+
+    renderRentPaymentDateMap(expandedView) {
+        var rentPaymentDateMap = this.state.rentPaymentDateMap;
+
+        var today = new Date();
+        var date = today.getDate();
+        var year = today.getFullYear();
+        var month = today.getMonth();
+
+        var timeline = [];
+
+        var numDaysInMonth = this.getDaysInMonth(month, year);
+        
+        var daysUntilEndOfMonth = numDaysInMonth - date;
+
+        for (const [key, value] of Object.entries(rentPaymentDateMap)) {
+            var daysUntil;
+            var iKey = parseInt(key);
+            if (iKey < date) {
+                daysUntil = daysUntilEndOfMonth + iKey;
+            } else {
+                daysUntil = iKey - date;
+            }
+            timeline.push(
+                <div className="rent_schedule_bullet_point_box">
+                    <div className="rent_schedule_bullet_point">
+                    </div>
+                    <li key={daysUntil} className="rent_schedule_bullet_point_text">
+                        {daysUntil} {daysUntil === 1 ? "day" : "days"} until {value["num_properties"]} {value["num_properties"] === 1 ? "property pays" : "properties pay"} ${this.numberWithCommas(value["total_rent"])} in rent
+                    </li>
+                </div>
+            );
+        }
+
+        var sortedTimeline = timeline.sort();
+        if (sortedTimeline.length < 3) {
+            sortedTimeline.push(
+                <div className="rent_schedule_bullet_point_box">
+                    <p className="rent_schedule_bullet_point_no_more_text">
+                        None other to Display
+                    </p>
+                </div>
+            )
+        }
+        if (!expandedView) {
+            return sortedTimeline.slice(0, 3);
+        }
+        return sortedTimeline;
+    }
+
     render() {
         if (this.state.redirect) {
             return <Redirect to={{
@@ -175,7 +320,7 @@ class MainDashboard extends React.Component {
                                         <BsFillHouseFill id="main_dashboard_summary_cards_icon_properties" className="main_dashboard_summary_cards_icon"></BsFillHouseFill>
                                         <div className="main_dashboard_summary_cards_text_box">
                                             <p className="main_dashboard_summary_cards_title">
-                                                {this.state.totalProperties ? this.state.totalProperties : 0}
+                                                {this.state.totalProperties ? this.state.totalProperties : 0} total
                                             </p>   
                                             <p className="main_dashboard_summary_cards_subtitle">
                                                 {this.state.totalProperties > 1 ? "properties" : "property"}
@@ -217,7 +362,132 @@ class MainDashboard extends React.Component {
                                     </div>
                                 </div>
                                 <div id="main_dashboard_bottom_box">
-                                    <div id="main_dashboard_bottom_box_left">
+                                    <div id="main_dashboard_bottom_left_box">
+                                        <div className="main_dashboard_bottom_left_box_top">
+                                            <p className="main_dashboard_box_title">
+                                                Portfolio Growth
+                                            </p>
+                                            <VictoryLine 
+                                                interpolation="natural"
+                                                style={{
+                                                    data: {
+                                                        stroke: "#296CF6",
+                                                        strokeWidth: "3",
+                                                    }
+                                                }}
+                                                minDomain={{ 
+                                                    y: 0
+                                                }}
+                                                // labels= {({ datum }) => datum.y}
+                                                width={"800"}
+                                                padding={{
+                                                    left: 20,
+                                                    right: 20,
+                                                    top: 20,
+                                                    bottom: 50
+                                                }}
+                                                data={[
+                                                    {x: "Jan", y: 6}, 
+                                                    {x: "Feb", y: 5}, 
+                                                    {x: "Mar", y: 6}, 
+                                                    {x: "Apr", y: 8}, 
+                                                    {x: "May", y: 11}, 
+                                                    {x: "Jun", y: 9}, 
+                                                    {x: "Jul", y: 10}, 
+                                                    {x: "Aug", y: 13}, 
+                                                    {x: "Sep", y: 17}, 
+                                                    {x: "Oct", y: 20}, 
+                                                    {x: "Nov", y: 18}, 
+                                                    {x: "Dec", y: 28}
+                                                ]} />
+                                        </div>
+                                        <div className="main_dashboard_bottom_left_box_bottom">
+                                            <div className="main_dashboard_bottom_left_box_bottom_inner_box">
+                                                <p className="main_dashboard_box_title">
+                                                    Mortgage Payment
+                                                </p>
+                                                <IoMdAddCircle className="main_dashboard_box_icon"></IoMdAddCircle>
+                                                <div className="clearfix"/>
+                                                {this.renderMortgagePaymentDateMap()}
+                                            </div>
+                                            <div className="main_dashboard_bottom_left_box_bottom_inner_box">
+                                                <p className="main_dashboard_box_title">
+                                                    Rent Collected
+                                                </p>
+                                                <IoMdAddCircle className="main_dashboard_box_icon"></IoMdAddCircle>
+                                                <div className="clearfix"/>
+                                                {this.renderRentCollected()}                                                
+                                            </div>
+                                            <div className="main_dashboard_bottom_left_box_bottom_inner_box">
+                                                <p className="main_dashboard_box_title">
+                                                    Additional Expenses
+                                                </p>
+                                                <IoMdAddCircle className="main_dashboard_box_icon"></IoMdAddCircle>
+                                                <div className="clearfix"/>
+                                                {this.renderAdditionalExpensesCollected()}      
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="main_dashboard_bottom_right_box">
+                                        <div className="main_dashboard_key_insights_box">
+                                            <div>
+                                                <p className="main_dashboard_box_title">
+                                                    Rent Schedule
+                                                </p>
+                                                <IoMdAddCircle className="main_dashboard_box_icon"></IoMdAddCircle>
+                                            </div>
+                                            <div className="clearfix"/>
+                                            {this.renderRentPaymentDateMap(false)}
+                                            {/* <div className="main_dashboard_key_insight_card">
+                                                <p className="main_dashboard_key_insight_card_title">
+                                                    {this.state.totalCurrentlyRented ? this.state.totalCurrentlyRented : 0}
+                                                </p>
+                                                <p className="main_dashboard_occupied_circle_text_box_subtitle">
+                                                    { this.state.totalCurrentlyRented > 1 ? "properties" : "property" } currently rented
+                                                </p>
+                                                <p id="main_dashboard_occupied_circle_text_box_footer">
+                                                    ${this.state.vacantProperties ? 0 : this.estimateLostRent(this.state.vacantProperties)} / month in estimated lost income
+                                                </p>
+                                            </div> */}
+                                        </div>
+                                        <div className="clearfix"/>
+                                        <div id="main_dashboard_yoy_growth_box">
+                                            <div className="main_dashboard_yoy_growth_toggle_box">
+                                                <div 
+                                                    onClick={() => this.setState({
+                                                        yoyGrowthToggleIsYear: false
+                                                    })}
+                                                    className={
+                                                        !this.state.yoyGrowthToggleIsYear ?
+                                                        "main_dashboard_yoy_growth_toggle_element main_dashboard_yoy_growth_toggle_element_active" :
+                                                        "main_dashboard_yoy_growth_toggle_element"}>
+                                                    Month
+                                                </div>
+                                                <div 
+                                                    onClick={() => this.setState({
+                                                        yoyGrowthToggleIsYear: true
+                                                    })}
+                                                    className={
+                                                        this.state.yoyGrowthToggleIsYear ?
+                                                        "main_dashboard_yoy_growth_toggle_element main_dashboard_yoy_growth_toggle_element_active" :
+                                                        "main_dashboard_yoy_growth_toggle_element"}>
+                                                    Year
+                                                </div>
+                                            </div>
+                                            {this.state.totalEstimateWorth >= this.state.yearAgoTotalEstimateWorth ?
+                                             <ImArrowUp2 id="main_dashboard_yoy_icon"></ImArrowUp2> : 
+                                             <ImArrowDown2 id="main_dashboard_yoy_icon"></ImArrowDown2>}
+                                             <p className="main_dashboard_yoy_growth_title">
+                                                 {Number(15.5.toFixed(1))}%
+                                             </p>
+                                             <div className="clearfix"/>
+                                             <p className="main_dashboard_yoy_subtitle">
+                                                Your portfolio {this.state.totalEstimateWorth >= this.state.yearAgoTotalEstimateWorth ? "grew" : "decreased"} from {this.numberWithCommas(this.state.yearAgoTotalEstimateWorth)} to {this.numberWithCommas(this.state.totalEstimateWorth)} year over year
+                                            </p>
+                                        </div>
+                                        
+                                    </div>
+                                    {/* <div id="main_dashboard_bottom_box_left">
                                         <p className="main_dashboard_bottom_box_title">
                                             Portfolio Growth
                                         </p>
@@ -338,8 +608,8 @@ class MainDashboard extends React.Component {
                                                         })}/>
                                                 </div>
                                             </div>
-                                        </div>  
-                                    </div>
+                                        </div>   */}
+                                    {/* </div> */}
                                 </div>
                             </div>
                         </div>
