@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/rs/zerolog/log"
+	"../db"
 )
 
 // RentPaymentAtDateSummary contains information about how many properties are paying rent
@@ -11,7 +11,7 @@ type RentPaymentAtDateSummary struct {
 	TotalRent float64 `json:"total_rent,omitempty"`
 }
 
-// PropertiesSummary contains information 
+// PropertiesSummary contains information about multiple properties.
 type PropertiesSummary struct {
 	TotalProperties int	`json:"total_properties,omitempty"`
 	TotalCurrentlyRented int `json:"total_currently_rented,omitempty"`
@@ -29,18 +29,17 @@ type PropertiesSummary struct {
 	RentPaymentDateMap map[int]*RentPaymentAtDateSummary `json:"rent_payment_date_map,omitempty"`
 	MortgagePaymentDateMap map[int]int `json:"mortgage_payment_date_map,omitempty"`
 
+	TotalMortgagePayment float64 `json:"total_mortgage_payment,omitempty"`
+	TotalPropertyManagerFee float64 `json:"total_property_manager_fee,omitempty"`
+
+	TotalSquareFootage int `json:"total_square_footage,omitempty"`
+	TotalBedrooms int `json:"total_bedrooms,omitempty"`
+	TotalBathrooms int `json:"total_bathrooms,omitempty"`
+
 	MissingEstimate bool	`json:"missing_estimate,omitempty"`
 }
 
-func (s *Server) calculatePropertiesSummary(userID string) (*PropertiesSummary, error) {
-
-	ll := log.With().Str("user_id", userID).Logger()
-
-	properties, err := s.DBHandle.GetPropertiesByOwner(userID)
-	if err != nil {
-		ll.Warn().Err(err).Msg("unable to get properties by owner")
-		return nil, err
-	}
+func calculatePropertiesSummary(properties []*db.Property) *PropertiesSummary {
 
 	// todo: fetch the user salary.
 	var totalCurrentlyRented int
@@ -50,7 +49,12 @@ func (s *Server) calculatePropertiesSummary(userID string) (*PropertiesSummary, 
 	var totalCost float64
 	var totalDownPayment float64
 	var totalLoan float64
+	var totalMortgagePayment float64
+	var totalPropertyManagerFee float64
 	var missingEstimate bool
+	var totalSquareFootage int
+	var totalBedrooms int
+	var totalBathrooms int
 
 	rentPaymentDateMap := make(map[int]*RentPaymentAtDateSummary)
 	// TODO: make this a map to mortgage IDs
@@ -89,6 +93,13 @@ func (s *Server) calculatePropertiesSummary(userID string) (*PropertiesSummary, 
 		if property.MortgagePaymentDate != 0 {
 			mortgagePaymentDateMap[property.MortgagePaymentDate]++
 		}
+
+		totalSquareFootage += property.SquareFootage
+		totalBedrooms += property.NumBeds
+		totalBathrooms += property.NumBaths
+
+		totalMortgagePayment += property.PriceMortgage
+		totalPropertyManagerFee += (property.PricePropertyManager * property.PriceRented) / 100.0
 	}
 
 	averageLTV := totalLoan / totalEstimateWorth * 100.0;
@@ -111,7 +122,25 @@ func (s *Server) calculatePropertiesSummary(userID string) (*PropertiesSummary, 
 		AverageDTI: averageDTI,
 		RentPaymentDateMap: rentPaymentDateMap,
 		MortgagePaymentDateMap: mortgagePaymentDateMap,
+		TotalMortgagePayment: totalMortgagePayment,
+		TotalPropertyManagerFee: totalPropertyManagerFee,
+		TotalSquareFootage: totalSquareFootage,
+		TotalBedrooms: totalBedrooms,
+		TotalBathrooms: totalBathrooms,
 		MissingEstimate: missingEstimate,
-	}, nil
+	}
 }
 
+// calculatePropertiesAnalysis will aggregate property information. It takes in two determinations
+// on which properties to aggregate on, propertyIDs and propertyTypes. By default, all propertyIDs
+// and all propertyTypes are aggregated on.
+func (s *Server) calculatePropertiesAnalysis(userID string, propertyIDs []string, propertyTypes []string) (*PropertiesSummary, error) {
+	
+	properties, err := s.DBHandle.GetSpecificPropertiesByOwner(userID, propertyIDs, propertyTypes)
+	if err != nil {
+		return nil, err
+	}
+
+	return calculatePropertiesSummary(properties), nil
+	
+}

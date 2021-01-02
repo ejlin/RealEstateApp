@@ -39,6 +39,10 @@ func (s *Server) HandleRoutes() {
 	// r.HandleFunc("/api/user/files/upload/{id}/{property_id}", s.getStoreFileSignedURL).Queries("file_name", "{file_name}").Methods("GET")
 	r.HandleFunc("/api/user/files/upload/{id}", s.uploadFileByUser).Methods("POST")
 
+	// Analysis Flow
+	r.HandleFunc("/api/user/analysis/{id}", s.getPropertiesAnalysis).Methods("GET")
+
+	// User Settings Flow
 	r.HandleFunc("/api/user/settings/profile/{id}", s.updateSettingsProfile).Methods("PUT")
 	r.HandleFunc("/api/user/settings/preferences/{id}", s.getSettings).Methods("GET")
 	r.HandleFunc("/api/user/settings/preferences/{id}", s.updateSettingsPreferences).Methods("PUT")
@@ -297,21 +301,14 @@ func (s *Server) getPropertiesSummary(w http.ResponseWriter, r *http.Request) {
 
 	ll := log.With().Str("user_id", userID).Logger()
 
-	propertiesSummary, err := s.calculatePropertiesSummary(userID)
+	propertiesSummary, err := s.calculatePropertiesAnalysis(userID, nil, nil)
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to calculate properties summary")
 		http.Error(w, "unable to calculate properties summary", http.StatusInternalServerError)
 		return
 	}
 
-	mPropertiesSummary, err := json.Marshal(propertiesSummary)
-	if err != nil {
-		ll.Warn().Err(err).Msg("unable to marshal properties summary")
-		http.Error(w, "unable to marshal properties summary", http.StatusInternalServerError)
-		return
-	}
-
-	w.Write(mPropertiesSummary)
+	RespondToRequest(w, propertiesSummary)
 	return
 }
 
@@ -330,13 +327,7 @@ func (s *Server) getProperties(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		marshalledProperties, err := json.Marshal(properties)
-		if err != nil {
-			ll.Error().Err(err).Interface("properties", properties).Msg("unable to marshal properties when fetching by owner id")
-			http.Error(w, fmt.Sprintf("unable to marshal properties when fetching by owner id: %w", err), http.StatusBadRequest)
-			return
-		}
-		w.Write(marshalledProperties)
+		RespondToRequest(w, properties)
 		return
 	}
 
@@ -408,6 +399,30 @@ func (s *Server) removePropertyByUser(w http.ResponseWriter, r *http.Request) {
 
 	w.Write([]byte("success"))
 }
+
+func (s *Server) getPropertiesAnalysis(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	ownerID, ok := vars["id"]
+	if !ok {
+		log.Warn().Msg("owner id not set")
+		http.Error(w, "owner id not set", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("owner_id", ownerID).Logger() 
+
+	propertySummary, err := s.calculatePropertiesAnalysis(ownerID, nil, nil)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to calculate properties analysis")
+		http.Error(w, "unable to calculate properties analysis", http.StatusInternalServerError)
+		return
+	}
+
+	RespondToRequest(w, propertySummary)
+	return
+}
+
 
 /****** Helper Functions ******/
 

@@ -25,12 +25,14 @@ class NewPropertyForm extends React.Component {
             user: this.props.location.state.user,
             profilePicture: this.props.location.state.profilePicture,
             toDisplay: generalInformation,
+            propertyType: "SFH",
+            purchaseType: "mortgage",
             properties: []
         };
-
-        console.log(this.state.email);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleFieldChange = this.handleFieldChange.bind(this);
+        this.propertyTypeOnChange = this.propertyTypeOnChange.bind(this);
+        this.purchaseTypeOnChange = this.purchaseTypeOnChange.bind(this);
     }
 
     handleFieldChange(e) {
@@ -66,6 +68,18 @@ class NewPropertyForm extends React.Component {
                 redirect: "/dashboard"
             })
         }).catch(error => console.error('timeout exceeded'));
+    }
+
+    propertyTypeOnChange(e) {
+        this.setState({
+            propertyType: e.target.value
+        });
+    }
+
+    purchaseTypeOnChange(e) {
+        this.setState({
+            purchaseType: e.target.value
+        })
     }
 
     renderFormParts() {
@@ -122,32 +136,51 @@ class NewPropertyForm extends React.Component {
                             </div>
                             <div className="clearfix"/>
                             <div className="form_footer_box">
-                                <select className="form_select_input">
-                                    <option>
+                                <select className="form_select_input" onChange={this.propertyTypeOnChange}>
+                                    <option name="SFH" value="SFH">
                                         Single Family Home
                                     </option>
-                                    <option>
+                                    <option name="manufactured" value="manufactured">
                                         Manufactured
                                     </option>
-                                    <option>
+                                    <option name="condo/ops" value="condo/ops">
                                         Condo/Ops
                                     </option>
-                                    <option>
+                                    <option name="multi-family" value="multi-family">
                                         Multi-Family
                                     </option>
-                                    <option>
+                                    <option name="apartment" value="apartment">
                                         Apartment
                                     </option>
-                                    <option>
+                                    <option name="lot/land" value="lot/land">
                                         Lot/Land
                                     </option>
-                                    <option>
+                                    <option name="townhome" value="townhome">
                                         Townhome
                                     </option>
-                                    <option>
+                                    <option name="commercial" value="commercial">
                                         Commercial
                                     </option>
                                 </select>
+                                {
+                                    this.state.propertyType === "apartment" || 
+                                    this.state.propertyType === "multi-family" || 
+                                    this.state.propertyType === "commercial" ? 
+                                    <input 
+                                        placeholder="# of Units" 
+                                        className="new_property_form_input_short" 
+                                        type="number" 
+                                        name="number_of_units" 
+                                        onChange={this.handleFieldChange} />:
+                                    <div></div>
+                                }
+                                <div 
+                                    onClick={() => this.setState({
+                                        toDisplay: purchaseInformation
+                                    })}
+                                    className="form_continue_button">
+                                    Continue
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -158,7 +191,107 @@ class NewPropertyForm extends React.Component {
                         <p className="form_title">
                             Purchase Information
                         </p>
-
+                        <div className="clearfix"/>
+                        <p className="form_inner_box_subtitle">
+                            Please input information on how you purchased this property.
+                        </p>
+                        <div className="form_box">
+                            {/* <label className="new_property_form_label">
+                                Address: 
+                            </label>
+                            <p className="new_property_form_required">*</p>
+                            <div className="clearfix"/> */}
+                            <div className="">
+                                <input 
+                                    placeholder="$ Purchase Price" 
+                                    className="new_property_form_input_triple" 
+                                    type="number" 
+                                    name="city" 
+                                    onChange={this.handleFieldChange} />
+                                <input 
+                                    placeholder="Purchase Date: MM / YY" 
+                                    className="new_property_form_input_triple" 
+                                    type="text" 
+                                    name="state" 
+                                    onChange={this.handleFieldChange} />
+                                <select id="form_select_input_purchase_type" className="form_select_input" onChange={this.purchaseTypeOnChange}>
+                                    <option name="mortgage" value="mortgage">
+                                        Mortgage
+                                    </option>
+                                    <option name="cash" value="cash">
+                                        Cash
+                                    </option>
+                                    <option name="hard_money_loan" value="hard_money_loan">
+                                        Hard Money Loan
+                                    </option>
+                                    <option name="hard_money_loan" value="hard_money_loan">
+                                        Lease Option
+                                    </option>
+                                    <option name="hard_money_loan" value="hard_money_loan">
+                                        Seller Finance
+                                    </option>
+                                    <option name="hard_money_loan" value="hard_money_loan">
+                                        Loan
+                                    </option>
+                                    <option name="gift" value="gift">
+                                        Gift/Inheritance
+                                    </option>
+                                    <option name="other" value="other">
+                                        Other
+                                    </option>
+                                </select>
+                            </div>
+                            {/* <input 
+                                placeholder="Address Line 1" 
+                                className="new_property_form_input new_property_form_input_long" 
+                                type="text" 
+                                name="addressOne" 
+                                onChange={this.handleFieldChange}/>
+                            <input 
+                                placeholder="Address Line 2" 
+                                className="new_property_form_input new_property_form_input_long" 
+                                type="text" 
+                                name="addressTwo" 
+                                onChange={this.handleFieldChange}/>
+                            <div className="clearfix"/>
+                            <div className="">
+                                <input 
+                                    placeholder="City" 
+                                    className="new_property_form_input_triple" 
+                                    type="text" 
+                                    name="city" 
+                                    onChange={this.handleFieldChange} />
+                                <input 
+                                    placeholder="State" 
+                                    className="new_property_form_input_triple" 
+                                    type="text" 
+                                    name="state" 
+                                    onChange={this.handleFieldChange} />
+                                <input 
+                                    placeholder="Zip Code" 
+                                    className="new_property_form_input_triple" 
+                                    type="text" 
+                                    name="zip_code" 
+                                    onChange={this.handleFieldChange} />
+                            </div> */}
+                            <div className="clearfix"/>
+                            <div className="form_footer_box">
+                                <div 
+                                    onClick={() => this.setState({
+                                        toDisplay: incomeInformation
+                                    })}
+                                    className="form_continue_button">
+                                    Continue
+                                </div>
+                                <div 
+                                    onClick={() => this.setState({
+                                        toDisplay: generalInformation
+                                    })}
+                                    className="form_back_button">
+                                    Back
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 );
             case incomeInformation:
@@ -167,7 +300,107 @@ class NewPropertyForm extends React.Component {
                         <p className="form_title">
                             Income Information
                         </p>
-
+                        <div className="clearfix"/>
+                        <p className="form_inner_box_subtitle">
+                            Please input information on your property's cashflow.
+                        </p>
+                        <div className="form_box">
+                            {/* <label className="new_property_form_label">
+                                Address: 
+                            </label>
+                            <p className="new_property_form_required">*</p>
+                            <div className="clearfix"/> */}
+                            <div className="">
+                                <input 
+                                    placeholder="$ Purchase Price" 
+                                    className="new_property_form_input_triple" 
+                                    type="number" 
+                                    name="city" 
+                                    onChange={this.handleFieldChange} />
+                                <input 
+                                    placeholder="Purchase Date: MM / YY" 
+                                    className="new_property_form_input_triple" 
+                                    type="text" 
+                                    name="state" 
+                                    onChange={this.handleFieldChange} />
+                                <select id="form_select_input_purchase_type" className="form_select_input" onChange={this.purchaseTypeOnChange}>
+                                    <option name="mortgage" value="mortgage">
+                                        Mortgage
+                                    </option>
+                                    <option name="cash" value="cash">
+                                        Cash
+                                    </option>
+                                    <option name="hard_money_loan" value="hard_money_loan">
+                                        Hard Money Loan
+                                    </option>
+                                    <option name="hard_money_loan" value="hard_money_loan">
+                                        Lease Option
+                                    </option>
+                                    <option name="hard_money_loan" value="hard_money_loan">
+                                        Seller Finance
+                                    </option>
+                                    <option name="hard_money_loan" value="hard_money_loan">
+                                        Loan
+                                    </option>
+                                    <option name="gift" value="gift">
+                                        Gift/Inheritance
+                                    </option>
+                                    <option name="other" value="other">
+                                        Other
+                                    </option>
+                                </select>
+                            </div>
+                            {/* <input 
+                                placeholder="Address Line 1" 
+                                className="new_property_form_input new_property_form_input_long" 
+                                type="text" 
+                                name="addressOne" 
+                                onChange={this.handleFieldChange}/>
+                            <input 
+                                placeholder="Address Line 2" 
+                                className="new_property_form_input new_property_form_input_long" 
+                                type="text" 
+                                name="addressTwo" 
+                                onChange={this.handleFieldChange}/>
+                            <div className="clearfix"/>
+                            <div className="">
+                                <input 
+                                    placeholder="City" 
+                                    className="new_property_form_input_triple" 
+                                    type="text" 
+                                    name="city" 
+                                    onChange={this.handleFieldChange} />
+                                <input 
+                                    placeholder="State" 
+                                    className="new_property_form_input_triple" 
+                                    type="text" 
+                                    name="state" 
+                                    onChange={this.handleFieldChange} />
+                                <input 
+                                    placeholder="Zip Code" 
+                                    className="new_property_form_input_triple" 
+                                    type="text" 
+                                    name="zip_code" 
+                                    onChange={this.handleFieldChange} />
+                            </div> */}
+                            <div className="clearfix"/>
+                            <div className="form_footer_box">
+                                <div 
+                                    onClick={() => this.setState({
+                                        toDisplay: incomeInformation
+                                    })}
+                                    className="form_continue_button">
+                                    Add Property
+                                </div>
+                                <div 
+                                    onClick={() => this.setState({
+                                        toDisplay: generalInformation
+                                    })}
+                                    className="form_back_button">
+                                    Back
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 );
             default: 

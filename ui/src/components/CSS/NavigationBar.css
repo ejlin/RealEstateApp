@@ -1,4 +1,5 @@
 #navigation_bar_parent {
+    background-color: transparent;
     height: 75px;
     position: fixed;
     top: 0;
@@ -7,6 +8,7 @@
 }
 
 #navigation_bar_subparent {
+    background-color: transparent;
     height: 10px;
     margin-left: 18%;
     width: calc(100% - 18% - 18%);

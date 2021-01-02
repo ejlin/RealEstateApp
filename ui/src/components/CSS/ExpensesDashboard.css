@@ -1,0 +1,19 @@
+#expenses_dashboard_parent_box {
+    background-color: #F5F5FA;
+    float: left;
+    height: 100vh;
+    margin-left: 220px;
+    width: calc(100% - 220px);
+}
+
+#expenses_dashboard_parent_inner_box {
+    margin-left: 60px;
+    margin-right: 60px;
+    margin-top: 80px;
+    width: calc((100% - 120px));
+}
+
+.expenses_dashboard_parent_inner_box_title {
+    font-size: 1.8em;
+    font-weight: bold;
+}

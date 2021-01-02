@@ -213,15 +213,16 @@ class MainDashboard extends React.Component {
                             className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_icon"
                         ></IoIosWarning>
                         <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_subtitle">
-                            You have mortgage(s) due today
+                            You have mortgage(s)/loan(s) due today
                         </p>
                     </div> :
                     <div>
-                        <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_title">
-                            {daysUntil < 10 ? "0" : ""}{daysUntil} 
+                        <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_title_two">
+                            {daysUntil < 10 ? "0" : ""}{daysUntil}
                         </p>
-                        <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_subtitle">
-                            {daysUntil === 1 ? "day" : "days"} until your next Mortgage Payment
+                        <div className="clearfix"/>
+                        <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_subtitle_two">
+                            {daysUntil === 1 ? "day" : "days"} until your next Payment
                         </p>
                     </div>}
                 </div>
@@ -404,7 +405,7 @@ class MainDashboard extends React.Component {
                                         <div className="main_dashboard_bottom_left_box_bottom">
                                             <div className="main_dashboard_bottom_left_box_bottom_inner_box">
                                                 <p className="main_dashboard_box_title">
-                                                    Mortgage Payment
+                                                    Mortgages/Loans
                                                 </p>
                                                 <IoMdAddCircle className="main_dashboard_box_icon"></IoMdAddCircle>
                                                 <div className="clearfix"/>

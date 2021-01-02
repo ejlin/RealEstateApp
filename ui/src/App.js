@@ -6,6 +6,7 @@ import Login from './components/Login.js';
 import MainDashboard from './components/MainDashboard.js';
 import PropertiesDashboard from './components/PropertiesDashboard.js';
 import AnalysisDashboard from './components/AnalysisDashboard.js';
+import ExpensesDashboard from './components/ExpensesDashboard.js';
 import FilesDashboard from './components/FilesDashboard.js';
 import ExploreDashboard from './components/ExploreDashboard.js';
 import SettingsDashboard from './components/SettingsDashboard.js';
@@ -38,6 +39,7 @@ function App() {
           <Route path="/dashboard" render={(props) => <MainDashboard {...props}/>}/>
           <Route path="/properties" render={(props) => <PropertiesDashboard {...props}/>}/>
           <Route path="/analysis" render={(props) => <AnalysisDashboard {...props}/>}/>
+          <Route path="/expenses" render={(props) => <ExpensesDashboard {...props}/>}/>
           <Route path="/files" render={(props) => <FilesDashboard {...props}/>}/>
           <Route path="/explore" render={(props) => <ExploreDashboard {...props}/>}/>
           <Route path="/settings" render={(props) => <SettingsDashboard {...props}/>}/>

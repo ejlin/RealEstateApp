@@ -3,7 +3,7 @@
     float: left;
     height: 100vh;
     margin-left: 220px;
-    width: calc(100% - 220px);
+    width: calc(100% - 220px - 20%);
 }
 
 #analysis_dashboard_parent_inner_box {
@@ -13,7 +13,351 @@
     width: calc((100% - 120px));
 }
 
-.analysis_dashboard_parent_inner_box_title {
+.analysis_dashboard_inner_box {
+    margin-top: 25px;
+    width: 100%;
+}
+
+.analysis_dashboard_inner_box_top_cards_box {
+    margin-top: 25px;
+    width: 100%;
+}
+
+.analysis_dashboard_inner_box_top_cards_box_element {
+    background-color:  #296CF6;
+    border-radius: 8px;
+    float: left;
+    height: 100px;
+    margin-right: 25px;
+    position: relative;
+    width: calc((100% - 75px) / 4);
+}
+
+.analysis_dashboard_inner_box_top_cards_box_element:last-child {
+    margin-right: 0px;
+}
+
+.analysis_dashboard_inner_box_middle_cards_box {
+    float: left;
+    margin-top: 25px;
+    width: 100%;
+}
+
+.analysis_dashboard_inner_box_middle_cards_left {
+    background-color: white;
+    border-radius: 8px;
+    float: left;
+    height: 435px;
+    width: calc((3 * (100% - 75px) / 4) + 50px);
+}
+
+.analysis_dashboard_inner_box_middle_cards_right {
+    float: right;
+    width: calc((100% - 75px) / 4);
+}
+
+.analysis_dashboard_inner_box_middle_cards_right_element_box {
+    background-color: white;
+    border-radius: 8px;
+    height: 125px;
+    margin-bottom: 30px;
+    position: relative;
+    width: 100%;
+}
+
+.analysis_dashboard_inner_box_property_selector_box {
+    cursor: pointer;
+    border-radius: 8px;
+    float: left;
+    height: 40px;
+    margin-top: 20px;
+    width: 200px;
+}
+
+.analysis_dashboard_inner_box_property_selector_box_active {
+    border-radius: 8px 8px 0px 0px;
+}
+
+.analysis_dashboard_parent_inner_box_title_text {
+    float: left;
     font-size: 1.8em;
     font-weight: bold;
+}
+
+.analysis_dashboard_inner_box_property_selector_box:hover {
+    opacity: 0.8;
+}
+
+.analysis_dashboard_property_selector_display_left_box {
+    float: left;
+    margin-bottom: 25px;
+    margin-left: 25px;
+    margin-top: 25px;
+    width: 250px;
+}
+
+.analysis_dashboard_property_selector_display_right_box {
+    float: left;
+    margin-bottom: 25px;
+    margin-top: 25px;
+    width: calc(100% - 250px - 25px);
+}
+
+.property_selector_left_box {
+    float: left;
+    min-width: 250px;
+    width: 50%;
+}
+
+.property_selector_apply_button {
+    background-color: #296CF6;
+    border-radius: 4px;
+    bottom: 25px;
+    color: white;
+    cursor: pointer;
+    float: right;
+    margin-right: 25px;
+    padding: 7.5px 15px 7.5px 15px;
+    transition: 0.5s;
+}
+
+.property_selector_apply_button:hover {
+    opacity: 0.7;
+}
+
+.property_selector_right_box {
+    float: left;
+    min-width: 250px;
+    width: 50%;
+}
+
+.analysis_dashboard_inner_box_property_selector_title {
+    color: black;
+    float: left;
+    font-size: 1.1em;
+    font-weight: bold;
+    line-height: 40px;
+    user-select: none;
+}
+
+.analysis_dashboard_inner_box_property_selector_icon {
+    color: black;
+    float: left;
+    height: 20px;
+    margin-left: 5px;
+    margin-top: 10px;
+    transition: 0.3s;
+    width: 20px;
+}
+
+.analysis_dashboard_inner_box_property_selector_icon_active {
+    transform: rotate(180deg);
+}
+
+.analysis_dashboard_property_selector_display_box {
+    background-color: white;
+    border: 3px solid #296CF6;
+    border-radius: 8px;
+    float: left;
+    margin-top: 10px;
+    width: calc(100% - 6px);
+}
+
+.analysis_dashboard_property_selector_display_left_box_title {
+    float: left;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.analysis_dashboard_property_selector_property_list {
+    height: 30px;
+}
+
+.analysis_dashboard_property_selector_property_list_checkbox {
+    border: 2px solid #296CF6;
+    border-radius: 4px;
+    float: left;
+    height: 15px;
+    margin-top: calc((30px - 15px - 4px)/2);
+    width: 15px;
+}
+
+.analysis_dashboard_property_selector_property_list_checkbox_active {
+    background-color: #296CF6;
+}
+
+.analysis_dashboard_property_selector_property_list_text {
+    float: left;
+    font-size: 1.1em;
+    line-height: 30px;
+    margin-left: 10px;
+}
+
+.analysis_dashboard_inner_box_top_cards_box_element_icon {
+    color: white;
+    float: left;
+    height: 25px;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 15px;
+    position: absolute;
+    width: 25px;
+}
+
+.analysis_dashboard_inner_box_top_cards_box_element_add_icon {
+    color: white;
+    cursor: pointer;
+    height: 25px;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 15px;
+    position: absolute;
+    right: 0;
+    width: 25px;
+}
+
+.analysis_dashboard_inner_box_top_cards_box_element_text_box {
+    float: left;
+    margin-top: 5px;
+    position: absolute;
+    margin-left: 20%;
+    margin-right: 20%;
+    width: 60%;
+}
+
+.analysis_dashboard_inner_box_top_cards_box_element_text {
+    color: white;
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.analysis_dashboard_inner_box_top_cards_box_element_subtitle {
+    color: white;
+    font-size: 1em;
+    text-align: center;
+}
+
+.analysis_dashboard_inner_box_middle_cards_right_element_box_header_title {
+    float: left;
+    font-size: 1.0em;
+    font-weight: bold;
+    margin-left: 20px;
+    padding-top: 15px;
+}
+
+.analysis_dashboard_inner_box_middle_cards_right_element_box_title {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.analysis_dashboard_inner_box_middle_cards_right_element_box_subtitle {
+    font-size: 1em;
+    margin-left: 10%;
+    margin-top: 5px;
+    text-align: center;
+    width: 80%;
+}
+
+.analysis_dashboard_inner_box_middle_box_element_add_icon {
+    color: #296CF6;
+    cursor: pointer;
+    height: 25px;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 15px;
+    position: absolute;
+    right: 0;
+    width: 25px;
+}
+
+.analysis_dashboard_inner_box_ratios_box {
+    width: 100%;
+}
+
+.analysis_dashboard_view_selection_box {
+    border-radius: 8px;
+    float: right;
+    height: 30px;
+    margin-top: calc(25px - 1px);
+    width: 160px;
+}
+
+.analysis_dashboard_view_selection_box_element {
+    background-color: white;
+    border: 2px solid #296CF6;
+    color: #296CF6;
+    cursor: pointer;
+    float: left;
+    font-size: 0.9em;
+    line-height: 30px;
+    height: 30px;
+    text-align: center;
+    transition: 0.5s;
+    user-select: none;
+    width: calc(50% - 4px);
+}
+
+.analysis_dashboard_view_selection_box_element_active, .analysis_dashboard_view_selection_box_element:hover {
+    background-color: #296CF6;
+    color: white;
+}
+
+.analysis_dashboard_view_selection_box_element:first-child {
+    border-radius: 4px 0px 0px 4px;
+    border-right: 1px solid #296CF6;
+}
+
+.analysis_dashboard_view_selection_box_element:last-child {
+    border-radius: 0px 4px 4px 0px;
+    border-left: 1px solid #296CF6;
+}
+
+.analysis_dashboard_advanced_inner_box_top_cards_box {
+    margin-top: 25px;
+    width: 100%;
+}
+
+.analysis_dashboard_advanced_inner_box_top_cards_box_element {
+    background-color:  white;
+    border-radius: 8px;
+    float: left;
+    height: 100px;
+    margin-right: 25px;
+    position: relative;
+    width: calc((100% - 75px) / 4);
+}
+
+.analysis_dashboard_advanced_inner_box_top_cards_box_element:last-child {
+    margin-right: 0px;
+}
+
+.analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon {
+    color: #296CF6;
+    cursor: pointer;
+    height: 25px;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 15px;
+    position: absolute;
+    right: 0;
+    width: 25px;
+}
+
+.analysis_dashboard_advanced_inner_box_top_cards_box_element_text {
+    color: black;
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.analysis_dashboard_advanced_inner_box_top_cards_box_element_subtitle {
+    color: black;
+    font-size: 1em;
+    text-align: center;
 }

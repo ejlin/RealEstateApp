@@ -30,6 +30,10 @@ type Property struct {
 	MortgageInterestRate float64      `json:"mortgage_interest_rate,omitempty",sql:"type:NUMERIC(5,1)"`
 	PropertyType         PropertyType `json:"property_type,omitempty",sql:"type:ENUM('SFH', 'Manufactured', 'Condo/Op', 'Multi-family', 'Apartment', 'Lot/Land', 'Townhome', 'Commercial')"`
 
+	NumBeds int `json:"num_beds,omitempty",sql:"type:INT"`
+	NumBaths int `json:"num_baths,omitempty",sql:"type:INT"`
+	SquareFootage int `json:"square_footage,omitempty",sql:"type:INT"`
+
 	// The day the user can expect rent to come in for this property.
 	RentPaymentDate int `json:"rent_payment_date,omitempty",sql:"type:INT"`
 	MortgagePaymentDate int `json:"mortgage_payment_data,omitempty",sql:"type:INT"`
@@ -95,6 +99,32 @@ func (handle *Handle) GetPropertiesByOwner(userID string) ([]*Property, error) {
 		return nil, err
 	}
 	return properties, nil
+}
+
+// GetSpecificPropertiesByOwner
+func (handle *Handle) GetSpecificPropertiesByOwner(userID string, propertyIDs []string, propertyTypes []string) ([]*Property, error) {
+
+	_, err := uuid.Parse(userID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid UUID: %w", err)
+	}
+
+	var properties []*Property
+
+	// Find all properties.
+	if propertyIDs == nil && propertyTypes == nil {
+		if err := handle.DB.Where("owner_id = ?", userID).Find(&properties).Error; err != nil {
+			return nil, err
+		}
+		return properties, nil
+	}
+
+	// Find properties that are in the union of these two.
+	if err := handle.DB.Where("owner_id = ? AND id IN ? AND property_type IN ?", userID, propertyIDs, propertyTypes).Find(&properties).Error; err != nil {
+		return nil, err
+	}
+	return properties, nil
+	
 }
 
 // RemovePropertyByID will delete a property from our database.

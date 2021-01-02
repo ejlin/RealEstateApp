@@ -146,7 +146,7 @@ class PricingPage extends React.Component {
                                         <div className="pricing_page_bullet">
                                             <BsFillHouseFill className="pricing_page_bullet_icon blue"></BsFillHouseFill>
                                             <p className="pricing_page_bullet_text blue large">
-                                                $149 / month
+                                                $199 / month
                                             </p>
                                         </div>
                                         <div className="pricing_page_bullet">
