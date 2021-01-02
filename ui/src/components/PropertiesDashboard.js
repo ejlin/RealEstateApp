@@ -41,7 +41,7 @@ class PropertiesDashboard extends React.Component {
             method: 'get',
             url: url,
         }).then(response => {
-            var properties = response.data;
+            var properties = response.data.sort();
             var totalNetWorth = 0;
             var totalRent = 0;
 
@@ -79,98 +79,7 @@ class PropertiesDashboard extends React.Component {
                                 property_details: property,
                             }                       
                         }}/>
-                    </div>
-                ),
-                manufacturedProperties: propMap['Manufactured'].map((property, i) => 
-                <div key={i}>
-                    <PropertyCard removePropertyFromState = {
-                            this.removePropertyFromState
-                        }
-                        data={{
-                        state: {
-                            user: this.state.user,
-                            property_details: property,
-                        }                       
-                    }}/>
-                </div>
-                ),
-                condoOpsProperties: propMap["Condo/Op"].map((property, i) => 
-                <div key={i}>
-                    <PropertyCard removePropertyFromState = {
-                            this.removePropertyFromState
-                        }
-                        data={{
-                        state: {
-                            user: this.state.user,
-                            property_details: property,
-                        }                       
-                    }}/>
-                </div>
-                ),
-                multiFamilyProperties: propMap['Multi-Family'].map((property, i) => 
-                <div key={i}>
-                    <PropertyCard removePropertyFromState = {
-                            this.removePropertyFromState
-                        }
-                        data={{
-                        state: {
-                            user: this.state.user,
-                            property_details: property,
-                        }                       
-                    }}/>
-                </div>
-                ),
-                apartmentProperties: propMap['Apartment'].map((property, i) => 
-                <div key={i}>
-                    <PropertyCard removePropertyFromState = {
-                            this.removePropertyFromState
-                        }
-                        data={{
-                        state: {
-                            user: this.state.user,
-                            property_details: property,
-                        }                       
-                    }}/>
-                </div>
-                ),
-                lotLandProperties: propMap['Lot/Land'].map((property, i) => 
-                <div key={i}>
-                    <PropertyCard removePropertyFromState = {
-                            this.removePropertyFromState
-                        }
-                        data={{
-                        state: {
-                            user: this.state.user,
-                            property_details: property,
-                        }                       
-                    }}/>
-                </div>
-                ),
-                townhomeProperties: propMap['Townhome'].map((property, i) => 
-                <div key={i}>
-                    <PropertyCard removePropertyFromState = {
-                            this.removePropertyFromState
-                        }
-                        data={{
-                        state: {
-                            user: this.state.user,
-                            property_details: property,
-                        }                       
-                    }}/>
-                </div>
-                ),
-                commercialProperties: propMap['Commercial'].map((property, i) => 
-                <div key={i}>
-                    <PropertyCard removePropertyFromState = {
-                            this.removePropertyFromState
-                        }
-                        data={{
-                        state: {
-                            user: this.state.user,
-                            property_details: property,
-                        }                       
-                    }}/>
-                </div>
+                    </div>                
                 ),
                 totalNetWorth: this.numberWithCommas(totalNetWorth),
                 totalRent: this.numberWithCommas(totalRent),

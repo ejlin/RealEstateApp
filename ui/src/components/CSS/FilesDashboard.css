@@ -106,7 +106,8 @@
 }
 
 .files_dashboard_icons {
-    border: 2px solid transparent;
+    color: #296CF6;
+    border: 2px solid #296CF6;
     border-radius: 8px;
     cursor: pointer;
     float: right;
@@ -121,7 +122,7 @@
    opacity: 0.85;
 }
 
-#download_file_icon {
+/* #download_file_icon {
     background-color: #eee6f9;
     border-radius: 4px;
     color: #6e4ec1; 
@@ -135,7 +136,7 @@
 #edit_file_icon {
     background-color: #dbebd2;
     color: #85bb65;
-}
+} */
 
 #files_dashboard_search_bar {
     border: 1px solid #d3d3d3;

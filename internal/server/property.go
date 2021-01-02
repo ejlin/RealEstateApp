@@ -69,15 +69,15 @@ func calculatePropertiesSummary(properties []*db.Property) *PropertiesSummary {
 		// totalCost is the mortgage and also the property manager fee.
 		totalCost += property.PriceMortgage + (property.PricePropertyManager * property.PriceRented / 100.0)
 		totalNetWorth += property.PriceBought
-		totalLoan += property.PriceBought - property.PriceDownPayment
+		totalLoan += property.PriceBought - property.DownPayment
 
-		if property.PriceEstimate == 0.0 {
+		if property.Estimate == 0.0 {
 			missingEstimate = true
 			totalEstimateWorth += property.PriceBought
 		} else {
-			totalEstimateWorth += property.PriceEstimate
+			totalEstimateWorth += property.Estimate
 		}
-		totalDownPayment += property.PriceDownPayment
+		totalDownPayment += property.DownPayment
 		if property.CurrentlyRented && property.PriceRented != 0.0 && property.RentPaymentDate != 0 {
 			if rentPaymentAtDateSummary, ok := rentPaymentDateMap[property.RentPaymentDate]; ok {
 					rentPaymentAtDateSummary.NumProperties++

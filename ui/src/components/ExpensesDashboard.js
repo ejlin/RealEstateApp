@@ -34,7 +34,8 @@ class ExpensesDashboard extends React.Component {
             method: 'get',
             url:  'api/user/property/' + this.state.user["id"],
         }).then(response => {
-            var propertiesList = response.data;
+            var propertiesList = response.data.sort();
+
 
             var propertiesMap = new Map();
             for (var i = 0; i < propertiesList.length; i++) {
@@ -54,9 +55,9 @@ class ExpensesDashboard extends React.Component {
         });
     }
 
-    fetchExpensesByProperty(propertyID) {
+    async fetchExpensesByProperty(propertyID) {
         // Load our properties list.
-        axios({
+        await axios({
             method: 'get',
             url:  'api/user/expenses/' + this.state.user["id"],
             params: {
@@ -64,24 +65,11 @@ class ExpensesDashboard extends React.Component {
                 limit: 5,
             }
         }).then(response => {
-            var propertiesList = response.data;
-
-            var propertiesMap = new Map();
-            for (var i = 0; i < propertiesList.length; i++) {
-                var propertyID = propertiesList[i]["id"];
-                var propertyAddress = propertiesList[i]["address"];
-                propertiesMap.set(propertyID, propertyAddress);
-            }
-            this.setState({
-                propertiesMap: [...propertiesMap],
-                isLoading: false
-            });
+            return null;
         }).catch(error => {
             console.log(error);
-            this.setState({
-                isLoading: false
-            })
         });
+        return null;
     }
 
     renderPropertyBoxes() {
@@ -95,18 +83,18 @@ class ExpensesDashboard extends React.Component {
             elements.push(
                 <div>
                     <p className="expenses_dashboard_body_inner_box_title">
-                            {value[1]}
-                        </p>
-                        <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
-                            {propertyExpenses ? propertyExpenses :
-                            <div>
-                                <MdError className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></MdError>
-                                <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
-                                    No Expenses to show
-                                </p>
-                            </div>}
-                        </div>
+                        {value[1]}
+                    </p>
+                    <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
+                        {propertyExpenses === null ? <div></div> :
+                        <div>
+                            <MdError className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></MdError>
+                            <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
+                                No Expenses to show
+                            </p>
+                        </div>}
                     </div>
+                </div>
                 );
         });
         return elements;

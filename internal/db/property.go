@@ -21,15 +21,16 @@ type Property struct {
 	BoughtDate           string  `json:"bought_date,omitempty",sql:"type:VARCHAR(5)"`
 	PriceBought          float64 `json:"price_bought,omitempty",sql:"type:NUMERIC(16,2)"`
 	PriceRented          float64 `json:"price_rented,omitempty",sql:"type:NUMERIC(10,2)"`
-	PriceEstimate        float64 `json:"price_estimate,omitempty",sql:"type:NUMERIC(16,2)"`
+	Estimate        float64 `json:"estimate,omitempty",sql:"type:NUMERIC(16,2)"`
 	PriceMortgage        float64 `json:"price_mortgage,omitempty",sql:"type:NUMERIC(12,2)"`
-	PriceDownPayment     float64 `json:"price_down_payment,omitempty",sql:"type:NUMERIC(12,2)"`
+	DownPayment     float64 `json:"down_payment,omitempty",sql:"type:NUMERIC(12,2)"`
 	PricePropertyManager float64 `json:"price_property_manager,omitempty",sql:"type:NUMERIC(12,2)"`
 
 	MortgageCompany      string       `json:"mortgage_company,omitempty",sql:"type:VARCHAR(64)"`
 	MortgageInterestRate float64      `json:"mortgage_interest_rate,omitempty",sql:"type:NUMERIC(5,1)"`
 	PropertyType         PropertyType `json:"property_type,omitempty",sql:"type:ENUM('SFH', 'Manufactured', 'Condo/Op', 'Multi-family', 'Apartment', 'Lot/Land', 'Townhome', 'Commercial')"`
 
+	NumUnits int `json:"num_units,omitempty",sql:"type:INT"`
 	NumBeds int `json:"num_beds,omitempty",sql:"type:INT"`
 	NumBaths int `json:"num_baths,omitempty",sql:"type:INT"`
 	SquareFootage int `json:"square_footage,omitempty",sql:"type:INT"`

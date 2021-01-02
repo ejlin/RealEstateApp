@@ -16,45 +16,25 @@ import { GiTwoCoins } from 'react-icons/gi';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { MdFileUpload } from 'react-icons/md';
 
+import { IoOpenOutline, IoBedSharp , IoWaterSharp, IoTrailSignSharp, IoBookmarkSharp} from 'react-icons/io5';
+
+
 class PropertyCard extends React.Component {
     constructor(props) {
         super(props);
 
-        var propDetails = this.props.data.state.property_details;
-        var iconsToggleMap = new Map([['analysis', false], ['files', false]]);
-        var filesToggleMap = new Map([
-                ['property', false],
-                ['receipts', false], 
-                ['mortgage', false], 
-                ['repairs', false], 
-                ['contracting', false], 
-                ['taxes', false], 
-                ['other', false]]);
-
         this.state = {
             user: this.props.data.state.user,
-            propertyID: propDetails["id"],
-            address: propDetails["address"],
-            city: propDetails["city"],
-            state: propDetails["state"],
-            zipCode: propDetails["zip_code"],
-            priceBought: propDetails["price_bought"],
-            priceRented: propDetails["price_rented"],
-            priceEstimate: propDetails["price_estimate"],
-            downPayment: propDetails["price_down_payment"],
-            boughtDate: propDetails["bought_date"],
-            rented: true,
-            propertyType: propDetails["property_type"],
-            iconsToggleMap: iconsToggleMap,
-            filesToggleMap: filesToggleMap,
-            files: [],
+            property: this.props.data.state.property_details,
             isLoading: true
         };
-        this.deletePropertyByUser = this.deletePropertyByUser.bind(this);
-        this.removePropertyFromState = this.props.removePropertyFromState;
+
+        console.log(this.state.property);
+        // this.deletePropertyByUser = this.deletePropertyByUser.bind(this);
+        // this.removePropertyFromState = this.props.removePropertyFromState;
         this.numberWithCommas = this.numberWithCommas.bind(this);
-        this.toggleIcons = this.toggleIcons.bind(this);
-        this.toggleFilesIcons = this.toggleFilesIcons.bind(this);
+        // this.toggleIcons = this.toggleIcons.bind(this);
+        // this.toggleFilesIcons = this.toggleFilesIcons.bind(this);
     }
 
     numberWithCommas(x) {
@@ -77,34 +57,34 @@ class PropertyCard extends React.Component {
 
     }
 
-    toggleIcons(type) {
+    // toggleIcons(type) {
 
-        var newMap = this.state.iconsToggleMap;
-        var toggled = this.state.iconsToggleMap[type];
+    //     var newMap = this.state.iconsToggleMap;
+    //     var toggled = this.state.iconsToggleMap[type];
 
-        Object.keys(this.state.iconsToggleMap).map(function(key) {
-            newMap[key] = false;
-        })
+    //     Object.keys(this.state.iconsToggleMap).map(function(key) {
+    //         newMap[key] = false;
+    //     })
 
-        // flip the toggle.
-        newMap[type] = !toggled;
-        this.setState({
-            iconsToggleMap: newMap
-        });
-        return;
-    }
+    //     // flip the toggle.
+    //     newMap[type] = !toggled;
+    //     this.setState({
+    //         iconsToggleMap: newMap
+    //     });
+    //     return;
+    // }
 
-    toggleFilesIcons(type) {
+    // toggleFilesIcons(type) {
 
-        var newMap = this.state.filesToggleMap;
-        var toggled = this.state.filesToggleMap[type];
+    //     var newMap = this.state.filesToggleMap;
+    //     var toggled = this.state.filesToggleMap[type];
 
-        newMap[type] = !toggled;
-        this.setState({
-            filesToggleMap: newMap
-        });
-        return;
-    }
+    //     newMap[type] = !toggled;
+    //     this.setState({
+    //         filesToggleMap: newMap
+    //     });
+    //     return;
+    // }
 
     componentDidMount() {
 
@@ -112,42 +92,22 @@ class PropertyCard extends React.Component {
         var loan = this.state.priceBought - this.state.downPayment;
         var ltvRatio = loan / estimate * 100;
 
-        var url = 'api/user/files/' + this.state.user["id"] + '/' + this.state.propertyID;
+        var url = 'api/user/files/' + this.state.user["id"] + '/' + this.state.property["id"];
         var files;
         axios({
             method: 'get',
             url: url,
         }).then(response => {
-
             if (response == null) {
                 return;
             }
-            files = [];
 
             var data = response.data;
             this.setState({
-                ltvRatio: Number(ltvRatio.toFixed(2)),
-                numBedrooms: 4,
-                numBathrooms: 2,
-                files: data.map((object, i) =>
-                    <div id="property_card_files_graphic" key={i}>
-                        <p>
-                            {object["name"]}
-                            {object["uploaded_at"]}
-                            {object["last_edited_at"]}
-                        </p>
-                    </div>
-                ),
                 isLoading: false
             })
         }).catch(error => {
-            if (error.response.status === 404) {
-                files = [];
-            }
             this.setState({
-                ltvRatio: Number(ltvRatio.toFixed(2)),
-                numBedrooms: 4,
-                numBathrooms: 2,
                 isLoading: false
             })
         });
@@ -297,88 +257,136 @@ class PropertyCard extends React.Component {
         return (
             <div>
                 { this.state.isLoading ? <div></div> : 
-                <div>
-                    <div className="propertyCard">
-                        <p className="property_card_address">
-                            {this.state.address} 
-                        </p>
-                        {this.state.rented ? 
-                        <div id="property_rented_box">
-                            <FaCheckCircle id="rented_check_icon">
-                            </FaCheckCircle>
-                            <p id="property_rented_text">
-                                Rented
+                    <div className="property_card_box">
+                        <div className="property_box_title_box">
+                            <p className="property_card_box_title">
+                                ${this.numberWithCommas(this.state.property["estimate"])}
                             </p>
-                        </div> : 
-                        <div></div>}
-                        <IoMdTrash  onClick={this.deletePropertyByUser} className="property_card_delete_button property_card_end_button"/>
-                        <MdEdit className="property_card_edit_button property_card_end_button"></MdEdit>
-                        <div
-                            id="files"
-                            onClick={(param) => this.toggleIcons('files')}>
-                            <GoFileDirectory 
-                                className={ this.state.iconsToggleMap['files'] ? "property_card_file_button_on property_card_end_button" : "property_card_file_button_off property_card_end_button"} 
-                            />  
+                            <IoOpenOutline className="property_card_box_title_expand_icon">
+                            </IoOpenOutline>
+                            {/* <div className="property_card_box_title_expand_button">
+                                Expand
+                            </div> */}
                         </div>
-                        <div>
-                            <SiGoogleanalytics
-                                id="analysis"
-                                onClick={() => {this.toggleIcons('analysis')}}
-                                className={ this.state.iconsToggleMap['analysis'] ? "property_card_analytics_button_on property_card_end_button" : "property_card_analytics_button_off property_card_end_button"} 
-                            />
-                        </div> 
-                        <div>
-                            { this.state.iconsToggleMap['files'] ? 
-                                    <MdFileUpload
-                                    id="add_file"
-                                    className="property_card_add_file_icon property_card_end_button"
-                                    />
-                                : <div></div>
-                            } 
-                        </div>        
                         <div className="clearfix"/>
-                        <div id="property_card_sub_info_box">
-                            <p id="property_card_sub_info_subaddress">
-                                {this.state.city}, {this.state.state} {this.state.zipCode}
-                            </p>
-                            <br></br>
-                            <p className="property_card_sub_info_estimate">
-                                ${this.state.priceEstimate ? this.numberWithCommas(this.state.priceEstimate) : this.numberWithCommas(this.state.priceBought)}
-                                {this.state.priceEstimate ? <div></div> : <HiOutlineExclamationCircle id="estimate_warning_icon"></HiOutlineExclamationCircle>}
-                            </p>
-                            <div className="clearfix"/>
-                            <br></br>
-                            <div id="property_card_sub_info_subtext_box">
-                                <div className="property_card_sub_info_subbox">
-                                    <BsHouseFill className="property_card_sub_info_icon"></BsHouseFill>
-                                    <p className="property_card_sub_info_subtext_title">
-                                        {this.state.numBedrooms ? this.state.numBedrooms : "-"} beds {this.state.numBathrooms ? this.state.numBathrooms : "-"} baths 
+                        <p className="property_card_box_address_title">
+                            {this.state.property["address"]}
+                        </p>
+                        <p className="property_card_box_address_subtitle">
+                            {this.state.property["state"]}, {this.state.property["zip_code"]}
+                        </p>
+                        <div className="property_card_box_info_box">
+                            <div className="property_card_box_info_box_first_row">
+                                <div className="property_card_box_info_box_first_row_first_element">
+                                    <IoBedSharp className="property_card_box_info_box_icon"></IoBedSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        {this.state.property["num_beds"]} {this.state.property["num_beds"] > 1 ? "beds" : "bed"}
                                     </p>
                                 </div>
-                                <div className="property_card_sub_info_subbox">
-                                    <GiTwoCoins className="property_card_sub_info_icon"></GiTwoCoins>
-                                    <p className="property_card_sub_info_subtext_title">
-                                        ${this.state.priceRented ? this.state.priceRented : "-"}
+                                <div className="property_card_box_info_box_first_row_second_element">
+                                    <IoWaterSharp className="property_card_box_info_box_icon"></IoWaterSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        {this.state.property["num_baths"]} {this.state.property["num_baths"] > 1 ? "baths" : "bath"}
                                     </p>
-                                    <p className="property_card_sub_info_subtext_subtitle">
-                                            / month
-                                        </p> 
-                                    </div>
-                                    <div className="clearfix"/>
-                                    <div className="property_card_sub_info_subbox">
-                                        <SiGooglecalendar className="property_card_sub_info_icon"></SiGooglecalendar>
-                                        <p className="property_card_sub_info_subtext_title">
-                                            {this.state.boughtDate ? this.state.boughtDate : "-"} 
-                                        </p>
-                                        <p className="property_card_sub_info_subtext_subtitle">
-                                            purchase date
-                                        </p>
-                                    </div>
                                 </div>
                             </div>
-                            {this.renderSubSection()}
+                            <div className="property_card_box_info_box_second_row">
+                                <div className="property_card_box_info_box_first_row_first_element">
+                                    <IoTrailSignSharp className="property_card_box_info_box_icon"></IoTrailSignSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        {this.state.property["num_units"]} {this.state.property["num_units"] > 1 ? "units" : "unit"}
+                                    </p>
+                                </div>
+                                <div className="property_card_box_info_box_first_row_second_element">
+                                    <IoBookmarkSharp className="property_card_box_info_box_icon"></IoBookmarkSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        {this.numberWithCommas(this.state.property["square_footage"])} sq ft
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>}
+                    // <div className="propertyCard">
+                    //     <p className="property_card_address">
+                    //         {this.state.address} 
+                    //     </p>
+                    //     {this.state.rented ? 
+                    //     <div id="property_rented_box">
+                    //         <FaCheckCircle id="rented_check_icon">
+                    //         </FaCheckCircle>
+                    //         <p id="property_rented_text">
+                    //             Rented
+                    //         </p>
+                    //     </div> : 
+                    //     <div></div>}
+                    //     <IoMdTrash  onClick={this.deletePropertyByUser} className="property_card_delete_button property_card_end_button"/>
+                    //     <MdEdit className="property_card_edit_button property_card_end_button"></MdEdit>
+                    //     <div
+                    //         id="files"
+                    //         onClick={(param) => this.toggleIcons('files')}>
+                    //         <GoFileDirectory 
+                    //             className={ this.state.iconsToggleMap['files'] ? "property_card_file_button_on property_card_end_button" : "property_card_file_button_off property_card_end_button"} 
+                    //         />  
+                    //     </div>
+                    //     <div>
+                    //         <SiGoogleanalytics
+                    //             id="analysis"
+                    //             onClick={() => {this.toggleIcons('analysis')}}
+                    //             className={ this.state.iconsToggleMap['analysis'] ? "property_card_analytics_button_on property_card_end_button" : "property_card_analytics_button_off property_card_end_button"} 
+                    //         />
+                    //     </div> 
+                    //     <div>
+                    //         { this.state.iconsToggleMap['files'] ? 
+                    //                 <MdFileUpload
+                    //                 id="add_file"
+                    //                 className="property_card_add_file_icon property_card_end_button"
+                    //                 />
+                    //             : <div></div>
+                    //         } 
+                    //     </div>        
+                    //     <div className="clearfix"/>
+                    //     <div id="property_card_sub_info_box">
+                    //         <p id="property_card_sub_info_subaddress">
+                    //             {this.state.city}, {this.state.state} {this.state.zipCode}
+                    //         </p>
+                    //         <br></br>
+                    //         <p className="property_card_sub_info_estimate">
+                    //             ${this.state.priceEstimate ? this.numberWithCommas(this.state.priceEstimate) : this.numberWithCommas(this.state.priceBought)}
+                    //             {this.state.priceEstimate ? <div></div> : <HiOutlineExclamationCircle id="estimate_warning_icon"></HiOutlineExclamationCircle>}
+                    //         </p>
+                    //         <div className="clearfix"/>
+                    //         <br></br>
+                    //         <div id="property_card_sub_info_subtext_box">
+                    //             <div className="property_card_sub_info_subbox">
+                    //                 <BsHouseFill className="property_card_sub_info_icon"></BsHouseFill>
+                    //                 <p className="property_card_sub_info_subtext_title">
+                    //                     {this.state.numBedrooms ? this.state.numBedrooms : "-"} beds {this.state.numBathrooms ? this.state.numBathrooms : "-"} baths 
+                    //                 </p>
+                    //             </div>
+                    //             <div className="property_card_sub_info_subbox">
+                    //                 <GiTwoCoins className="property_card_sub_info_icon"></GiTwoCoins>
+                    //                 <p className="property_card_sub_info_subtext_title">
+                    //                     ${this.state.priceRented ? this.state.priceRented : "-"}
+                    //                 </p>
+                    //                 <p className="property_card_sub_info_subtext_subtitle">
+                    //                         / month
+                    //                     </p> 
+                    //                 </div>
+                    //                 <div className="clearfix"/>
+                    //                 <div className="property_card_sub_info_subbox">
+                    //                     <SiGooglecalendar className="property_card_sub_info_icon"></SiGooglecalendar>
+                    //                     <p className="property_card_sub_info_subtext_title">
+                    //                         {this.state.boughtDate ? this.state.boughtDate : "-"} 
+                    //                     </p>
+                    //                     <p className="property_card_sub_info_subtext_subtitle">
+                    //                         purchase date
+                    //                     </p>
+                    //                 </div>
+                    //             </div>
+                    //         </div>
+                    //         {this.renderSubSection()}
+                // </div>
+                }
             </div>
         )
     }
