@@ -19,8 +19,12 @@ class ExpensesDashboard extends React.Component {
             profilePicture: this.props.location.state.profilePicture,
             totalEstimateWorth: this.props.location.state.totalEstimateWorth,
             missingEstimate: this.props.location.state.missingEstimate,
+            propertiesMap: null,
             isLoading: true
         };
+
+        this.renderPropertyBoxes = this.renderPropertyBoxes.bind(this);
+        this.fetchExpensesByProperty = this.fetchExpensesByProperty.bind(this);
     }
 
     componentDidMount() {
@@ -39,7 +43,7 @@ class ExpensesDashboard extends React.Component {
                 propertiesMap.set(propertyID, propertyAddress);
             }
             this.setState({
-                properties: [...propertiesMap],
+                propertiesMap: [...propertiesMap],
                 isLoading: false
             });
         }).catch(error => {
@@ -48,6 +52,64 @@ class ExpensesDashboard extends React.Component {
                 isLoading: false
             })
         });
+    }
+
+    fetchExpensesByProperty(propertyID) {
+        // Load our properties list.
+        axios({
+            method: 'get',
+            url:  'api/user/expenses/' + this.state.user["id"],
+            params: {
+                property_id: propertyID,
+                limit: 5,
+            }
+        }).then(response => {
+            var propertiesList = response.data;
+
+            var propertiesMap = new Map();
+            for (var i = 0; i < propertiesList.length; i++) {
+                var propertyID = propertiesList[i]["id"];
+                var propertyAddress = propertiesList[i]["address"];
+                propertiesMap.set(propertyID, propertyAddress);
+            }
+            this.setState({
+                propertiesMap: [...propertiesMap],
+                isLoading: false
+            });
+        }).catch(error => {
+            console.log(error);
+            this.setState({
+                isLoading: false
+            })
+        });
+    }
+
+    renderPropertyBoxes() {
+        var elements = [];
+        var propertiesMap = this.state.propertiesMap;
+        propertiesMap.forEach((value, key, map) => {
+            // value[0] is our propertyID.
+            // value[1] is our property Address.
+            var propertyExpenses = this.fetchExpensesByProperty(value[0]);
+
+            elements.push(
+                <div>
+                    <p className="expenses_dashboard_body_inner_box_title">
+                            {value[1]}
+                        </p>
+                        <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
+                            {propertyExpenses ? propertyExpenses :
+                            <div>
+                                <MdError className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></MdError>
+                                <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
+                                    No Expenses to show
+                                </p>
+                            </div>}
+                        </div>
+                    </div>
+                );
+        });
+        return elements;
     }
 
     render() {
@@ -77,6 +139,7 @@ class ExpensesDashboard extends React.Component {
                                     Add Expense
                                 </div>
                             </div>
+                            {this.state.isLoading ? <div></div> : 
                             <div className="expenses_dashboard_body_inner_box">
                                 <div className="expenses_dashboard_body_inner_box_most_recent_box">
                                     <p className="expenses_dashboard_body_inner_box_title">
@@ -91,9 +154,10 @@ class ExpensesDashboard extends React.Component {
                                                 No Expenses to show
                                             </p>
                                         </div>
+                                        {this.renderPropertyBoxes()}
                                     </div>}
                                 </div>
-                            </div>
+                            </div>}
                         </div>
                     </div>
                 </div>

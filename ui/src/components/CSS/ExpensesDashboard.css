@@ -85,13 +85,14 @@
 
 .expenses_dashboard_body_inner_box_no_expenses_box {
     float: left;
-    margin-top: 25px;
     width: 100%;
 }
 
 .expenses_dashboard_body_inner_box_no_expenses_inner_box {
     background-color: white;
     border-radius: 8px;
+    margin-bottom: 40px;
+    margin-top: 20px;
     padding: 20px 0px 20px 0px;
     position: relative;
     width: 100%;
