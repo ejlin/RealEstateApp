@@ -388,7 +388,7 @@ class AnalysisDashboard extends React.Component {
                         <IoMdAddCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
                         <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
                             <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
-                                {Number(this.state.propertiesSummary["average_dti"].toFixed(2))} total
+                                {Number(this.state.propertiesSummary["average_dti"].toFixed(2))} %
                             </p>
                             <div className="clearfix"/>
                             <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_subtitle">

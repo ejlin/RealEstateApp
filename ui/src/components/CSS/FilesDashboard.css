@@ -29,8 +29,8 @@
     border-radius: 8px;
     color: #296CF6;
     cursor: pointer;
-    height: 24px;
-    line-height: 24px;
+    height: 20px;
+    line-height: 20px;
     margin-right: 20px;
     padding: 7.5px 15px 7.5px 15px;
     transition: 0.2s;
@@ -60,8 +60,8 @@
 #files_dashboard_sort_icon {
     float: left;
     height: 20px;
-    margin-left: 5px;   
-    margin-top: 3px;
+    margin-left: 0px;   
+    margin-top: 1px;
     width: 20px;
 }
 
@@ -77,19 +77,18 @@
 }
 
 #files_dashboard_upload_file_text_button {
-    /* background-color:#296CF6; */
+    background-color:#296CF6;
     /* background-color: #F1F1F1; */
     border: 2px solid #296CF6;
-    background-color: #eaf5fb;
     border-radius: 8px;
     /* color: black; */
-    /* color: white; */
-    color: #296CF6;
+    color: white;
+    /* color: #296CF6; */
     cursor: pointer;
     font-weight: bold;
     float: right;
-    height: 24px;
-    line-height: 24px;
+    height: 20px;
+    line-height: 20px;
     margin-bottom: 10px;
     margin-left: 15px;
     padding: 7.5px 15px 7.5px 15px;

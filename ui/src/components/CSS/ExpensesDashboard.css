@@ -3,7 +3,7 @@
     float: left;
     height: 100vh;
     margin-left: 220px;
-    width: calc(100% - 220px);
+    width: calc(100% - 220px - 20%);
 }
 
 #expenses_dashboard_parent_inner_box {
@@ -14,6 +14,103 @@
 }
 
 .expenses_dashboard_parent_inner_box_title {
+    float: left;
     font-size: 1.8em;
     font-weight: bold;
+}
+
+.expenses_dashboard_title_box {
+    width: 100%;
+}
+
+.expenses_dashboard_search_bar {
+    border: 1px solid #d3d3d3;
+    border-radius: 8px;
+    float: right;
+    font-size: 1.1em;
+    padding: 7.5px 15px 7.5px 15px;
+    width: 500px;
+}
+
+.expenses_dashboard_search_bar:focus {
+    outline: none;
+}
+
+.expenses_dashboard_body_box {
+    float: left;
+    margin-top: 25px;
+    width: 100%;
+}
+
+.expenses_dashboard_buttons_box {
+    float: left;
+    height: 40px;
+    width: 100%;
+}
+
+.expenses_dashboard_add_expense_button {
+    background-color: #296CF6;
+    border: 2px solid #296CF6;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    float: right;
+    font-weight: bold;
+    height: 20px;
+    line-height: 20px;
+    padding: 7.5px 15px 7.5px 15px;
+    text-align: center;
+    transition: 0.3s;
+    user-select: none;
+}
+
+.expenses_dashboard_add_expense_button:hover {
+    opacity: 0.7;
+}
+
+.expenses_dashboard_body_inner_box {
+    float: left;
+    margin-top: 25px;
+    width: 100%;
+}
+
+.expenses_dashboard_body_inner_box_most_recent_box {
+    width: 100%;
+}
+
+.expenses_dashboard_body_inner_box_title {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.expenses_dashboard_body_inner_box_no_expenses_box {
+    float: left;
+    margin-top: 25px;
+    width: 100%;
+}
+
+.expenses_dashboard_body_inner_box_no_expenses_inner_box {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px 0px 20px 0px;
+    position: relative;
+    width: 100%;
+}
+
+.expenses_dashboard_body_inner_box_no_expenses_inner_box_icon {
+    color: grey;
+    float: left;
+    height: 30px;
+    left: calc(50% - 100px - 30px);
+    position: absolute;
+    width: 30px;
+}
+
+.expenses_dashboard_body_inner_box_no_expenses_inner_box_text {
+    color: grey;
+    font-size: 1.3em;
+    line-height: 30px;
+    margin-left: calc((100% - 200px)/2);
+    text-align: center;
+    width: 200px;
 }
