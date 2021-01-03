@@ -1,11 +1,12 @@
 .file_card_individual_file {
     background-color: white;
-    border: 2px solid white;
+    border: 2px solid #296CF6;
     border-radius: 8px;
     display: inline-block;
     height: calc(40px + 12px);
     margin-right: 30px;
     margin-top: 15px;
+    min-width: 200px;
     position: relative;
     width: calc((100% - 150px - 20px) / 5);
 }
@@ -55,8 +56,13 @@
 }
 
 .file_card_active {
-    background-color: #eaf5fb;
+    background-color: #296CF6;
+    /* background-color: #eaf5fb; */
     border: 2px solid #296CF6;
+}
+
+.file_card_individual_file_footer_title_active {
+    color: white;
 }
 
 @media screen and (max-width: 2000px) {

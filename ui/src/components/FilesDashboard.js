@@ -24,6 +24,132 @@ import { AiFillFile, AiFillFileImage, AiFillFileExclamation, AiFillFilePdf, AiFi
  * and passing it in to renderFiles(). 
  */
 
+export const openSignedURL = (userID, fileKey)  => {
+    var url = "api/user/files/" + userID + "/" + fileKey;
+    axios({
+        method: 'get',
+        url: url,
+        params: {
+            request: "signed_url"
+        }
+    }).then(response => {
+        var url = response.data;
+        if (url !== "") {
+            window.open(url, '_blank', 'noopener,noreferrer')
+        }
+    }).catch(error => console.log(error));
+}
+
+
+ // isSmall is used for small icons
+ export const mapFileTypeToIcon = (imageType, isSmall, isActive) => {
+    
+    var classNames = isSmall ? "files_dashboard_upload_image_type_mini_icon" : "files_dashboard_upload_image_type";
+
+    if (imageType === null || imageType === undefined) {
+        classNames += isActive? " white" : " grey";
+        return (
+            <div>
+                <AiFillFileExclamation 
+                    className={classNames}>
+                </AiFillFileExclamation>
+            </div>
+        )
+    }
+
+    if (imageType.includes("image")){
+        classNames += isActive? " white" : " blue";
+        return (
+            <div>
+                <AiFillFileImage 
+                    className={classNames}>
+                </AiFillFileImage>
+            </div>
+        );
+    } else if (imageType.includes("pdf")) {
+        classNames += isActive? " white" : " red";
+        return (
+            <div>
+                <AiFillFilePdf
+                    className={classNames}>
+                </AiFillFilePdf>
+            </div>
+        )
+    } else if (imageType.includes("video")) {
+        classNames += isActive? " white" : " blue";
+        return (
+            <div>
+                <AiFillFile 
+                    className={classNames}>
+                </AiFillFile>
+            </div>
+        )
+    } else if (imageType.includes("audio")) {
+        classNames += isActive? " white" : " blue";
+        return (
+            <div>
+                <AiFillFile 
+                    className={classNames}>
+                </AiFillFile>
+            </div>
+        )
+    } else if (imageType.includes("zip")) {
+        classNames += isActive? " white" : " grey";
+        return (
+            <div>
+                <AiFillFileZip
+                    className={classNames}>
+                </AiFillFileZip>
+            </div>
+        )
+    } else if (imageType.includes("text")) {
+        classNames += isActive? " white" : " grey";
+        return (
+            <div>
+                <AiFillFileText
+                    className={classNames}>
+                </AiFillFileText>
+            </div>
+        )
+    } else if (imageType.includes("presentation")) {
+        classNames += isActive? " white" : " orange";
+        return (
+            <div>
+                <AiFillFilePpt
+                    className={classNames}>
+                </AiFillFilePpt>
+            </div>
+        )
+    } else if (imageType.includes("spreadsheet")) {
+        classNames += isActive? " white" : " green";
+        return (
+            <div>
+                <AiFillFileExcel
+                    className={classNames}>
+                </AiFillFileExcel>
+            </div>
+        )
+    } else if (imageType.includes("doc")) {
+        classNames += isActive? " white" : " blue";
+        return (
+            <div>
+                <AiFillFileWord
+                    className={classNames}>
+                </AiFillFileWord>
+            </div>
+        )
+    } else {
+        classNames += isActive? " white" : " grey";
+        return (
+            <div>
+                <AiFillFileExclamation
+                    className={classNames}>
+                </AiFillFileExclamation>
+            </div>
+        )
+    }
+}
+
 class FilesDashboard extends React.Component {
         
     constructor(props) {
@@ -56,7 +182,6 @@ class FilesDashboard extends React.Component {
         };
 
         this.setActiveFileAttributes = this.setActiveFileAttributes.bind(this);
-        this.openSignedURL = this.openSignedURL.bind(this);
         this.downloadActiveFiles = this.downloadActiveFiles.bind(this);
         this.downloadFile = this.downloadFile.bind(this);
         this.deleteActiveFiles = this.deleteActiveFiles.bind(this);
@@ -137,44 +262,7 @@ class FilesDashboard extends React.Component {
             })
         });
     }
-
-    // file Key = propertyID + '/' + fileName
-    setActiveFileAttributes(fileKey, file, toRemove) {
-        var currentActiveFiles = this.state.activeFiles;
-        if (currentActiveFiles === null || currentActiveFiles === undefined || currentActiveFiles.length === 0) {
-            currentActiveFiles = new Map();
-        }
-        if (currentActiveFiles.size >= 25 && !toRemove) {
-            return false
-        }
-        if (!toRemove) {
-            currentActiveFiles.set(fileKey, file);
-        } else {
-            // Remove from active ("unclicked")
-            currentActiveFiles.delete(fileKey);
-        }
-        this.setState({
-            activeFiles: currentActiveFiles
-        });
-        return true;
-    }
-
-    openSignedURL(fileKey) {
-        var url = "api/user/files/" + this.state.user["id"] + "/" + fileKey;
-        axios({
-            method: 'get',
-            url: url,
-            params: {
-                request: "signed_url"
-            }
-        }).then(response => {
-            var url = response.data;
-            if (url !== "") {
-                window.open(url, '_blank', 'noopener,noreferrer')
-            }
-        }).catch(error => console.log(error));
-    }
-
+    
     downloadFile(value, key, map) {
         var url = "api/user/files/" + this.state.user["id"] + "/" + key;
         axios({
@@ -387,145 +475,6 @@ class FilesDashboard extends React.Component {
         return fileName;
     }
 
-    // isSmall is used for small icons
-    mapFileTypeToIcon(imageType, isSmall) {
-        if (imageType === null || imageType === undefined) {
-            return (
-                <div>
-                    <AiFillFileExclamation 
-                        className={
-                            isSmall ? 
-                            "files_dashboard_upload_image_type_mini_icon grey" : 
-                            "files_dashboard_upload_image_type grey"
-                        }>
-                    </AiFillFileExclamation>
-                </div>
-            )
-        }
-
-        if (imageType.includes("image")){
-            return (
-                <div>
-                    <AiFillFileImage 
-                        className={
-                            isSmall ? 
-                            "files_dashboard_upload_image_type_mini_icon blue": 
-                            "files_dashboard_upload_image_type blue"
-                    }>
-                    </AiFillFileImage>
-                </div>
-            );
-        } else if (imageType.includes("pdf")) {
-            return (
-                <div>
-                    <AiFillFilePdf
-                        className={
-                            isSmall ? 
-                            "files_dashboard_upload_image_type_mini_icon red": 
-                            "files_dashboard_upload_image_type red"
-                    }>
-                    </AiFillFilePdf>
-                </div>
-            )
-        } else if (imageType.includes("video")) {
-            return (
-                <div>
-                    <AiFillFile 
-                        className={
-                            isSmall ? 
-                            "files_dashboard_upload_image_type_mini_icon blue": 
-                            "files_dashboard_upload_image_type blue"
-                    }>
-                    </AiFillFile>
-                </div>
-            )
-        } else if (imageType.includes("audio")) {
-            return (
-                <div>
-                    <AiFillFile 
-                        className={
-                            isSmall ? 
-                            "files_dashboard_upload_image_type_mini_icon blue": 
-                            "files_dashboard_upload_image_type blue"
-                    }>
-                    </AiFillFile>
-                </div>
-            )
-        } else if (imageType.includes("zip")) {
-            return (
-                <div>
-                    <AiFillFileZip
-                        className={
-                            isSmall ? 
-                            "files_dashboard_upload_image_type_mini_icon grey": 
-                            "files_dashboard_upload_image_type grey"
-                    }>
-                    </AiFillFileZip>
-                </div>
-            )
-        } else if (imageType.includes("text")) {
-            return (
-                <div>
-                    <AiFillFileText
-                        className={
-                            isSmall ? 
-                            "files_dashboard_upload_image_type_mini_icon grey": 
-                            "files_dashboard_upload_image_type grey"
-                    }>
-                    </AiFillFileText>
-                </div>
-            )
-        } else if (imageType.includes("presentation")) {
-            return (
-                <div>
-                    <AiFillFilePpt
-                        className={
-                            isSmall ? 
-                            "files_dashboard_upload_image_type_mini_icon orange": 
-                            "files_dashboard_upload_image_type orange"
-                    }>
-                    </AiFillFilePpt>
-                </div>
-            )
-        } else if (imageType.includes("spreadsheet")) {
-            return (
-                <div>
-                    <AiFillFileExcel
-                        className={
-                            isSmall ? 
-                            "files_dashboard_upload_image_type_mini_icon green": 
-                            "files_dashboard_upload_image_type green"
-                    }>
-                    </AiFillFileExcel>
-                </div>
-            )
-        } else if (imageType.includes("doc")) {
-            return (
-                <div>
-                    <AiFillFileWord
-                        className={
-                            isSmall ? 
-                            "files_dashboard_upload_image_type_mini_icon blue": 
-                            "files_dashboard_upload_image_type blue"
-                    }>
-                    </AiFillFileWord>
-                </div>
-            )
-        } else {
-            return (
-                <div>
-                    <AiFillFileExclamation
-                        className={
-                            isSmall ? 
-                            "files_dashboard_upload_image_type_mini_icon grey": 
-                            "files_dashboard_upload_image_type grey"
-                    }>
-                    </AiFillFileExclamation>
-                </div>
-            )
-        }
-    }
-
     renderFileUploadPropertiesSelection() {
         return (
             this.state.properties.map((property, i) => 
@@ -545,6 +494,28 @@ class FilesDashboard extends React.Component {
 
     renderActiveSearchFiles() {
         return this.state.activeSearchFiles.length > 0 ? this.state.activeSearchFiles : this.renderNoFiles();
+    }
+
+
+    // file Key = propertyID + '/' + fileName
+    setActiveFileAttributes(fileKey, file, toRemove) {
+        var currentActiveFiles = this.state.activeFiles;
+        if (currentActiveFiles === null || currentActiveFiles === undefined || currentActiveFiles.length === 0) {
+            currentActiveFiles = new Map();
+        }
+        if (currentActiveFiles.size >= 25 && !toRemove) {
+            return false
+        }
+        if (!toRemove) {
+            currentActiveFiles.set(fileKey, file);
+        } else {
+            // Remove from active ("unclicked")
+            currentActiveFiles.delete(fileKey);
+        }
+        this.setState({
+            activeFiles: currentActiveFiles
+        })
+        return true;
     }
 
     renderNoFiles() {
@@ -654,8 +625,8 @@ class FilesDashboard extends React.Component {
                             user: this.state.user,
                             file: file,
                             setActiveFileAttributes: this.setActiveFileAttributes,
-                            openSignedURL: this.openSignedURL, 
-                            mapFileTypeToIcon: this.mapFileTypeToIcon
+                            openSignedURL: openSignedURL, 
+                            mapFileTypeToIcon: mapFileTypeToIcon
                         }                       
                     }}/>
                 )

@@ -5,8 +5,11 @@ import './CSS/PropertiesDashboard.css';
 import './CSS/Style.css';
 
 import PropertyCard from './PropertyCard.js';
+import FileCard from './FileCard.js';
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
+
+import { mapFileTypeToIcon, openSignedURL } from './FilesDashboard.js';
 
 import { GoFileDirectory } from 'react-icons/go';
 import { SiGoogleanalytics } from 'react-icons/si';
@@ -52,13 +55,16 @@ class PropertiesDashboard extends React.Component {
             activePropertyID: "",
             activeProperty: null,
             activePropertyView: overview,
+            activeFiles: [],
             isLoading: true
         };
+        this.setActiveFileAttributes = this.setActiveFileAttributes.bind(this);
         this.numberWithCommas = this.numberWithCommas.bind(this);
         this.removePropertyFromState = this.removePropertyFromState.bind(this);
         this.handleTagsListClick = this.handleTagsListClick.bind(this);
         this.setActiveProperty = this.setActiveProperty.bind(this);
         this.renderActivePropertyView = this.renderActivePropertyView.bind(this);
+        this.renderActivePropertyFiles = this.renderActivePropertyFiles.bind(this);
     }
 
     componentDidMount() {
@@ -232,20 +238,60 @@ class PropertiesDashboard extends React.Component {
         return;
     }
 
+    setActiveFileAttributes(fileKey, file, toRemove) {
+        var currentActiveFiles = this.state.activeFiles;
+        if (currentActiveFiles === null || currentActiveFiles === undefined || currentActiveFiles.length === 0) {
+            currentActiveFiles = new Map();
+        }
+        if (currentActiveFiles.size >= 25 && !toRemove) {
+            return false
+        }
+        if (!toRemove) {
+            currentActiveFiles.set(fileKey, file);
+        } else {
+            // Remove from active ("unclicked")
+            currentActiveFiles.delete(fileKey);
+        }
+        this.setState({
+            activeFiles: currentActiveFiles
+        })
+        return true;
+    }
+
     setActiveProperty(propertyID) {
         axios({
             method: 'get',
             url: 'api/property/' + propertyID,
         }).then(response => {
             this.setState({
-                activeProperty: response.data
+                activePropertyID: propertyID,
+                activeProperty: response.data,
+                activePropertyView: overview,
+                isLoadingActiveProperty: false
             })
         }).catch(error => {
             console.log(error);
         });
-        this.setState({
-            activePropertyID: propertyID
-        });
+    }
+
+    renderActivePropertyFiles() {
+        var elements = [];
+        var files = this.state.activePropertyFiles;
+        for (var i = 0; i < files.length; i++) {
+            let file = files[i];
+            elements.push(
+                <FileCard key={this.state.activePropertyID + "-" + file["name"]} data={{
+                    state: {
+                        user: this.state.user,
+                        file: file,
+                        setActiveFileAttributes: this.setActiveFileAttributes,
+                        openSignedURL: openSignedURL, 
+                        mapFileTypeToIcon: mapFileTypeToIcon
+                    }                       
+                }}/>
+            );
+        }
+        return elements;
     }
 
     renderActivePropertyView() {
@@ -256,7 +302,6 @@ class PropertiesDashboard extends React.Component {
                         <p className="active_property_view_title">
                             Overview
                         </p>
-
                     </div>
                 );
             case analysis:
@@ -273,6 +318,7 @@ class PropertiesDashboard extends React.Component {
                         <p className="active_property_view_title">
                             Files
                         </p>
+                        {this.renderActivePropertyFiles()}
                     </div>
                 );
             case expenses:
@@ -347,7 +393,10 @@ class PropertiesDashboard extends React.Component {
                                 <div className="property_card_box_info_box_last_row_first_element">
                                     <IoPersonSharp className="property_card_box_info_box_icon"></IoPersonSharp>
                                     <p className="property_card_box_info_box_text">
-                                        Property Manager ${this.state.activeProperty["price_property_manager"] * this.state.activeProperty["price_rented"] / 100.0}/mo
+                                        Property Manager ${
+                                        this.state.activeProperty["price_property_manager"] && this.state.activeProperty["price_rented"] ?
+                                        this.state.activeProperty["price_property_manager"] * this.state.activeProperty["price_rented"] / 100.00 :
+                                        "-"}/mo
                                     </p>
                                 </div>
                             </div>
@@ -400,8 +449,17 @@ class PropertiesDashboard extends React.Component {
                                     ></SiGoogleanalytics>
                                 <GoFileDirectory 
                                     onMouseDown={() => {
-                                        this.setState({
-                                            activePropertyView: files
+                                        axios({
+                                            url: 'api/user/files/' + this.state.user["id"] + '/' + this.state.activePropertyID,
+                                            method: 'get'
+                                        }).then(response => {
+                                            console.log(response.data);
+                                            this.setState({
+                                                activePropertyFiles: response.data,
+                                                activePropertyView: files
+                                            })
+                                        }).catch(error => {
+
                                         })
                                     }}
                                     className={

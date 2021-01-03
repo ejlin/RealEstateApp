@@ -20,7 +20,6 @@ class FileCard extends React.Component {
 
         this.trimTrailingFileName = this.trimTrailingFileName.bind(this);
         this.clickCard = this.clickCard.bind(this);
-        this.doubleClickCard = this.doubleClickCard.bind(this);
     }
 
     trimTrailingFileName(fileName) {
@@ -34,33 +33,27 @@ class FileCard extends React.Component {
 
         var now = Date.now();
         var key = this.state.file["property_id"] + '/' + this.state.file["name"];
-
         if (this.state.timeClicked === null || (now - this.state.timeClicked) > 200) { 
             // Let parent know this file was clicked
-            if (this.state.setActiveFileAttributes(key, this.state.file, this.state.isClicked)) {
+            var success = this.state.setActiveFileAttributes(key, this.state.file, this.state.isClicked);
+            console.log(success);
+            if (success) {
                 this.setState({
                     isClicked: !this.state.isClicked,
                     timeClicked: Date.now()
                 });
             }
         } else {
-            this.state.openSignedURL(key)
+            console.log("yooooo")
+            this.state.openSignedURL(this.state.user["id"], key);
             if (this.state.setActiveFileAttributes(key, this.state.file, false)) {
                 this.setState({
-                    isClicked: false,
+                    isClicked: true,
                     timeClicked: Date.now()
                 })
             }
         }
     }
-
-    doubleClickCard() {
-        if (this.state.isClicked) {
-            return;
-        }
-        var key = this.state.file["property_id"] + '/' + this.state.file["name"];
-        this.state.openSignedURL(key)
-    }  
 
     componentDidMount() {
         this.clickTimeout = null;
@@ -69,16 +62,20 @@ class FileCard extends React.Component {
     render() {
         return (
             <div className={
-                            this.state.isClicked ? 
-                            "file_card_individual_file file_card_active" : 
-                            "file_card_individual_file"
-                            } 
+                    this.state.isClicked ? 
+                    "file_card_individual_file file_card_active" : 
+                    "file_card_individual_file"
+                } 
                 // onDoubleClick={() => this.doubleClickCard()}
                 onMouseDown={() => this.clickCard()}
                 >
-                {this.state.mapFileTypeToIcon(this.state.file["metadata"]["file_type"], true)}
+                {this.state.mapFileTypeToIcon(this.state.file["metadata"]["file_type"], true, this.state.isClicked)}
                 <div className="file_card_individual_file_footer">
-                    <p className="file_card_individual_file_footer_title" title={this.state.file["name"] ? this.state.file["name"] : "Unknown File"}>
+                    <p className={
+                        this.state.isClicked ?
+                        "file_card_individual_file_footer_title file_card_individual_file_footer_title_active":
+                        "file_card_individual_file_footer_title"}
+                        title={this.state.file["name"] ? this.state.file["name"] : "Unknown File"}>
                         {this.state.file["name"] ? this.trimTrailingFileName(this.state.file["name"]) : "Unknown File"}
                     </p>
                 </div>
