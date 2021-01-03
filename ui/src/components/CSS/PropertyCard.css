@@ -27,17 +27,14 @@
     cursor: pointer;
     float: right;
     height: 25px;
+    transition: 0.5s;
     width: 25px;
 }
 
-.property_card_box_title_expand_button {
-    background-color: #296CF6;
-    border-radius: 4px;
-    color: white;
-    cursor: pointer;
-    float: right;
-    padding: 7.5px 15px 7.5px 15px;
+.property_card_box_title_expand_icon:hover {
+    opacity: 0.7;
 }
+
 
 .property_card_box_address_title {
     font-size: 1.1em;
@@ -91,9 +88,13 @@
 
 .property_card_box_info_box_text {
     line-height: 25px;
+    word-break: break-all;
 }
 
-
+.property_card_box_info_box_last_row_first_element {
+    float: left;
+    width: 100%;  
+}
 
 
 

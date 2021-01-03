@@ -72,15 +72,15 @@
 #files_dashboard_icons_box {
     margin-left: 60px;
     margin-right: 80px;
-    margin-top: 25px;
+    margin-top: 10px;
     width: calc(100% - 120px);
 }
 
-#files_dashboard_upload_file_text_button {
+.files_dashboard_upload_file_text_button {
     background-color:#296CF6;
     /* background-color: #F1F1F1; */
     border: 2px solid #296CF6;
-    border-radius: 8px;
+    border-radius: 4px;
     /* color: black; */
     color: white;
     /* color: #296CF6; */

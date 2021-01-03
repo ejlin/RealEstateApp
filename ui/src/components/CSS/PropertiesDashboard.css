@@ -6,9 +6,11 @@
     width: calc(100% - 220px - 20%);
 }
 
-#properties_dashboard_title_box {
+.properties_dashboard_inner_box {
     margin-left: 60px;
+    margin-right: 60px;
     margin-top: 80px;
+    width: calc((100% - 60px - 60px));
 }
 
 #properties_dashboard_title_box_title {
@@ -22,17 +24,16 @@
     background-color: #296CF6;
 }
 
-#properties_dashboard_search_bar {
+.properties_dashboard_search_bar {
     border: 1px solid #d3d3d3;
     border-radius: 4px;
     float: right;
     font-size: 1.1em;
-    margin-right: 60px;
     padding: 7.5px 15px 7.5px 15px;
     width: 500px;
 }
 
-#properties_dashboard_search_bar:focus {
+.properties_dashboard_search_bar:focus {
     outline: none;
 }
 
@@ -182,4 +183,141 @@
 
 #piechart {
     background-color: #6532cd;
+}
+
+.properties_dashboard_buttons_box {
+    float: left;
+    height: 40px;
+    margin-bottom: 0px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.properties_dashboard_add_property_button {
+    background-color: #296CF6;
+    border: 2px solid #296CF6;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    float: right;
+    font-weight: bold;
+    height: 20px;
+    line-height: 20px;
+    padding: 7.5px 15px 7.5px 15px;
+    text-align: center;
+    transition: 0.3s;
+    user-select: none;
+}
+
+.properties_dashboard_active_property_box {
+    background-color: white;
+    border-radius: 4px;
+    height: 500px;
+    margin-bottom: 25px;
+    margin-top: 25px;
+    width: 100%;
+}
+
+.properties_dashboard_active_property_box_left_box {
+    float: left;
+    height: 300px;
+    width: 325px;
+}
+
+.properties_dashboard_active_property_box_left_box_title {
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-bottom: 15px;
+    margin-left: 30px;
+    margin-top: 25px;
+}
+
+.properties_dashboard_active_property_box_left_box_subtitle {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-left: 30px;
+}
+
+.properties_dashboard_active_property_box_divider {
+    background-color: black;
+    float: left;
+    margin-top: 30px;
+    height: 440px;
+    width: 1px;
+}
+
+.properties_dashboard_active_property_box_right_box {
+    float: right;
+    height: 300px;
+    width: calc((100% - 325px - 1px));
+}
+
+.properties_dashboard_active_property_box_right_box_title_box {
+    height: 30px;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-top: 25px;
+    width: calc((100% - 60px));
+}
+
+.properties_dashboard_active_property_box_right_box_title_box_icon {
+    color: #296CF6;
+    cursor: pointer;
+    float: right;
+    height: 30px;
+    transition: 0.5s;
+    width: 30px;
+}
+
+.properties_dashboard_active_property_box_right_box_title_box_icon:hover {
+    opacity: 0.7;
+}
+
+.properties_dashboard_active_property_box_right_box_inner_box {
+    height: calc(300px - 30px - 25px - 10px - 15px);
+    width: 100%;
+}
+
+.properties_dashboard_active_property_box_right_box_inner_box_navbar_box {
+    float: left;
+    height: calc(300px - 30px - 25px - 10px - 15px);
+    margin-left: 15px;
+    width: 35px;
+}
+
+.properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon {
+    color: #296CF6;
+    cursor: pointer;
+    height: 25px;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    transition: 0.5s;
+    width: 25px;
+}
+
+.properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon:hover {
+    opacity: 0.7;
+}
+
+.properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon_active {
+    background-color: #296CF6;
+    border-radius: 4px;
+    color: white;
+}
+
+.properties_dashboard_active_property_box_right_box_inner_box_view_box {
+    float: left;
+    height: 225px;
+    margin-left: 20px;
+    margin-right: 30px;
+    width: calc(100% - 50px - 20px - 30px);
+}
+
+.active_property_view_title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-left: 10px;
 }

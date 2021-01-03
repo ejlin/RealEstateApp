@@ -8,6 +8,27 @@ import PropertyCard from './PropertyCard.js';
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 
+import { GoFileDirectory } from 'react-icons/go';
+import { SiGoogleanalytics } from 'react-icons/si';
+import { FaMoneyCheck } from 'react-icons/fa';
+import { MdDashboard  } from 'react-icons/md';
+import { 
+    IoOpenOutline, 
+    IoCloseOutline, 
+    IoCalendarSharp, 
+    IoBedSharp , 
+    IoWaterSharp, 
+    IoTrailSignSharp, 
+    IoBookmarkSharp,
+    IoFolderSharp,
+    IoWalletSharp,
+    IoReaderSharp,
+    IoPersonSharp} from 'react-icons/io5';
+
+const overview = "overview";
+const analysis = "analysis";
+const files = "files";
+const expenses = "expenses";
 
 class PropertiesDashboard extends React.Component {
     
@@ -28,11 +49,16 @@ class PropertiesDashboard extends React.Component {
             tags: ['SFH', 'Manufactured', 'Condo/Op', 'Multi-Family', 'Apartment', 'Lot/Land', 'Townhome', 'Commercial'],
             tagsToToggledMap: [],
             propertiesMap: [],
+            activePropertyID: "",
+            activeProperty: null,
+            activePropertyView: overview,
             isLoading: true
         };
         this.numberWithCommas = this.numberWithCommas.bind(this);
         this.removePropertyFromState = this.removePropertyFromState.bind(this);
         this.handleTagsListClick = this.handleTagsListClick.bind(this);
+        this.setActiveProperty = this.setActiveProperty.bind(this);
+        this.renderActivePropertyView = this.renderActivePropertyView.bind(this);
     }
 
     componentDidMount() {
@@ -59,8 +85,8 @@ class PropertiesDashboard extends React.Component {
                 totalRent += property["price_rented"];
                 propMap[property["property_type"]].push(property);
 
-                if (property["price_estimate"] && property["price_estimate"] !== 0.00) { 
-                    totalEstimateWorth += property["price_estimate"];
+                if (property["estimate"] && property["estimate"] !== 0.00) { 
+                    totalEstimateWorth += property["estimate"];
                 } else {
                     totalEstimateWorth += property["price_bought"];
                     missingEstimate = true;
@@ -73,10 +99,13 @@ class PropertiesDashboard extends React.Component {
                         <PropertyCard removePropertyFromState = {
                                 this.removePropertyFromState
                             }
+                            setActiveProperty = {
+                                this.setActiveProperty
+                            }
                             data={{
                             state: {
                                 user: this.state.user,
-                                property_details: property,
+                                property_details: property
                             }                       
                         }}/>
                     </div>                
@@ -203,6 +232,208 @@ class PropertiesDashboard extends React.Component {
         return;
     }
 
+    setActiveProperty(propertyID) {
+        axios({
+            method: 'get',
+            url: 'api/property/' + propertyID,
+        }).then(response => {
+            this.setState({
+                activeProperty: response.data
+            })
+        }).catch(error => {
+            console.log(error);
+        });
+        this.setState({
+            activePropertyID: propertyID
+        });
+    }
+
+    renderActivePropertyView() {
+        switch(this.state.activePropertyView) {
+            case overview:
+                return (
+                    <div>
+                        <p className="active_property_view_title">
+                            Overview
+                        </p>
+
+                    </div>
+                );
+            case analysis:
+                return (
+                    <div>
+                        <p className="active_property_view_title">
+                            Analysis
+                        </p>
+                    </div>
+                );
+            case files:
+                return (
+                    <div>
+                        <p className="active_property_view_title">
+                            Files
+                        </p>
+                    </div>
+                );
+            case expenses:
+                return (
+                    <div>
+                        <p className="active_property_view_title">
+                            Expenses
+                        </p>
+                    </div>
+                );
+        }
+    }
+
+    renderActiveProperty() {
+        if (this.state.activePropertyID !== "" && this.state.activeProperty) {
+            return (
+                <div key={this.state.activePropertyID} className="properties_dashboard_active_property_box">
+                    <div className="properties_dashboard_active_property_box_left_box">
+                        <p className="properties_dashboard_active_property_box_left_box_title">
+                            ${this.numberWithCommas(this.state.activeProperty["estimate"])}
+                        </p>
+                        <p className="properties_dashboard_active_property_box_left_box_subtitle">
+                            {this.state.activeProperty["address"]}
+                        </p>
+                        <p className="properties_dashboard_active_property_box_left_box_subtitle">
+                            {this.state.activeProperty["state"]}, {this.state.activeProperty["zip_code"]}
+                        </p>
+                        <div className="property_card_box_info_box">
+                            <div className="property_card_box_info_box_first_row">
+                                <div className="property_card_box_info_box_first_row_first_element">
+                                    <IoBedSharp className="property_card_box_info_box_icon"></IoBedSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        {this.state.activeProperty["num_beds"]} {this.state.activeProperty["num_beds"] > 1 ? "beds" : "bed"}
+                                    </p>
+                                </div>
+                                <div className="property_card_box_info_box_first_row_second_element">
+                                    <IoWaterSharp className="property_card_box_info_box_icon"></IoWaterSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        {this.state.activeProperty["num_baths"]} {this.state.activeProperty["num_baths"] > 1 ? "baths" : "bath"}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="property_card_box_info_box_second_row">
+                                <div className="property_card_box_info_box_first_row_first_element">
+                                    <IoTrailSignSharp className="property_card_box_info_box_icon"></IoTrailSignSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        {this.state.activeProperty["num_units"]} {this.state.activeProperty["num_units"] > 1 ? "units" : "unit"}
+                                    </p>
+                                </div>
+                                <div className="property_card_box_info_box_first_row_second_element">
+                                    <IoBookmarkSharp className="property_card_box_info_box_icon"></IoBookmarkSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        {this.numberWithCommas(this.state.activeProperty["square_footage"])} sq ft
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="property_card_box_info_box_second_row">
+                                <div className="property_card_box_info_box_first_row_first_element">
+                                    <IoWalletSharp title="rent per month" alt="rent per month" className="property_card_box_info_box_icon"></IoWalletSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        ${this.numberWithCommas(this.state.activeProperty["price_rented"])}/mo
+                                    </p>
+                                </div>
+                                <div className="property_card_box_info_box_first_row_second_element">
+                                    <IoReaderSharp className="property_card_box_info_box_icon"></IoReaderSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        ${this.numberWithCommas(this.state.activeProperty["price_mortgage"])}/mo
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="property_card_box_info_box_second_row">
+                                <div className="property_card_box_info_box_last_row_first_element">
+                                    <IoPersonSharp className="property_card_box_info_box_icon"></IoPersonSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        Property Manager ${this.state.activeProperty["price_property_manager"] * this.state.activeProperty["price_rented"] / 100.0}/mo
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="property_card_box_info_box_second_row">
+                                <div className="property_card_box_info_box_last_row_first_element">
+                                    <IoCalendarSharp className="property_card_box_info_box_icon"></IoCalendarSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        Purchased {this.state.activeProperty["bought_date"]}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="properties_dashboard_active_property_box_divider">
+                    </div>
+                    <div className="properties_dashboard_active_property_box_right_box">
+                        <div className="properties_dashboard_active_property_box_right_box_title_box">
+                            <IoCloseOutline 
+                                onMouseDown={() => {
+                                    this.setState({
+                                        activePropertyID: "",
+                                        activeProperty: null,
+                                    })
+                                }}
+                                className="properties_dashboard_active_property_box_right_box_title_box_icon"></IoCloseOutline>
+                        </div>
+                        <div className="properties_dashboard_active_property_box_right_box_inner_box">
+                            <div className="properties_dashboard_active_property_box_right_box_inner_box_navbar_box">
+                                <MdDashboard 
+                                    onMouseDown={() => {
+                                        this.setState({
+                                            activePropertyView: overview
+                                        })
+                                    }}
+                                    className={
+                                        this.state.activePropertyView === overview ? 
+                                        "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon_active" :
+                                        "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon"}
+                                    ></MdDashboard>
+                                <SiGoogleanalytics 
+                                    onMouseDown={() => {
+                                        this.setState({
+                                            activePropertyView: analysis
+                                        })
+                                    }}
+                                    className={
+                                        this.state.activePropertyView === analysis ? 
+                                        "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon_active" :
+                                        "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon"}
+                                    ></SiGoogleanalytics>
+                                <GoFileDirectory 
+                                    onMouseDown={() => {
+                                        this.setState({
+                                            activePropertyView: files
+                                        })
+                                    }}
+                                    className={
+                                        this.state.activePropertyView === files ? 
+                                        "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon_active" :
+                                        "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon"}
+                                    ></GoFileDirectory>
+                                <FaMoneyCheck 
+                                    onMouseDown={() => {
+                                        this.setState({
+                                            activePropertyView: expenses
+                                        })
+                                    }}
+                                    className={
+                                        this.state.activePropertyView === expenses ? 
+                                        "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon_active" :
+                                        "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon"}
+                                    ></FaMoneyCheck>
+                            </div>
+                            <div className="properties_dashboard_active_property_box_right_box_inner_box_view_box">
+                                {this.renderActivePropertyView()}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        return (
+            <div></div>
+        )
+    }
+
     render() {
         return (
             <div>
@@ -219,14 +450,22 @@ class PropertiesDashboard extends React.Component {
                     {this.state.isLoading ? <div></div> : 
                     <div>
                         <div className="properties_dashboard_property_type_box">
-                            <div id="properties_dashboard_title_box">
-                                <p id="properties_dashboard_title_box_title">
-                                    Properties
-                                </p>
-                                <input id="properties_dashboard_search_bar" placeholder="Search...">
-                                </input>
-                            </div>
-                            <div className="clearfix"/>
+                            <div className="properties_dashboard_inner_box">
+                                <div id="properties_dashboard_title_box">
+                                    <p id="properties_dashboard_title_box_title">
+                                        Properties
+                                    </p>
+                                    <input className="properties_dashboard_search_bar" placeholder="Search...">
+                                    </input>
+                                </div>
+                                <div className="clearfix"/>
+                                <div className="properties_dashboard_buttons_box">
+                                    <div className="properties_dashboard_add_property_button">
+                                        New Property
+                                    </div>
+                                </div> 
+                                <div className="clearfix"/>
+                                {this.renderActiveProperty()}
                             {/* <div id="properties_dashboard_tags_box">
                                 <button value="Single Family Homes" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
                                     Single Family Homes
@@ -253,7 +492,6 @@ class PropertiesDashboard extends React.Component {
                                     Commercial
                                 </button>
                             </div> */}
-                            <div id="properties_dashboard_property_parent_box">
                                 <div id="properties_dashboard_property_inner_box">
                                     {this.state.sfhProperties}
                                 </div>

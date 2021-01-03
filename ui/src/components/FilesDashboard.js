@@ -966,7 +966,7 @@ class FilesDashboard extends React.Component {
                                 </div> : 
                                 <div></div>
                             }
-                            <div id="files_dashboard_upload_file_text_button" onClick={() => this.setState({displayUploadFileBox: true})}>Add File</div>
+                            <div className="files_dashboard_upload_file_text_button" onClick={() => this.setState({displayUploadFileBox: true})}>Add File</div>
                             {this.state.activeFiles.size >= 1 ?
                                 <IoMdTrash id="trash_file_icon" className="files_dashboard_icons" onClick={() => this.deleteActiveFiles()}></IoMdTrash> : 
                                 <div></div>}

@@ -25,7 +25,7 @@
 
 .analysis_dashboard_inner_box_top_cards_box_element {
     background-color:  #296CF6;
-    border-radius: 8px;
+    border-radius: 4px;
     float: left;
     height: 100px;
     margin-right: 25px;
@@ -45,7 +45,7 @@
 
 .analysis_dashboard_inner_box_middle_cards_left {
     background-color: white;
-    border-radius: 8px;
+    border-radius: 4px;
     float: left;
     height: 435px;
     width: calc((3 * (100% - 75px) / 4) + 50px);
@@ -58,7 +58,7 @@
 
 .analysis_dashboard_inner_box_middle_cards_right_element_box {
     background-color: white;
-    border-radius: 8px;
+    border-radius: 4px;
     height: 125px;
     margin-bottom: 30px;
     position: relative;
