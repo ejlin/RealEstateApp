@@ -25,6 +25,7 @@ class PropertyCard extends React.Component {
 
         this.state = {
             user: this.props.data.state.user,
+            isFirstChild: this.props.data.state.isFirstChild,
             property: this.props.data.state.property_details,
             isLoading: true
         };
@@ -257,7 +258,10 @@ class PropertyCard extends React.Component {
         return (
             <div>
                 { this.state.isLoading ? <div></div> : 
-                    <div className="property_card_box">
+                    <div className={
+                        this.state.isFirstChild ? 
+                        "property_card_box property_card_box_first_child" :
+                        "property_card_box"}>
                         <div className="property_box_title_box">
                             <p className="property_card_box_title">
                                 ${this.numberWithCommas(this.state.property["estimate"])}

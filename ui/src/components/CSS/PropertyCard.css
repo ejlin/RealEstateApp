@@ -4,9 +4,13 @@
     float: left;
     height: 250px;
     margin-bottom: 25px;
-    margin-right: max(calc((100% - 975px) / 2), 15px);    /* 100% - 4 cards at 250px width each, 3 spacings in between them) */
+    margin-left: max(calc((100% - 975px) / 2), 15px);    /* 100% - 4 cards at 250px width each, 3 spacings in between them) */
     min-width: 325px;
     width: 325px;
+}
+
+.property_card_box_first_child {
+    margin-left: 0px;
 }
 
 .property_box_title_box {

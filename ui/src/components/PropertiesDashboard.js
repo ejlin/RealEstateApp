@@ -11,10 +11,12 @@ import NotificationSidebar from './NotificationSidebar.js';
 
 import { mapFileTypeToIcon, openSignedURL } from './FilesDashboard.js';
 
+import { Link, Redirect } from 'react-router-dom';
+
 import { GoFileDirectory } from 'react-icons/go';
 import { SiGoogleanalytics } from 'react-icons/si';
 import { FaMoneyCheck } from 'react-icons/fa';
-import { MdDashboard  } from 'react-icons/md';
+import { MdDashboard, MdEdit  } from 'react-icons/md';
 import { 
     IoOpenOutline, 
     IoCloseOutline, 
@@ -26,7 +28,8 @@ import {
     IoFolderSharp,
     IoWalletSharp,
     IoReaderSharp,
-    IoPersonSharp} from 'react-icons/io5';
+    IoPersonSharp,
+    IoTrashSharp} from 'react-icons/io5';
 
 const overview = "overview";
 const analysis = "analysis";
@@ -41,17 +44,8 @@ class PropertiesDashboard extends React.Component {
         this.state = {
             user: this.props.location.state.user,
             profilePicture: this.props.location.state.profilePicture,
-            sfhProperties: [],
-            manufacturedProperties: [],
-            condoOpsProperties: [],
-            multiFamilyProperties: [],
-            apartmentProperties: [],
-            lotLandProperties: [],
-            townhomeProperties: [],
-            commercialProperties: [],
             tags: ['SFH', 'Manufactured', 'Condo/Op', 'Multi-Family', 'Apartment', 'Lot/Land', 'Townhome', 'Commercial'],
-            tagsToToggledMap: [],
-            propertiesMap: [],
+            propertiesMap: new Map(),
             activePropertyID: "",
             activeProperty: null,
             activePropertyView: overview,
@@ -62,6 +56,7 @@ class PropertiesDashboard extends React.Component {
         this.numberWithCommas = this.numberWithCommas.bind(this);
         this.removePropertyFromState = this.removePropertyFromState.bind(this);
         this.handleTagsListClick = this.handleTagsListClick.bind(this);
+        this.renderProperties = this.renderProperties.bind(this);
         this.setActiveProperty = this.setActiveProperty.bind(this);
         this.renderActivePropertyView = this.renderActivePropertyView.bind(this);
         this.renderActivePropertyFiles = this.renderActivePropertyFiles.bind(this);
@@ -99,26 +94,23 @@ class PropertiesDashboard extends React.Component {
                 }
             }
 
+            var propertiesMap = new Map();
+            for (var i = 0; i < properties.length; i++) {
+                let property = properties[i];
+                let propertyType = property["property_type"];
+
+                if (!propertiesMap.has(propertyType)) {
+                    propertiesMap.set(propertyType, []);
+                }
+                var propertiesTypeArr = propertiesMap.get(propertyType);
+                propertiesTypeArr.push(property);
+                propertiesMap.set(propertyType, propertiesTypeArr);
+            }
+
             this.setState({
-                sfhProperties: propMap['SFH'].map((property, i) =>
-                    <div key={i}>
-                        <PropertyCard removePropertyFromState = {
-                                this.removePropertyFromState
-                            }
-                            setActiveProperty = {
-                                this.setActiveProperty
-                            }
-                            data={{
-                            state: {
-                                user: this.state.user,
-                                property_details: property
-                            }                       
-                        }}/>
-                    </div>                
-                ),
+                propertiesMap: [...propertiesMap],
                 totalNetWorth: this.numberWithCommas(totalNetWorth),
                 totalRent: this.numberWithCommas(totalRent),
-                propertiesMap: propMap,
                 totalProperties: properties.length,
                 totalEstimateWorth: this.numberWithCommas(totalEstimateWorth),
                 missingEstimate: missingEstimate,
@@ -332,6 +324,36 @@ class PropertiesDashboard extends React.Component {
         }
     }
 
+    renderProperties() {
+        var elements = [];
+        var propertiesMap = this.state.propertiesMap;
+        var isFirstChild = true;
+        propertiesMap.forEach((value, key, map) => {
+            let propertyArr = value[1];
+            for (var i = 0; i < propertyArr.length; i++) {
+                let property = propertyArr[i];
+                elements.push(
+                    <PropertyCard key={property["name"]}
+                        removePropertyFromState = {
+                            this.removePropertyFromState
+                        }
+                        setActiveProperty = {
+                            this.setActiveProperty
+                        }
+                        data={{
+                        state: {
+                            user: this.state.user,
+                            isFirstChild: isFirstChild,
+                            property_details: property
+                        }                       
+                    }}/>
+                );
+                isFirstChild = false;
+            }
+        });
+        return elements;
+    }
+    
     renderActiveProperty() {
         if (this.state.activePropertyID !== "" && this.state.activeProperty) {
             return (
@@ -406,6 +428,13 @@ class PropertiesDashboard extends React.Component {
                                     <p className="property_card_box_info_box_text">
                                         Purchased {this.state.activeProperty["bought_date"]}
                                     </p>
+                                </div>
+                            </div>
+                            <div className="clearfix"/>
+                            <div className="properties_dashboard_active_property_icon_box">
+                                <div>
+                                    <MdEdit className="properties_dashboard_active_property_icon"></MdEdit>
+                                    <IoTrashSharp className="properties_dashboard_active_property_icon"></IoTrashSharp>
                                 </div>
                             </div>
                         </div>
@@ -518,9 +547,19 @@ class PropertiesDashboard extends React.Component {
                                 </div>
                                 <div className="clearfix"/>
                                 <div className="properties_dashboard_buttons_box">
-                                    <div className="properties_dashboard_add_property_button">
-                                        New Property
-                                    </div>
+                                    <Link to={{
+                                        pathname: "/addproperty",
+                                        state: {
+                                            user: this.state.user,
+                                            totalEstimateWorth: this.state.totalEstimateWorth,
+                                            missingEstimate: this.state.missingEstimate,
+                                            profilePicture: this.state.profilePicture
+                                        }
+                                    }}>
+                                        <div className="properties_dashboard_add_property_button">
+                                            New Property
+                                        </div>
+                                    </Link>
                                 </div> 
                                 <div className="clearfix"/>
                                 {this.renderActiveProperty()}
@@ -551,7 +590,7 @@ class PropertiesDashboard extends React.Component {
                                 </button>
                             </div> */}
                                 <div id="properties_dashboard_property_inner_box">
-                                    {this.state.sfhProperties}
+                                    {this.renderProperties()}
                                 </div>
                             </div>
                         </div>

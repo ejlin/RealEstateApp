@@ -321,3 +321,31 @@
     font-weight: bold;
     margin-left: 10px;
 }
+
+.properties_dashboard_active_property_icon_box {
+    margin-left: calc((100% - 99px)/2);
+    margin-right: calc((100% - 99px)/2);
+    margin-top: 25px;
+    width: calc(99px); /* 25px + 25px + 15px + 15px + 15px + 2px + 2px */
+}
+
+.properties_dashboard_active_property_icon {
+    border: 1px solid #296CF6;
+    border-radius: 50px;
+    color: #296CF6;
+    cursor: pointer;
+    height: 25px;
+    margin-right: 15px;
+    padding: 7.5px;
+    transition: 0.5s;
+    width: 25px;
+}
+
+.properties_dashboard_active_property_icon:hover {
+    background-color: #296CF6;
+    color: white;
+}
+
+.properties_dashboard_active_property_icon:last-child {
+    margin-right: 0px;
+}
