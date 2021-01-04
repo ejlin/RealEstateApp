@@ -20,7 +20,7 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import { GoFileDirectory } from 'react-icons/go';
 import { SiGoogleanalytics } from 'react-icons/si';
 import { FaMoneyCheck } from 'react-icons/fa';
-import { MdDashboard, MdEdit  } from 'react-icons/md';
+import { MdDashboard, MdEdit, MdError  } from 'react-icons/md';
 import { 
     IoOpenOutline, 
     IoCloseOutline, 
@@ -63,6 +63,7 @@ class PropertiesDashboard extends React.Component {
         this.setActiveProperty = this.setActiveProperty.bind(this);
         this.renderActivePropertyView = this.renderActivePropertyView.bind(this);
         this.renderActivePropertyFiles = this.renderActivePropertyFiles.bind(this);
+        this.renderActivePropertyExpenses = this.renderActivePropertyExpenses.bind(this);
         this.getARR = this.getARR.bind(this);
         this.getLTVRatio = this.getLTVRatio.bind(this);
         this.getDTIRatio = this.getDTIRatio.bind(this);
@@ -326,6 +327,25 @@ class PropertiesDashboard extends React.Component {
         return elements;
     }
 
+    renderActivePropertyExpenses() {
+        var elements = [];
+        var expenses = this.state.activePropertyExpenses;
+        if (expenses.length === 0) {
+            return (
+                <div className="active_property_expenses_box">
+                    <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
+                        <MdError className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></MdError>
+                        <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
+                            No Expenses to show
+                        </p>
+                    </div>
+                </div>
+            );
+        } else {
+            // TODO: render expenses card.
+        }
+    }
+
     renderActivePropertyView() {
         switch(this.state.activePropertyView) {
             case overview:
@@ -511,6 +531,7 @@ class PropertiesDashboard extends React.Component {
                             Expenses
                         </p>
                         <div className="clearfix"/>
+                        {this.renderActivePropertyExpenses()}
                     </div>
                 );
         }
@@ -659,7 +680,6 @@ class PropertiesDashboard extends React.Component {
                                         url: 'api/user/files/' + this.state.user["id"] + '/' + this.state.activePropertyID,
                                         method: 'get'
                                     }).then(response => {
-                                        console.log(response.data);
                                         this.setState({
                                             activePropertyFiles: response.data,
                                             activePropertyView: files
@@ -675,9 +695,16 @@ class PropertiesDashboard extends React.Component {
                                 ></GoFileDirectory>
                             <FaMoneyCheck 
                                 onMouseDown={() => {
-                                    this.setState({
-                                        activePropertyView: expenses
+                                    axios({
+                                        url: '/api/user/expenses/' + this.state.user["id"] + '/' + this.state.activePropertyID,
+                                        method: 'get'
+                                    }).then(response => {
+                                        this.setState({
+                                            activePropertyExpenses: response.data,
+                                            activePropertyView: expenses
+                                        })
                                     })
+                                    
                                 }}
                                 className={
                                     this.state.activePropertyView === expenses ? 

@@ -523,3 +523,9 @@
 .active_property_view_box_right_box_bottom_box_element {
     height: calc(240px / 5);
 }
+
+.active_property_expenses_box {
+    height: 200px;
+    margin-top: 25px;
+    width: 100%;
+}

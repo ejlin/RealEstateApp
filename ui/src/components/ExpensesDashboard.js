@@ -20,6 +20,7 @@ class ExpensesDashboard extends React.Component {
             totalEstimateWorth: this.props.location.state.totalEstimateWorth,
             missingEstimate: this.props.location.state.missingEstimate,
             propertiesMap: null,
+            displayAddExpense: false,
             isLoading: true
         };
 
@@ -125,12 +126,23 @@ class ExpensesDashboard extends React.Component {
                         </div>
                         <div className="expenses_dashboard_body_box">
                             <div className="expenses_dashboard_buttons_box">
-                                <div className="expenses_dashboard_add_expense_button">
+                                <div 
+                                    onClick={() => {
+                                        this.setState({
+                                            displayAddExpense: true
+                                        })
+                                    }}
+                                    className="expenses_dashboard_add_expense_button">
                                     Add Expense
                                 </div>
                             </div>
                             {this.state.isLoading ? <div></div> : 
                             <div className="expenses_dashboard_body_inner_box">
+                                {this.state.displayAddExpense ?
+                                <div className="expenses_dashboard_display_add_expense_box">
+
+                                </div> :
+                                <div></div>}
                                 <div className="expenses_dashboard_body_inner_box_most_recent_box">
                                     <p className="expenses_dashboard_body_inner_box_title">
                                         Most Recent

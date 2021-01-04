@@ -42,6 +42,11 @@ func (s *Server) HandleRoutes() {
 	// Analysis Flow
 	r.HandleFunc("/api/user/analysis/{id}", s.getPropertiesAnalysis).Methods("GET")
 
+	// Expenses Flow
+	r.HandleFunc("/api/user/expenses/{id}/{property_id}", s.getExpensesByProperty).Methods("GET")
+	r.HandleFunc("/api/user/expenses/{id}", s.getExpensesByUser).Methods("GET")
+	r.HandleFunc("/api/user/expenses/{id}/{property_id}", s.addExpensesByProperty).Methods("POST")
+
 	// User Settings Flow
 	r.HandleFunc("/api/user/settings/profile/{id}", s.updateSettingsProfile).Methods("PUT")
 	r.HandleFunc("/api/user/settings/preferences/{id}", s.getSettings).Methods("GET")

@@ -89,7 +89,6 @@
 }
 
 .expenses_dashboard_body_inner_box_no_expenses_inner_box {
-    background-color: white;
     border-radius: 8px;
     height: 200px;
     margin-bottom: 40px;
@@ -102,11 +101,11 @@
 .expenses_dashboard_body_inner_box_no_expenses_inner_box_icon {
     color: grey;
     float: left;
-    height: 30px;
-    left: calc(50% - 100px - 30px);
+    height: 25px;
+    left: calc(50% - 100px - 25px);
     margin-top: 75px;
     position: absolute;
-    width: 30px;
+    width: 25px;
 }
 
 .expenses_dashboard_body_inner_box_no_expenses_inner_box_text {
@@ -116,4 +115,12 @@
     margin-top: 75px;
     text-align: center;
     width: 200px;
+}
+
+.expenses_dashboard_display_add_expense_box {
+    background-color: white;
+    border-radius: 4px;
+    height: 200px;
+    margin-bottom: 25px;
+    width: 100%;
 }

@@ -1,5 +1,13 @@
 package db
 
+import (
+	"errors"
+	"fmt"
+	"time"
+
+	"github.com/google/uuid"
+)
+
 type Expense struct {
 	ID        string     `json:"id",sql:"type:uuid; primary key"`
 	OwnerID string `json:"owner_id",sql:"type:uuid; foreign key"`
@@ -43,6 +51,20 @@ func (handle *Handle) GetExpenseByID(expenseID string) (*Expense, error) {
 	return &expense, nil
 }
 
+func (handle *Handle) GetExpensesByProperty(userID, propertyID string) ([]*Expense, error) {
+
+	_, err := uuid.Parse(userID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid UUID: %w", err)
+	}
+
+	var expenses []*Expense
+	if err := handle.DB.Where("user_id = ? AND property_id = ?", userID, propertyID).Find(&expenses).Error; err != nil {
+		return nil, err
+	}
+	return expenses, nil
+}
+
 // GetExpensesByOwner will fetch all properties associated with a user.
 func (handle *Handle) GetExpensesByOwner(userID string) ([]*Expense, error) {
 
@@ -73,7 +95,7 @@ func (handle *Handle) RemoveExpenseByID(ownerID, expenseID string) error {
 		return fmt.Errorf("invalid UUID: %w", err)
 	}
 
-	expense := expense{
+	expense := Expense{
 		ID: expenseID,
 	}
 
