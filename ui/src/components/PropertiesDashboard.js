@@ -31,7 +31,6 @@ import {
     IoPersonSharp,
     IoTrashSharp} from 'react-icons/io5';
 
-const overview = "overview";
 const analysis = "analysis";
 const files = "files";
 const expenses = "expenses";
@@ -48,7 +47,7 @@ class PropertiesDashboard extends React.Component {
             propertiesMap: new Map(),
             activePropertyID: "",
             activeProperty: null,
-            activePropertyView: overview,
+            activePropertyView: analysis,
             activeFiles: [],
             isLoading: true
         };
@@ -258,7 +257,7 @@ class PropertiesDashboard extends React.Component {
             this.setState({
                 activePropertyID: propertyID,
                 activeProperty: response.data,
-                activePropertyView: overview,
+                activePropertyView: analysis,
                 isLoadingActiveProperty: false
             })
         }).catch(error => {
@@ -276,6 +275,7 @@ class PropertiesDashboard extends React.Component {
                     state: {
                         user: this.state.user,
                         file: file,
+                        backgroundColor: "grey",
                         setActiveFileAttributes: this.setActiveFileAttributes,
                         openSignedURL: openSignedURL, 
                         mapFileTypeToIcon: mapFileTypeToIcon
@@ -288,20 +288,15 @@ class PropertiesDashboard extends React.Component {
 
     renderActivePropertyView() {
         switch(this.state.activePropertyView) {
-            case overview:
-                return (
-                    <div>
-                        <p className="active_property_view_title">
-                            Overview
-                        </p>
-                    </div>
-                );
             case analysis:
                 return (
                     <div>
                         <p className="active_property_view_title">
                             Analysis
                         </p>
+                        <div className="active_property_view_box">
+                        
+                        </div>
                     </div>
                 );
             case files:
@@ -358,17 +353,146 @@ class PropertiesDashboard extends React.Component {
         if (this.state.activePropertyID !== "" && this.state.activeProperty) {
             return (
                 <div key={this.state.activePropertyID} className="properties_dashboard_active_property_box">
-                    <div className="properties_dashboard_active_property_box_left_box">
-                        <p className="properties_dashboard_active_property_box_left_box_title">
-                            ${this.numberWithCommas(this.state.activeProperty["estimate"])}
-                        </p>
-                        <p className="properties_dashboard_active_property_box_left_box_subtitle">
-                            {this.state.activeProperty["address"]}
-                        </p>
-                        <p className="properties_dashboard_active_property_box_left_box_subtitle">
-                            {this.state.activeProperty["state"]}, {this.state.activeProperty["zip_code"]}
-                        </p>
-                        <div className="property_card_box_info_box">
+                    <div className="properties_dashboard_active_property_box_top_box">
+                        <div className="properties_dashboard_active_property_box_top_box_left_box">
+                            <p className="properties_dashboard_active_property_box_top_box_title">
+                                ${this.numberWithCommas(this.state.activeProperty["estimate"])}
+                            </p>
+                            <p className="properties_dashboard_active_property_box_top_box_subtitle">
+                                {this.state.activeProperty["address"]}
+                            </p>
+                            <p className="properties_dashboard_active_property_box_top_box_subtitle">
+                                {this.state.activeProperty["state"]}, {this.state.activeProperty["zip_code"]}
+                            </p>
+                        </div>
+                        <div className="properties_dashboard_active_property_box_info_box">
+                            <div className="properties_dashboard_active_property_box_top_box_left_box_second_box">
+                                <div className="properties_dashboard_active_property_box_top_box_element">
+                                    <IoBedSharp className="property_card_box_info_box_icon"></IoBedSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        {this.state.activeProperty["num_beds"]} {this.state.activeProperty["num_beds"] > 1 ? "beds" : "bed"}
+                                    </p>
+                                </div>
+                                <div className="clearfix"/>
+                                <div className="properties_dashboard_active_property_box_top_box_second_element">
+                                    <IoWaterSharp className="property_card_box_info_box_icon"></IoWaterSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        {this.state.activeProperty["num_baths"]} {this.state.activeProperty["num_baths"] > 1 ? "baths" : "bath"}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="properties_dashboard_active_property_box_top_box_left_box_second_box">
+                                <div className="properties_dashboard_active_property_box_top_box_element">
+                                    <IoTrailSignSharp className="property_card_box_info_box_icon"></IoTrailSignSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        {this.state.activeProperty["num_units"]} {this.state.activeProperty["num_units"] > 1 ? "units" : "unit"}
+                                    </p>
+                                </div>
+                                <div className="clearfix"/>
+                                <div className="properties_dashboard_active_property_box_top_box_second_element">
+                                    <IoBookmarkSharp className="property_card_box_info_box_icon"></IoBookmarkSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        {this.numberWithCommas(this.state.activeProperty["square_footage"])} sq ft
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="properties_dashboard_active_property_box_top_box_left_box_second_box">
+                                <div className="properties_dashboard_active_property_box_top_box_element">
+                                    <IoWalletSharp title="rent per month" alt="rent per month" className="property_card_box_info_box_icon"></IoWalletSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        ${this.numberWithCommas(this.state.activeProperty["price_rented"])}/mo
+                                    </p>
+                                </div>
+                                <div className="clearfix"/>
+                                <div className="properties_dashboard_active_property_box_top_box_second_element">
+                                    <IoReaderSharp className="property_card_box_info_box_icon"></IoReaderSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        ${this.numberWithCommas(this.state.activeProperty["price_mortgage"])}/mo
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="properties_dashboard_active_property_box_top_box_left_box_second_box properties_dashboard_active_property_box_top_box_left_box_second_box_last_child">
+                                <div className="properties_dashboard_active_property_box_top_box_element">
+                                    <IoPersonSharp className="property_card_box_info_box_icon"></IoPersonSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        Management ${
+                                        this.state.activeProperty["price_property_manager"] && this.state.activeProperty["price_rented"] ?
+                                        this.state.activeProperty["price_property_manager"] * this.state.activeProperty["price_rented"] / 100.00 :
+                                        "-"}/mo
+                                    </p>
+                                </div>
+                                <div className="clearfix"/>
+                                <div className="properties_dashboard_active_property_box_top_box_second_element">
+                                    <IoCalendarSharp className="property_card_box_info_box_icon"></IoCalendarSharp>
+                                    <p className="property_card_box_info_box_text">
+                                        Purchased {this.state.activeProperty["bought_date"]}
+                                    </p>
+                                </div>
+                            </div>
+                            <div>
+                                <IoCloseOutline 
+                                    onMouseDown={() => {
+                                        this.setState({
+                                            activePropertyID: "",
+                                            activeProperty: null,
+                                        })
+                                    }}
+                                    className="properties_dashboard_active_property_box_right_box_title_box_icon"></IoCloseOutline>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="properties_dashboard_active_property_box_top_divider">
+                    </div>
+                    <div className="properties_dashboard_active_property_box_bottom_box">
+                        <div className="properties_dashboard_active_property_box_right_box_inner_box_navbar_box">
+                            <SiGoogleanalytics 
+                                onMouseDown={() => {
+                                    this.setState({
+                                        activePropertyView: analysis
+                                    })
+                                }}
+                                className={
+                                    this.state.activePropertyView === analysis ? 
+                                    "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon_active" :
+                                    "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon"}
+                                ></SiGoogleanalytics>
+                            <GoFileDirectory 
+                                onMouseDown={() => {
+                                    axios({
+                                        url: 'api/user/files/' + this.state.user["id"] + '/' + this.state.activePropertyID,
+                                        method: 'get'
+                                    }).then(response => {
+                                        console.log(response.data);
+                                        this.setState({
+                                            activePropertyFiles: response.data,
+                                            activePropertyView: files
+                                        })
+                                    }).catch(error => {
+
+                                    })
+                                }}
+                                className={
+                                    this.state.activePropertyView === files ? 
+                                    "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon_active" :
+                                    "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon"}
+                                ></GoFileDirectory>
+                            <FaMoneyCheck 
+                                onMouseDown={() => {
+                                    this.setState({
+                                        activePropertyView: expenses
+                                    })
+                                }}
+                                className={
+                                    this.state.activePropertyView === expenses ? 
+                                    "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon_active" :
+                                    "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon"}
+                                ></FaMoneyCheck>
+                        </div>
+                        <div className="properties_dashboard_active_property_box_right_box_inner_box_view_box">
+                            {this.renderActivePropertyView()}
+                        </div>
+                    </div>
+                        {/* <div className="property_card_box_info_box">
                             <div className="property_card_box_info_box_first_row">
                                 <div className="property_card_box_info_box_first_row_first_element">
                                     <IoBedSharp className="property_card_box_info_box_icon"></IoBedSharp>
@@ -454,17 +578,6 @@ class PropertiesDashboard extends React.Component {
                         </div>
                         <div className="properties_dashboard_active_property_box_right_box_inner_box">
                             <div className="properties_dashboard_active_property_box_right_box_inner_box_navbar_box">
-                                <MdDashboard 
-                                    onMouseDown={() => {
-                                        this.setState({
-                                            activePropertyView: overview
-                                        })
-                                    }}
-                                    className={
-                                        this.state.activePropertyView === overview ? 
-                                        "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon_active" :
-                                        "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon"}
-                                    ></MdDashboard>
                                 <SiGoogleanalytics 
                                     onMouseDown={() => {
                                         this.setState({
@@ -510,9 +623,8 @@ class PropertiesDashboard extends React.Component {
                             </div>
                             <div className="properties_dashboard_active_property_box_right_box_inner_box_view_box">
                                 {this.renderActivePropertyView()}
-                            </div>
-                        </div>
-                    </div>
+                            </div> */}
+                        {/* </div> */}
                 </div>
             );
         }
@@ -560,6 +672,12 @@ class PropertiesDashboard extends React.Component {
                                             New Property
                                         </div>
                                     </Link>
+                                    {this.state.activeProperty ? 
+                                    <div>
+                                        <IoTrashSharp className="properties_dashboard_buttons_box_icon"></IoTrashSharp>
+                                        <MdEdit className="properties_dashboard_buttons_box_icon"></MdEdit>
+                                    </div> : 
+                                    <div></div>}
                                 </div> 
                                 <div className="clearfix"/>
                                 {this.renderActiveProperty()}
@@ -589,7 +707,7 @@ class PropertiesDashboard extends React.Component {
                                     Commercial
                                 </button>
                             </div> */}
-                                <div id="properties_dashboard_property_inner_box">
+                                <div className="properties_dashboard_property_inner_box">
                                     {this.renderProperties()}
                                 </div>
                             </div>

@@ -90,7 +90,7 @@
     height: 20px;
     line-height: 20px;
     margin-bottom: 10px;
-    margin-left: 15px;
+    margin-left: 10px;
     padding: 7.5px 15px 7.5px 15px;
     transition: 0.3s;
     user-select: none;
@@ -108,35 +108,20 @@
 .files_dashboard_icons {
     color: #296CF6;
     border: 2px solid #296CF6;
-    border-radius: 8px;
+    border-radius: 50px;
     cursor: pointer;
     float: right;
     height: 25px;
     margin-left: 10px;
     padding: 5px;
     width: 25px;
-    transition: 0.3s;
+    transition: 0.5s;
 }
 
 .files_dashboard_icons:hover {
-   opacity: 0.85;
+   background-color: #296CF6;
+   color: white;
 }
-
-/* #download_file_icon {
-    background-color: #eee6f9;
-    border-radius: 4px;
-    color: #6e4ec1; 
-}
-
-#trash_file_icon {
-    background-color: #d3d3d3;
-    border-radius: 4px;
-}
-
-#edit_file_icon {
-    background-color: #dbebd2;
-    color: #85bb65;
-} */
 
 #files_dashboard_search_bar {
     border: 1px solid #d3d3d3;
@@ -403,24 +388,28 @@
     width: 30px;
 }
 
-.blue {
+.card_white {
+    color: white;
+}
+
+.card_blue {
     color: #3679ED;
 }
 
-.grey {
+.card_grey {
     color: #d3d3d3;
     opacity: 1.2;
 }
 
-.red {
+.card_red {
     color: #EB3632;
 }
 
-.green {
+.card_green {
     color: #249F4F;
 }
 
-.orange {
+.card_orange {
     color: #FDB32B;
 }
 

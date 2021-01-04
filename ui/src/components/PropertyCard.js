@@ -30,6 +30,8 @@ class PropertyCard extends React.Component {
             isLoading: true
         };
 
+        console.log(this.state.property);
+
         // this.deletePropertyByUser = this.deletePropertyByUser.bind(this);
         // this.removePropertyFromState = this.props.removePropertyFromState;
         this.numberWithCommas = this.numberWithCommas.bind(this);
@@ -266,6 +268,13 @@ class PropertyCard extends React.Component {
                             <p className="property_card_box_title">
                                 ${this.numberWithCommas(this.state.property["estimate"])}
                             </p>
+                            {this.state.property["currently_rented"] ? 
+                            <div>
+                                <FaCheckCircle className="rented_check_icon"></FaCheckCircle>
+                                <p className="property_rented_text">
+                                    Rented
+                                </p>
+                            </div> : <div></div>}
                             <IoOpenOutline 
                                 onClick={() => {
                                     this.setActiveProperty(this.state.property["id"])

@@ -11,6 +11,7 @@ class FileCard extends React.Component {
         this.state = {
             user: this.props.data.state.user,
             file: this.props.data.state.file,
+            backgroundColor: this.props.data.state.backgroundColor,
             setActiveFileAttributes: this.props.data.state.setActiveFileAttributes,
             openSignedURL: this.props.data.state.openSignedURL,
             mapFileTypeToIcon: this.props.data.state.mapFileTypeToIcon,
@@ -36,7 +37,6 @@ class FileCard extends React.Component {
         if (this.state.timeClicked === null || (now - this.state.timeClicked) > 200) { 
             // Let parent know this file was clicked
             var success = this.state.setActiveFileAttributes(key, this.state.file, this.state.isClicked);
-            console.log(success);
             if (success) {
                 this.setState({
                     isClicked: !this.state.isClicked,
@@ -60,12 +60,15 @@ class FileCard extends React.Component {
     }
 
     render() {
+
+        var className = "file_card_individual_file";
+        if (this.state.isClicked) {
+            className += " file_card_active";
+        } else {
+            className += " " + this.state.backgroundColor;
+        }
         return (
-            <div className={
-                    this.state.isClicked ? 
-                    "file_card_individual_file file_card_active" : 
-                    "file_card_individual_file"
-                } 
+            <div className={className} 
                 // onDoubleClick={() => this.doubleClickCard()}
                 onMouseDown={() => this.clickCard()}
                 >

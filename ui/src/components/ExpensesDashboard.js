@@ -80,22 +80,24 @@ class ExpensesDashboard extends React.Component {
             // value[1] is our property Address.
             var propertyExpenses = this.fetchExpensesByProperty(value[0]);
 
-            elements.push(
-                <div>
-                    <p className="expenses_dashboard_body_inner_box_title">
-                        {value[1]}
-                    </p>
-                    <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
-                        {propertyExpenses === null ? <div></div> :
-                        <div>
-                            <MdError className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></MdError>
-                            <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
-                                No Expenses to show
-                            </p>
-                        </div>}
+            if (propertyExpenses !== null && propertyExpenses.length > 0) {
+                elements.push(
+                    <div>
+                        <p className="expenses_dashboard_body_inner_box_title">
+                            {value[1]}
+                        </p>
+                        <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
+                            {propertyExpenses === null ? <div></div> :
+                            <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box_title_box">
+                                <MdError className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></MdError>
+                                <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
+                                    No Expenses to show
+                                </p>
+                            </div>}
+                        </div>
                     </div>
-                </div>
                 );
+            }
         });
         return elements;
     }

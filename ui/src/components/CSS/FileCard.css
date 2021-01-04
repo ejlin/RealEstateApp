@@ -65,6 +65,14 @@
     color: white;
 }
 
+.white {
+    background-color: white;
+}
+
+.grey {
+    background-color: #F5F5FA;
+}
+
 @media screen and (max-width: 2000px) {
     .file_card_individual_file {
         width: calc((100% - 150px - 20px) / 5);

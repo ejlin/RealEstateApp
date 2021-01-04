@@ -12,7 +12,7 @@ import ProgressBar from './../utility/ProgressBar.js';
 
 import { MdFileDownload, MdFileUpload, MdEdit } from 'react-icons/md';
 import { IoMdTrash, IoMdArrowDropdown } from 'react-icons/io';
-import { IoCloseSharp } from 'react-icons/io5';
+import { IoCloseSharp, IoTrashSharp } from 'react-icons/io5';
 import { AiFillFile, AiFillFileImage, AiFillFileExclamation, AiFillFilePdf, AiFillFileExcel, AiFillFilePpt, AiFillFileText, AiFillFileWord, AiFillFileZip } from 'react-icons/ai';
 
 /****
@@ -47,7 +47,7 @@ export const openSignedURL = (userID, fileKey)  => {
     var classNames = isSmall ? "files_dashboard_upload_image_type_mini_icon" : "files_dashboard_upload_image_type";
 
     if (imageType === null || imageType === undefined) {
-        classNames += isActive? " white" : " grey";
+        classNames += isActive? " card_white" : " card_grey";
         return (
             <div>
                 <AiFillFileExclamation 
@@ -58,7 +58,7 @@ export const openSignedURL = (userID, fileKey)  => {
     }
 
     if (imageType.includes("image")){
-        classNames += isActive? " white" : " blue";
+        classNames += isActive? " card_white" : " card_blue";
         return (
             <div>
                 <AiFillFileImage 
@@ -67,7 +67,7 @@ export const openSignedURL = (userID, fileKey)  => {
             </div>
         );
     } else if (imageType.includes("pdf")) {
-        classNames += isActive? " white" : " red";
+        classNames += isActive? " card_white" : " card_red";
         return (
             <div>
                 <AiFillFilePdf
@@ -76,7 +76,7 @@ export const openSignedURL = (userID, fileKey)  => {
             </div>
         )
     } else if (imageType.includes("video")) {
-        classNames += isActive? " white" : " blue";
+        classNames += isActive? " card_white" : " card_blue";
         return (
             <div>
                 <AiFillFile 
@@ -85,7 +85,7 @@ export const openSignedURL = (userID, fileKey)  => {
             </div>
         )
     } else if (imageType.includes("audio")) {
-        classNames += isActive? " white" : " blue";
+        classNames += isActive? " card_white" : " card_blue";
         return (
             <div>
                 <AiFillFile 
@@ -94,7 +94,7 @@ export const openSignedURL = (userID, fileKey)  => {
             </div>
         )
     } else if (imageType.includes("zip")) {
-        classNames += isActive? " white" : " grey";
+        classNames += isActive? " card_white" : " card_grey";
         return (
             <div>
                 <AiFillFileZip
@@ -103,7 +103,7 @@ export const openSignedURL = (userID, fileKey)  => {
             </div>
         )
     } else if (imageType.includes("text")) {
-        classNames += isActive? " white" : " grey";
+        classNames += isActive? " card_white" : " card_grey";
         return (
             <div>
                 <AiFillFileText
@@ -112,7 +112,7 @@ export const openSignedURL = (userID, fileKey)  => {
             </div>
         )
     } else if (imageType.includes("presentation")) {
-        classNames += isActive? " white" : " orange";
+        classNames += isActive? " card_white" : " card_orange";
         return (
             <div>
                 <AiFillFilePpt
@@ -121,7 +121,7 @@ export const openSignedURL = (userID, fileKey)  => {
             </div>
         )
     } else if (imageType.includes("spreadsheet")) {
-        classNames += isActive? " white" : " green";
+        classNames += isActive? " card_white" : " card_green";
         return (
             <div>
                 <AiFillFileExcel
@@ -130,7 +130,7 @@ export const openSignedURL = (userID, fileKey)  => {
             </div>
         )
     } else if (imageType.includes("doc")) {
-        classNames += isActive? " white" : " blue";
+        classNames += isActive? " card_white" : " card_blue";
         return (
             <div>
                 <AiFillFileWord
@@ -139,7 +139,7 @@ export const openSignedURL = (userID, fileKey)  => {
             </div>
         )
     } else {
-        classNames += isActive? " white" : " grey";
+        classNames += isActive? " card_white" : " card_grey";
         return (
             <div>
                 <AiFillFileExclamation
@@ -624,6 +624,7 @@ class FilesDashboard extends React.Component {
                         state: {
                             user: this.state.user,
                             file: file,
+                            backgroundColor: "white",
                             setActiveFileAttributes: this.setActiveFileAttributes,
                             openSignedURL: openSignedURL, 
                             mapFileTypeToIcon: mapFileTypeToIcon
@@ -939,14 +940,14 @@ class FilesDashboard extends React.Component {
                             }
                             <div className="files_dashboard_upload_file_text_button" onClick={() => this.setState({displayUploadFileBox: true})}>Add File</div>
                             {this.state.activeFiles.size >= 1 ?
-                                <IoMdTrash id="trash_file_icon" className="files_dashboard_icons" onClick={() => this.deleteActiveFiles()}></IoMdTrash> : 
+                                <IoTrashSharp className="files_dashboard_icons" onClick={() => this.deleteActiveFiles()}></IoTrashSharp> : 
                                 <div></div>}
                             {this.state.activeFiles.size >= 1 ? 
-                                <MdFileDownload id="download_file_icon" className="files_dashboard_icons" onClick={() => this.downloadActiveFiles()}></MdFileDownload> : 
+                                <MdFileDownload className="files_dashboard_icons" onClick={() => this.downloadActiveFiles()}></MdFileDownload> : 
                                 <div></div>
                             }
                             {this.state.activeFiles.size === 1 ? 
-                                <MdEdit id="edit_file_icon" className="files_dashboard_icons"></MdEdit> : 
+                                <MdEdit className="files_dashboard_icons"></MdEdit> : 
                                 <div></div>
                             }
                         </div>

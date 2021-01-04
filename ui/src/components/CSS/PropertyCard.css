@@ -4,9 +4,9 @@
     float: left;
     height: 250px;
     margin-bottom: 25px;
-    margin-left: max(calc((100% - 975px) / 2), 15px);    /* 100% - 4 cards at 250px width each, 3 spacings in between them) */
-    min-width: 325px;
-    width: 325px;
+    margin-right: max(calc((100% - 1020px) / 2), 15px);    /* 100% - 4 cards at 250px width each, 3 spacings in between them) */
+    min-width: 340px;
+    width: 340px;
 }
 
 .property_card_box_first_child {
@@ -69,12 +69,12 @@
 
 .property_card_box_info_box_first_row_first_element {
     float: left;
-    width: 47%;
+    width: 48%;
 }
 
 .property_card_box_info_box_first_row_second_element {
     float: left;
-    width: 53%;
+    width: 52%;
 }
 
 .property_card_box_info_box_second_row {
@@ -129,10 +129,11 @@
     margin-top: 0px;
 }
 
-#rented_check_icon {
+.rented_check_icon {
     color: #85bb65;
     float: left;
-    margin-top: 3px;
+    margin-left: 20px;   
+    margin-top: 10px;
 }
 
 #estimate_warning_icon {
@@ -143,11 +144,12 @@
     width: 17.5px;
 }
 
-#property_rented_text {
+.property_rented_text {
     color: #85bb65; 
     float: left;
     font-weight: bold;
     margin-left: 5px;
+    margin-top: 7px;
 }
 
 #property_rented_box {
