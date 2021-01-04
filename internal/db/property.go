@@ -10,13 +10,13 @@ import (
 
 // Property represents a property in our database.
 type Property struct {
-	ID        string     `json:"id",sql:"type:uuid; primary key"`
-	CreatedAt *time.Time `json:"created_at",sql:"type:timestamp"`
+	ID        string     `json:"id,omitempty",sql:"type:uuid; primary key"`
+	CreatedAt *time.Time `json:"created_at,omitempty",sql:"type:timestamp"`
 
-	Address string `json:"address",sql:"type:VARCHAR(75)"`
-	State   string `json:"state",sql:"type:VARCHAR(2)"`
-	City    string `json:"city",sql:"type:VARCHAR(50)"`
-	ZipCode string `json:"zip_code",sql:"type:VARCHAR(10)"`
+	Address string `json:"address,omitempty",sql:"type:VARCHAR(75)"`
+	State   string `json:"state,omitempty",sql:"type:VARCHAR(2)"`
+	City    string `json:"city,omitempty",sql:"type:VARCHAR(50)"`
+	ZipCode string `json:"zip_code,omitempty",sql:"type:VARCHAR(10)"`
 
 	BoughtDate           string  `json:"bought_date,omitempty",sql:"type:VARCHAR(5)"`
 	PriceBought          float64 `json:"price_bought,omitempty",sql:"type:NUMERIC(16,2)"`

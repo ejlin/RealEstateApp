@@ -26,40 +26,40 @@
 .new_property_dashboard_bottom_left_box_list {
     border-radius: 8px;
     cursor: pointer;
-    height: 50px;
+    height: 45px;
     transition: 0.5s;
     width: calc(80%);
 }
 
-.new_property_dashboard_bottom_left_box_list_active{
-    background-color: #296CF6;
-    color: white;
+.new_property_dashboard_bottom_left_box_list:hover, .new_property_dashboard_bottom_left_box_list_active{
+    background-color: #d3d3d3;
+    color: black;
 }
 
 .new_property_dashboard_bottom_left_box_list_icon {
     float: left;
     height: 20px;
-    margin-left: 25px;
-    margin-top: 15px;
+    margin-left: 20px;
+    margin-top: 12.5px;
     width: 20px;
 }
 
 .new_property_dashboard_bottom_left_box_list_text {
     float: left;
     font-size: 1.1em;
-    line-height: 50px;
+    line-height: 45px;
     margin-left: 15px;
 }
 
 .new_property_dashboard_bottom_left_box {
     float: left;
-    width: 325px;
+    width: 300px;
 }
 
 .new_property_dashboard_bottom_right_box {
     float: left;
     height: 100px;
-    width: calc(100% - 325px);
+    width: calc(100% - 300px);
 }
 
 .form_title {

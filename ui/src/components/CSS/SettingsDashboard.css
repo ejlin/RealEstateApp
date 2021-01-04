@@ -257,34 +257,30 @@
     border-radius: 8px;
     cursor: pointer;
     float: left;
-    height: 50px;
+    height: 45px;
     margin-left: 10%;
     margin-right: 10%;
     transition: 0.5s;
     width: 80%;
 }
 
-.settings_dashboard_right_box_nav_bar_list:hover {
-    opacity: 0.7;
-}
-
-.settings_dashboard_right_box_nav_bar_active_list {
-    background-color: #296CF6;
-    color: white;
+.settings_dashboard_right_box_nav_bar_list:hover, .settings_dashboard_right_box_nav_bar_active_list {
+    background-color: #d3d3d3;
+    color:black;
 }
 
 .settings_dashboard_right_box_nav_bar_list_icon {
     float: left;
     height: 20px;
     margin-left: 25px;
-    margin-top: 15px;
+    margin-top: 12.5px;
     width: 20px;
 }
 
 .settings_dashboard_right_box_nav_bar_list_text {
     float: left;
     font-size: 1.1em;
-    line-height: 50px;
+    line-height: 45px;
     margin-left: 10px;
 }
 

@@ -108,7 +108,7 @@ class NewPropertyForm extends React.Component {
                                 onChange={this.handleFieldChange}/>
                             {/* <p className="new_property_form_required">*</p> */}
                             <input 
-                                placeholder="Address Line 2" 
+                                placeholder="APT or Suite #" 
                                 className="new_property_form_input new_property_form_input_long" 
                                 type="text" 
                                 name="addressTwo" 

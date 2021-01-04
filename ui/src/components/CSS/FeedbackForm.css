@@ -39,20 +39,21 @@
     border-radius: 8px;
     cursor: pointer;
     float: left;
-    height: 50px;
+    height: 45px;
     margin-right: 10%;
+    transition: 0.5s;
     width: 80%;
 }
 
 .feedback_form_inner_lower_box_nav_bar_list:hover, .feedback_form_inner_lower_box_nav_bar_list_active {
-    background-color: #f1f1f1;
+    background-color: #d3d3d3;
 }
 
 .feedback_form_inner_lower_box_nav_bar_list_title {
     color:  black;
     float: left;
     font-size: 1.0em;
-    line-height: 50px;
+    line-height: 45px;
     margin-left: 10px;
 }
 
@@ -61,7 +62,7 @@
     float: left;
     height: 20px;
     margin-left: 25px;
-    margin-top: calc((50px - 20px)/2);
+    margin-top: calc((45px - 20px)/2);
     width: 20px;
 }
 
