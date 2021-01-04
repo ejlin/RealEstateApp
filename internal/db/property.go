@@ -37,7 +37,7 @@ type Property struct {
 
 	// The day the user can expect rent to come in for this property.
 	RentPaymentDate int `json:"rent_payment_date,omitempty",sql:"type:INT"`
-	MortgagePaymentDate int `json:"mortgage_payment_data,omitempty",sql:"type:INT"`
+	MortgagePaymentDate int `json:"mortgage_payment_date,omitempty",sql:"type:INT"`
 
 	CurrentlyRented bool `json:"currently_rented,omitempty",sql:"type:BOOLEAN"`
 

@@ -176,7 +176,7 @@
 
 .analysis_dashboard_property_selector_property_list_checkbox {
     border: 2px solid #296CF6;
-    border-radius: 4px;
+    border-radius: 0px;
     float: left;
     height: 15px;
     margin-top: calc((30px - 15px - 4px)/2);

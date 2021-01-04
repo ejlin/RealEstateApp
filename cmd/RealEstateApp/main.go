@@ -21,7 +21,7 @@ var (
 
 	conn = "host=realestate-296303:us-west2:realestate-db user=postgres password=realestate dbname=realestate-db sslmode=disable"
 
-	conn = "host=realestate-296303:us-west2:realestate-db user=postgres password=realestate dbname=realestate-admin-db sslmode=disable"
+	// conn = "host=realestate-296303:us-west2:realestate-db user=postgres password=realestate dbname=realestate-admin-db sslmode=disable"
 
 
 	UsersBucket = "realestate-users"

@@ -9,9 +9,13 @@ import FileCard from './FileCard.js';
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 
+import { getDaysUntil } from './MainDashboard.js';
+
 import { mapFileTypeToIcon, openSignedURL } from './FilesDashboard.js';
 
 import { Link, Redirect } from 'react-router-dom';
+import { VictoryChart, VictoryLine, VictoryAxis, VictoryLabel } from 'victory';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 
 import { GoFileDirectory } from 'react-icons/go';
 import { SiGoogleanalytics } from 'react-icons/si';
@@ -31,7 +35,7 @@ import {
     IoPersonSharp,
     IoTrashSharp} from 'react-icons/io5';
 
-const analysis = "analysis";
+const overview = "overview";
 const files = "files";
 const expenses = "expenses";
 
@@ -47,7 +51,7 @@ class PropertiesDashboard extends React.Component {
             propertiesMap: new Map(),
             activePropertyID: "",
             activeProperty: null,
-            activePropertyView: analysis,
+            activePropertyView: overview,
             activeFiles: [],
             isLoading: true
         };
@@ -59,6 +63,9 @@ class PropertiesDashboard extends React.Component {
         this.setActiveProperty = this.setActiveProperty.bind(this);
         this.renderActivePropertyView = this.renderActivePropertyView.bind(this);
         this.renderActivePropertyFiles = this.renderActivePropertyFiles.bind(this);
+        this.getARR = this.getARR.bind(this);
+        this.getLTVRatio = this.getLTVRatio.bind(this);
+        this.getDTIRatio = this.getDTIRatio.bind(this);
     }
 
     componentDidMount() {
@@ -257,12 +264,45 @@ class PropertiesDashboard extends React.Component {
             this.setState({
                 activePropertyID: propertyID,
                 activeProperty: response.data,
-                activePropertyView: analysis,
+                activePropertyView: overview,
                 isLoadingActiveProperty: false
             })
         }).catch(error => {
             console.log(error);
         });
+    }
+
+    getARR() {
+
+    }
+
+    getLTVRatio() {
+        var activeProperty = this.state.activeProperty;
+        if (!activeProperty["price_bought"]  || !activeProperty["down_payment"] || !activeProperty["price_bought"]) {
+            return 0.0;
+        }
+        var apv = activeProperty["estimate"] ? activeProperty["estimate"] : activeProperty["price_bought"];
+
+        var loan = activeProperty["price_bought"] - activeProperty["down_payment"];
+        return Number((loan / apv * 100.0).toFixed(2));
+    }
+
+    getDTIRatio() {
+        var activeProperty = this.state.activeProperty;
+        if (!activeProperty["price_mortgage"]  || 
+            !activeProperty["price_property_manager"] || 
+            !activeProperty["currently_rented"] || 
+            !activeProperty["price_rented"]) {
+            return 0.0;
+        }
+        
+        var debt = activeProperty["price_mortgage"];
+        debt += activeProperty["price_property_manager"] ? activeProperty["price_property_manager"] : 0.0;
+
+        var income = activeProperty["price_rented"];
+
+        var dti = debt / income * 100.0
+        return Number(dti.toFixed(2));
     }
 
     renderActivePropertyFiles() {
@@ -288,14 +328,169 @@ class PropertiesDashboard extends React.Component {
 
     renderActivePropertyView() {
         switch(this.state.activePropertyView) {
-            case analysis:
+            case overview:
                 return (
                     <div>
                         <p className="active_property_view_title">
-                            Analysis
+                            Overview
                         </p>
+                        <div className="clearfix"/>
                         <div className="active_property_view_box">
-                        
+                            <div className="active_property_view_box_growth_graph">
+                                <p className="active_property_view_box_growth_graph_title">
+                                    Property Estimated Value
+                                </p>
+                                <VictoryChart
+                                    width={"700"}
+                                    height={"250"}
+                                    padding={{
+                                        left: 10,
+                                        right: 50,
+                                        top: 0,
+                                        bottom: 10
+                                    }}>
+                                    <VictoryLine 
+                                        interpolation="natural"
+                                        style={{
+                                            data: {
+                                                stroke: "#296CF6",
+                                                strokeWidth: "3",
+                                            }
+                                        }}
+                                        minDomain={{ 
+                                            y: 0
+                                        }}
+                                        x={(d) => d.x}
+                                        width={"800"}
+                                        padding={{
+                                            left: 40,
+                                            right: 40,
+                                            top: 40,
+                                            bottom: 10
+                                        }}
+                                        data={[
+                                            {x: "Jan", y: 6}, 
+                                            {x: "Feb", y: 5}, 
+                                            {x: "Mar", y: 6}, 
+                                            {x: "Apr", y: 8}, 
+                                            {x: "May", y: 11}, 
+                                            {x: "Jun", y: 9}, 
+                                            {x: "Jul", y: 10}, 
+                                            {x: "Aug", y: 13}, 
+                                            {x: "Sep", y: 17}, 
+                                            {x: "Oct", y: 20}, 
+                                            {x: "Nov", y: 18}, 
+                                            {x: "Dec", y: 28}]}>
+                                    </VictoryLine>
+                                </VictoryChart>
+                                <div className="clearfix"/>
+                            </div>
+                            <div className="active_property_view_box_parent_right_box">
+                                <div className="active_property_view_box_right_box">
+                                    <p className="active_property_view_box_right_box_title">
+                                        Quick Look
+                                    </p>
+                                    <div className="clearfix"/>
+                                    <div className="active_property_view_box_right_box_inner_box">
+                                        <div className="active_property_view_box_right_box_inner_box_bullet_point">
+                                        </div>
+                                        <p className="active_property_view_box_right_box_inner_box_bullet_point_text">
+                                            {this.state.activeProperty["rent_payment_date"] ? "Rent is paid in " + getDaysUntil(this.state.activeProperty["rent_payment_date"])  + " days" : "Not currently rented"}
+                                        </p>
+                                        <div className="clearfix"/>
+                                        <div className="active_property_view_box_right_box_inner_box_bullet_point">
+                                        </div>
+                                        <p className="active_property_view_box_right_box_inner_box_bullet_point_text">
+                                            {this.state.activeProperty["mortgage_payment_date"] ? "Mortgage is due in " + getDaysUntil(this.state.activeProperty["mortgage_payment_date"])  + " days" : "No current mortgage"}
+                                        </p>
+                                    </div>
+                                </div>  
+                                <div className="active_property_view_box_right_box_bottom_box">
+                                    <div className="active_property_view_box_right_box_bottom_box_element">
+                                        <p className="active_property_view_box_right_box_bottom_box_title">
+                                            ARR
+                                        </p>
+                                        <p className="active_property_view_box_right_box_bottom_box_text">
+                                            
+                                        </p>
+                                    </div>
+                                    <div className="clearfix"/>
+                                    <div className="active_property_view_box_right_box_bottom_box_element">
+                                        <p className="active_property_view_box_right_box_bottom_box_title">
+                                            Expenses this mo.
+                                        </p>
+                                        <p className="active_property_view_box_right_box_bottom_box_text">
+                                            
+                                        </p>
+                                    </div>
+                                    <div className="clearfix"/>
+                                    <div className="active_property_view_box_right_box_bottom_box_element">
+                                        <p className="active_property_view_box_right_box_bottom_box_title">
+                                            Property Taxes
+                                        </p>
+                                        <p className="active_property_view_box_right_box_bottom_box_text">
+                                            ${this.getLTVRatio()}/yr
+                                        </p>
+                                    </div>
+                                    <div className="clearfix"/>
+                                    <div className="active_property_view_box_right_box_bottom_box_element">
+                                        <p className="active_property_view_box_right_box_bottom_box_title">
+                                            LTV Ratio
+                                        </p>
+                                        <p className="active_property_view_box_right_box_bottom_box_text">
+                                            {this.getLTVRatio()}%
+                                        </p>
+                                    </div>
+                                    <div className="clearfix"/>
+                                    <div className="active_property_view_box_right_box_bottom_box_element">
+                                        <p className="active_property_view_box_right_box_bottom_box_title">
+                                            DTI Ratio
+                                        </p>
+                                        <p className="active_property_view_box_right_box_bottom_box_text">
+                                            {this.getDTIRatio()}%
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* <div className="active_property_view_box_right_box_circle">
+                                        <CircularProgressbar 
+                                            value={this.getLTVRatio()}
+                                            background
+                                            backgroundPadding={5}
+                                            styles={buildStyles({
+                                            backgroundColor: "transparent",
+                                            textColor: "#296CF6",
+                                            pathColor: "#296CF6",
+                                            trailColor: "#fff",
+                                            })}/>
+                                        <p className="active_property_view_box_right_box_circle_subtitle">
+                                            {this.getLTVRatio()}%
+                                            <br></br>
+                                            LTV Ratio
+                                        </p>
+                                    </div>
+                                    <div className="active_property_view_box_right_box_circle">
+                                        <CircularProgressbar 
+                                            value={this.getDTIRatio()}
+                                            background
+                                            backgroundPadding={5}
+                                            styles={buildStyles({
+                                            backgroundColor: "transparent",
+                                            textColor: "#296CF6",
+                                            pathColor: "#296CF6",
+                                            trailColor: "#fff",
+                                            })}/>
+                                        <p className="active_property_view_box_right_box_circle_subtitle">
+                                            {this.getDTIRatio()}%
+                                            <br></br>
+                                            DTI Ratio
+                                        </p>
+                                    </div> */}
+                            </div>
+                            <div className="clearfix"/>
+                            <div className="active_property_view_box_right_box_circle_box">
+                                    
+                                </div>                      
                         </div>
                     </div>
                 );
@@ -305,6 +500,7 @@ class PropertiesDashboard extends React.Component {
                         <p className="active_property_view_title">
                             Files
                         </p>
+                        <div className="clearfix"/>
                         {this.renderActivePropertyFiles()}
                     </div>
                 );
@@ -314,6 +510,7 @@ class PropertiesDashboard extends React.Component {
                         <p className="active_property_view_title">
                             Expenses
                         </p>
+                        <div className="clearfix"/>
                     </div>
                 );
         }
@@ -448,11 +645,11 @@ class PropertiesDashboard extends React.Component {
                             <SiGoogleanalytics 
                                 onMouseDown={() => {
                                     this.setState({
-                                        activePropertyView: analysis
+                                        activePropertyView: overview
                                     })
                                 }}
                                 className={
-                                    this.state.activePropertyView === analysis ? 
+                                    this.state.activePropertyView === overview ? 
                                     "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon_active" :
                                     "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon"}
                                 ></SiGoogleanalytics>
@@ -492,139 +689,6 @@ class PropertiesDashboard extends React.Component {
                             {this.renderActivePropertyView()}
                         </div>
                     </div>
-                        {/* <div className="property_card_box_info_box">
-                            <div className="property_card_box_info_box_first_row">
-                                <div className="property_card_box_info_box_first_row_first_element">
-                                    <IoBedSharp className="property_card_box_info_box_icon"></IoBedSharp>
-                                    <p className="property_card_box_info_box_text">
-                                        {this.state.activeProperty["num_beds"]} {this.state.activeProperty["num_beds"] > 1 ? "beds" : "bed"}
-                                    </p>
-                                </div>
-                                <div className="property_card_box_info_box_first_row_second_element">
-                                    <IoWaterSharp className="property_card_box_info_box_icon"></IoWaterSharp>
-                                    <p className="property_card_box_info_box_text">
-                                        {this.state.activeProperty["num_baths"]} {this.state.activeProperty["num_baths"] > 1 ? "baths" : "bath"}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="property_card_box_info_box_second_row">
-                                <div className="property_card_box_info_box_first_row_first_element">
-                                    <IoTrailSignSharp className="property_card_box_info_box_icon"></IoTrailSignSharp>
-                                    <p className="property_card_box_info_box_text">
-                                        {this.state.activeProperty["num_units"]} {this.state.activeProperty["num_units"] > 1 ? "units" : "unit"}
-                                    </p>
-                                </div>
-                                <div className="property_card_box_info_box_first_row_second_element">
-                                    <IoBookmarkSharp className="property_card_box_info_box_icon"></IoBookmarkSharp>
-                                    <p className="property_card_box_info_box_text">
-                                        {this.numberWithCommas(this.state.activeProperty["square_footage"])} sq ft
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="property_card_box_info_box_second_row">
-                                <div className="property_card_box_info_box_first_row_first_element">
-                                    <IoWalletSharp title="rent per month" alt="rent per month" className="property_card_box_info_box_icon"></IoWalletSharp>
-                                    <p className="property_card_box_info_box_text">
-                                        ${this.numberWithCommas(this.state.activeProperty["price_rented"])}/mo
-                                    </p>
-                                </div>
-                                <div className="property_card_box_info_box_first_row_second_element">
-                                    <IoReaderSharp className="property_card_box_info_box_icon"></IoReaderSharp>
-                                    <p className="property_card_box_info_box_text">
-                                        ${this.numberWithCommas(this.state.activeProperty["price_mortgage"])}/mo
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="property_card_box_info_box_second_row">
-                                <div className="property_card_box_info_box_last_row_first_element">
-                                    <IoPersonSharp className="property_card_box_info_box_icon"></IoPersonSharp>
-                                    <p className="property_card_box_info_box_text">
-                                        Property Manager ${
-                                        this.state.activeProperty["price_property_manager"] && this.state.activeProperty["price_rented"] ?
-                                        this.state.activeProperty["price_property_manager"] * this.state.activeProperty["price_rented"] / 100.00 :
-                                        "-"}/mo
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="property_card_box_info_box_second_row">
-                                <div className="property_card_box_info_box_last_row_first_element">
-                                    <IoCalendarSharp className="property_card_box_info_box_icon"></IoCalendarSharp>
-                                    <p className="property_card_box_info_box_text">
-                                        Purchased {this.state.activeProperty["bought_date"]}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="clearfix"/>
-                            <div className="properties_dashboard_active_property_icon_box">
-                                <div>
-                                    <MdEdit className="properties_dashboard_active_property_icon"></MdEdit>
-                                    <IoTrashSharp className="properties_dashboard_active_property_icon"></IoTrashSharp>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="properties_dashboard_active_property_box_divider">
-                    </div>
-                    <div className="properties_dashboard_active_property_box_right_box">
-                        <div className="properties_dashboard_active_property_box_right_box_title_box">
-                            <IoCloseOutline 
-                                onMouseDown={() => {
-                                    this.setState({
-                                        activePropertyID: "",
-                                        activeProperty: null,
-                                    })
-                                }}
-                                className="properties_dashboard_active_property_box_right_box_title_box_icon"></IoCloseOutline>
-                        </div>
-                        <div className="properties_dashboard_active_property_box_right_box_inner_box">
-                            <div className="properties_dashboard_active_property_box_right_box_inner_box_navbar_box">
-                                <SiGoogleanalytics 
-                                    onMouseDown={() => {
-                                        this.setState({
-                                            activePropertyView: analysis
-                                        })
-                                    }}
-                                    className={
-                                        this.state.activePropertyView === analysis ? 
-                                        "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon_active" :
-                                        "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon"}
-                                    ></SiGoogleanalytics>
-                                <GoFileDirectory 
-                                    onMouseDown={() => {
-                                        axios({
-                                            url: 'api/user/files/' + this.state.user["id"] + '/' + this.state.activePropertyID,
-                                            method: 'get'
-                                        }).then(response => {
-                                            console.log(response.data);
-                                            this.setState({
-                                                activePropertyFiles: response.data,
-                                                activePropertyView: files
-                                            })
-                                        }).catch(error => {
-
-                                        })
-                                    }}
-                                    className={
-                                        this.state.activePropertyView === files ? 
-                                        "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon_active" :
-                                        "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon"}
-                                    ></GoFileDirectory>
-                                <FaMoneyCheck 
-                                    onMouseDown={() => {
-                                        this.setState({
-                                            activePropertyView: expenses
-                                        })
-                                    }}
-                                    className={
-                                        this.state.activePropertyView === expenses ? 
-                                        "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon_active" :
-                                        "properties_dashboard_active_property_box_right_box_inner_box_navbar_box_icon"}
-                                    ></FaMoneyCheck>
-                            </div>
-                            <div className="properties_dashboard_active_property_box_right_box_inner_box_view_box">
-                                {this.renderActivePropertyView()}
-                            </div> */}
-                        {/* </div> */}
                 </div>
             );
         }
@@ -681,32 +745,6 @@ class PropertiesDashboard extends React.Component {
                                 </div> 
                                 <div className="clearfix"/>
                                 {this.renderActiveProperty()}
-                            {/* <div id="properties_dashboard_tags_box">
-                                <button value="Single Family Homes" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
-                                    Single Family Homes
-                                </button>
-                                <button value="Manufactured" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
-                                    Manufactured
-                                </button>
-                                <button value="Condos/Ops" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
-                                    Condos/Ops
-                                </button>
-                                <button value="Multi-Family" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
-                                    Multi-Family
-                                </button>
-                                <button value="Apartments" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
-                                    Apartments
-                                </button>
-                                <button value="Lots/Land" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
-                                    Lots/Land
-                                </button>
-                                <button value="Townhomes" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
-                                    Townhomes
-                                </button>
-                                <button value="Commercial" className="properties_dashboard_tags_box_list" onClick={this.handleTagsListClick}>
-                                    Commercial
-                                </button>
-                            </div> */}
                                 <div className="properties_dashboard_property_inner_box">
                                     {this.renderProperties()}
                                 </div>

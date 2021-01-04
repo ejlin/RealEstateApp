@@ -23,9 +23,25 @@ import { IoMdAddCircle } from 'react-icons/io';
 
 import { LineChart, PieChart } from 'react-chartkick'
 import 'chart.js'
-import { VictoryLine, VictoryAxis } from "victory";
+import { VictoryLine, VictoryAxis, VictoryChart } from 'victory';
 
 import { BarChart, XAxis, Bar } from 'recharts';
+
+export const getDaysInMonth = (month, year) => {
+    return new Date(year, month+1, 0).getDate();
+}
+
+export const getDaysUntil = (rentDay) => {
+    var today = new Date();
+    var date = today.getDate();
+    var year = today.getFullYear();
+    var month = today.getMonth();
+
+    var numDaysInMonth = getDaysInMonth(month, year);
+
+    var daysUntilEndOfMonth = numDaysInMonth - date;
+    return rentDay < date ? daysUntilEndOfMonth + rentDay : rentDay- date;
+}
 
 class MainDashboard extends React.Component {
     constructor(props) {
@@ -153,10 +169,6 @@ class MainDashboard extends React.Component {
         return trailingMonths;
     }
 
-    getDaysInMonth(month, year) {
-        return new Date(year, month+1, 0).getDate();
-    }
-
     renderRentCollected() {
         return (
             <div className="main_dashboard_bottom_left_box_bottom_inner_box_text_box">
@@ -187,24 +199,12 @@ class MainDashboard extends React.Component {
 
     renderMortgagePaymentDateMap(expandedView) {
         var mortgagePaymentDateMap = this.state.mortgagePaymentDateMap;
-        
-        var today = new Date();
-        var date = today.getDate();
-        var year = today.getFullYear();
-        var month = today.getMonth();
         var timeline = [];
-
-        var numDaysInMonth = this.getDaysInMonth(month, year);
-        var daysUntilEndOfMonth = numDaysInMonth - date;
 
         for (const [key, value] of Object.entries(mortgagePaymentDateMap)) {
             var daysUntil;
             var iKey = parseInt(key);
-            if (iKey < date) {
-                daysUntil = daysUntilEndOfMonth + iKey;
-            } else {
-                daysUntil = iKey - date;
-            }
+            var daysUntil = getDaysUntil(iKey);
             timeline.push(
                 <div className="main_dashboard_bottom_left_box_bottom_inner_box_text_box">
                     {daysUntil === 0 ? 
@@ -240,25 +240,11 @@ class MainDashboard extends React.Component {
     renderRentPaymentDateMap(expandedView) {
         var rentPaymentDateMap = this.state.rentPaymentDateMap;
 
-        var today = new Date();
-        var date = today.getDate();
-        var year = today.getFullYear();
-        var month = today.getMonth();
-
         var timeline = [];
 
-        var numDaysInMonth = this.getDaysInMonth(month, year);
-        
-        var daysUntilEndOfMonth = numDaysInMonth - date;
-
         for (const [key, value] of Object.entries(rentPaymentDateMap)) {
-            var daysUntil;
             var iKey = parseInt(key);
-            if (iKey < date) {
-                daysUntil = daysUntilEndOfMonth + iKey;
-            } else {
-                daysUntil = iKey - date;
-            }
+            var daysUntil = getDaysUntil(iKey)
             timeline.push(
                 <div className="rent_schedule_bullet_point_box">
                     <div className="rent_schedule_bullet_point">
@@ -368,6 +354,15 @@ class MainDashboard extends React.Component {
                                             <p className="main_dashboard_box_title">
                                                 Portfolio Growth
                                             </p>
+                                            <VictoryChart
+                                                width={"700"}
+                                                height={"250"}
+                                                padding={{
+                                                    left: 50,
+                                                    right: 50,
+                                                    top: 0,
+                                                    bottom: 60
+                                                }}>
                                             <VictoryLine 
                                                 interpolation="natural"
                                                 style={{
@@ -377,16 +372,12 @@ class MainDashboard extends React.Component {
                                                     }
                                                 }}
                                                 minDomain={{ 
+                                                    x: 0,
                                                     y: 0
                                                 }}
                                                 // labels= {({ datum }) => datum.y}
-                                                width={"800"}
-                                                padding={{
-                                                    left: 20,
-                                                    right: 20,
-                                                    top: 20,
-                                                    bottom: 50
-                                                }}
+                                                width={"700"}
+                                                
                                                 data={[
                                                     {x: "Jan", y: 6}, 
                                                     {x: "Feb", y: 5}, 
@@ -401,6 +392,26 @@ class MainDashboard extends React.Component {
                                                     {x: "Nov", y: 18}, 
                                                     {x: "Dec", y: 28}
                                                 ]} />
+                                                {/* <VictoryAxis
+                                                    dependentAxis
+                                                    tickFormat={(y) => {
+                                                            // const dateObj = new Date(x);
+                                                            // const year = dateObj.getFullYear().toString().substr(-2);
+                                                            // const month = dateObj.toLocaleString('en-us', { month: 'short' });           
+                                                            // return `${month}/${year}`;       
+                                                            return y;                                            
+                                                    }}                                             
+                                                /> */}
+                                                <VictoryAxis
+                                                    tickFormat={(x) => {
+                                                            // const dateObj = new Date(x);
+                                                            // const year = dateObj.getFullYear().toString().substr(-2);
+                                                            // const month = dateObj.toLocaleString('en-us', { month: 'short' });           
+                                                            // return `${month}/${year}`;       
+                                                            return x;                                            
+                                                    }}                                             
+                                                />
+                                            </VictoryChart>
                                         </div>
                                         <div className="main_dashboard_bottom_left_box_bottom">
                                             <div className="main_dashboard_bottom_left_box_bottom_inner_box">
