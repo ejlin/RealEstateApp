@@ -1,0 +1,132 @@
+.create_expense_modal_parent_box {
+    background-color: white;
+    float: left;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 75px;
+    padding-bottom: 30px;
+    width: 80%; 
+    z-index: 11;
+}
+
+.create_expense_modal_parent_box_title_box {
+    float: left;
+    height: 30px;
+    margin-top: 25px;
+    width: 100%;
+}
+
+.create_expense_modal_parent_box_title_box_close_icon {
+    cursor: pointer;
+    height: 30px;
+    float: right;
+    margin-right: calc(40px);
+    transition: 0.5s;
+    width: 30px;
+}
+
+.create_expense_modal_parent_box_title_box_close_icon:hover {
+    opacity: 0.7;
+}
+
+.create_expense_modal_parent_box_title {
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+.create_expense_modal_parent_box_subtitle {
+    margin-top: 15px;
+}
+
+.create_expense_modal_parent_box_inner_box {
+    margin-left: 40px;
+    margin-right: 40px;
+    width: calc((100% - 80px));
+}
+
+.create_expense_modal_parent_box_title_input {
+    border: 2px solid black;
+    border-radius: 4px;
+    font-size: 1.2em;
+    margin-top: 25px;
+    padding: 7.5px 15px 7.5px 15px;
+    width: calc((100% - 4px - 30px));
+}
+
+.create_expense_modal_parent_box_title_textarea {
+    border: 2px solid black;
+    border-radius: 4px;
+    font-size: 1.2em;
+    height: 125px;
+    margin-top: 10px;
+    padding: 7.5px 15px 7.5px 15px;
+    resize: none;
+    width: calc(100% - 4px - 30px);
+}
+
+.create_expense_modal_parent_box_inner_box_left_box {
+    float: left;
+    margin-top: 15px;
+    width: 60%;
+}
+
+.create_expense_modal_parent_box_inner_box_right_box {
+    float: right;
+    margin-top: 15px;
+    width: calc(40% - 25px);
+}
+
+.create_expense_modal_parent_box_inner_box_right_box_date_input {
+    border: 2px solid black;
+    border-radius: 4px;
+    font-size: 1.0em;
+    margin-top: 10px;
+    padding: 7.5px 15px 7.5px 15px;
+    width: calc(100% - 4px - 30px);
+}
+
+.create_expense_modal_parent_box_inner_box_right_box_title {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-top: 10px;
+}
+
+.create_expense_modal_parent_box_inner_box_right_box_date_select {
+    border: 2px solid black;
+    border-radius: 4px;
+    font-size: 1.0em;
+    margin-top: 10px;
+    padding: 7.5px 15px 7.5px 15px;
+    width: calc(100% );
+}
+
+.create_expense_modal_parent_box_inner_box_bottom_box {
+    margin-top: 25px;
+    width: 100%;
+}
+
+.create_expense_modal_parent_box_inner_box_bottom_box_add_button {
+    background-color: #296CF6;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    float: right;
+    font-weight: bold;
+    padding: 10px 15px 10px 15px;
+    text-align: center;
+    transition: 0.5s;
+}
+
+.create_expense_modal_parent_box_inner_box_bottom_box_add_button:hover {
+    opacity: 0.7;
+}
+
+.create_expense_modal_associated_properties_input {
+    border: 2px solid black;
+    border-radius: 4px;
+    float: left;
+    font-size: 1.2em;
+    margin-top: 10px;
+    padding: 7.5px 14px 7.5px 15px;
+    width: calc((100% - 125px) - 30px);
+}

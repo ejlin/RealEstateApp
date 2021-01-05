@@ -4,6 +4,7 @@ import axios from 'axios';
 import './CSS/ExpensesDashboard.css';
 import './CSS/Style.css';
 
+import CreateExpenseModal from './CreateExpenseModal.js';
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 
@@ -23,7 +24,7 @@ class ExpensesDashboard extends React.Component {
             displayAddExpense: false,
             isLoading: true
         };
-
+        this.closeCreateExpenseModal = this.closeCreateExpenseModal.bind(this);
         this.renderPropertyBoxes = this.renderPropertyBoxes.bind(this);
         this.fetchExpensesByProperty = this.fetchExpensesByProperty.bind(this);
     }
@@ -54,6 +55,12 @@ class ExpensesDashboard extends React.Component {
                 isLoading: false
             })
         });
+    }
+
+    closeCreateExpenseModal()  {
+        this.setState({
+            displayAddExpense: false
+        })
     }
 
     async fetchExpensesByProperty(propertyID) {
@@ -116,7 +123,20 @@ class ExpensesDashboard extends React.Component {
                     }
                 }}/>
                 <div id="expenses_dashboard_parent_box">
-                    <div id="expenses_dashboard_parent_inner_box">
+                    {this.state.displayAddExpense ?
+                        <div className="expenses_dashboard_display_add_expense_box">
+                            <CreateExpenseModal
+                                data={{
+                                state: {
+                                    user: this.state.user,
+                                    closeCreateExpenseModal: this.closeCreateExpenseModal,
+                                }                       
+                            }}
+                            ></CreateExpenseModal>
+                        </div> :
+                        <div></div>}
+                    <div className="expenses_dashboard_parent_inner_box">
+                        
                         <div className="expenses_dashboard_title_box">
                             <div className="expenses_dashboard_parent_inner_box_title">
                                 Expenses
@@ -138,11 +158,6 @@ class ExpensesDashboard extends React.Component {
                             </div>
                             {this.state.isLoading ? <div></div> : 
                             <div className="expenses_dashboard_body_inner_box">
-                                {this.state.displayAddExpense ?
-                                <div className="expenses_dashboard_display_add_expense_box">
-
-                                </div> :
-                                <div></div>}
                                 <div className="expenses_dashboard_body_inner_box_most_recent_box">
                                     <p className="expenses_dashboard_body_inner_box_title">
                                         Most Recent
