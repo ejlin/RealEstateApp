@@ -8,13 +8,14 @@ import { IoCloseOutline, IoTrashSharp } from 'react-icons/io5';
 import { IoMdAdd } from 'react-icons/io';
 
 const All = "All";
-const None = None;
+const None = "None";
 
 const title = "title";
 const description = "description";
 const amount = "amount";
 const date = "date";
 const frequency = "frequency";
+const properties = "properties";
 
 class CreateExpenseModal extends React.Component {
     
@@ -27,6 +28,7 @@ class CreateExpenseModal extends React.Component {
             addExpense: this.props.data.state.addExpense,
             closeCreateExpenseModal: this.props.data.state.closeCreateExpenseModal,
         };
+        this.closePotentialAssociatedProperties = this.closePotentialAssociatedProperties.bind(this);
         this.handleFieldChange = this.handleFieldChange.bind(this);
         this.renderAssociatedProperties = this.renderAssociatedProperties.bind(this);
         this.displayPotentialAssociatedProperties = this.displayPotentialAssociatedProperties.bind(this);
@@ -35,6 +37,8 @@ class CreateExpenseModal extends React.Component {
     }
 
     componentDidMount() {
+        var associatedPropertiesInput = document.getElementById("associated_properties_input");
+        document.body.addEventListener('click', this.closePotentialAssociatedProperties);
 
         // Load our properties list.
         axios({
@@ -63,6 +67,17 @@ class CreateExpenseModal extends React.Component {
                 isPropertiesLoading: false
             })
         });
+    }
+
+    componentWillUnmount() {
+        document.body.removeEventListener('click', this.closePotentialAssociatedProperties);
+    }
+
+    closePotentialAssociatedProperties() {
+        console.log("here");
+        this.setState({
+            filteredAssociatedProperties: [],
+        })
     }
 
     handleFieldChange(e) {
@@ -204,7 +219,10 @@ class CreateExpenseModal extends React.Component {
             <div>
                 <input 
                     id="associated_properties_input"
-                    onClick={this.displayPotentialAssociatedProperties}
+                    onClick={(e) => {
+                        this.displayPotentialAssociatedProperties(e);
+                        e.stopPropagation();
+                    }}
                     
                     onChange={this.displayPotentialAssociatedProperties}
                     placeholder="Add a property" 

@@ -64,7 +64,7 @@ class ExpensesDashboard extends React.Component {
         })
     }
 
-    addExpense() {
+    addExpense(expense) {
         axios({
             method: 'post',
             url: 'api/user'
