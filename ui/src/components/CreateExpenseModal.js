@@ -4,8 +4,17 @@ import axios from 'axios';
 import './CSS/CreateExpenseModal.css';
 import './CSS/Style.css';
 
-import { IoCloseOutline } from 'react-icons/io5';
+import { IoCloseOutline, IoTrashSharp } from 'react-icons/io5';
 import { IoMdAdd } from 'react-icons/io';
+
+const All = "All";
+const None = None;
+
+const title = "title";
+const description = "description";
+const amount = "amount";
+const date = "date";
+const frequency = "frequency";
 
 class CreateExpenseModal extends React.Component {
     
@@ -14,14 +23,19 @@ class CreateExpenseModal extends React.Component {
 
         this.state = {
             user: this.props.data.state.user,
+            currSelectedAssociatedProperties: [],
+            addExpense: this.props.data.state.addExpense,
             closeCreateExpenseModal: this.props.data.state.closeCreateExpenseModal,
         };
-
+        this.handleFieldChange = this.handleFieldChange.bind(this);
         this.renderAssociatedProperties = this.renderAssociatedProperties.bind(this);
         this.displayPotentialAssociatedProperties = this.displayPotentialAssociatedProperties.bind(this);
+        this.removeSelectedAssociatedProperty = this.removeSelectedAssociatedProperty.bind(this);
+        this.verifyExpense = this.verifyExpense.bind(this);
     }
 
     componentDidMount() {
+
         // Load our properties list.
         axios({
             method: 'get',
@@ -51,112 +65,284 @@ class CreateExpenseModal extends React.Component {
         });
     }
 
+    handleFieldChange(e) {
+        console.log(e.target.value);
+        this.setState({ 
+            [e.target.name]: e.target.value
+         })
+    }
+
     displayPotentialAssociatedProperties(e) {
+
+        var selectedPropertyInput = document.getElementById("associated_properties_input");
+
         var elements = [];
         var value = e.target.value;
-        if (value.length === 0) {
-            this.setState({
-                filteredAssociatedProperties: [],
-            })
-            return;
+        var currSelectedAssociatedProperties = this.state.currSelectedAssociatedProperties;
+
+        var allIndex = currSelectedAssociatedProperties.indexOf(All);
+        if (allIndex < 0){
+            elements.push(
+                <div 
+                    onClick={() => {
+                        var currSelectedAssociatedProperties = this.state.currSelectedAssociatedProperties;
+                        currSelectedAssociatedProperties.push(All);
+                        // Remove None from our list if we add a non-None element.
+                        let index = currSelectedAssociatedProperties.indexOf(None);
+                        if (index >= 0) {
+                            currSelectedAssociatedProperties.splice(index, 1);
+                        }
+                        // reset the search bar to empty.
+                        selectedPropertyInput.value = "";
+                        this.setState({
+                            currSelectedAssociatedProperties: [...currSelectedAssociatedProperties],
+                            filteredAssociatedProperties: null,
+                        })
+                    }} 
+                    className="associated_properties_dropdown_elements">
+                    {All}
+                </div>
+            );
+        }
+        
+        var noneIndex = currSelectedAssociatedProperties.indexOf(None);
+        if (noneIndex < 0){
+            elements.push(
+                <div 
+                    onClick={() => {
+                        var currSelectedAssociatedProperties = this.state.currSelectedAssociatedProperties;
+                        currSelectedAssociatedProperties = [None];
+                        // reset the search bar to empty.
+                        selectedPropertyInput.value = "";
+                        this.setState({
+                            currSelectedAssociatedProperties: [...currSelectedAssociatedProperties],
+                            filteredAssociatedProperties: null,
+                        })
+                    }} 
+                    className="associated_properties_dropdown_elements">
+                    {None}
+                </div>
+            );
         }
 
         var propertyAddresses = this.state.propertyAddresses;
         var filteredAddresses = propertyAddresses.filter(address => address.startsWith(value));
         for (var i = 0; i < filteredAddresses.length; i++) {
-            elements.push(
-                <div>
-                    {filteredAddresses[i]}
-                </div>
-            );
+            let filteredAddress = filteredAddresses[i];
+            var index = currSelectedAssociatedProperties.indexOf(filteredAddress);
+            // Only show properties that are not currently selected.
+            if (index < 0){
+                elements.push(
+                    <div 
+                        onClick={() => {
+                            var currSelectedAssociatedProperties = this.state.currSelectedAssociatedProperties;
+                            currSelectedAssociatedProperties.push(filteredAddress);
+                            // Remove None from our list if we add a non-None element.
+                            let index = currSelectedAssociatedProperties.indexOf(None);
+                            console.log(index);
+                            if (index >= 0) {
+                                currSelectedAssociatedProperties.splice(index, 1);
+                                console.log(currSelectedAssociatedProperties);
+                            }
+                            // reset the search bar to empty.
+                            selectedPropertyInput.value = "";
+                            this.setState({
+                                currSelectedAssociatedProperties: [...currSelectedAssociatedProperties],
+                                filteredAssociatedProperties: null,
+                            })
+                        }} 
+                        className="associated_properties_dropdown_elements">
+                        {filteredAddresses[i]}
+                    </div>
+                );
+            }
         }
         this.setState({
             filteredAssociatedProperties: elements,
         })
     }
 
+    removeSelectedAssociatedProperty(addressToRemove) {
+        var currSelectedAssociatedProperties = this.state.currSelectedAssociatedProperties;
+        var index = currSelectedAssociatedProperties.indexOf(addressToRemove);
+        currSelectedAssociatedProperties.splice(index, 1);
+        this.setState({
+            currSelectedAssociatedProperties: currSelectedAssociatedProperties,
+        })
+    }
+
     renderAssociatedProperties() {
         var elements = [];
-        elements.push(
+
+        var currSelectedAssociatedProperties = this.state.currSelectedAssociatedProperties;
+        for (var i = 0; i < currSelectedAssociatedProperties.length; i++) {
+            
+            let currSelectedAssociatedProperty = currSelectedAssociatedProperties[i];
+            elements.push(
+                <div className="current_selected_associated_properties">
+                    <p className="current_selected_associated_properties_text">
+                        {currSelectedAssociatedProperty}
+                    </p>
+                    <IoTrashSharp 
+                        onClick={() => this.removeSelectedAssociatedProperty(currSelectedAssociatedProperty)}
+                        className="current_selected_associated_properties_icon"></IoTrashSharp>
+                </div>
+            );
+        }
+
+        var wrappedElements = [];
+
+        if (elements.length > 0) {
+            wrappedElements.push(
+                <div className="associated_properties_selected_parent_box">
+                    {elements}
+                </div>
+            );
+        }
+        
+        wrappedElements.push(
             <div>
                 <input 
+                    id="associated_properties_input"
+                    onClick={this.displayPotentialAssociatedProperties}
+                    
                     onChange={this.displayPotentialAssociatedProperties}
                     placeholder="Add a property" 
                     className="create_expense_modal_associated_properties_input"></input>
-                {this.state.filteredAssociatedProperties}
+                <div className="clearfix"/>
+                {this.state.filteredAssociatedProperties && this.state.filteredAssociatedProperties.length > 0 ?
+                <div className="create_expense_modal_associated_properties_filtered_properties_box">
+                    {this.state.filteredAssociatedProperties}
+                </div>:
+                <div></div>}
             </div>
         );
-        return elements;
+        return wrappedElements;
+    }
+
+    verifyExpense() {
+        
+        // TODO: verify expense
+        var expense = [];
+        expense[title] = this.state.title;
+        expense[description] = this.state.description;
+        expense[date] = this.state.date;
+        expense[amount] = this.state.amount;
+        expense[frequency] = this.state.frequency;
+
+        var currSelectedAssociatedProperties = this.state.currSelectedAssociatedProperties;
+        var indexAll = currSelectedAssociatedProperties.indexOf(All);
+        var indexNone = currSelectedAssociatedProperties.indexOf(None);
+        if (indexAll >= 0) {
+            expense[properties] = [All];
+        } else if (indexNone >= 0) {
+            expense[properties] = [None];
+        } else {
+            expense[properties] = this.state.currSelectedAssociatedProperties;
+        }   
+        
+        this.state.addExpense(expense);
     }
 
     render() {
         return (
-            <div className="create_expense_modal_parent_box">
-                <div className="create_expense_modal_parent_box_title_box">
-                    <IoCloseOutline 
-                        onClick={() => {
-                            this.state.closeCreateExpenseModal();
-                        }}
-                        className="create_expense_modal_parent_box_title_box_close_icon"></IoCloseOutline>
-                </div>
-                <div className="create_expense_modal_parent_box_inner_box">
-                    <p className="create_expense_modal_parent_box_title">
-                        Add an Expense 
-                    </p>
-                    <input placeholder="Title" className="create_expense_modal_parent_box_title_input">
-                    </input>
-                    <textarea maxlength="500" placeholder="Description (max 500 char.)" className="create_expense_modal_parent_box_title_textarea">
-                    </textarea>
-                    <div className="create_expense_modal_parent_box_inner_box_left_box">
-                        <p className="create_expense_modal_parent_box_inner_box_right_box_title">
-                            Associated Properties
-                        </p>
-                        {this.renderAssociatedProperties()}
+            <div>
+                <div className="create_expense_modal_parent_box">
+                    <div className="create_expense_modal_parent_box_title_box">
+                        <IoCloseOutline 
+                            onClick={() => {
+                                this.state.closeCreateExpenseModal();
+                            }}
+                            className="create_expense_modal_parent_box_title_box_close_icon"></IoCloseOutline>
                     </div>
-                    <div className="create_expense_modal_parent_box_inner_box_right_box">
-                        <p className="create_expense_modal_parent_box_inner_box_right_box_title">
-                            Expense Date
+                    <div className="create_expense_modal_parent_box_inner_box">
+                        <p className="create_expense_modal_parent_box_title">
+                            Add an Expense 
                         </p>
-                        <input type="date" className="create_expense_modal_parent_box_inner_box_right_box_date_input">
+                        <input 
+                            onChange={this.handleFieldChange} 
+                            name="title" 
+                            placeholder="Title" 
+                            className="create_expense_modal_parent_box_title_input">
                         </input>
-                        <p className="create_expense_modal_parent_box_inner_box_right_box_title">
-                            Expense Amount
-                        </p>
-                        <input type="text" placeholder="$" className="create_expense_modal_parent_box_inner_box_right_box_date_input">
-                        </input>
-                        <p className="create_expense_modal_parent_box_inner_box_right_box_title">
-                            Frequency
-                        </p>
-                        <select className="create_expense_modal_parent_box_inner_box_right_box_date_select">
-                            <option>
-                                Once
-                            </option>
-                            <option>
-                                Daily
-                            </option>
-                            <option>
-                                Weekly
-                            </option>
-                            <option>
-                                Bi-Weekly
-                            </option>
-                            <option>
-                                Monthly
-                            </option>
-                            <option>
-                                Semi-Annually
-                            </option>
-                            <option>
-                                Annually
-                            </option>
-                        </select>
-                    </div>
-                    <div className="clearfix"/>
-                    <div className="create_expense_modal_parent_box_inner_box_bottom_box">
-                        <div className="create_expense_modal_parent_box_inner_box_bottom_box_add_button">
-                            Add Expense
+                        <textarea 
+                            onChange={this.handleFieldChange} 
+                            name="description"
+                            maxlength="500" 
+                            placeholder="Description (max 500 char.)" 
+                            className="create_expense_modal_parent_box_title_textarea">
+                        </textarea>
+                        <div className="create_expense_modal_parent_box_inner_box_left_box">
+                            <p className="create_expense_modal_parent_box_inner_box_right_box_title">
+                                Associated Properties
+                            </p>
+                            <div className="create_expense_modal_render_associated_properties_box">
+                                {this.renderAssociatedProperties()}
+                            </div>
                         </div>
+                        <div className="create_expense_modal_parent_box_inner_box_right_box">
+                            <p className="create_expense_modal_parent_box_inner_box_right_box_title">
+                                Expense Date
+                            </p>
+                            <input 
+                                onChange={this.handleFieldChange} 
+                                name="date"
+                                type="date" 
+                                className="create_expense_modal_parent_box_inner_box_right_box_date_input">
+                            </input>
+                            <p className="create_expense_modal_parent_box_inner_box_right_box_title">
+                                Expense Amount
+                            </p>
+                            <input 
+                                onChange={this.handleFieldChange} 
+                                name="amount"
+                                type="text" 
+                                placeholder="$" 
+                                className="create_expense_modal_parent_box_inner_box_right_box_date_input">
+                            </input>
+                            <p className="create_expense_modal_parent_box_inner_box_right_box_title">
+                                Frequency
+                            </p>
+                            <select 
+                                onChange={this.handleFieldChange} 
+                                name="frequency"
+                                className="create_expense_modal_parent_box_inner_box_right_box_date_select">
+                                <option>
+                                    Once
+                                </option>
+                                <option>
+                                    Daily
+                                </option>
+                                <option>
+                                    Weekly
+                                </option>
+                                <option>
+                                    Bi-Weekly
+                                </option>
+                                <option>
+                                    Monthly
+                                </option>
+                                <option>
+                                    Semi-Annually
+                                </option>
+                                <option>
+                                    Annually
+                                </option>
+                            </select>
+                            <div className="clearfix"/>
+                            <div 
+                                onClick={() => {
+                                    this.verifyExpense()
+                                }}
+                                className="create_expense_modal_parent_box_inner_box_bottom_box_add_button">
+                                Add Expense
+                            </div>
+                        </div>
+                        <div className="clearfix"/>
+                        
                     </div>
+                </div>
+                <div className="create_expense_modal_padding_bottom">
                 </div>
             </div>
         )

@@ -128,3 +128,9 @@
     width: calc(100% - 20% - 220px);
     z-index: 5;
 }
+
+.expenses_dashboard_display_add_expense_box_bottom_padding {
+    background-color: transparent;
+    height: 50px;
+    width: 100%;
+}

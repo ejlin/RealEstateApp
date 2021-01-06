@@ -24,6 +24,7 @@ class ExpensesDashboard extends React.Component {
             displayAddExpense: false,
             isLoading: true
         };
+        this.addExpense = this.addExpense.bind(this);
         this.closeCreateExpenseModal = this.closeCreateExpenseModal.bind(this);
         this.renderPropertyBoxes = this.renderPropertyBoxes.bind(this);
         this.fetchExpensesByProperty = this.fetchExpensesByProperty.bind(this);
@@ -60,6 +61,13 @@ class ExpensesDashboard extends React.Component {
     closeCreateExpenseModal()  {
         this.setState({
             displayAddExpense: false
+        })
+    }
+
+    addExpense() {
+        axios({
+            method: 'post',
+            url: 'api/user'
         })
     }
 
@@ -129,6 +137,7 @@ class ExpensesDashboard extends React.Component {
                                 data={{
                                 state: {
                                     user: this.state.user,
+                                    addExpense: this.addExpense,
                                     closeCreateExpenseModal: this.closeCreateExpenseModal,
                                 }                       
                             }}

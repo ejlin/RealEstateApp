@@ -27,16 +27,19 @@ Property Table:
 
 
 Expenses Table:
-
-_________________________________________________________________________
+____________________________________________________________________________
 id              | uuid                          | not null | Primary Key    |
 owner_id        | uuid                          | not null | Foreign Key    |
-property_id     | uuid                          | not null | Foreign Key    |
 amount          | numeric(10,2)                 | not null |                |
 repeating       | repeating_enum                | not null |                |
 date            | character varying(7)          | not null |                |
 created_at      | timestamp without timezone    | not null |                |
-last_modifed_at | timestamp without timezone    | not null |                |          
+last_modifed_at | timestamp without timezone    | not null |                |   
+
+Expenses_Properties Table:
+____________________________________________________________________________
+expense_id      | uuid                          | not null | Foreign Key    |
+property_id     | uuid                          | not null | Foreign Key    |
 
 repeating_enum is (never, daily, weekly, monthly, annually)
 

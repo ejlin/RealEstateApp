@@ -44,6 +44,6 @@ func (s *Server) getExpensesByUser(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (s *Server) addExpensesByProperty(w http.ResponseWriter, r *http.Request) {
+func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 
 }
