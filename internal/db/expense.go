@@ -6,34 +6,72 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/jinzhu/gorm"
 )
 
 type Expense struct {
 	ID        string     `json:"id",sql:"type:uuid; primary key"`
-	OwnerID string `json:"owner_id",sql:"type:uuid; foreign key"`
-	PropertyID string `json:"property_id",sql:"type:uuid; foreign key"`
+	UserID string `json:"user_id",sql:"type:uuid; foreign key"`
 	CreatedAt *time.Time `json:"created_at,omitempty",sql:"type:timestamp"`
 	LastModifiedAt *time.Time `json:"last_modified_at,omitempty",sql:"type:timestamp"`
+	Title string `json:"title,omitempty",sql:"type:VARCHAR(128)"`
+	Description string `json:"description,omitempty",sql:"type:VARCHAR(300)"`
 	Amount int `json:"amount,omitempty",sql:"type:INT"`
-
+	Frequency FrequencyType `json:"frequency,omitempty",sql:"type:ENUM('once', 'daily', 'weekly', 'bi-weekly', 'monthly', 'annually', 'semi-annually')"`
 	// Date is the date of the expense in MM/DD/YYYY format. It is not stored as a timestamp
 	// for user ease.
 	Date string `json:"date,omitempty", sql:"type:VARCHAR(10)"`
 }
 
-// AddExpenseByUser will add a record of a expense for a user.
-func (handle *Handle) AddExpenseByUser(userID string, expense *Expense) error {
+// ExpensesProperties is a mapping of expenses to properties. One expense can map to multiple propeties and
+// one property can map to multiple expenses. This is a separate table within our database.
+type ExpensesProperties struct {
+	ExpenseID string `json:"expense_id",sql:"type:uuid; foreign key"`
+	PropertyID string `json:"property_id",sql:"type:uuid; foreign key"`
+}
 
-	_, err := uuid.Parse(userID)
-	if err != nil {
-		return fmt.Errorf("invalid UUID: %w", err)
-	}
+type FrequencyType string
+
+const (
+	Once FrequencyType = "once"
+	Daily FrequencyType = "daily"
+	Weekly FrequencyType = "weekly"
+	BiWeekly FrequencyType = "bi-weekly"
+	Monthly FrequencyType = "monthly"
+	Annually FrequencyType = "annually"
+	SemiAnnually FrequencyType = "semi-annually"
+)
+
+// AddExpenseByUser will add a record of a expense for a user.
+// We need to add two types of records to our database. The first is in our expenses table.
+// This contains information about the expense. The second is in our expenses_properties table.
+// This is just a mapping of expense -> properties. We need to perform the two additions within
+// a transaction so we can roll back one or the other if either fails.
+func (handle *Handle) AddExpense(expense *Expense, propertyIDs []string) error {
 
 	if expense == nil {
 		return errors.New("nil expense")
 	}
 
-	return handle.DB.FirstOrCreate(&expense, expense).Error
+	return handle.DB.Transaction(func(tx *gorm.DB) error {
+		
+		if err := tx.FirstOrCreate(&expense, expense).Error; err != nil {
+			return err
+		}
+
+		for _, propertyID := range propertyIDs {
+
+			expensesProperties := ExpensesProperties {
+				ExpenseID: expense.ID,
+				PropertyID: propertyID,
+			}
+
+			if err := tx.FirstOrCreate(&expensesProperties, expensesProperties).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
 }
 
 // GetExpenseByID will fetch the expense by its unique ID.

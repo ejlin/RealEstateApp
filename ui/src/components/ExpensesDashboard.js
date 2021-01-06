@@ -64,10 +64,19 @@ class ExpensesDashboard extends React.Component {
         })
     }
 
-    addExpense(expense) {
+    addExpense(expenseFormData) {
+
         axios({
             method: 'post',
-            url: 'api/user'
+            url: 'api/user/expenses/' + this.state.user["id"],
+            data: expenseFormData
+        }).then(response => {
+            console.log(response);
+            this.setState({
+                displayAddExpense: false
+            })
+        }).catch(error => {
+            
         })
     }
 

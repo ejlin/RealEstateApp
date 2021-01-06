@@ -5,7 +5,6 @@ import './CSS/CreateExpenseModal.css';
 import './CSS/Style.css';
 
 import { IoCloseOutline, IoTrashSharp } from 'react-icons/io5';
-import { IoMdAdd } from 'react-icons/io';
 
 const All = "All";
 const None = "None";
@@ -37,7 +36,6 @@ class CreateExpenseModal extends React.Component {
     }
 
     componentDidMount() {
-        var associatedPropertiesInput = document.getElementById("associated_properties_input");
         document.body.addEventListener('click', this.closePotentialAssociatedProperties);
 
         // Load our properties list.
@@ -57,7 +55,7 @@ class CreateExpenseModal extends React.Component {
                 propertyAddresses.push(propertyAddress);
             }
             this.setState({
-                properties: [...propertiesMap],
+                properties: propertiesMap,
                 propertyAddresses: propertyAddresses,
                 isPropertiesLoading: false
             });
@@ -74,14 +72,12 @@ class CreateExpenseModal extends React.Component {
     }
 
     closePotentialAssociatedProperties() {
-        console.log("here");
         this.setState({
             filteredAssociatedProperties: [],
         })
     }
 
     handleFieldChange(e) {
-        console.log(e.target.value);
         this.setState({ 
             [e.target.name]: e.target.value
          })
@@ -154,7 +150,6 @@ class CreateExpenseModal extends React.Component {
                             currSelectedAssociatedProperties.push(filteredAddress);
                             // Remove None from our list if we add a non-None element.
                             let index = currSelectedAssociatedProperties.indexOf(None);
-                            console.log(index);
                             if (index >= 0) {
                                 currSelectedAssociatedProperties.splice(index, 1);
                                 console.log(currSelectedAssociatedProperties);
@@ -241,23 +236,38 @@ class CreateExpenseModal extends React.Component {
     verifyExpense() {
         
         // TODO: verify expense
-        var expense = [];
-        expense[title] = this.state.title;
-        expense[description] = this.state.description;
-        expense[date] = this.state.date;
-        expense[amount] = this.state.amount;
-        expense[frequency] = this.state.frequency;
+        var expense = new FormData();
+        expense.append(title, this.state.title);
+        expense.append(description, this.state.description);
+        expense.append(date, this.state.date);
+        expense.append(amount, this.state.amount);
+        expense.append(frequency, this.state.frequency);
 
         var currSelectedAssociatedProperties = this.state.currSelectedAssociatedProperties;
         var indexAll = currSelectedAssociatedProperties.indexOf(All);
         var indexNone = currSelectedAssociatedProperties.indexOf(None);
+
+        var associatedProperties = [];
+        var propertiesMap = this.state.properties;
+        console.log(typeof(propertiesMap));
+
         if (indexAll >= 0) {
-            expense[properties] = [All];
+            // Add all of our properties.
+            propertiesMap.forEach((value, key, map) => {
+                associatedProperties.push(value);
+            })
         } else if (indexNone >= 0) {
-            expense[properties] = [None];
         } else {
-            expense[properties] = this.state.currSelectedAssociatedProperties;
+            // Add all the ids of the properties selected.
+            for (var i = 0; i < currSelectedAssociatedProperties.length; i++) {
+                let currSelectedAssociatedProperty = currSelectedAssociatedProperties[i];
+                if (propertiesMap.has(currSelectedAssociatedProperty)) {
+                    associatedProperties.push(propertiesMap.get(currSelectedAssociatedProperty));
+                }
+            }
         }   
+
+        expense.append(properties, associatedProperties);
         
         this.state.addExpense(expense);
     }
