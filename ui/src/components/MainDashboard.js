@@ -43,6 +43,10 @@ export const getDaysUntil = (rentDay) => {
     return rentDay < date ? daysUntilEndOfMonth + rentDay : rentDay- date;
 }
 
+export const capitalizeName = (x) => {
+    return x.charAt(0).toUpperCase() + x.slice(1);
+}
+
 class MainDashboard extends React.Component {
     constructor(props) {
         super(props);
@@ -62,7 +66,6 @@ class MainDashboard extends React.Component {
         };
 
         this.numberWithCommas = this.numberWithCommas.bind(this);
-        this.capitalizeName = this.capitalizeName.bind(this);
         this.getDate = this.getDate.bind(this);
         this.estimateLostRent = this.estimateLostRent.bind(this);
         this.ltvToText = this.ltvToText.bind(this);
@@ -71,13 +74,14 @@ class MainDashboard extends React.Component {
     }
 
     componentDidMount() {
-        var url = '/api/user/property/summary/' + this.state.user["id"];
+        var url = '/api/user/summary/' + this.state.user["id"];
         axios({
             method: 'get',
             url: url,
         }).then(response => {
-            var propertiesSummary = response.data;
-            console.log(propertiesSummary);
+            var userSummary = response.data;
+            var propertiesSummary = userSummary["properties_summary"];
+            var expensesSummary = userSummary["expenses_summary"];
             this.setState({
                 // totalEstimateWorth: propertiesSummary["total_estimate_worth"] this.numberWithCommas(propertiesSummary["total_estimate_worth"]),
                 totalEstimateWorth: propertiesSummary["total_estimate_worth"],
@@ -92,6 +96,7 @@ class MainDashboard extends React.Component {
                 totalCurrentlyRented: propertiesSummary["total_currently_rented"],
                 rentPaymentDateMap: propertiesSummary["rent_payment_date_map"],
                 mortgagePaymentDateMap: propertiesSummary["mortgage_payment_date_map"],
+                totalExpenses: expensesSummary["total_expenses"],
                 isLoading: false
             });
 
@@ -110,10 +115,6 @@ class MainDashboard extends React.Component {
 
     numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
-    capitalizeName(x) {
-        return x.charAt(0).toUpperCase() + x.slice(1);
     }
 
     getDate() {
@@ -187,7 +188,7 @@ class MainDashboard extends React.Component {
         return (
             <div className="main_dashboard_bottom_left_box_bottom_inner_box_text_box">
                 <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_title_two">
-                    $400
+                    ${this.state.totalExpenses}
                 </p>
                 <div className="clearfix"/>
                 <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_subtitle_two">
@@ -299,7 +300,7 @@ class MainDashboard extends React.Component {
                                         {this.getDate()}
                                     </p>
                                     <p id="main_dashboard_welcome_box_name">
-                                        Welcome, {this.capitalizeName(this.state.user["first_name"])}
+                                        Welcome, {capitalizeName(this.state.user["first_name"])}
                                     </p>
                                 </div>
                                 <div id="main_dashboard_summary_cards_box">
@@ -432,7 +433,7 @@ class MainDashboard extends React.Component {
                                             </div>
                                             <div className="main_dashboard_bottom_left_box_bottom_inner_box">
                                                 <p className="main_dashboard_box_title">
-                                                    Additional Expenses
+                                                    Expenses
                                                 </p>
                                                 <IoMdAddCircle className="main_dashboard_box_icon"></IoMdAddCircle>
                                                 <div className="clearfix"/>

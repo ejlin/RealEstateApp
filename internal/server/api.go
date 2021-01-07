@@ -29,7 +29,7 @@ func (s *Server) HandleRoutes() {
 	r.HandleFunc("/api/user/property/{id}", s.addPropertyByUser).Methods("POST")
 
 	// Used to display our main dashboard page. Provides a summary for users. 
-	r.HandleFunc("/api/user/property/summary/{id}", s.getPropertiesSummary).Methods("GET")
+	r.HandleFunc("/api/user/summary/{id}", s.getUserSummary).Methods("GET")
 
 	// Order matters. Routing is done sequentially, so the first one must be the one that doesn't satisfy the second one.
 	r.HandleFunc("/api/user/files/{id}/{property_id}/{file_name}", s.getFile).Queries("request", "{request}").Methods("GET")
@@ -46,6 +46,7 @@ func (s *Server) HandleRoutes() {
 	r.HandleFunc("/api/user/expenses/{id}/{property_id}", s.getExpensesByProperty).Methods("GET")
 	r.HandleFunc("/api/user/expenses/{id}", s.getExpensesByUser).Methods("GET")
 	r.HandleFunc("/api/user/expenses/{id}", s.addExpensesByUser).Methods("POST")
+	r.HandleFunc("/api/user/expenses/{id}/{expense_id}", s.deleteExpense).Methods("DELETE")
 
 	// User Settings Flow
 	r.HandleFunc("/api/user/settings/profile/{id}", s.updateSettingsProfile).Methods("PUT")
@@ -294,7 +295,7 @@ func (s *Server) addPropertyByUser(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (s *Server) getPropertiesSummary(w http.ResponseWriter, r *http.Request) {
+func (s *Server) getUserSummary(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	userID, ok := vars["id"]
@@ -306,14 +307,14 @@ func (s *Server) getPropertiesSummary(w http.ResponseWriter, r *http.Request) {
 
 	ll := log.With().Str("user_id", userID).Logger()
 
-	propertiesSummary, err := s.calculatePropertiesAnalysis(userID, nil, nil)
+	userSummary, err := s.calculateUserSummary(userID)
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to calculate properties summary")
 		http.Error(w, "unable to calculate properties summary", http.StatusInternalServerError)
 		return
 	}
 
-	RespondToRequest(w, propertiesSummary)
+	RespondToRequest(w, userSummary)
 	return
 }
 

@@ -16,18 +16,11 @@ type Expense struct {
 	LastModifiedAt *time.Time `json:"last_modified_at,omitempty",sql:"type:timestamp"`
 	Title string `json:"title,omitempty",sql:"type:VARCHAR(128)"`
 	Description string `json:"description,omitempty",sql:"type:VARCHAR(300)"`
-	Amount int `json:"amount,omitempty",sql:"type:INT"`
+	Amount float64 `json:"amount,omitempty",sql:"type:type:NUMERIC(10,2)"`
 	Frequency FrequencyType `json:"frequency,omitempty",sql:"type:ENUM('once', 'daily', 'weekly', 'bi-weekly', 'monthly', 'annually', 'semi-annually')"`
 	// Date is the date of the expense in MM/DD/YYYY format. It is not stored as a timestamp
 	// for user ease.
 	Date string `json:"date,omitempty", sql:"type:VARCHAR(10)"`
-}
-
-// ExpensesProperties is a mapping of expenses to properties. One expense can map to multiple propeties and
-// one property can map to multiple expenses. This is a separate table within our database.
-type ExpensesProperties struct {
-	ExpenseID string `json:"expense_id",sql:"type:uuid; foreign key"`
-	PropertyID string `json:"property_id",sql:"type:uuid; foreign key"`
 }
 
 type FrequencyType string
@@ -103,8 +96,8 @@ func (handle *Handle) GetExpensesByProperty(userID, propertyID string) ([]*Expen
 	return expenses, nil
 }
 
-// GetExpensesByOwner will fetch all properties associated with a user.
-func (handle *Handle) GetExpensesByOwner(userID string) ([]*Expense, error) {
+// GetExpensesByUser will fetch all properties associated with a user.
+func (handle *Handle) GetExpensesByUser(userID string) ([]*Expense, error) {
 
 	_, err := uuid.Parse(userID)
 	if err != nil {
@@ -112,18 +105,18 @@ func (handle *Handle) GetExpensesByOwner(userID string) ([]*Expense, error) {
 	}
 
 	var expenses []*Expense
-	if err := handle.DB.Where("owner_id = ?", userID).Find(&expenses).Error; err != nil {
+	if err := handle.DB.Where("user_id = ?", userID).Find(&expenses).Error; err != nil {
 		return nil, err
 	}
 	return expenses, nil
 }
 
 // RemoveExpenseByID will delete an expense from our database.
-func (handle *Handle) RemoveExpenseByID(ownerID, expenseID string) error {
+func (handle *Handle) DeleteExpenseByID(userID, expenseID string) error {
 
 	// TODO: eric.lin to explore gorm soft delete options. Provide users with undo method.
 
-	_, err := uuid.Parse(ownerID)
+	_, err := uuid.Parse(userID)
 	if err != nil {
 		return fmt.Errorf("invalid UUID: %w", err)
 	}
@@ -133,17 +126,55 @@ func (handle *Handle) RemoveExpenseByID(ownerID, expenseID string) error {
 		return fmt.Errorf("invalid UUID: %w", err)
 	}
 
-	expense := Expense{
-		ID: expenseID,
+	return handle.DB.Transaction(func(tx *gorm.DB) error {
+		
+		expense := Expense{
+			ID: expenseID,
+		}
+
+		expenseProperties := ExpensesProperties {
+			ExpenseID: expenseID,
+		}
+
+		if err := tx.Where("user_id = ?", userID).Delete(&expense).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Where("expense_id = ?", expenseID).Delete(&expenseProperties).Error; err != nil {
+			return err
+		}
+		
+		return nil
+	})
+}
+
+/*****************************************************************************/
+
+// ExpensesProperties is a mapping of expenses to properties. One expense can map to multiple propeties and
+// one property can map to multiple expenses. This is a separate table within our database.
+type ExpensesProperties struct {
+	ExpenseID string `json:"expense_id",sql:"type:uuid; foreign key"`
+	PropertyID string `json:"property_id",sql:"type:uuid; foreign key"`
+}
+
+
+func (handle *Handle) GetPropertiesAssociatedWithExpense(expenseID string) ([]string, error) {
+
+	_, err := uuid.Parse(expenseID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid UUID: %w", err)
 	}
 
-	delete := handle.DB.Where("owner_id = ?", ownerID).Delete(&expense)
-	if err := delete.Error; err != nil {
-		return err
+	var expensesProperties []ExpensesProperties
+	if err := handle.DB.Select("property_id").Where("expense_id = ?", expenseID).Find(&expensesProperties).Error; err != nil {
+		return nil, err
 	}
 
-	if delete.RowsAffected != 1 {
-		return fmt.Errorf("incorrect number of properties deleted: %d", delete.RowsAffected)
+	var properties []string
+
+	for _, expenseProperties := range expensesProperties {
+		properties = append(properties, expenseProperties.PropertyID)
 	}
-	return nil
+
+	return properties, nil
 }

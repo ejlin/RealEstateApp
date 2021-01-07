@@ -1,0 +1,115 @@
+.expense_card_parent_box {
+    background-color: white;
+    border: 1px solid #d3d3d3;
+    height: 50px;
+    transition: 0.5s;
+    width: calc(100% - 2px);
+}
+
+.expense_card_parent_box:hover, .expense_card_parent_box_expanded {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
+    transform: scale(1.01);
+}
+
+.expense_card_parent_box_title {
+    float: left;
+    font-weight: bold;
+    line-height: 50px;
+    margin-left: 25px;
+    user-select: none;
+    width: 350px;
+}
+
+.expense_card_parent_box_price_title {
+    float: right;
+    line-height: 50px;
+    user-select: none;
+    margin-right: 25px;
+}
+
+.expense_card_parent_box_date {
+    float: left;
+    line-height: 50px;
+}
+
+.expense_card_expanded_box {
+    background-color: white;
+    float: left;
+    margin-bottom: 25px;
+    padding-bottom: 25px;
+    width: 100%;
+}
+
+.expense_card_expanded_box_title_box {
+    height: 30px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.expense_card_expanded_box_title_box_icon {
+    border: 2px solid #296CF6;
+    border-radius: 50px;
+    color: #296CF6;
+    cursor: pointer;
+    float: right;
+    height: 20px;
+    margin-right: 20px;
+    padding: 5px;
+    transition: 0.5s;
+    width: 20px;
+}
+
+#expense_card_expanded_box_title_box_leftmost_icon {
+    margin-right: 15px;
+}
+
+.expense_card_expanded_box_title_box_icon:hover {
+    background-color: #296CF6;
+    color: white;
+}
+
+.expense_card_expanded_box_title_box_date {
+    float: left;
+    font-weight: bold;
+    line-height: 30px;
+    margin-left: 25px;
+}
+
+.expense_card_expanded_box_bottom_box {
+    width: 100%;
+}
+
+.expense_card_expanded_box_bottom_box_left_box {
+    float: left;
+    margin-right: 25px;
+    width: calc(75% - 25px);
+}
+
+.expense_card_expanded_box_bottom_box_right_box {
+    float: right;
+    width: 25%;
+}
+
+.expense_card_expanded_box_bottom_box_left_box_text {
+    margin-left: 25px;
+    word-break: break-all;
+}
+
+.expense_card_expanded_box_bottom_box_right_box_text {
+    margin-right: 20px;
+}
+
+.expense_card_expanded_box_bottom_box_right_box_text_description {
+    float: left;
+}
+
+.expense_card_expanded_box_bottom_box_right_box_text_actual {
+    float: right;
+    font-style: italic;
+    margin-right: 25px;
+}
+
+.expense_card_expanded_box_bottom_box_right_box_inner_box {
+    margin-top: 5px;
+}

@@ -13,6 +13,22 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// RestExpense is an expense sent back by the server to the client.
+type RestExpense struct {
+	ID        string     `json:"id"`
+	UserID string `json:"user_id"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	LastModifiedAt *time.Time `json:"last_modified_at,omitempty"`
+	Title string `json:"title,omitempty"`
+	Description string `json:"description,omitempty"`
+	Amount float64 `json:"amount,omitempty"`
+	Frequency db.FrequencyType `json:"frequency,omitempty"`
+	Properties []string `json:"properties,omitempty"`
+	// Date is the date of the expense in MM/DD/YYYY format. It is not stored as a timestamp
+	// for user ease.
+	Date string `json:"date,omitempty"`
+} 
+
 func (s *Server) getExpensesByProperty(w http.ResponseWriter, r *http.Request) {
 	
 	vars := mux.Vars(r)
@@ -48,6 +64,50 @@ func (s *Server) getExpensesByProperty(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) getExpensesByUser(w http.ResponseWriter, r *http.Request) {
 
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Info().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	expenses, err := s.DBHandle.GetExpensesByUser(userID)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to query for user expenses")
+		http.Error(w, "unable to query for user expenses", http.StatusBadRequest)
+		return
+	}
+
+	var restExpenses []*RestExpense
+
+	for _, expense := range expenses {
+		properties, err := s.DBHandle.GetPropertiesAssociatedWithExpense(expense.ID)
+		if err != nil || len(properties) == 0 {
+			// Don't error out so we still return what expenses we can.
+			ll.Warn().Err(err).Str("expense_id", expense.ID).Msg("unable to get properties associated with expense")
+			continue
+		}
+		restExpenses = append(restExpenses, &RestExpense {
+			ID: expense.ID,
+			UserID: expense.UserID,
+			CreatedAt: expense.CreatedAt,
+			LastModifiedAt: expense.LastModifiedAt,
+			Title: expense.Title,
+			Description: expense.Description,
+			Amount: expense.Amount,
+			Frequency: expense.Frequency,
+			Properties: properties,
+			Date: expense.Date,
+		})
+	}
+
+	ll.Info().Msg("successfully returned expenses by user")
+	RespondToRequest(w, restExpenses)
+	return
 }
 
 func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
@@ -112,7 +172,7 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 
 	now := time.Now()
 
-	amount, err := strconv.Atoi(sAmount)
+	amount, err := strconv.ParseFloat(sAmount, 64)
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to convert expense amount to int")
 		http.Error(w, "unable to convert expense amount to int", http.StatusBadRequest)
@@ -139,7 +199,71 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write([]byte("Ok"))
+	RespondToRequest(w, &RestExpense {
+		ID: expense.ID,
+		UserID: expense.UserID, 
+		CreatedAt: expense.CreatedAt,
+		LastModifiedAt: expense.LastModifiedAt,
+		Title: expense.Title,
+		Description: expense.Description,
+		Amount: expense.Amount,
+		Frequency: expense.Frequency,
+		Date: expense.Date,
+		Properties: associatedProperties,
+	})
+	return
+}
+
+func (s *Server) deleteExpense(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Info().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	expenseID, ok := vars["expense_id"]
+	if !ok {
+		ll.Info().Msg("missing expense id")
+		http.Error(w, "missing expense id", http.StatusBadRequest)
+		return
+	}
+
+	err := s.DBHandle.DeleteExpenseByID(userID, expenseID)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to delete expense")
+		http.Error(w, "unable to delete expense", http.StatusInternalServerError)
+		return
+	}
+
+	ll.Info().Str("expense_id", expenseID).Msg("successfully deleted expense")
+	w.Write([]byte("ok"))
+}
+
+type ExpensesSummary struct {
+	TotalExpenses float64 `json:"total_expenses,omitempty"`
+}
+
+func (s *Server) calculateExpensesAnalysis(userID string) (*ExpensesSummary, error) {
+
+	expenses, err := s.DBHandle.GetExpensesByUser(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	var totalExpenses float64
+	for _, expense := range expenses {
+		totalExpenses += expense.Amount
+	}
+
+	return &ExpensesSummary {
+		TotalExpenses: totalExpenses,
+	}, nil
 }
 
 func getFrequency(frequency string) db.FrequencyType {

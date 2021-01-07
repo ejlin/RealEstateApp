@@ -7,6 +7,7 @@ import './CSS/Style.css';
 import CreateExpenseModal from './CreateExpenseModal.js';
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
+import ExpenseCard from './ExpenseCard.js';
 
 import { MdError } from 'react-icons/md';
 
@@ -22,12 +23,14 @@ class ExpensesDashboard extends React.Component {
             missingEstimate: this.props.location.state.missingEstimate,
             propertiesMap: null,
             displayAddExpense: false,
+            propertiesToExpenses: new Map(),
             isLoading: true
         };
         this.addExpense = this.addExpense.bind(this);
         this.closeCreateExpenseModal = this.closeCreateExpenseModal.bind(this);
         this.renderPropertyBoxes = this.renderPropertyBoxes.bind(this);
-        this.fetchExpensesByProperty = this.fetchExpensesByProperty.bind(this);
+        this.expenseFormDataToExpense = this.expenseFormDataToExpense.bind(this);
+        this.deleteExpense = this.deleteExpense.bind(this);
     }
 
     componentDidMount() {
@@ -39,7 +42,6 @@ class ExpensesDashboard extends React.Component {
         }).then(response => {
             var propertiesList = response.data.sort();
 
-
             var propertiesMap = new Map();
             for (var i = 0; i < propertiesList.length; i++) {
                 var propertyID = propertiesList[i]["id"];
@@ -47,7 +49,7 @@ class ExpensesDashboard extends React.Component {
                 propertiesMap.set(propertyID, propertyAddress);
             }
             this.setState({
-                propertiesMap: [...propertiesMap],
+                propertiesMap: propertiesMap,
                 isLoading: false
             });
         }).catch(error => {
@@ -56,12 +58,47 @@ class ExpensesDashboard extends React.Component {
                 isLoading: false
             })
         });
+
+        axios({
+            method: 'get',
+            url: 'api/user/expenses/' + this.state.user["id"],
+        }).then(response => {
+            var propertiesToExpenses = this.state.propertiesToExpenses;
+            // response.data is an array of expenses. Order them by property IDs -> expenses.
+            var expenses = response.data;
+            for (var i = 0; i < expenses.length; i++) {
+                let expense = expenses[i];
+                let associatedProperties = expense["properties"];
+                for (var j = 0; j < associatedProperties.length; j++) {
+                    let propertyID = associatedProperties[j];
+                    if (!propertiesToExpenses.has(propertyID)){
+                        propertiesToExpenses.set(propertyID, []);
+                    }
+                    let propertiesToExpensesArr = propertiesToExpenses.get(propertyID);
+                    propertiesToExpensesArr.push(expense);
+                    propertiesToExpenses.set(propertyID, propertiesToExpensesArr);
+                }
+            }
+            this.setState({
+                propertiesToExpenses: propertiesToExpenses,
+            })
+        }).catch(error => {
+
+        })
     }
 
     closeCreateExpenseModal()  {
         this.setState({
             displayAddExpense: false
         })
+    }
+
+    expenseFormDataToExpense(expenseFormData) {
+        var object = [];
+        for (const [key, value]  of expenseFormData) {
+            object[key] = value;
+        }
+        return object;
     }
 
     addExpense(expenseFormData) {
@@ -71,54 +108,114 @@ class ExpensesDashboard extends React.Component {
             url: 'api/user/expenses/' + this.state.user["id"],
             data: expenseFormData
         }).then(response => {
-            console.log(response);
+            var expense = response.data;
+            var propertiesToExpenses = this.state.propertiesToExpenses;
+            var associatedProperties = expenseFormData.get("properties");
+            var splitAssociatedProperties = associatedProperties.split(",")
+
+            for (var i = 0; i < splitAssociatedProperties.length; i++) {
+                let propertyID = splitAssociatedProperties[i];
+                if (!propertiesToExpenses.has(propertyID)) {
+                    propertiesToExpenses.set(propertyID, []);
+                }
+                let propertiesToExpensesArr = propertiesToExpenses.get(propertyID);
+                propertiesToExpensesArr.push(expense);
+                propertiesToExpenses.set(propertyID, propertiesToExpensesArr);
+            }
+
             this.setState({
+                propertiesToExpenses: propertiesToExpenses,
                 displayAddExpense: false
             })
         }).catch(error => {
-            
+            console.log(error);
         })
     }
 
-    async fetchExpensesByProperty(propertyID) {
-        // Load our properties list.
-        await axios({
-            method: 'get',
-            url:  'api/user/expenses/' + this.state.user["id"],
-            params: {
-                property_id: propertyID,
-                limit: 5,
-            }
+    deleteExpense(expenseID, properties) {
+        console.log(properties);
+        axios({
+            method: 'delete',
+            url: 'api/user/expenses/' + this.state.user["id"] + "/" + expenseID,
         }).then(response => {
-            return null;
+            console.log(response);
+            var propertiesToExpenses = this.state.propertiesToExpenses;
+
+            for (var i = 0; i < properties.length; i++) {
+                let propertyID = properties[i];
+                if (!propertiesToExpenses.has(propertyID)) {
+                    continue;
+                }
+                let propertiesToExpensesArr = propertiesToExpenses.get(propertyID);
+                for (var j = 0; j < propertiesToExpensesArr.length; j++) {
+                    if (propertiesToExpensesArr[j]["id"] === expenseID){
+                        propertiesToExpensesArr.splice(j, 1);
+                    }
+                }
+                propertiesToExpenses.set(propertyID, propertiesToExpensesArr);
+            }
+            console.log(propertiesToExpenses);
+
+            this.setState({
+                propertiesToExpenses: propertiesToExpenses,
+                displayAddExpense: false
+            }, () => console.log(this.state.propertiesToExpenses))
         }).catch(error => {
-            console.log(error);
-        });
-        return null;
+            console.log(error)
+        })
     }
 
     renderPropertyBoxes() {
         var elements = [];
         var propertiesMap = this.state.propertiesMap;
+        var propertiesToExpenses = this.state.propertiesToExpenses;
         propertiesMap.forEach((value, key, map) => {
-            // value[0] is our propertyID.
-            // value[1] is our property Address.
-            var propertyExpenses = this.fetchExpensesByProperty(value[0]);
-
-            if (propertyExpenses !== null && propertyExpenses.length > 0) {
+            // value is our propertyID
+            var propertyExpenses = propertiesToExpenses.get(key);
+            if (propertyExpenses !== null && propertyExpenses !== undefined && propertyExpenses.length > 0) {
                 elements.push(
                     <div>
                         <p className="expenses_dashboard_body_inner_box_title">
-                            {value[1]}
+                            {value}
+                        </p>
+                    </div>
+                );
+
+                var expenses = [];
+                for (var i = 0; i < propertyExpenses.length; i++) {
+                    let expense = propertyExpenses[i];
+                    expenses.push(
+                        <ExpenseCard data={{
+                            state: {
+                                expense: expense,
+                                deleteExpense: this.deleteExpense
+                            }
+                        }}>
+                        </ExpenseCard>
+                    )
+                }
+
+                elements.push(
+                    <div>
+                        <div className="expenses_dashboard_property_expenses_parent_box">
+                            {expenses}
+                        </div>
+                        <div className="clearfix"/>
+                    </div>
+                );
+            } else {
+                elements.push(
+                    <div>
+                        <p className="expenses_dashboard_body_inner_box_title">
+                            {value}
                         </p>
                         <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
-                            {propertyExpenses === null ? <div></div> :
                             <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box_title_box">
                                 <MdError className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></MdError>
                                 <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
                                     No Expenses to show
                                 </p>
-                            </div>}
+                            </div>
                         </div>
                     </div>
                 );

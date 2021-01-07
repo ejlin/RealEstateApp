@@ -249,7 +249,6 @@ class CreateExpenseModal extends React.Component {
 
         var associatedProperties = [];
         var propertiesMap = this.state.properties;
-        console.log(typeof(propertiesMap));
 
         if (indexAll >= 0) {
             // Add all of our properties.
@@ -290,13 +289,14 @@ class CreateExpenseModal extends React.Component {
                         <input 
                             onChange={this.handleFieldChange} 
                             name="title" 
-                            placeholder="Title" 
+                            maxLength="30"
+                            placeholder="Title (max 30 char.)" 
                             className="create_expense_modal_parent_box_title_input">
                         </input>
                         <textarea 
                             onChange={this.handleFieldChange} 
                             name="description"
-                            maxlength="500" 
+                            maxLength="500" 
                             placeholder="Description (max 500 char.)" 
                             className="create_expense_modal_parent_box_title_textarea">
                         </textarea>
