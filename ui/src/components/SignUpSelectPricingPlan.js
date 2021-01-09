@@ -37,7 +37,7 @@ class SignUpSelectPricingPlan extends React.Component {
         this.state = {
             user: this.props.location.state.user,
             form: this.props.location.state.form,
-            displayPage: paymentPage,
+            displayPage: planPage,
             plan: starter
         };
     }
@@ -246,6 +246,10 @@ class SignUpSelectPricingPlan extends React.Component {
                             </div>
                         </div>
                     </div>
+                    <div className="clearfix"/>
+                    <p className="sign_up_select_pricing_plan_parent_box_right_box_element_box_middle_box_text_astericks_text">
+                        * $1/additional property; $1/additional 5GB
+                    </p>
                 </div> : 
                 <div>
                     <div className="sign_up_select_pricing_plan_parent_box">
