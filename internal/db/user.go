@@ -24,7 +24,7 @@ type User struct {
 	Password  string `json:"password,omitempty",sql:"type:varchar(50)"`
 	Email     string `json:"email,omitempty",sql:"type:varchar(50)"`
 
-	Plan PlanType `json:"plan,omitempty",sql:"type:ENUM('Free', 'Basic', 'Business', 'Enterprise')"`
+	Plan PlanType `json:"plan,omitempty",sql:"type:ENUM('Inactivated', 'Starter', 'Professional', 'Enterprise')"`
 
 	// User settings, corresponds to the "Settings page" in the UI. Contains information about
 	// about stuff like "whether to receive marketing emails, etc."
@@ -34,9 +34,9 @@ type User struct {
 type PlanType string
 
 const (
-	Free       PropertyType = "Free"
-	Basic      PropertyType = "Basic"
-	Business   PropertyType = "Business"
+	Inactivated      PropertyType = "Inactivated"
+	Starter     PropertyType = "Starter"
+	Professional   PropertyType = "Professional"
 	Enterprise PropertyType = "Enterprise"
 )
 

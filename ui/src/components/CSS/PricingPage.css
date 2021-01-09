@@ -21,13 +21,13 @@
 
 #pricing_page_title {
     background-color: white;
-    font-size: 3em;
+    font-size: 2.5em;
     font-weight: bold;
     text-align: center;
 }
 
 #pricing_page_subtitle {
-    font-size: 1.5em;
+    font-size: 1.3em;
     margin-left: calc((100% - 600px)/2);
     margin-top: 25px;
     text-align: center;
@@ -35,7 +35,7 @@
 }
 
 #pricing_page_prices_box {
-    margin-top: 75px;
+    margin-top: 50px;
     width: 100%;
 }
 
@@ -43,7 +43,7 @@
     background-color:  #EEF0F3;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.05), 0 6px 10px 0 rgba(0, 0, 0, 0.09) !important;
     float: left;
-    height: 450px;
+    height: 430px;
     margin-left: 20px;
     width: calc((100% - 40px)/3);
 }
@@ -59,13 +59,14 @@
 
 .pricing_page_prices_title {
     color:  #296CF6;
-    font-size: 2em;
+    font-size: 1.8em;
     font-weight: bold;
     margin-top: 30px;
     text-align: center;
 }
 
 .pricing_page_prices_subtitle {
+    background-color: transparent !important;
     font-size: 1.0em;
     margin-top: 10px;
     text-align: center;
@@ -83,27 +84,30 @@
 
 .pricing_page_features_box {
     margin-top: -10px;
+    position: relative;
     width: 100%;
 }
 
 .pricing_page_bullet {
-    margin-left: 12%;
+    margin-left: 15%;
     margin-bottom: 15px;
-    height: 30px;
-    width: 76%;
+    height: 27.5px;
+    width: 70%;
 }
 
 .pricing_page_bullet_icon {
+    background-color: transparent !important;
     float: left;
-    height: 30px;
-    width: 30px;
+    height: 25px;
+    width: 25px;
 }
 
 .pricing_page_bullet_text {
+    background-color: transparent !important;
     float: left;
-    font-size: 1.1em;
+    font-size: 1.0em;
     font-weight: bold;
-    line-height: 30px;
+    line-height: 25px;
     margin-left: 10px;
 }
 
@@ -116,5 +120,48 @@
 }
 
 .large {
-    font-size: 1.5em;
+    font-size: 1.4em;
+}
+
+.pricing_page_custom_solutions_talk_box {
+    height: 40px;
+    margin-left: calc((100% - 390px)/2);
+    margin-top: 75px;
+    width: 390px;
+}
+
+.pricing_page_custom_solutions_sales_text {
+    float: left;
+    line-height: 40px;
+}
+
+.pricing_page_custom_solutions_sales_button {
+    background-color: #296CF6;
+    border-radius: 4px;
+    height: 40px;
+    margin-left: 10px;
+    float: left;
+    
+}
+
+.pricing_page_custom_solutions_sales_button_text {
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    line-height: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+    transition: 0.5s;
+}
+
+.pricing_page_custom_solutions_sales_button_text:hover {
+    opacity: 0.7;
+}
+
+.pricing_page_asterick {
+    bottom: 0;
+    font-size: 0.8em;
+    margin-left: 15%;
+    margin-top: 75px;
+    width: 70%;
 }

@@ -45,9 +45,18 @@ class Login extends React.Component {
             }
         }).then(response => {
             if (response != null) {
+
+                var user = response.data;
+                var redirect;
+                
+                if (user["plan"] === "inactivated") {
+                    redirect = "/selectpricingplan"
+                } else {
+                    redirect = "/dashboard"
+                }
                 this.setState({
-                    user: response.data,
-                    redirect: "/dashboard"
+                    user: user,
+                    redirect: redirect
                 }, () => console.log(this.state.user));
             }
             

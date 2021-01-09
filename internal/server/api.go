@@ -122,10 +122,11 @@ func (s *Server) addUser(w http.ResponseWriter, r *http.Request) {
 	sanitizeNewUser(&user)
 
 	// Fill in required information.
-	createdAt := time.Now().UTC()
+	now := time.Now().UTC()
 
 	user.ID = uuid.New().String()
-	user.CreatedAt = &createdAt
+	user.CreatedAt = &now
+	user.LastLogin = &now
 
 	// Load user settings with the defaults.
 	defaultSettings := createDefaultSettings()
@@ -137,14 +138,7 @@ func (s *Server) addUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	mUser, err := json.Marshal(user)
-	if err != nil {
-		log.Warn().Err(err).Str("name", user.FirstName+" "+user.LastName).Msg("unable to marshal created user")
-		http.Error(w, "unable to marshal created user", http.StatusForbidden)
-		return
-	}
-
-	w.Write(mUser)
+	RespondToRequest(w, user)
 	return
 }
 

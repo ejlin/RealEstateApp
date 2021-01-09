@@ -268,19 +268,20 @@ class PropertyCard extends React.Component {
                             <p className="property_card_box_title">
                                 ${this.numberWithCommas(this.state.property["estimate"])}
                             </p>
-                            {this.state.property["currently_rented"] ? 
-                            <div>
-                                <FaCheckCircle className="rented_check_icon"></FaCheckCircle>
-                                <p className="property_rented_text">
-                                    Rented
-                                </p>
-                            </div> : <div></div>}
                             <IoOpenOutline 
                                 onClick={() => {
                                     this.setActiveProperty(this.state.property["id"])
                                 }}
                                 className="property_card_box_title_expand_icon">
                             </IoOpenOutline>
+                            {this.state.property["currently_rented"] ? 
+                            <div className="property_card_rented_box">
+                                <FaCheckCircle className="rented_check_icon"></FaCheckCircle>
+                                <p className="property_rented_text">
+                                    Rented
+                                </p>
+                            </div> : <div></div>}
+                            
                             {/* <div className="property_card_box_title_expand_button">
                                 Expand
                             </div> */}

@@ -97,14 +97,6 @@ class ExpenseCard extends React.Component {
                                     </p>
                                 </div>
                                 <div className="clearfix"/>
-                                <div className="expense_card_expanded_box_bottom_box_right_box_inner_box">
-                                    <p className="expense_card_expanded_box_bottom_box_right_box_text_description">
-                                        Last Modified: 
-                                    </p>
-                                    <p className="expense_card_expanded_box_bottom_box_right_box_text_actual">
-                                        {this.convertDate(this.state.expense["last_modified_at"])}
-                                    </p>
-                                </div>
                             </div>
                         </div>
                     </div>

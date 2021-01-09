@@ -1,0 +1,151 @@
+.sign_up_select_pricing_plan_parent_box {
+    margin-left: calc(220px + 80px);
+    padding-top: 80px;
+    width: calc(100% - 220px - 220px - 80px - 80px);
+}
+
+.sign_up_select_pricing_plan_parent_box_title {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.sign_up_select_pricing_plan_parent_box_left_box {
+    border-top: 1px solid black;
+    float: left;
+    margin-top: 70px;
+    width: 300px;
+}
+
+.sign_up_select_pricing_plan_parent_box_right_box {
+    float: right;
+    width: calc(100% - 300px);
+}
+
+.sign_up_select_pricing_plan_parent_box_title_box {
+    float: left;
+    margin-left: calc((100% - 260px)/2);
+    width: 260px;
+}
+
+.sign_up_select_pricing_plan_parent_box_title_box_icon {
+    color:  #296CF6;
+    float: left;
+    height: 30px;
+    width: 30px;
+}
+
+.sign_up_select_pricing_plan_parent_box_title_box_text {
+    float: left;
+    font-size: 1.5em;
+    font-weight: bold;
+    line-height: 30px;
+    margin-left: 10px;
+}
+
+.sign_up_select_pricing_plan_parent_box_title_box_subtext {
+    margin-top: 10px;
+}
+
+.sign_up_select_pricing_plan_parent_box_title_box_steps {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+.sign_up_select_pricing_plan_parent_box_right_box_element_box {
+    float: left;
+    width: 33%;
+}
+
+.sign_up_select_pricing_plan_parent_box_right_box_element_box_title {
+    font-size: 1.3em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.sign_up_select_pricing_plan_parent_box_right_box_element_box_recommended_subtitle {
+    color: #296CF6;
+    text-align: center;
+}
+
+.sign_up_select_pricing_plan_parent_box_right_box_element_box_title_box {
+    border-bottom: 1px solid black;
+    height: 55px;
+    margin-top: 15px;
+}
+
+.sign_up_select_pricing_plan_parent_box_right_box_element_box_middle_box {
+
+}
+
+.sign_up_select_pricing_plan_parent_box_right_box_element_box_middle_box_text {
+    font-size: 1.1em;
+    height: 40px;
+    line-height: 40px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.sign_up_select_pricing_plan_title_box {
+}
+
+.sign_up_select_pricing_plan_parent_box_upper {
+    margin-top: 40px;
+}
+
+.sign_up_select_pricing_plan_parent_box_right_box_element_box_middle_box_select_button {
+    background-color: #296CF6;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    height: 40px;
+    line-height: 40px;
+    margin-left: calc((100% - 100px)/2);
+    margin-top: 20px;
+    text-align: center;
+    transition: 0.5s;
+    width: 100px;
+}
+
+.sign_up_select_pricing_plan_parent_box_right_box_element_box_middle_box_select_button:hover {
+    opacity: 0.8;
+}
+
+
+.sign_up_select_pricing_plan_title_box_welcome {
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.payment_information_box {
+    background-color: white;
+    border-radius: 4px;
+    float: left;
+    margin-left: calc((100% - 500px)/2);
+    margin-right: calc((100% - 500px)/2);
+    margin-top: 20px;
+    padding: 30px;
+    width: 500px;
+}
+
+.payment_information_title {
+    margin-left: calc((100% - 500px)/2);
+    margin-right: calc((100% - 500px)/2);
+    margin-top: 50px;
+    width: calc(500px);
+}
+
+.payment_information_title_back_icon {
+    float: left;
+    height: 15px;
+}
+
+.payment_information_title_back_text {
+    float: left;
+    line-height: 15px;
+}
+
+.payment_information_title_back_button {
+    cursor: pointer;
+}

@@ -13,6 +13,7 @@ import { BsFillAwardFill } from 'react-icons/bs';
 import { RiUser3Fill } from 'react-icons/ri';
 import { IoMdSettings, IoMdNotifications, IoIosSend } from 'react-icons/io';
 import { FaUserTie, FaBuilding } from 'react-icons/fa';
+import { TiUser } from 'react-icons/ti';
 
 const general = "general";
 const email = "email";
@@ -724,7 +725,7 @@ class SettingsDashboard extends React.Component {
                             
                             {this.state.profilePicture ? 
                             <img id="settings_dashboard_user_information_profile_picture" src={this.state.profilePicture} alt={"logo"}/> :
-                            <RiUser3Fill id="settings_dashboard_user_information_profile_picture_default"></RiUser3Fill>}
+                            <TiUser id="settings_dashboard_user_information_profile_picture_default"></TiUser>}
 
                             <label htmlFor="settings_dashboard_upload_profile_picture_button">
                                 <MdEdit id="settings_dashboard_user_information_profile_picture_edit_icon"></MdEdit>

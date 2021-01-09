@@ -80,7 +80,7 @@
 
 .analysis_dashboard_parent_inner_box_title_text {
     float: left;
-    font-size: 1.8em;
+    font-size: 1.6em;
     font-weight: bold;
 }
 
@@ -360,4 +360,25 @@
     color: black;
     font-size: 1em;
     text-align: center;
+}
+
+.analysis_dashboard_advanced_inner_box_middle_box {
+    margin-top: 25px;
+    width: 100%;
+}
+
+.analysis_dashboard_advanced_inner_box_middle_box_left_box {
+    background-color: white;
+    border-radius: 4px;
+    float: left;
+    height: 400px;
+    width: calc((50% - 12.5px));
+}
+
+.analysis_dashboard_advanced_inner_box_middle_box_right_box {
+    background-color: white;
+    border-radius: 4px;
+    float: right;
+    height: 400px;
+    width: calc((50% - 12.5px));
 }

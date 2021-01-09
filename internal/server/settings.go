@@ -148,6 +148,7 @@ func (s *Server) uploadProfilePictureByUser(w http.ResponseWriter, r *http.Reque
 
 func (s *Server) getProfilePictureByUser(w http.ResponseWriter, r *http.Request) {
 
+	ctx := r.Context()
 	vars := mux.Vars(r)
 
 	userID, ok := vars["id"]
@@ -159,14 +160,14 @@ func (s *Server) getProfilePictureByUser(w http.ResponseWriter, r *http.Request)
 
 	ll := log.With().Str("user_id", userID).Logger()
 
-	url, err := s.getProfilePictureData(userID)
+	url, err := s.getProfilePictureData(ctx, userID)
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to get profile picture data by user")
 		http.Error(w, "unable to get profile picture data by user", http.StatusInternalServerError)
 		return
 	}
 	
-	w.Write([]byte(url))
+	RespondToRequest(w, url)
 	return
 }
 

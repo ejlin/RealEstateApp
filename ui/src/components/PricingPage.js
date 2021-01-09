@@ -146,7 +146,7 @@ class PricingPage extends React.Component {
                                         <div className="pricing_page_bullet">
                                             <BsFillHouseFill className="pricing_page_bullet_icon blue"></BsFillHouseFill>
                                             <p className="pricing_page_bullet_text blue large">
-                                                $199 / month
+                                                $169 / month
                                             </p>
                                         </div>
                                         <div className="pricing_page_bullet">
@@ -158,13 +158,13 @@ class PricingPage extends React.Component {
                                         <div className="pricing_page_bullet">
                                             <FiCheck className="pricing_page_bullet_icon blue"></FiCheck>
                                             <p className="pricing_page_bullet_text blue">
-                                                Unlimited Properties
+                                                Up to 100 Properties*
                                             </p>
                                         </div>
                                         <div className="pricing_page_bullet">
                                             <FiCheck className="pricing_page_bullet_icon blue"></FiCheck>
                                             <p className="pricing_page_bullet_text blue">
-                                                Unlimited File Storage
+                                                Up to 300 GB File Storage*
                                             </p>
                                         </div>
                                         <div className="pricing_page_bullet">
@@ -173,10 +173,24 @@ class PricingPage extends React.Component {
                                                 Dedicated Priority Support
                                             </p>
                                         </div>
+                                        <p className="pricing_page_asterick blue">
+                                            * $1/additional property; $1/additional 5GB
+                                        </p>
+
                                     </div>
                                 </div>
                             </div>
-                            
+                            <div className="clearfix"/>
+                            <div className="pricing_page_custom_solutions_talk_box">
+                                <p className="pricing_page_custom_solutions_sales_text">
+                                    Don't see a plan that fits your needs? Talk to 
+                                </p>
+                                <div className="pricing_page_custom_solutions_sales_button">
+                                    <p className="pricing_page_custom_solutions_sales_button_text">
+                                        Sales
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

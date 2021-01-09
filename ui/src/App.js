@@ -2,6 +2,7 @@ import './App.css';
 import HomePage from './components/HomePage.js';
 import PricingPage from './components/PricingPage.js';
 import SignUpPage from './components/SignUpPage.js';
+import SignUpSelectPricingPlan from './components/SignUpSelectPricingPlan.js';
 import Login from './components/Login.js';
 import MainDashboard from './components/MainDashboard.js';
 import PropertiesDashboard from './components/PropertiesDashboard.js';
@@ -26,8 +27,10 @@ function App() {
     <Router>
       <div>
         <Switch>
-          <Route path="/signup">
+          {/* <Route path="/signup">
             <SignUpPage />
+          </Route> */}
+          <Route path="/selectpricingplan" render={(props) => <SignUpSelectPricingPlan {...props}/>} >
           </Route>
           <Route path="/login">
             <Login />

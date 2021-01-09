@@ -102,12 +102,22 @@ button:focus {
     text-align: center;
 }
 
-#dashboard_sidebar_profile_pic {
+.dashboard_sidebar_profile_pic {
     border-radius: 50px;
     height: 100px;
     margin-left: calc((100% - 100px)/2);
     margin-top: 80px;
     width: 100px;
+}
+
+.dashboard_sidebar_profile_pic_image_icon {
+    border: 3px solid white;
+    border-radius: 50px;
+    color: white;
+    height: calc(100px - 6px);
+    margin-left: calc((100% - 100px)/2);
+    margin-top: 80px;
+    width: calc(100px - 6px);
 }
 
 .dashboard_sidebar_profile_pic_title {
@@ -148,4 +158,17 @@ button:focus {
 .dashboard_sidebar_profile_tooltip_list:hover {
     background-color: #d3d3d3;
     opacity: 0.7;
+}
+
+.color_white {
+    color: white;
+}
+
+.dashboard_sidebar_locked_parent {
+    background-color: white;
+    height: 100vh;
+    opacity: 0.5;
+    position: fixed;
+    width: 220px;
+    z-index: 5;
 }

@@ -13,9 +13,9 @@
     width: calc((100% - 60px - 60px));
 }
 
-#properties_dashboard_title_box_title {
+.properties_dashboard_title_box_title {
     float: left;
-    font-size: 1.8em;
+    font-size: 1.6em;
     font-weight: bold;
 }
 

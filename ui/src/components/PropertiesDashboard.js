@@ -742,7 +742,7 @@ class PropertiesDashboard extends React.Component {
                         <div className="properties_dashboard_property_type_box">
                             <div className="properties_dashboard_inner_box">
                                 <div id="properties_dashboard_title_box">
-                                    <p id="properties_dashboard_title_box_title">
+                                    <p className="properties_dashboard_title_box_title">
                                         Properties
                                     </p>
                                     <input className="properties_dashboard_search_bar" placeholder="Search...">

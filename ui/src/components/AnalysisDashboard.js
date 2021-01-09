@@ -350,7 +350,7 @@ class AnalysisDashboard extends React.Component {
                                     ${this.numberWithCommas(this.state.propertiesSummary["total_mortgage_payment"])}
                                 </p>
                                 <p className="analysis_dashboard_inner_box_middle_cards_right_element_box_subtitle">
-                                    in payback due this month
+                                    due this month
                                 </p>
                             </div>
                         </div>
@@ -359,53 +359,63 @@ class AnalysisDashboard extends React.Component {
             );
         case advanced:
             return (
-                <div className="analysis_dashboard_advanced_inner_box_top_cards_box">
-                    <div className="analysis_dashboard_advanced_inner_box_top_cards_box_element">
-                        <IoMdAddCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
-                        <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
-                            <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
-                                ${this.numberWithCommas(this.state.propertiesSummary["total_estimate_worth"])}
-                            </p>
-                            <div className="clearfix"/>
-                            <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_subtitle">
-                                total estimated value
-                            </p>
+                <div>
+
+                    <div className="analysis_dashboard_advanced_inner_box_top_cards_box">
+                        <div className="analysis_dashboard_advanced_inner_box_top_cards_box_element">
+                            <IoMdAddCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
+                            <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
+                                <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
+                                    ${this.numberWithCommas(this.state.propertiesSummary["total_estimate_worth"])}
+                                </p>
+                                <div className="clearfix"/>
+                                <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_subtitle">
+                                    total estimated value
+                                </p>
+                            </div>
+                        </div>
+                        <div className="analysis_dashboard_advanced_inner_box_top_cards_box_element">
+                            <IoMdAddCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
+                            <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
+                                <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
+                                    {Number(this.state.propertiesSummary["average_ltv"].toFixed(2))} %
+                                </p>
+                                <div className="clearfix"/>
+                                <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_subtitle">
+                                    average LTV ratio
+                                </p>
+                            </div>
+                        </div>
+                        <div className="analysis_dashboard_advanced_inner_box_top_cards_box_element">
+                            <IoMdAddCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
+                            <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
+                                <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
+                                    {Number(this.state.propertiesSummary["average_dti"].toFixed(2))} %
+                                </p>
+                                <div className="clearfix"/>
+                                <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_subtitle">
+                                    average DTI ratio
+                                </p>
+                            </div>
+                        </div>
+                        <div className="analysis_dashboard_advanced_inner_box_top_cards_box_element">
+                            <IoMdAddCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
+                            <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
+                                <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
+                                    {this.numberWithCommas(this.state.propertiesSummary["total_bedrooms"])} total beds
+                                </p>
+                                <div className="clearfix"/>
+                                <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_subtitle">
+                                {(this.state.propertiesSummary["total_bathrooms"])} total baths
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <div className="analysis_dashboard_advanced_inner_box_top_cards_box_element">
-                        <IoMdAddCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
-                        <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
-                            <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
-                                {Number(this.state.propertiesSummary["average_ltv"].toFixed(2))} %
-                            </p>
-                            <div className="clearfix"/>
-                            <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_subtitle">
-                                average LTV ratio
-                            </p>
+                    <div className="clearfix"/>
+                    <div className="analysis_dashboard_advanced_inner_box_middle_box">
+                        <div className="analysis_dashboard_advanced_inner_box_middle_box_left_box">
                         </div>
-                    </div>
-                    <div className="analysis_dashboard_advanced_inner_box_top_cards_box_element">
-                        <IoMdAddCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
-                        <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
-                            <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
-                                {Number(this.state.propertiesSummary["average_dti"].toFixed(2))} %
-                            </p>
-                            <div className="clearfix"/>
-                            <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_subtitle">
-                                average DTI ratio
-                            </p>
-                        </div>
-                    </div>
-                    <div className="analysis_dashboard_advanced_inner_box_top_cards_box_element">
-                        <IoMdAddCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
-                        <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
-                            <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
-                                {this.numberWithCommas(this.state.propertiesSummary["total_bedrooms"])} total beds
-                            </p>
-                            <div className="clearfix"/>
-                            <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_subtitle">
-                            {(this.state.propertiesSummary["total_bathrooms"])} total baths
-                            </p>
+                        <div className="analysis_dashboard_advanced_inner_box_middle_box_right_box">
                         </div>
                     </div>
                 </div>

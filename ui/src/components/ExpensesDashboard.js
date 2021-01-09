@@ -274,7 +274,7 @@ class ExpensesDashboard extends React.Component {
                             {this.state.isLoading ? <div></div> : 
                             <div className="expenses_dashboard_body_inner_box">
                                 <div className="expenses_dashboard_body_inner_box_most_recent_box">
-                                    <p className="expenses_dashboard_body_inner_box_title">
+                                    {/* <p className="expenses_dashboard_body_inner_box_title">
                                         Most Recent
                                     </p>
                                     {this.state.mostRecentExpenses ? 
@@ -286,8 +286,8 @@ class ExpensesDashboard extends React.Component {
                                                 No Expenses to show
                                             </p>
                                         </div>
-                                        {this.renderPropertyBoxes()}
-                                    </div>}
+                                    </div>} */}
+                                    {this.renderPropertyBoxes()}
                                 </div>
                             </div>}
                         </div>

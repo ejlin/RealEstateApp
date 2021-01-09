@@ -208,9 +208,15 @@ func (s *Server) addStorageProfilePictureFile(ctx context.Context, f io.Reader, 
 	return nil
 }
 
-func (s *Server) getProfilePictureData(userID string) (string, error) {
+func (s *Server) getProfilePictureData(ctx context.Context, userID string) (string, error) {
 	prefix := path.Join(userID, profile)
 	key := path.Join(prefix, picture)
+
+	_, err := s.StorageClient.Bucket(s.UsersBucket).Object(key).Attrs(ctx)
+	// Check if the object exists. If not, serve up a does not exist error.
+	if err != nil {
+		return "", err
+	}
 
 	return storage.SignedURL(s.UsersBucket, key, &storage.SignedURLOptions{
 		GoogleAccessID: s.GoogleAccessID,

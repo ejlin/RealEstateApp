@@ -9,34 +9,20 @@ import { Redirect } from "react-router-dom";
 class SignUp extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {value: ''};
+        this.state = {
+            form: [],
+        };
 
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
-        this.handleLastNameChange = this.handleLastNameChange.bind(this);
-        this.handleEmailChange = this.handleEmailChange.bind(this);
-        this.handlePasswordChange = this.handlePasswordChange.bind(this);
-        this.handleConfirmPasswordChange = this.handleConfirmPasswordChange.bind(this);
+        this.handleFieldChange = this.handleFieldChange.bind(this);
     }
 
-    handleFirstNameChange(e) {
-        this.setState({firstName: e.target.value});
-    }
-
-    handleLastNameChange(e) {
-        this.setState({lastName: e.target.value});
-    }
-
-    handleEmailChange(e) {
-        this.setState({email: e.target.value});
-    }
-
-    handlePasswordChange(e) {
-        this.setState({password: e.target.value});
-    }
-
-    handleConfirmPasswordChange(e) {
-        this.setState({confirmPassword: e.target.value});
+    handleFieldChange(e) {
+        var form = this.state.form;
+        form[e.target.name] = e.target.value;
+        this.setState({
+            form: form,
+        });
     }
 
     handleSubmit(event) {
@@ -46,18 +32,19 @@ class SignUp extends React.Component {
             url: '/api/user/signup',
             timeout: 5000,  // 5 seconds timeout
             data: {
-                first_name: this.state.firstName,
-                last_name: this.state.lastName,
-                email: this.state.email,
-                password: this.state.password,
+                first_name: this.state.form["first_name"],
+                last_name: this.state.form["last_name"],
+                email: this.state.form["email"],
+                password: this.state.form["password"],
+                plan: "inactivated",
             }
         })
         .then(response => {
             if (response != null) {
                 this.setState({
                     currUser: response.data,
-                    redirect: "/dashboard"
-                });
+                    redirect: "/selectpricingplan"
+                }, () => this.state.currUser);
             }
         }).catch(error => console.error('timeout exceeded'));
     }
@@ -68,17 +55,18 @@ class SignUp extends React.Component {
                 pathname: this.state.redirect,
                 state: {
                     user: this.state.currUser,
+                    form: this.state.form,
                 }
             }} />
         }
         return (
             <div className="App">
                 <form onSubmit={this.handleSubmit}>
-                    <input className="signup_input" placeholder="First Name" type="text" name="first_name" onChange={this.handleFirstNameChange}/>
-                    <input className="signup_input" placeholder="Last Name" type="text" name="last_name" onChange={this.handleLastNameChange}/>
-                    <input className="signup_input" placeholder="Email" type="text" name="email" onChange={this.handleEmailChange}/>
-                    <input className="signup_input" placeholder="Password" type="password" name="password" onChange={this.handlePasswordChange} />
-                    <input className="signup_input" placeholder="Confirm Password" type="password" name="confirm_password" onChange={this.handleConfirmPasswordChange} />
+                    <input className="signup_input" placeholder="First Name" type="text" name="first_name" onChange={this.handleFieldChange}/>
+                    <input className="signup_input" placeholder="Last Name" type="text" name="last_name" onChange={this.handleFieldChange}/>
+                    <input className="signup_input" placeholder="Email" type="text" name="email" onChange={this.handleFieldChange}/>
+                    <input className="signup_input" placeholder="Password" type="password" name="password" onChange={this.handleFieldChange} />
+                    <input className="signup_input" placeholder="Confirm Password" type="password" name="confirm_password" onChange={this.handleFieldChange} />
                     <input id="signup_submit" type="submit" value="Sign Up"></input>
                 </form>
             </div>

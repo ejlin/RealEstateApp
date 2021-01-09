@@ -151,7 +151,7 @@ class FeedbackForm extends React.Component {
                         <div className="clearfix"/>
                         <textarea 
                             type="textarea" 
-                            placeholder="Please describe your bug report. The more details you can provide, the more we can quickly identify and fix this bug." 
+                            placeholder="Please describe your bug report. The more details you can provide, the more we can quickly identify and fix this bug. Please be as descriptive as possible on how to re-create this bug." 
                             className="feedback_form_actual_form_title_textarea"></textarea>
                         <div className="clearfix"/>
                         <div id="feedback_form_actual_form_select_box">

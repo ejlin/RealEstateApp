@@ -12,7 +12,7 @@
 }
 
 #settings_dashboard_title_box_title {
-    font-size: 1.8em;
+    font-size: 1.6em;
     font-weight: bold;
 }
 
@@ -78,10 +78,10 @@
 }
 
 #settings_dashboard_user_information_profile_picture_default {
-    background-color: #f1f1f1;
-    border: 6px solid #f1f1f1;
+    background-color:white;
+    border: 6px solid white;
     border-radius: 50%;
-    color:  #296CF6;
+    color:  black;
     float: left;
     height: 150px;
     margin-left: calc((100% - 225px)/2);
@@ -140,8 +140,9 @@
 .settings_dashboard_user_information_inner_box_text {
     bottom: 0;
     float: left;
-    font-size: 1.2em;
+    font-size: 1.1em;
     margin-left: 10px;
+    margin-top: 2px;
     width: calc(100% - 25px - 10px);
     word-break: break-all;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-import './CSS/CreateExpenseModal.css';
+import './CSS/PropertyModal.css';
 import './CSS/Style.css';
 
 import { IoCloseOutline, IoTrashSharp } from 'react-icons/io5';
@@ -16,7 +16,7 @@ const date = "date";
 const frequency = "frequency";
 const properties = "properties";
 
-class CreateExpenseModal extends React.Component {
+class PropertyModal extends React.Component {
     
     constructor(props) {
         super(props);
@@ -25,7 +25,7 @@ class CreateExpenseModal extends React.Component {
             user: this.props.data.state.user,
             currSelectedAssociatedProperties: [],
             addExpense: this.props.data.state.addExpense,
-            closeCreateExpenseModal: this.props.data.state.closeCreateExpenseModal,
+            closePropertyModal: this.props.data.state.closePropertyModal,
         };
         this.closePotentialAssociatedProperties = this.closePotentialAssociatedProperties.bind(this);
         this.handleFieldChange = this.handleFieldChange.bind(this);
@@ -278,7 +278,7 @@ class CreateExpenseModal extends React.Component {
                     <div className="create_expense_modal_parent_box_title_box">
                         <IoCloseOutline 
                             onClick={() => {
-                                this.state.closeCreateExpenseModal();
+                                this.state.closePropertyModal();
                             }}
                             className="create_expense_modal_parent_box_title_box_close_icon"></IoCloseOutline>
                     </div>
@@ -377,4 +377,4 @@ class CreateExpenseModal extends React.Component {
     }
 }
 
-export default CreateExpenseModal;
+export default PropertyModal;
