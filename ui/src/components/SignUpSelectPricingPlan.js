@@ -28,6 +28,8 @@ const starter = "starter";
 const professional = "professional";
 const enterprise = "enterprise";
 
+const planToPriceObj = {starter: "9", professional: 49, enterprise: 169}
+
 class SignUpSelectPricingPlan extends React.Component {
     constructor(props) {
         super(props);
@@ -36,6 +38,7 @@ class SignUpSelectPricingPlan extends React.Component {
             user: this.props.location.state.user,
             form: this.props.location.state.form,
             displayPage: paymentPage,
+            plan: starter
         };
     }
 
@@ -79,7 +82,7 @@ class SignUpSelectPricingPlan extends React.Component {
                 <div className="sign_up_select_pricing_plan_parent_box">
                     <div className="sign_up_select_pricing_plan_title_box">
                         <p className="sign_up_select_pricing_plan_title_box_welcome">
-                            Welcome {capitalizeName(this.state.user["first_name"])}!
+                            Welcome, {capitalizeName(this.state.user["first_name"])}!
                         </p>
                         <p className="sign_up_select_pricing_plan_parent_box_title_box_steps">
                             <b>Step</b> <b>2</b> of <b>3</b>
@@ -248,7 +251,7 @@ class SignUpSelectPricingPlan extends React.Component {
                     <div className="sign_up_select_pricing_plan_parent_box">
                         <div className="sign_up_select_pricing_plan_title_box">
                             <p className="sign_up_select_pricing_plan_title_box_welcome">
-                                Welcome {capitalizeName(this.state.user["first_name"])}!
+                                Welcome, {capitalizeName(this.state.user["first_name"])}!
                             </p>
                             <p className="sign_up_select_pricing_plan_parent_box_title_box_steps">
                                 <b>Step</b> <b>3</b> of <b>3</b>
@@ -260,7 +263,7 @@ class SignUpSelectPricingPlan extends React.Component {
                             </p>
                             <div className="clearfix"/>
                             <p className="sign_up_select_pricing_plan_parent_box_title_box_subtext">
-                                Start your membership as soon as you input your information.
+                                Start your membership as soon as you set up your payment information.
                             </p>
                             <div className="payment_information_title">
                                 <div 
@@ -275,7 +278,12 @@ class SignUpSelectPricingPlan extends React.Component {
                                         Back
                                     </p>
                                 </div>
+                                <p className="payment_information_title_text">
+                                You have selected the {capitalizeName(this.state.plan)} plan
+                            </p>
                             </div>
+                            <div className="clearfix"/>
+                            
                             <div className="payment_information_box">
                                 <Elements stripe={stripePromise}>
                                     <CardElement
@@ -301,6 +309,17 @@ class SignUpSelectPricingPlan extends React.Component {
                                     >
                                     </CardElement>
                                 </Elements>
+                            </div>
+                            <div className="clearfix"/>
+                            <div className="payment_terms_text_box">
+                                By clicking the "Start my Paid Membership" button below, you agree to our&nbsp;
+                                <p className="payment_terms_link">Terms of Use,</p>
+                                <p className="payment_terms_link"> Privacy Notice</p> 
+                                &nbsp;and that ReiMei LLC. will automatically continue your membership and charge the monthly membership fee (currently ${planToPriceObj[this.state.plan]}) to your payment method until you cancel. You may cancel at any time to avoid future charges. To cancel, go to Settings and click "Cancel Plan".
+                            </div>
+                            <div className="clearfix"/>
+                            <div className="payment_submit_button">
+                                Start my Paid Membership
                             </div>
                         </div>
                     </div>

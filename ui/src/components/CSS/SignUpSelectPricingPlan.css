@@ -100,11 +100,11 @@
     font-weight: bold;
     height: 40px;
     line-height: 40px;
-    margin-left: calc((100% - 100px)/2);
+    margin-left: calc((100% - 80px)/2);
     margin-top: 20px;
     text-align: center;
     transition: 0.5s;
-    width: 100px;
+    width: 80px;
 }
 
 .sign_up_select_pricing_plan_parent_box_right_box_element_box_middle_box_select_button:hover {
@@ -122,18 +122,18 @@
     background-color: white;
     border-radius: 4px;
     float: left;
-    margin-left: calc((100% - 500px)/2);
-    margin-right: calc((100% - 500px)/2);
-    margin-top: 20px;
+    margin-left: calc((100% - 560px)/2);
+    margin-right: calc((100% - 560px)/2);
+    margin-top: 30px;
     padding: 30px;
     width: 500px;
 }
 
 .payment_information_title {
-    margin-left: calc((100% - 500px)/2);
-    margin-right: calc((100% - 500px)/2);
-    margin-top: 50px;
-    width: calc(500px);
+    margin-left: calc((100% - 560px)/2);
+    margin-right: calc((100% - 560px)/2);
+    margin-top: 75px;
+    width: calc(560px);
 }
 
 .payment_information_title_back_icon {
@@ -148,4 +148,65 @@
 
 .payment_information_title_back_button {
     cursor: pointer;
+    float: left;
+    margin-top: 5px;
+    width: 80px;
+}
+
+.payment_submit_button {
+    background-color: #296CF6;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-left: calc((100% - 560px)/2);
+    margin-right: calc((100% - 560px)/2);
+    margin-top: 25px;
+    padding: 15px 30px 15px 30px;
+    text-align: center;
+    transition: 0.5s;
+    width: calc(500px);
+}
+
+.payment_submit_button:hover {
+    opacity: 0.8;
+}
+
+.payment_information_title_text {
+    float: left;
+    font-size: 1.4em;
+    font-weight: bold;
+    line-height: 15px;
+    text-align: center;
+    width: 400px;
+}
+
+.payment_terms_text_box {
+    color: grey;
+    font-size: 0.9em;
+    margin-right: 5px;
+    display: inline-block;
+    margin-left: calc((100% - 560px)/2);
+    margin-right: calc((100% - 560px)/2);
+    margin-top: 25px;
+    width: 560px;
+}
+
+.payment_terms_text {
+    color: grey;
+    font-size: 0.9em;
+    margin-right: 5px;
+    word-break: break-all;
+}
+
+.payment_terms_link {
+    color: #296CF6;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 0.9em;
+}
+
+.payment_terms_link:hover {
+    text-decoration:underline;
 }
