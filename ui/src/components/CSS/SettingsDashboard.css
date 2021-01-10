@@ -266,7 +266,7 @@
 }
 
 .settings_dashboard_right_box_nav_bar_list:hover, .settings_dashboard_right_box_nav_bar_active_list {
-    background-color: #d3d3d3;
+    background-color: white;
     color:black;
 }
 

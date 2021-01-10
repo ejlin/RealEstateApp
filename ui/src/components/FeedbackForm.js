@@ -213,7 +213,7 @@ class FeedbackForm extends React.Component {
                         <div className="clearfix"/>
                         <textarea 
                             type="textarea" 
-                            placeholder="Please describe the security issue. The more details you can provide, the more we can quickly identify and fix this vulnerability." 
+                            placeholder="Please describe your account's issue." 
                             className="feedback_form_actual_form_title_textarea"></textarea>
                         <div className="clearfix"/>
                         <div id="feedback_form_actual_form_select_box">

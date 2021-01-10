@@ -24,7 +24,7 @@
 }
 
 .new_property_dashboard_bottom_left_box_list {
-    border-radius: 8px;
+    border-radius: 4px;
     cursor: pointer;
     height: 45px;
     transition: 0.5s;
@@ -32,7 +32,7 @@
 }
 
 .new_property_dashboard_bottom_left_box_list:hover, .new_property_dashboard_bottom_left_box_list_active{
-    background-color: #d3d3d3;
+    background-color: white;
     color: black;
 }
 
@@ -114,7 +114,7 @@ input::placeholder {
 }
 
 .new_property_form_input {
-    border: 2px solid black;
+    border: none;
     border-radius: 4px;
     font-size: 1.1em;
     margin-top: 10px;
@@ -131,7 +131,7 @@ input::placeholder {
 }
 
 .form_select_input {
-    border: 2px solid black;
+    border: none;
     border-radius: 4px;
     float: left;
     font-size: 1.1em;
@@ -142,7 +142,7 @@ input::placeholder {
 }
 
 .new_property_form_input_triple {
-    border: 2px solid black;
+    border: none;
     border-radius: 4px;
     float: left;
     font-size: 1.1em;
@@ -216,13 +216,7 @@ input::placeholder {
     width: calc(100% - 30px);
 }
 
-#new_property_form_property_type_select:focus {
-    border: 1px solid #6532cd;
-    outline: none;
-}
-
 .new_property_form_input:focus, .new_property_form_input_triple:focus {
-    border: 2px solid #296CF6;
     border-radius: 4px;
     outline: none;
 }

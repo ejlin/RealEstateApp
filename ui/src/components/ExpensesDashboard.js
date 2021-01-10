@@ -9,6 +9,8 @@ import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 import ExpenseCard from './ExpenseCard.js';
 
+import { capitalizeName } from './MainDashboard.js';
+
 import { MdError } from 'react-icons/md';
 
 class ExpensesDashboard extends React.Component {
@@ -28,9 +30,12 @@ class ExpensesDashboard extends React.Component {
         };
         this.addExpense = this.addExpense.bind(this);
         this.closeCreateExpenseModal = this.closeCreateExpenseModal.bind(this);
-        this.renderPropertyBoxes = this.renderPropertyBoxes.bind(this);
+        // this.renderPropertyBoxes = this.renderPropertyBoxes.bind(this);
         this.expenseFormDataToExpense = this.expenseFormDataToExpense.bind(this);
         this.deleteExpense = this.deleteExpense.bind(this);
+        this.renderExpenseTable = this.renderExpenseTable.bind(this);
+        this.renderExpenseTableTitle = this.renderExpenseTableTitle.bind(this);
+        this.renderExpenseTableElements = this.renderExpenseTableElements.bind(this);
     }
 
     componentDidMount() {
@@ -165,62 +170,178 @@ class ExpensesDashboard extends React.Component {
         })
     }
 
-    renderPropertyBoxes() {
-        var elements = [];
-        var propertiesMap = this.state.propertiesMap;
+    // renderPropertyBoxes() {
+    //     var elements = [];
+    //     var propertiesMap = this.state.propertiesMap;
+    //     var propertiesToExpenses = this.state.propertiesToExpenses;
+    //     propertiesMap.forEach((value, key, map) => {
+    //         // value is our propertyID
+    //         var propertyExpenses = propertiesToExpenses.get(key);
+    //         if (propertyExpenses !== null && propertyExpenses !== undefined && propertyExpenses.length > 0) {
+    //             elements.push(
+    //                 <div>
+    //                     <p className="expenses_dashboard_body_inner_box_title">
+    //                         {value}
+    //                     </p>
+    //                 </div>
+    //             );
+
+    //             var expenses = [];
+    //             for (var i = 0; i < propertyExpenses.length; i++) {
+    //                 let expense = propertyExpenses[i];
+    //                 expenses.push(
+    //                     <ExpenseCard data={{
+    //                         state: {
+    //                             expense: expense,
+    //                             deleteExpense: this.deleteExpense
+    //                         }
+    //                     }}>
+    //                     </ExpenseCard>
+    //                 )
+    //             }
+
+    //             elements.push(
+    //                 <div>
+    //                     <div className="expenses_dashboard_property_expenses_parent_box">
+    //                         {expenses}
+    //                     </div>
+    //                     <div className="clearfix"/>
+    //                 </div>
+    //             );
+    //         } else {
+    //             elements.push(
+    //                 <div>
+    //                     <p className="expenses_dashboard_body_inner_box_title">
+    //                         {value}
+    //                     </p>
+    //                     <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
+    //                         <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box_title_box">
+    //                             <MdError className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></MdError>
+    //                             <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
+    //                                 No Expenses to show
+    //                             </p>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             );
+    //         }
+    //     });
+    //     return elements;
+    // }
+
+    renderExpenseTableTitle() {
+        return (
+            <div className="expenses_table">
+                <div className="expenses_table_title_row">
+                    <div className="expenses_table_first_row_long">
+                        <p className="expenses_table_first_row_title">
+                            Name
+                        </p>
+                    </div>
+                    <div className="expenses_table_first_row_long">
+                        <p className="expenses_table_first_row_title">
+                            Properties
+                        </p>
+                    </div>
+                    <div className="expenses_table_first_row_short">
+                        <p className="expenses_table_first_row_title">
+                            Frequency
+                        </p>
+                    </div>
+                    <div className="expenses_table_first_row_short">
+                        <p className="expenses_table_first_row_title">
+                            Date
+                        </p>
+                    </div>
+                    <div className="expenses_table_first_row_short">
+                        <p className="expenses_table_first_row_title">
+                            Amount
+                        </p>
+                    </div>
+                </div>
+                <div className="clearfix"/>
+                <div className="expenses_table_title_row_divider">
+                </div>
+                {this.renderExpenseTableElements()}
+            </div>
+        )
+    }
+
+    renderExpenseTable() {
+        return (
+            <div>
+                {this.renderExpenseTableTitle()}
+                <div className="clearfix"/>
+            </div>
+        )
+    }
+
+    renderExpenseTableElements() {
+        
+        console.log(this.state.propertiesToExpenses);
+
         var propertiesToExpenses = this.state.propertiesToExpenses;
-        propertiesMap.forEach((value, key, map) => {
-            // value is our propertyID
-            var propertyExpenses = propertiesToExpenses.get(key);
-            if (propertyExpenses !== null && propertyExpenses !== undefined && propertyExpenses.length > 0) {
-                elements.push(
-                    <div>
-                        <p className="expenses_dashboard_body_inner_box_title">
-                            {value}
-                        </p>
-                    </div>
-                );
+        var propertiesMap = this.state.propertiesMap;
 
-                var expenses = [];
-                for (var i = 0; i < propertyExpenses.length; i++) {
-                    let expense = propertyExpenses[i];
-                    expenses.push(
-                        <ExpenseCard data={{
-                            state: {
-                                expense: expense,
-                                deleteExpense: this.deleteExpense
-                            }
-                        }}>
-                        </ExpenseCard>
-                    )
-                }
-
-                elements.push(
-                    <div>
-                        <div className="expenses_dashboard_property_expenses_parent_box">
-                            {expenses}
-                        </div>
-                        <div className="clearfix"/>
-                    </div>
-                );
-            } else {
-                elements.push(
-                    <div>
-                        <p className="expenses_dashboard_body_inner_box_title">
-                            {value}
-                        </p>
-                        <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
-                            <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box_title_box">
-                                <MdError className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></MdError>
-                                <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
-                                    No Expenses to show
+        var elements = [];
+        propertiesToExpenses.forEach((value, key, map) => {
+            let expensesArr = value;
+            for (var i = 0; i < expensesArr.length; i++) {
+                let expense = expensesArr[i];
+                let expenseProperties = expense["properties"];
+                
+                var properties = [];
+                if (expenseProperties.length > 0) {
+                    /* If we have more than 5 associated properties, only show the first 5 */
+                    var maxLength = expenseProperties.length < 5 ? expenseProperties.length : 5;
+                    for (var i = 0; i < maxLength; i++) {
+                        let expensePropertyID = expenseProperties[i];
+                        properties.push(
+                            <div>
+                                <p className="expenses_table_first_row_subtitle">
+                                    {propertiesMap.get(expensePropertyID)}
                                 </p>
+                                <div className="clearfix"/>
                             </div>
+                        );
+                    }
+                    /* If we have more than 5 associated properties, only show the first 5 and show an element saying "more" */
+                    if (expenseProperties.length > maxLength) {
+                        properties.push(
+                            <div>
+                                <p className="expenses_table_first_row_subtitle">
+                                    {"More..."}
+                                </p>
+                                <div className="clearfix"/>
+                            </div>
+                        )
+                    }
+                } else {
+                    properties.push(
+                        <div>
+                            <p className="expenses_table_first_row_subtitle">
+                                {"None"}
+                            </p>
+                            <div className="clearfix"/>
                         </div>
-                    </div>
+                    );
+                }
+                
+                elements.push(
+                    <ExpenseCard data={{
+                        state: {
+                            properties: properties,
+                            expense: expense,
+                            deleteExpense: this.deleteExpense
+                        }
+                    }}>
+
+                    </ExpenseCard>
                 );
             }
-        });
+        })
+        
+
         return elements;
     }
 
@@ -287,7 +408,8 @@ class ExpensesDashboard extends React.Component {
                                             </p>
                                         </div>
                                     </div>} */}
-                                    {this.renderPropertyBoxes()}
+                                    {this.renderExpenseTable()}
+                                    {/* {this.renderPropertyBoxes()} */}
                                 </div>
                             </div>}
                         </div>

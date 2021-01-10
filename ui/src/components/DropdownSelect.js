@@ -30,7 +30,6 @@ class DropdownSelect extends React.Component {
             placeholderText: this.props.data.state.placeholderText,
             setParentList: this.props.data.state.setParentList,
             closePotentialList: this.props.data.state.closePotentialList,
-            filteredList: this.props.filteredList,
         };
         this.handleFieldChange = this.handleFieldChange.bind(this);
         this.displayPotentialElements = this.displayPotentialElements.bind(this);

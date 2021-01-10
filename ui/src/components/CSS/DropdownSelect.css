@@ -1,0 +1,9 @@
+.current_selected_associated_properties {
+    background-color: rgb(245, 245, 250);
+    border-radius: 0px;
+    font-size: 1.1em;
+    height: 45px;
+    line-height: 45px;
+    padding: 2px;
+    width: calc((100% - 4px));
+}

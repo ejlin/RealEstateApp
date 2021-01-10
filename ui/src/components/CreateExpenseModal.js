@@ -272,6 +272,15 @@ class CreateExpenseModal extends React.Component {
                             className="create_expense_modal_button">
                             Continue
                         </div>
+                        <div
+                            onClick={() => {
+                                this.setState({
+                                    pageToDisplay: general
+                                })
+                            }} 
+                            className="create_expense_modal_back_button">
+                            Back
+                        </div>
                     </div>
                 )
             case associate_properties:
@@ -288,7 +297,6 @@ class CreateExpenseModal extends React.Component {
                             </p>
                         </div>                        
                         <DropdownSelect 
-                            filteredList={this.state.filteredList}
                             data={{
                                 state: {
                                     inputMap: this.state.properties,
@@ -296,14 +304,25 @@ class CreateExpenseModal extends React.Component {
                                     includeNone: true,
                                     includeAll: true,
                                     placeholderText: "Add a Property",
-                                    setParentList: this.setParentList,
                                     closePotentialList: this.closePotentialList,
+                                    setParentList: this.setParentList,
                                 }
                             }}
                         />
                         <div
                             className="create_expense_modal_button">
                             Add Expense
+                        </div>
+                        <div
+                            onClick={() => {
+                                this.setState({
+                                    pageToDisplay: upload_file
+                                })
+                            }} 
+                            className="create_expense_modal_back_button">
+                            <p className="create_expense_modal_back_button_text">
+                                Back
+                            </p>
                         </div>
                     </div>
                 );

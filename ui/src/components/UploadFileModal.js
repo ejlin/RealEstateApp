@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import './CSS/UploadFileModal.css';
 import './CSS/Style.css';
+import DropdownSelect from './DropdownSelect.js';
 
 import { IoCloseSharp, IoCloseOutline, IoTrashSharp } from 'react-icons/io5';
 import { MdFileUpload } from 'react-icons/md';
@@ -203,12 +204,17 @@ class UploadFileModal extends React.Component {
                                 <p className="files_dashboard_title">
                                     Associated Properties
                                 </p>
-                                <input 
-                                    placeholder="Add a Property"
-                                    className="files_dashboard_associated_properties_input">
-                                </input>
+                                <DropdownSelect data={{
+                                    state: {
+                                        inputMap: this.state.properties,
+                                        inputList: this.state.propertyAddresses,
+                                        includeNone: true,
+                                        includeAll: true,
+                                        placeholderText: "Add a Property",
+                                    }
+                                }}/>
                                 <div className="create_expense_modal_render_associated_properties_box">
-                                    {this.renderAssociatedProperties()}
+                                    {/* {this.renderAssociatedProperties()} */}
                                 </div>
                             </div>
                             <div className="files_dashboard_upload_file_right_box_right_box">

@@ -15,6 +15,7 @@ class ExpenseCard extends React.Component {
 
         this.state = {
             expense: this.props.data.state.expense,
+            properties: this.props.data.state.properties,
             expandCard: false,
             deleteExpense: this.props.data.state.deleteExpense,
         };
@@ -43,60 +44,36 @@ class ExpenseCard extends React.Component {
     render() {
         return (
             <div>
-                <div 
-                    onClick={() => this.setState({
-                        expandCard: !this.state.expandCard,
-                    })}
-                    className={
-                        this.state.expandCard? "expense_card_parent_box expense_card_parent_box_expanded":
-                        "expense_card_parent_box"}>
-                    <p className="expense_card_parent_box_title">
-                        {this.state.expense["title"]}
-                    </p>
-                    <p className="expense_card_parent_box_price_title">
-                        ${this.state.expense["amount"]}
-                    </p>
-                </div>
-                {this.state.expandCard ? 
-                <div>
-                    <div className="expense_card_expanded_box">
-                        <div className="expense_card_expanded_box_title_box">
-                            <p className="expense_card_expanded_box_title_box_date">
-                                {this.convertDate(this.state.expense["date"])}
-                            </p>
-                            <IoTrashSharp 
-                                onClick={() => {
-                                    this.state.deleteExpense(this.state.expense["id"], this.state.expense["properties"])
-                                }}
-                                className="expense_card_expanded_box_title_box_icon"></IoTrashSharp>
-                            <MdEdit id="expense_card_expanded_box_title_box_leftmost_icon" className="expense_card_expanded_box_title_box_icon"></MdEdit>
-                        </div>
-                        <div className="clearfix"/>
-                        <div className="expense_card_expanded_box_bottom_box">
-                            <div className="expense_card_expanded_box_bottom_box_left_box">
-                                <p className="expense_card_expanded_box_bottom_box_left_box_text">
-                                    {this.state.expense["description"]}
-                                </p>
-                            </div>
-                            <div className="expense_card_expanded_box_bottom_box_right_box">
-                                <div className="expense_card_expanded_box_bottom_box_right_box_inner_box">
-                                    <p className="expense_card_expanded_box_bottom_box_right_box_text_actual">
-                                        {capitalizeName(this.state.expense["frequency"])}
-                                    </p>
-                                </div>
-                                <div className="clearfix"/>
-                                <div className="expense_card_expanded_box_bottom_box_right_box_inner_box">
-                                    <p className="expense_card_expanded_box_bottom_box_right_box_text_actual">
-                                        {this.convertDate(this.state.expense["created_at"])}
-                                    </p>
-                                </div>
-                                <div className="clearfix"/>
-                            </div>
-                        </div>
+                <div className="expenses_table_subtitle_row">
+                    <div className="expenses_table_first_row_long">
+                        <p className="expenses_table_first_row_subtitle">
+                            {this.state.expense["title"]}
+                        </p>
                     </div>
-                    <div className="clearfix"/>
-                </div> :
-                <div></div>}
+                    <div className="expenses_table_first_row_long">
+                        <p className="expenses_table_first_row_subtitle">
+                            {this.state.properties}
+                        </p>
+                    </div>
+                    <div className="expenses_table_first_row_short">
+                        <p className="expenses_table_first_row_subtitle">
+                            {capitalizeName(this.state.expense["frequency"])}
+                        </p>
+                    </div>
+                    <div className="expenses_table_first_row_short">
+                        <p className="expenses_table_first_row_subtitle">
+                            {this.state.expense["date"]}
+                        </p>
+                    </div>
+                    <div className="expenses_table_first_row_short">
+                        <p className="expenses_table_first_row_subtitle">
+                            ${this.state.expense["amount"]}
+                        </p>
+                    </div>
+                </div>
+                <div className="clearfix"/>
+                <div className="expenses_table_title_row_subdivider">
+                </div>
             </div>
         );
     }

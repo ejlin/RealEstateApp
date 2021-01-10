@@ -4,9 +4,15 @@
     float: left;
     height: 250px;
     margin-bottom: 25px;
-    margin-right: max(calc((100% - 1020px) / 2), 15px);    /* 100% - 4 cards at 250px width each, 3 spacings in between them) */
-    min-width: 340px;
-    width: 340px;
+    margin-right: max(calc((100% - 1050px) / 2), 15px);    /* 100% - 4 cards at 250px width each, 3 spacings in between them) */
+    min-width: 350px;
+    width: 350px;
+}
+
+@media screen and (max-width: 2200px) {
+    .property_card_box {
+        margin-right: max(calc((100% - 1400px) / 3), 15px);    /* 100% - 4 cards at 250px width each, 3 spacings in between them) */
+    }
 }
 
 .property_card_box_first_child {
@@ -70,12 +76,12 @@
 
 .property_card_box_info_box_first_row_first_element {
     float: left;
-    width: 48%;
+    width: 50%;
 }
 
 .property_card_box_info_box_first_row_second_element {
     float: left;
-    width: 52%;
+    width: 50%;
 }
 
 .property_card_box_info_box_second_row {

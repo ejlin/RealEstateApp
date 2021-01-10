@@ -103,7 +103,7 @@ body {
 
 #main_dashboard_summary_cards_box {
     background-color: #296CF6;
-    border-radius: 8px;
+    border-radius: 4px;
     border: 1px solid #d3d3d3;
     /* box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09); */
     height: 125px;
@@ -187,14 +187,14 @@ body {
 
 #main_dashboard_bottom_box_left {
     border: 2px solid #d3d3d3;
-    border-radius: 8px;
+    border-radius: 4px;
     float: left;
     height: 350px;
 }
 
 #main_dashboard_bottom_box_right {
     border: 2px solid #d3d3d3;
-    border-radius: 8px;
+    border-radius: 4px;
     float: right;
     width: 38%;
 }
@@ -302,7 +302,7 @@ body {
 .main_dashboard_bottom_left_box_top {
     background-color: white;
     border: 1px solid #f1f1f1;
-    border-radius: 8px;
+    border-radius: 4px;
     height: 350px;
     width: calc(100% - 2px);
 }
@@ -315,7 +315,7 @@ body {
 .main_dashboard_bottom_left_box_bottom_inner_box {
     background-color: white;
     border: 1px solid #f1f1f1;
-    border-radius: 8px;
+    border-radius: 4px;
     float: left;
     height: 135px;
     margin-bottom: 25px;
@@ -376,7 +376,7 @@ body {
 
 #main_dashboard_yoy_growth_box {
     background-color: #296CF6;
-    border-radius: 8px;
+    border-radius: 4px;
     height: 190px;
     margin-top: 40px;
     padding-bottom: 25px;
@@ -395,7 +395,7 @@ body {
 .main_dashboard_yoy_growth_toggle_element {
     background-color: white;
     border: 1px solid white;
-    border-radius: 8px;
+    border-radius: 4px;
     color: #296CF6;
     cursor: pointer;
     float: left;
@@ -452,7 +452,7 @@ body {
 .main_dashboard_key_insights_box {
     background-color: white;
     border: 1px solid #f1f1f1;
-    border-radius: 8px;
+    border-radius: 4px;
     padding-bottom: 30px;
     overflow: hidden;
     width: calc(100% - 2px);
@@ -509,7 +509,7 @@ body {
 
 .rent_schedule_bullet_point {
     background-color: #296CF6;
-    border-radius: 8px;
+    border-radius: 4px;
     float: left;
     height: 10px;
     margin-left: 20px;
