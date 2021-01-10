@@ -60,6 +60,9 @@ func (s *Server) HandleRoutes() {
 	r.HandleFunc("/api/user/signup", s.addUser).Methods("POST")
 	r.HandleFunc("/api/user/login/email", s.loginUserByEmail).Methods("POST")
 
+	// Update a new plan for users
+	r.HandleFunc("/api/user/plan/{id}", s.updateUserPlan).Methods("PATCH")
+
 	r.HandleFunc("/api/property/{property_id}", s.getProperty).Methods("GET")
 
 	http.Handle("/", r)

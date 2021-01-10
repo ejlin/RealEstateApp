@@ -36,32 +36,31 @@ class SignUpSelectPricingPlan extends React.Component {
 
         this.state = {
             user: this.props.location.state.user,
-            form: this.props.location.state.form,
             displayPage: planPage,
             plan: starter
         };
+
+        this.registerPlan = this.registerPlan.bind(this);
     }
 
-    handleSubmit(event) {
-        event.preventDefault();
+    registerPlan() {
+
+        let formData = new FormData();
+        formData.append('plan', this.state.plan);
+
         axios({
-            method: 'post',
-            url: '/api/user/signup',
+            method: 'patch',
+            url: '/api/user/plan/' + this.state.user["id"],
             timeout: 5000,  // 5 seconds timeout
-            data: {
-                first_name: this.state.form["first_name"],
-                last_name: this.state.form["last_name"],
-                email: this.state.form["email"],
-                password: this.state.form["password"],
-                plan: this.state.plan,
-            }
+            data: formData
         })
         .then(response => {
-            if (response != null) {
+            console.log(response);
+            if (response.status === 200) {
+                console.log(this.state.user);
                 this.setState({
-                    currUser: response.data,
                     redirect: "/dashboard"
-                });
+                })
             }
         }).catch(error => console.error('timeout exceeded'));
     }
@@ -71,7 +70,7 @@ class SignUpSelectPricingPlan extends React.Component {
             return <Redirect to={{
                 pathname: this.state.redirect,
                 state: {
-                    user: this.state.currUser,
+                    user: this.state.user,
                 }
             }} />
         }
@@ -322,7 +321,9 @@ class SignUpSelectPricingPlan extends React.Component {
                                 &nbsp;and that ReiMei LLC. will automatically continue your membership and charge the monthly membership fee (currently ${planToPriceObj[this.state.plan]}) to your payment method until you cancel. You may cancel at any time to avoid future charges. To cancel, go to Settings and click "Cancel Plan".
                             </div>
                             <div className="clearfix"/>
-                            <div className="payment_submit_button">
+                            <div 
+                                onClick={() => this.registerPlan()}
+                                className="payment_submit_button">
                                 Start my Paid Membership
                             </div>
                         </div>

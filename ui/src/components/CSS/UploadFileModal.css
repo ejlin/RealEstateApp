@@ -1,0 +1,102 @@
+#files_dashboard_upload_file_button_label {
+    background-color: #F1F1F1;
+    border: 1px solid black;
+    border-radius: 2px;
+    border-style: dashed;
+    cursor: pointer;
+    float: left;
+    height: 200px;
+    margin-top: 25px;
+    position: relative;
+    transition: 0.5s;
+    width: 200px;
+}
+
+.files_dashboard_upload_file_title {
+    color: grey;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.upload_file_input {
+    border: 2px solid black;
+    border-radius: 4px;
+    font-size: 1.0em;
+    height: 22.5px;
+    margin-bottom: 15px;
+    padding: 7.5px 15px 7.5px 15px;
+    width: calc((100% - 30px));
+}
+
+.files_dashboard_upload_file_right_box {
+    float: left;
+    margin-left: 25px;
+    margin-top: 25px;
+    width: calc(100% - 200px - 2px - 25px);
+}
+
+.upload_file_modal_parent_box_inner_box {
+    margin-left: 40px;
+    margin-right: 40px;
+    width: calc((100% - 80px));
+}
+
+#files_dashboard_upload_file_close_icon:hover{
+    transform: scale(1.05);
+}
+
+.files_dashboard_upload_file_final_button:hover{
+    opacity: 0.8;
+}
+
+.files_dashboard_upload_file_final_button {
+    background-color:#296CF6;
+    border: 2px solid #296CF6;
+    border-radius: 4px;
+    color:   white;
+    cursor: pointer;
+    float: right;
+    font-weight: bold;
+    margin-top: 25px;
+    padding: 7.5px 15px 7.5px 15px;
+    transition: 0.5s;
+}
+
+.files_dashboard_title {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.files_dashboard_upload_file_right_box_left_box {
+    float: left;
+    margin-top: 10px;
+    width: calc(55%);
+}
+
+.files_dashboard_associated_properties_input {
+    border: 2px solid black;
+    border-radius: 4px;
+    font-size: 1.0em;
+    height: 22.5px;
+    margin-bottom: 15px;
+    margin-top: 10px;
+    padding: 7.5px 15px 7.5px 15px;
+    width: calc((100% - 30px - 4px));
+}
+
+.files_dashboard_upload_file_right_box_right_box {
+    float: right;
+    margin-left: 25px;
+    margin-top: 10px;
+    width: calc(45% - 25px);
+}
+
+.files_dashboard_file_type {
+    border: 2px solid black;
+    border-radius: 4px;
+    font-size: 1.0em;
+    margin-top: 10px;
+    padding: 7.5px 15px 7.5px 15px;
+    width: 100%;
+}

@@ -80,18 +80,12 @@ class ExpenseCard extends React.Component {
                             </div>
                             <div className="expense_card_expanded_box_bottom_box_right_box">
                                 <div className="expense_card_expanded_box_bottom_box_right_box_inner_box">
-                                    <p className="expense_card_expanded_box_bottom_box_right_box_text_description">
-                                        Frequency: 
-                                    </p>
                                     <p className="expense_card_expanded_box_bottom_box_right_box_text_actual">
                                         {capitalizeName(this.state.expense["frequency"])}
                                     </p>
                                 </div>
                                 <div className="clearfix"/>
                                 <div className="expense_card_expanded_box_bottom_box_right_box_inner_box">
-                                    <p className="expense_card_expanded_box_bottom_box_right_box_text_description">
-                                        Created: 
-                                    </p>
                                     <p className="expense_card_expanded_box_bottom_box_right_box_text_actual">
                                         {this.convertDate(this.state.expense["created_at"])}
                                     </p>

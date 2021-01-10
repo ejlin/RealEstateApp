@@ -34,11 +34,26 @@ type User struct {
 type PlanType string
 
 const (
-	Inactivated      PropertyType = "Inactivated"
-	Starter     PropertyType = "Starter"
-	Professional   PropertyType = "Professional"
-	Enterprise PropertyType = "Enterprise"
+	Inactivated      PlanType = "inactivated"
+	Starter     PlanType = "starter"
+	Professional   PlanType = "professional"
+	Enterprise PlanType = "enterprise"
 )
+
+func ConvertStringTosPlanType(plan string) (PlanType, error) {
+	switch plan {
+	case "inactivated":
+		return Inactivated, nil
+	case "starter":
+		return Starter, nil
+	case "professional":
+		return Professional, nil
+	case "enterprise":
+		return Enterprise, nil
+	default:
+		return "", errors.New("invalid plan type")
+	}
+}
 
 // AddUser will add a new user to the database.
 func (handle *Handle) AddUser(user *User) error {
@@ -105,7 +120,7 @@ func (handle *Handle) UpdateSettingsProfileByUser(id string, m map[string]interf
 	}
 
 	var user User
-	return handle.DB.Model(&user).Updates(m).Error
+	return handle.DB.Model(&user).Where("id = ?", id).Updates(m).Error
 }
 
 func (handle *Handle) UpdateSettingsPreferencesByUser(id string, settings *json.RawMessage) error {
@@ -116,4 +131,15 @@ func (handle *Handle) UpdateSettingsPreferencesByUser(id string, settings *json.
 
 	var user User
 	return handle.DB.Model(&user).UpdateColumn("settings", settings).Error
+}
+
+func (handle *Handle) UpdatePlanByUser(id string, plan PlanType) error {
+
+	_, err := uuid.Parse(id)
+	if err != nil {
+		return fmt.Errorf("invalid UUID: %w", err)
+	}
+
+	var user User
+	return handle.DB.Model(&user).Where("id = ?", id).Update("plan", plan).Error
 }

@@ -7,13 +7,23 @@ import './CSS/Style.css';
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 import FileCard from './FileCard.js';
+import UploadFileModal from './UploadFileModal.js';
 
 import ProgressBar from './../utility/ProgressBar.js';
 
 import { MdFileDownload, MdFileUpload, MdEdit } from 'react-icons/md';
 import { IoMdTrash, IoMdArrowDropdown } from 'react-icons/io';
 import { IoCloseSharp, IoTrashSharp } from 'react-icons/io5';
-import { AiFillFile, AiFillFileImage, AiFillFileExclamation, AiFillFilePdf, AiFillFileExcel, AiFillFilePpt, AiFillFileText, AiFillFileWord, AiFillFileZip } from 'react-icons/ai';
+import { 
+    AiFillFile, 
+    AiFillFileImage, 
+    AiFillFileExclamation, 
+    AiFillFilePdf, 
+    AiFillFileExcel, 
+    AiFillFilePpt, 
+    AiFillFileText, 
+    AiFillFileWord, 
+    AiFillFileZip } from 'react-icons/ai';
 
 /****
  * The UI is rendered using a field "filesToDisplay".
@@ -190,8 +200,8 @@ class FilesDashboard extends React.Component {
         this.handleFileUploadChange = this.handleFileUploadChange.bind(this);
         this.handleFileUpload = this.handleFileUpload.bind(this);
         this.trimTrailingFileName = this.trimTrailingFileName.bind(this);
-        this.renderFileUploadPropertiesSelection = this.renderFileUploadPropertiesSelection.bind(this);
         this.convertPropertyToFilesMapToElements = this.convertPropertyToFilesMapToElements.bind(this);
+        this.closeFileUpload = this.closeFileUpload.bind(this);
     }
 
     componentDidMount() {
@@ -261,6 +271,12 @@ class FilesDashboard extends React.Component {
                 isPropertiesLoading: false
             })
         });
+    }
+
+    closeFileUpload() {
+        this.setState({
+            displayUploadFileBox: false
+        })
     }
     
     downloadFile(value, key, map) {
@@ -475,13 +491,6 @@ class FilesDashboard extends React.Component {
         return fileName;
     }
 
-    renderFileUploadPropertiesSelection() {
-        return (
-            this.state.properties.map((property, i) => 
-            <option name={property[1]} key={property[1] + i} value={property[0]}>{property[1]}</option>
-        ))
-    }
-
     handleSearchBar(e) {
         var searchValue = e.target.value.toLowerCase().replace(/\s/g, "");
 
@@ -687,81 +696,88 @@ class FilesDashboard extends React.Component {
     //     </div>);
     // }
 
-    renderUploadBox() {
-        return (
-            <div id="files_dashboard_upload_file_box">
-                <div id="files_dashboard_upload_file_left_box">
-                    <label htmlFor="files_dashboard_upload_file_button" id="files_dashboard_upload_file_button_label">
-                        {this.state.fileToUpload ? 
-                            <div alt={this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "Unknown File"}>
-                                <div>
-                                    {this.mapFileTypeToIcon(this.state.fileToUpload["type"], false)}
-                                </div>
-                                <p id="files_dashboard_uploaded_file_name">
-                                    {this.state.fileToUpload["name"] ? this.trimTrailingFileName(this.state.fileToUpload["name"]) : "Unable to Upload File"}
-                                </p>
-                            </div> : 
-                            <div>
-                                <MdFileUpload id="files_dashboard_upload_file_icon"></MdFileUpload>
-                                <p id="files_dashboard_upload_file_title">
-                                    Choose File
-                                </p>
-                            </div>}
-                    </label>
-                    <input id="files_dashboard_upload_file_button" type="file" onChange={this.handleFileUploadChange}></input>
-                </div>
-                <div id="files_dashboard_upload_file_right_box">
-                    <div>
-                        <p id="files_dashboard_upload_file_label">Upload a File</p>
-                        <IoCloseSharp 
-                            id="files_dashboard_upload_file_close_icon" 
-                            onClick={() => 
-                                this.setState({
-                                    displayUploadFileBox: false,
-                                    fileToUpload: null
-                                })}>
-                        </IoCloseSharp>
-                        <div id="files_dashboard_upload_file_final_button" onClick={this.handleFileUpload}>
-                            Upload
-                        </div>
-                    </div>
-                    <input 
-                        id="files_dashboard_upload_file_name_input"
-                        placeholder={this.state.fileToUpload && this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "File Name"} 
-                        className={this.state.fileToUpload && this.state.fileToUpload["name"] ? "upload_file_input dark_placeholder" : "upload_file_input"}>
-                    </input>
-                    <br></br>
-                    <select id="files_dashboard_upload_file_property_select" className="upload_file_select">
-                        <option value="" disabled selected>Property</option>
-                        <option name="general" value="general">General</option>
-                        {this.renderFileUploadPropertiesSelection()}
-                    </select>
-                    <br></br>
-                    <select id="files_dashboard_upload_file_category_select" className="upload_file_select_half_left">
-                        <option value="" disabled selected>File Type</option>
-                        <option name="mortgage" value="mortgage">Mortgage</option>
-                        <option name="contracting" value="contracting">Contracting</option>
-                        <option name="property" value="property">Property</option>
-                        <option name="receipts" value="receipts">Receipts</option>
-                        <option name="repairs" value="repairs">Repairs</option>
-                        <option name="taxes" value="taxes">Taxes</option>
-                        <option name="other" value="other">Other</option>
-                    </select>
-                    <input 
-                        id="files_dashboard_upload_file_year_input" 
-                        className="upload_file_input_half_right" 
-                        type="number" 
-                        maxlength="4"
-                        onChange={this.enforceYearInput}
-                        placeholder="Year">
-                    </input>
-                    <div className="clearfix"/>
-                </div>
-                <div className="clearfix"></div>
-                <ProgressBar id="upload_file_progress_bar" bgColor="#296CF6" completed={this.state.fileUploadProgressBar}></ProgressBar>
-            </div>
-        )
-    }
+    // renderUploadBox() {
+    //     return (
+    //         <UploadFileModal
+    //             data={{
+    //                 state: {
+    //                     user: this.state.user,
+    //                     closeFileUpload: this.closeFileUpload
+    //                 }                       
+    //             }}/>
+    //         // <div id="files_dashboard_upload_file_box">
+    //         //     <div id="files_dashboard_upload_file_left_box">
+    //         //         <label htmlFor="files_dashboard_upload_file_button" id="files_dashboard_upload_file_button_label">
+    //         //             {this.state.fileToUpload ? 
+    //         //                 <div alt={this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "Unknown File"}>
+    //         //                     <div>
+    //         //                         {this.mapFileTypeToIcon(this.state.fileToUpload["type"], false)}
+    //         //                     </div>
+    //         //                     <p id="files_dashboard_uploaded_file_name">
+    //         //                         {this.state.fileToUpload["name"] ? this.trimTrailingFileName(this.state.fileToUpload["name"]) : "Unable to Upload File"}
+    //         //                     </p>
+    //         //                 </div> : 
+    //         //                 <div>
+    //         //                     <MdFileUpload id="files_dashboard_upload_file_icon"></MdFileUpload>
+    //         //                     <p id="files_dashboard_upload_file_title">
+    //         //                         Choose File
+    //         //                     </p>
+    //         //                 </div>}
+    //         //         </label>
+    //         //         <input id="files_dashboard_upload_file_button" type="file" onChange={this.handleFileUploadChange}></input>
+    //         //     </div>
+    //         //     <div id="files_dashboard_upload_file_right_box">
+    //         //         <div>
+    //         //             <p id="files_dashboard_upload_file_label">Upload a File</p>
+    //         //             <IoCloseSharp 
+    //         //                 id="files_dashboard_upload_file_close_icon" 
+    //         //                 onClick={() => 
+    //         //                     this.setState({
+    //         //                         displayUploadFileBox: false,
+    //         //                         fileToUpload: null
+    //         //                     })}>
+    //         //             </IoCloseSharp>
+    //         //             <div id="files_dashboard_upload_file_final_button" onClick={this.handleFileUpload}>
+    //         //                 Upload
+    //         //             </div>
+    //         //         </div>
+    //         //         <input 
+    //         //             id="files_dashboard_upload_file_name_input"
+    //         //             placeholder={this.state.fileToUpload && this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "File Name"} 
+    //         //             className={this.state.fileToUpload && this.state.fileToUpload["name"] ? "upload_file_input dark_placeholder" : "upload_file_input"}>
+    //         //         </input>
+    //         //         <br></br>
+    //         //         <select id="files_dashboard_upload_file_property_select" className="upload_file_select">
+    //         //             <option value="" disabled selected>Property</option>
+    //         //             <option name="general" value="general">General</option>
+    //         //             {this.renderFileUploadPropertiesSelection()}
+    //         //         </select>
+    //         //         <br></br>
+    //         //         <select id="files_dashboard_upload_file_category_select" className="upload_file_select_half_left">
+    //         //             <option value="" disabled selected>File Type</option>
+    //         //             <option name="mortgage" value="mortgage">Mortgage</option>
+    //         //             <option name="contracting" value="contracting">Contracting</option>
+    //         //             <option name="property" value="property">Property</option>
+    //         //             <option name="receipts" value="receipts">Receipts</option>
+    //         //             <option name="repairs" value="repairs">Repairs</option>
+    //         //             <option name="taxes" value="taxes">Taxes</option>
+    //         //             <option name="other" value="other">Other</option>
+    //         //         </select>
+    //         //         <input 
+    //         //             id="files_dashboard_upload_file_year_input" 
+    //         //             className="upload_file_input_half_right" 
+    //         //             type="number" 
+    //         //             maxlength="4"
+    //         //             onChange={this.enforceYearInput}
+    //         //             placeholder="Year">
+    //         //         </input>
+    //         //         <div className="clearfix"/>
+    //         //     </div>
+    //         //     <div className="clearfix"></div>
+    //         //     <ProgressBar id="upload_file_progress_bar" bgColor="#296CF6" completed={this.state.fileUploadProgressBar}></ProgressBar>
+    //         // </div>
+    //     )
+    // }
 
     render() {
         return (
@@ -776,6 +792,17 @@ class FilesDashboard extends React.Component {
                     }
                 }}/>
                 <div id="files_dashboard_parent_box">
+                    {this.state.displayUploadFileBox ? 
+                        <div className="files_dashboard_display_add_file_box">
+                            <UploadFileModal
+                                data={{
+                                    state: {
+                                        properties: this.state.properties,
+                                        closeFileUpload: this.closeFileUpload
+                                    }                       
+                                }}/>
+                        </div> :
+                    <div></div>}
                     <div id="files_dashboard_welcome_box">
                         <p id="files_dashboard_welcome_box_title">
                             Files
@@ -938,7 +965,11 @@ class FilesDashboard extends React.Component {
                                 </div> : 
                                 <div></div>
                             }
-                            <div className="files_dashboard_upload_file_text_button" onClick={() => this.setState({displayUploadFileBox: true})}>Add File</div>
+                            <div 
+                                className="files_dashboard_upload_file_text_button" 
+                                onClick={() => this.setState({
+                                    displayUploadFileBox: true
+                                    })}>Add File</div>
                             {this.state.activeFiles.size >= 1 ?
                                 <IoTrashSharp className="files_dashboard_icons" onClick={() => this.deleteActiveFiles()}></IoTrashSharp> : 
                                 <div></div>}
@@ -950,11 +981,7 @@ class FilesDashboard extends React.Component {
                                 <MdEdit className="files_dashboard_icons"></MdEdit> : 
                                 <div></div>
                             }
-                        </div>
-                        <div className="clearfix"/>
-                        {this.state.displayUploadFileBox ? 
-                        this.renderUploadBox()
-                         : <div></div>}
+                        </div>                        
                         <div className="clearfix"/>
                         <div id="files_dashboard_files_box">
                             {
