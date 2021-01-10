@@ -197,8 +197,6 @@ class FilesDashboard extends React.Component {
         this.deleteActiveFiles = this.deleteActiveFiles.bind(this);
         this.deleteFile = this.deleteFile.bind(this);
         this.handleSearchBar = this.handleSearchBar.bind(this);
-        this.handleFileUploadChange = this.handleFileUploadChange.bind(this);
-        this.handleFileUpload = this.handleFileUpload.bind(this);
         this.trimTrailingFileName = this.trimTrailingFileName.bind(this);
         this.convertPropertyToFilesMapToElements = this.convertPropertyToFilesMapToElements.bind(this);
         this.closeFileUpload = this.closeFileUpload.bind(this);
@@ -372,118 +370,7 @@ class FilesDashboard extends React.Component {
             propertyToFilesMap: currPropertyToFilesMap
         });
     }
-
-    handleFileUploadChange(event) {
-        var file = event.target.files[0];
-        if (file !== null && file !== undefined) {
-            this.setState({
-                fileToUpload: file
-            })
-        }
-    }
      
-    handleFileUpload() {
-        var file = this.state.fileToUpload;
-        if (file === null || file === undefined) {
-            return;
-        }
-
-        var nameInput = document.getElementById("files_dashboard_upload_file_name_input");
-        var nameInputValue = nameInput.value;
-
-        var fileName = file["name"];
-        if (nameInputValue !== "") {
-            fileName = nameInputValue;
-        }
-
-        var propertySelect = document.getElementById("files_dashboard_upload_file_property_select");
-        var propertySelectValue = propertySelect.value;
-        var propertySelectAddress = propertySelect.options[propertySelect.selectedIndex].text;
-
-        var fileCategorySelect = document.getElementById("files_dashboard_upload_file_category_select");
-        var fileCategorySelectValue = fileCategorySelect.value;
-
-        var yearInput = document.getElementById("files_dashboard_upload_file_year_input");
-
-        // Year sanitization is handled server side. If empty, server will fill in with current year. 
-        var yearInputValue = yearInput.value;
-
-        // var signedURL;
-        // axios({
-        //     method: 'get',
-        //     url: 'api/user/files/upload/' + this.state.user["id"] + '/' + propertySelectValue + '?file_name=' + fileName,
-        // }).then(response => {
-        //     signedURL = response.data;
-        //     axios({
-        //         method: 'put',
-        //         url: signedURL,
-        //         data: file
-        //     }).then(signedURLResponse => {
-        //         console.log(signedURLResponse);
-        //     }).catch(signedURLError => {
-        //         console.log(signedURLError);
-        //     });
-        // }).catch(error => {
-        // });
-
-        var formData = new FormData();
-        formData.append('file', file);
-        formData.append('property_id', propertySelectValue);
-        formData.append('file_category', fileCategorySelectValue);
-        formData.append('file_type', file["type"]);
-        formData.append('address', propertySelectAddress);
-        formData.append('year', yearInputValue);
-
-
-        // If user wants to override the default name.
-        if (nameInputValue !== "") {
-            formData.append('file_name', nameInputValue);
-        }
-
-        axios({
-            method: 'post',
-            url: 'api/user/files/upload/' + this.state.user["id"],
-            config: {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-            },
-            onUploadProgress: (progressEvent) => {
-                // Use Math.min because we currently upload to the server, then upload to GCS. The GCS step can take a while,
-                // but this only tracks progress from client -> server. Stop it at 90, then finish the last 10 once we 
-                // successfully write to GCS.
-                var progressCompleted = Math.min(Math.round((progressEvent.loaded * 100) / progressEvent.total), 98);
-                this.setState({
-                    fileUploadProgressBar: progressCompleted
-                })
-            },
-            data: formData
-        }).then(response => {
-            var currFiles = this.state.propertyToFilesMap;
-            if (!currFiles.has(propertySelectValue)) {
-                currFiles.set(propertySelectValue, []);
-            }
-
-            var propertyArr = currFiles.get(propertySelectValue);
-            propertyArr.unshift(response.data);
-
-            currFiles.set(propertySelectValue, propertyArr);
-
-            var files = this.state.files;
-            files.push(response.data);
-
-            this.renderFiles(currFiles);
-
-            this.setState({
-                files: [...files],
-                displayUploadFileBox: false,
-                fileToUpload: null,
-                fileUploadProgressBar: 0,
-                propertyToFilesMap: currFiles
-            })
-        }).catch(error => console.log(error));
-    }
-
     trimTrailingFileName(fileName) {
         if (fileName.length > 20) {
             return fileName.substring(0,20) + "...";
@@ -535,10 +422,6 @@ class FilesDashboard extends React.Component {
                 </p>
             </div>
         );
-    }
-
-    enforceYearInput(e) {
-        e.target.value = e.target.value > 4 ? e.target.value.slice(0, 4) : e.target.value;
     }
 
     handleSortOptionsHelper(newPropertyToFilesMap, sortType, arrowDown) {
@@ -694,89 +577,6 @@ class FilesDashboard extends React.Component {
     //     return (<div>
     //         {options}
     //     </div>);
-    // }
-
-    // renderUploadBox() {
-    //     return (
-    //         <UploadFileModal
-    //             data={{
-    //                 state: {
-    //                     user: this.state.user,
-    //                     closeFileUpload: this.closeFileUpload
-    //                 }                       
-    //             }}/>
-    //         // <div id="files_dashboard_upload_file_box">
-    //         //     <div id="files_dashboard_upload_file_left_box">
-    //         //         <label htmlFor="files_dashboard_upload_file_button" id="files_dashboard_upload_file_button_label">
-    //         //             {this.state.fileToUpload ? 
-    //         //                 <div alt={this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "Unknown File"}>
-    //         //                     <div>
-    //         //                         {this.mapFileTypeToIcon(this.state.fileToUpload["type"], false)}
-    //         //                     </div>
-    //         //                     <p id="files_dashboard_uploaded_file_name">
-    //         //                         {this.state.fileToUpload["name"] ? this.trimTrailingFileName(this.state.fileToUpload["name"]) : "Unable to Upload File"}
-    //         //                     </p>
-    //         //                 </div> : 
-    //         //                 <div>
-    //         //                     <MdFileUpload id="files_dashboard_upload_file_icon"></MdFileUpload>
-    //         //                     <p id="files_dashboard_upload_file_title">
-    //         //                         Choose File
-    //         //                     </p>
-    //         //                 </div>}
-    //         //         </label>
-    //         //         <input id="files_dashboard_upload_file_button" type="file" onChange={this.handleFileUploadChange}></input>
-    //         //     </div>
-    //         //     <div id="files_dashboard_upload_file_right_box">
-    //         //         <div>
-    //         //             <p id="files_dashboard_upload_file_label">Upload a File</p>
-    //         //             <IoCloseSharp 
-    //         //                 id="files_dashboard_upload_file_close_icon" 
-    //         //                 onClick={() => 
-    //         //                     this.setState({
-    //         //                         displayUploadFileBox: false,
-    //         //                         fileToUpload: null
-    //         //                     })}>
-    //         //             </IoCloseSharp>
-    //         //             <div id="files_dashboard_upload_file_final_button" onClick={this.handleFileUpload}>
-    //         //                 Upload
-    //         //             </div>
-    //         //         </div>
-    //         //         <input 
-    //         //             id="files_dashboard_upload_file_name_input"
-    //         //             placeholder={this.state.fileToUpload && this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "File Name"} 
-    //         //             className={this.state.fileToUpload && this.state.fileToUpload["name"] ? "upload_file_input dark_placeholder" : "upload_file_input"}>
-    //         //         </input>
-    //         //         <br></br>
-    //         //         <select id="files_dashboard_upload_file_property_select" className="upload_file_select">
-    //         //             <option value="" disabled selected>Property</option>
-    //         //             <option name="general" value="general">General</option>
-    //         //             {this.renderFileUploadPropertiesSelection()}
-    //         //         </select>
-    //         //         <br></br>
-    //         //         <select id="files_dashboard_upload_file_category_select" className="upload_file_select_half_left">
-    //         //             <option value="" disabled selected>File Type</option>
-    //         //             <option name="mortgage" value="mortgage">Mortgage</option>
-    //         //             <option name="contracting" value="contracting">Contracting</option>
-    //         //             <option name="property" value="property">Property</option>
-    //         //             <option name="receipts" value="receipts">Receipts</option>
-    //         //             <option name="repairs" value="repairs">Repairs</option>
-    //         //             <option name="taxes" value="taxes">Taxes</option>
-    //         //             <option name="other" value="other">Other</option>
-    //         //         </select>
-    //         //         <input 
-    //         //             id="files_dashboard_upload_file_year_input" 
-    //         //             className="upload_file_input_half_right" 
-    //         //             type="number" 
-    //         //             maxlength="4"
-    //         //             onChange={this.enforceYearInput}
-    //         //             placeholder="Year">
-    //         //         </input>
-    //         //         <div className="clearfix"/>
-    //         //     </div>
-    //         //     <div className="clearfix"></div>
-    //         //     <ProgressBar id="upload_file_progress_bar" bgColor="#296CF6" completed={this.state.fileUploadProgressBar}></ProgressBar>
-    //         // </div>
-    //     )
     // }
 
     render() {

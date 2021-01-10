@@ -54,6 +54,9 @@ func (handle *Handle) AddExpense(expense *Expense, propertyIDs []string) error {
 
 		for _, propertyID := range propertyIDs {
 
+			if propertyID == "" {
+				continue
+			}
 			expensesProperties := ExpensesProperties {
 				ExpenseID: expense.ID,
 				PropertyID: propertyID,

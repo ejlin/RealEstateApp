@@ -24,10 +24,10 @@
 }
 
 .files_dashboard_category_and_sort {
-    background-color: #eaf5fb;
+    background-color: #296CF6;
     border: 2px solid #296CF6;
     border-radius: 8px;
-    color: #296CF6;
+    color: white;
     cursor: pointer;
     height: 20px;
     line-height: 20px;
@@ -101,9 +101,7 @@
     color: white;
 }
 
-#files_dashboard_upload_file_icon:hover  {
-    transform: scale(1.05);
-}
+
 
 .files_dashboard_icons {
     color: #296CF6;
@@ -283,42 +281,9 @@
     width: 24px;
 }
 
-#files_dashboard_upload_file_button {
-    opacity: 0;
-    position: absolute;
-    z-index: -1;
-}
-
-#files_dashboard_upload_file_button_label:hover {
-    opacity: 0.7;
-}
-
-#files_dashboard_uploaded_file_name {
-    bottom: 0;
-    color: grey;
-    font-size: 0.9em;
-    font-weight: bold;
-    margin-bottom: 15px;
-    margin-left: 15px;
-    position: absolute;
-    user-select: none;
-    width: calc(100% - 30px);
-    word-break: break-all;
-    text-align: center;
-}
-
 #files_dashboard_upload_file_thumbnail_image {
     height: 50px;
     width: 100px;
-}
-
-#files_dashboard_upload_file_icon {
-    color: grey;
-    height: 40px;
-    margin-left: calc((100% - 60px)/2);
-    margin-top: 40px;
-    padding: 10px;
-    width: 40px;
 }
 
 .files_dashboard_upload_image_type {

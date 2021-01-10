@@ -2,6 +2,7 @@ package server
 
 import (
 	"net/http"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -191,6 +192,7 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		Date: date,
 	}
 		
+	fmt.Println(expense)
 	// Add our expense to our expenses table.
 	err = s.DBHandle.AddExpense(expense, associatedProperties)
 	if err != nil {

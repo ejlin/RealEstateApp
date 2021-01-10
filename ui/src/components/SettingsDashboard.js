@@ -11,6 +11,7 @@ import { ImUser } from 'react-icons/im';
 import { AiFillClockCircle } from 'react-icons/ai';
 import { BsFillAwardFill } from 'react-icons/bs';
 import { RiUser3Fill } from 'react-icons/ri';
+import { IoSettingsSharp } from 'react-icons/io5';
 import { IoMdSettings, IoMdNotifications, IoIosSend } from 'react-icons/io';
 import { FaUserTie, FaBuilding } from 'react-icons/fa';
 import { TiUser } from 'react-icons/ti';
@@ -791,7 +792,7 @@ class SettingsDashboard extends React.Component {
                                         this.state.toDisplay === general ? 
                                         "settings_dashboard_right_box_nav_bar_list settings_dashboard_right_box_nav_bar_active_list" : 
                                         "settings_dashboard_right_box_nav_bar_list"}>
-                                    <IoMdSettings className="settings_dashboard_right_box_nav_bar_list_icon"></IoMdSettings>
+                                    <IoSettingsSharp className="settings_dashboard_right_box_nav_bar_list_icon"></IoSettingsSharp>
                                     <p className="settings_dashboard_right_box_nav_bar_list_text">
                                         General
                                     </p>

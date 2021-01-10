@@ -1,5 +1,7 @@
 import React from 'react';
 
+import axios from 'axios';
+
 import './CSS/UploadFileModal.css';
 import './CSS/Style.css';
 
@@ -19,6 +21,8 @@ class UploadFileModal extends React.Component {
         };
     
         this.renderFileUploadPropertiesSelection = this.renderFileUploadPropertiesSelection.bind(this);
+        this.handleFileUploadChange = this.handleFileUploadChange.bind(this);
+        this.handleFileUpload = this.handleFileUpload.bind(this);
     }
 
     componentDidMount() {
@@ -39,10 +43,125 @@ class UploadFileModal extends React.Component {
         ))
     }
 
+    enforceYearInput(e) {
+        e.target.value = e.target.value > 4 ? e.target.value.slice(0, 4) : e.target.value;
+    }
+
+    handleFileUploadChange(event) {
+        var file = event.target.files[0];
+        if (file !== null && file !== undefined) {
+            this.setState({
+                fileToUpload: file
+            })
+        }
+    }
+
+    handleFileUpload() {
+        var file = this.state.fileToUpload;
+        if (file === null || file === undefined) {
+            return;
+        }
+
+        var nameInput = document.getElementById("files_dashboard_upload_file_name_input");
+        var nameInputValue = nameInput.value;
+
+        var fileName = file["name"];
+        if (nameInputValue !== "") {
+            fileName = nameInputValue;
+        }
+
+        var propertySelect = document.getElementById("files_dashboard_upload_file_property_select");
+        var propertySelectValue = propertySelect.value;
+        var propertySelectAddress = propertySelect.options[propertySelect.selectedIndex].text;
+
+        var fileCategorySelect = document.getElementById("files_dashboard_upload_file_category_select");
+        var fileCategorySelectValue = fileCategorySelect.value;
+
+        var yearInput = document.getElementById("files_dashboard_upload_file_year_input");
+
+        // Year sanitization is handled server side. If empty, server will fill in with current year. 
+        var yearInputValue = yearInput.value;
+
+        // var signedURL;
+        // axios({
+        //     method: 'get',
+        //     url: 'api/user/files/upload/' + this.state.user["id"] + '/' + propertySelectValue + '?file_name=' + fileName,
+        // }).then(response => {
+        //     signedURL = response.data;
+        //     axios({
+        //         method: 'put',
+        //         url: signedURL,
+        //         data: file
+        //     }).then(signedURLResponse => {
+        //         console.log(signedURLResponse);
+        //     }).catch(signedURLError => {
+        //         console.log(signedURLError);
+        //     });
+        // }).catch(error => {
+        // });
+
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('property_id', propertySelectValue);
+        formData.append('file_category', fileCategorySelectValue);
+        formData.append('file_type', file["type"]);
+        formData.append('address', propertySelectAddress);
+        formData.append('year', yearInputValue);
+
+
+        // If user wants to override the default name.
+        if (nameInputValue !== "") {
+            formData.append('file_name', nameInputValue);
+        }
+
+        axios({
+            method: 'post',
+            url: 'api/user/files/upload/' + this.state.user["id"],
+            config: {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+            },
+            onUploadProgress: (progressEvent) => {
+                // Use Math.min because we currently upload to the server, then upload to GCS. The GCS step can take a while,
+                // but this only tracks progress from client -> server. Stop it at 90, then finish the last 10 once we 
+                // successfully write to GCS.
+                var progressCompleted = Math.min(Math.round((progressEvent.loaded * 100) / progressEvent.total), 98);
+                this.setState({
+                    fileUploadProgressBar: progressCompleted
+                })
+            },
+            data: formData
+        }).then(response => {
+            var currFiles = this.state.propertyToFilesMap;
+            if (!currFiles.has(propertySelectValue)) {
+                currFiles.set(propertySelectValue, []);
+            }
+
+            var propertyArr = currFiles.get(propertySelectValue);
+            propertyArr.unshift(response.data);
+
+            currFiles.set(propertySelectValue, propertyArr);
+
+            var files = this.state.files;
+            files.push(response.data);
+
+            this.renderFiles(currFiles);
+
+            this.setState({
+                files: [...files],
+                displayUploadFileBox: false,
+                fileToUpload: null,
+                fileUploadProgressBar: 0,
+                propertyToFilesMap: currFiles
+            })
+        }).catch(error => console.log(error));
+    }
+
     render() {
         return (
             <div>
-                <div className="create_expense_modal_parent_box">
+                <div className="upload_file_modal_parent_box">
                     <div className="create_expense_modal_parent_box_title_box">
                         <IoCloseOutline 
                             onClick={() => {
@@ -88,13 +207,19 @@ class UploadFileModal extends React.Component {
                                     placeholder="Add a Property"
                                     className="files_dashboard_associated_properties_input">
                                 </input>
+                                <div className="create_expense_modal_render_associated_properties_box">
+                                    {this.renderAssociatedProperties()}
+                                </div>
                             </div>
                             <div className="files_dashboard_upload_file_right_box_right_box">
                                 <p className="files_dashboard_title">
                                     Year
                                 </p>
                                 <input 
+                                    type="number" 
+                                    maxlength="4"
                                     placeholder="YYYY"
+                                    onChange={this.enforceYearInput}
                                     className="files_dashboard_associated_properties_input">
                                 </input>
                                 <p className="files_dashboard_title">
@@ -117,15 +242,6 @@ class UploadFileModal extends React.Component {
                                 {this.renderFileUploadPropertiesSelection()}
                             </select> */}
                             
-                            
-                            {/* <input 
-                                id="files_dashboard_upload_file_year_input" 
-                                className="upload_file_input_half_right" 
-                                type="number" 
-                                maxlength="4"
-                                onChange={this.enforceYearInput}
-                                placeholder="Year">
-                            </input> */}
                             <div className="clearfix"></div>
                             {/* <ProgressBar id="upload_file_progress_bar" bgColor="#296CF6" completed={this.state.fileUploadProgressBar}></ProgressBar> */}
                             <div className="files_dashboard_upload_file_final_button" onClick={this.handleFileUpload}>
