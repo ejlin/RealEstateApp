@@ -258,12 +258,6 @@
     width: 20px;
 }
 
-.create_expense_modal_actual_box {
-    float: right;
-    margin-left: 40px;
-    width: calc((100%));
-}
-
 .create_expense_modal_button {
     background-color: #296CF6;
     border-radius: 4px;

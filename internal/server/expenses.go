@@ -2,7 +2,6 @@ package server
 
 import (
 	"net/http"
-	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -124,6 +123,13 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 
 	ll := log.With().Str("user_id", userID).Logger()
 
+	err := r.ParseMultipartForm(32 << 20) // maxMemory 32MB
+	if err != nil {
+		ll.Error().Err(err).Msg("failed to parse multipart message")
+		http.Error(w, "failed to parse multipart message", http.StatusBadRequest)
+		return
+	}
+	
 	title := r.FormValue("title")
 	if title == "" {
 		ll.Error().Msg("missing expense title")
@@ -136,6 +142,19 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		ll.Error().Msg("missing expense description")
 		http.Error(w, "missing expense description", http.StatusBadRequest)
 		return
+	}
+	
+	formFile, handler, err := r.FormFile("file")
+	if err != nil {
+		ll.Error().Err(err).Msg("error retrieving the file")
+		http.Error(w, "error retrieving the file", http.StatusBadRequest)
+		return
+	}
+	defer formFile.Close()
+
+	fileName := handler.Filename
+	if fileName == "" {
+		fileName = title + "-file"
 	}
 
 	frequency := r.FormValue("frequency")
@@ -191,10 +210,37 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		Frequency: getFrequency(frequency),
 		Date: date,
 	}
-		
-	fmt.Println(expense)
+
+	func getYear(date string) string {
+		dateSpl := strings.Split(date, "-")
+		return dateSpl[0]
+	}
+
+	var file *File
+	if formFile != nil {
+		file = &db.File {
+			ID: uuid.New().String(),
+			UserID: userID,
+			CreatedAt: &now,
+			LastModifiedAt: &now,
+			Name: fileName,
+			Year: getYear(date),
+			Type: db.FileType("other"),
+		}
+	} else {
+		file = nil
+	}
+	
+	key := path.Join()
+
+	addFileToCloudStorage := func() func(ctx context.Context) error {
+		return func(ctx context.Context) error {
+			cloudstorage.AddCloudstorageFile(ctx, s.StorageClient, formFile, s.UsersBucket, key)
+		}
+	}
+
 	// Add our expense to our expenses table.
-	err = s.DBHandle.AddExpense(expense, associatedProperties)
+	err = s.DBHandle.AddExpense(ctx, expense, associatedProperties, file, addFileToCloudStorage)
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to add expense to database")
 		http.Error(w, "unable to add expense to database", http.StatusInternalServerError)

@@ -26,7 +26,7 @@
 
 .expenses_dashboard_search_bar {
     border: 1px solid #d3d3d3;
-    border-radius: 8px;
+    border-radius: 4px;
     float: right;
     font-size: 1.1em;
     padding: 7.5px 15px 7.5px 15px;
@@ -154,7 +154,7 @@
     margin-bottom: 15px;
     padding-left: 30px;
     padding-right: 20px;
-    padding-top: 30px;
+    padding-top: 25px;
     width: calc(100% - 50px);
 }
 .expenses_table_first_row_long:first-child {
@@ -169,7 +169,7 @@
 .expenses_table_first_row_short {
     float: left;
     min-width: 100px;
-    width: calc((34% - 100px)/3);
+    width: calc((34% - 60px)/3);
 }
 
 .expenses_table_first_row_title {
@@ -185,8 +185,8 @@
 
 .expenses_table_subtitle_row {
     float: left;
-    padding-bottom: 15px;
-    padding-top: 15px;
+    padding-bottom: 10px;
+    padding-top: 10px;
     padding-left: 30px;
     padding-right: 20px;
     width: calc(100% - 50px);

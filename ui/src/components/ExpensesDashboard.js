@@ -114,7 +114,6 @@ class ExpensesDashboard extends React.Component {
     }
 
     addExpense(expenseFormData) {
-
         axios({
             method: 'post',
             url: 'api/user/expenses/' + this.state.user["id"],
@@ -176,65 +175,6 @@ class ExpensesDashboard extends React.Component {
             console.log(error)
         })
     }
-
-    // renderPropertyBoxes() {
-    //     var elements = [];
-    //     var propertiesMap = this.state.propertiesMap;
-    //     var propertiesToExpenses = this.state.propertiesToExpenses;
-    //     propertiesMap.forEach((value, key, map) => {
-    //         // value is our propertyID
-    //         var propertyExpenses = propertiesToExpenses.get(key);
-    //         if (propertyExpenses !== null && propertyExpenses !== undefined && propertyExpenses.length > 0) {
-    //             elements.push(
-    //                 <div>
-    //                     <p className="expenses_dashboard_body_inner_box_title">
-    //                         {value}
-    //                     </p>
-    //                 </div>
-    //             );
-
-    //             var expenses = [];
-    //             for (var i = 0; i < propertyExpenses.length; i++) {
-    //                 let expense = propertyExpenses[i];
-    //                 expenses.push(
-    //                     <ExpenseCard data={{
-    //                         state: {
-    //                             expense: expense,
-    //                             deleteExpense: this.deleteExpense
-    //                         }
-    //                     }}>
-    //                     </ExpenseCard>
-    //                 )
-    //             }
-
-    //             elements.push(
-    //                 <div>
-    //                     <div className="expenses_dashboard_property_expenses_parent_box">
-    //                         {expenses}
-    //                     </div>
-    //                     <div className="clearfix"/>
-    //                 </div>
-    //             );
-    //         } else {
-    //             elements.push(
-    //                 <div>
-    //                     <p className="expenses_dashboard_body_inner_box_title">
-    //                         {value}
-    //                     </p>
-    //                     <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
-    //                         <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box_title_box">
-    //                             <MdError className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></MdError>
-    //                             <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
-    //                                 No Expenses to show
-    //                             </p>
-    //                         </div>
-    //                     </div>
-    //                 </div>
-    //             );
-    //         }
-    //     });
-    //     return elements;
-    // }
 
     renderExpenseTableTitle() {
         return (
@@ -339,14 +279,10 @@ class ExpensesDashboard extends React.Component {
                             expense: expense,
                             deleteExpense: this.deleteExpense
                         }
-                    }}>
-
-                    </ExpenseCard>
+                    }}/>
                 );
             }
         })
-        
-
         return elements;
     }
 

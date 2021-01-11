@@ -52,7 +52,7 @@ class ExpenseCard extends React.Component {
                     </div>
                     <div className="expenses_table_first_row_long">
                         <p className="expenses_table_first_row_subtitle">
-                            {this.state.properties}
+                            {this.state.properties ? this.state.properties : "None"}
                         </p>
                     </div>
                     <div className="expenses_table_first_row_short">

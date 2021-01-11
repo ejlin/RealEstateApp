@@ -21,6 +21,10 @@ type File struct {
 
 type FileType string
 
+const (
+	Other FileType = "Other"
+)
+
 func (handle *Handle) AddFile(file *File, propertyID string) error {
 	
 	if file == nil {

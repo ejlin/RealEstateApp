@@ -143,7 +143,7 @@ func (s *Server) getFileData(ctx context.Context, userID, propertyID, fileName s
 // addStorageFile adds a new file to cloudstorage bucket.
 func (s *Server) addStorageFile(ctx context.Context, f io.Reader, userID, propertyID, fileName, fileType, fileCategory, address, year string) (*FileInfo, error) {
 
-	tCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
+	tCtx, cancel := context.WithTimeout(ctx, 60*time.Second)
 	defer cancel()
 
 	prefix := path.Join(userID, propertyDelimiter, propertyID)
@@ -353,3 +353,4 @@ func getFileInfoFromAttrs(attrs *storage.ObjectAttrs, prefix string) *FileInfo {
 	}
 	return nil
 }
+

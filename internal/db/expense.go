@@ -35,12 +35,14 @@ const (
 	SemiAnnually FrequencyType = "semi-annually"
 )
 
-// AddExpenseByUser will add a record of a expense for a user.
-// We need to add two types of records to our database. The first is in our expenses table.
-// This contains information about the expense. The second is in our expenses_properties table.
-// This is just a mapping of expense -> properties. We need to perform the two additions within
-// a transaction so we can roll back one or the other if either fails.
-func (handle *Handle) AddExpense(expense *Expense, propertyIDs []string) error {
+// AddExpense will add a record of a expense for a user.
+// We need to add three types of records to our database. The first is in our expenses table.
+// This contains information about the expense. The second is in our properties_references table.
+// This is just a mapping of properties -> {expenses, files}. We need to perform the three additions 
+// within a transaction so we can roll them back if any of them fail. 
+// We also need to upload our file to google cloud storage. If it fails to upload, roll back these
+// transactions.
+func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, propertyIDs []string, file *File, fn func(ctx context.Context) error) error {
 
 	if expense == nil {
 		return errors.New("nil expense")
@@ -66,6 +68,25 @@ func (handle *Handle) AddExpense(expense *Expense, propertyIDs []string) error {
 				return err
 			}
 		}
+
+		if file != nil {
+			if err := tx.FirstOrCreate(&file, file).Error; err != nil {
+				return err
+			}
+
+			// Note: We MUST perform file operations in this order. First
+			// create the db record, _then_ create the GCS file. This is in 
+			// case we successfully create the record, but cannot successfully
+			// upload to GCS. Then we can roll back all of our transactions.
+			// 
+			// TLDR: File upload to GCS _must_ come last after all db operations
+			// because we can rollback db operations, but we cannot rollback
+			// GCS uploads.
+			if err := fn(ctx); err != nil {
+				return err
+			}
+		}
+
 		return nil
 	})
 }

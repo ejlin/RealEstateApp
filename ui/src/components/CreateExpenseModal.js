@@ -14,6 +14,7 @@ import { MdFileUpload } from 'react-icons/md';
 const All = "All";
 const None = "None";
 
+const file = "file";
 const title = "title";
 const description = "description";
 const amount = "amount";
@@ -23,6 +24,8 @@ const properties = "properties";
 
 var URLBuilder = require('url-join');
 const once = "Once";
+
+const frequencyOptions = ['Once', 'Daily', 'Weekly', 'Bi-Weekly', 'Monthly', 'Semi-Annually', 'Annually'];
 
 class CreateExpenseModal extends React.Component {
     
@@ -46,7 +49,7 @@ class CreateExpenseModal extends React.Component {
             filteredList: [],
         };
         this.handleFieldChange = this.handleFieldChange.bind(this);
-        this.verifyExpense = this.verifyExpense.bind(this);
+        this.verifyAndAddExpense = this.verifyAndAddExpense.bind(this);
         this.setParentList = this.setParentList.bind(this);
         this.renderViewBox = this.renderViewBox.bind(this);
         this.handleFileUploadChange = this.handleFileUploadChange.bind(this);
@@ -86,10 +89,11 @@ class CreateExpenseModal extends React.Component {
         })
     }
 
-    verifyExpense() {
+    verifyAndAddExpense() {
         
         // TODO: verify expense
         var expense = new FormData();
+        expense.append(file, this.state.fileToUpload);
         expense.append(title, this.state.title);
         expense.append(description, this.state.description);
         expense.append(date, this.state.date);
@@ -123,6 +127,20 @@ class CreateExpenseModal extends React.Component {
         expense.append(properties, associatedProperties);
         
         this.state.addExpense(expense);
+    }
+
+    renderFrequencyOptions() {
+
+        var options = [];
+        for (var i = 0; i < frequencyOptions.length; i++) {
+            let frequencyOption = frequencyOptions[i];
+            options.push(
+                <option>
+                    {frequencyOption}
+                </option>
+            );
+        }
+        return options;
     }
 
     renderViewBox() {
@@ -161,27 +179,7 @@ class CreateExpenseModal extends React.Component {
                         onChange={this.handleFieldChange} 
                         name="frequency"
                         className="create_expense_modal_parent_box_inner_box_right_box_date_select">
-                        <option>
-                            Once
-                        </option>
-                        <option>
-                            Daily
-                        </option>
-                        <option>
-                            Weekly
-                        </option>
-                        <option>
-                            Bi-Weekly
-                        </option>
-                        <option>
-                            Monthly
-                        </option>
-                        <option>
-                            Semi-Annually
-                        </option>
-                        <option>
-                            Annually
-                        </option>
+                        {this.renderFrequencyOptions()}
                     </select>
                 </div>
                 <div className="create_expense_modal_parent_box_inner_box_small_input_box">
@@ -199,7 +197,7 @@ class CreateExpenseModal extends React.Component {
                 <div className="create_expense_modal_info_text_box">
                     <p className="create_expense_modal_info_text_box_text">
                         <AiFillQuestionCircle className="create_expense_modal_info_text_box_icon"></AiFillQuestionCircle>
-                        Upload any file associated with this expense. Eg: Receipt, Invoice, Proof of Funds, etc.
+                        (Optional) Upload any file associated with this expense. Eg: Receipt, Invoice, Proof of Funds, etc.
                     </p>
                     <div className="clearfix"/>
                     <p className="create_expense_modal_parent_box_inner_box_right_box_title">
@@ -227,7 +225,7 @@ class CreateExpenseModal extends React.Component {
                 <div className="create_expense_modal_info_text_box">
                     <p className="create_expense_modal_info_text_box_text">
                         <AiFillQuestionCircle className="create_expense_modal_info_text_box_icon"></AiFillQuestionCircle>
-                        Add properties that this expense pertains to. This allows for even distribution of expenses across multiple properties and better overall calculations. If there are no properties associated with this expense, choose 'None'. 
+                        (Optional) Add properties that this expense pertains to. This allows for even distribution of expenses across multiple properties and better overall calculations. 
                     </p>
                     <div className="clearfix"/>
                     <p className="create_expense_modal_parent_box_inner_box_right_box_title">
@@ -248,6 +246,7 @@ class CreateExpenseModal extends React.Component {
                     }}
                 />
                 <div
+                    onClick={() => this.verifyAndAddExpense()}
                     className="create_expense_modal_button">
                     Add Expense
                 </div>
@@ -272,9 +271,7 @@ class CreateExpenseModal extends React.Component {
                         </p>
                         <div className="clearfix"/>
                         <div className="create_expense_modal_bottom_box">
-                            <div className="create_expense_modal_actual_box">
-                                {this.renderViewBox()}
-                            </div>
+                            {this.renderViewBox()}
                         </div>
                     </div>
                 </div>
