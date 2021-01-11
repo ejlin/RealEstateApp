@@ -87,7 +87,7 @@ func (s *Server) getExpensesByUser(w http.ResponseWriter, r *http.Request) {
 
 	for _, expense := range expenses {
 		properties, err := s.DBHandle.GetPropertiesAssociatedWithExpense(expense.ID)
-		if err != nil || len(properties) == 0 {
+		if err != nil {
 			// Don't error out so we still return what expenses we can.
 			ll.Warn().Err(err).Str("expense_id", expense.ID).Msg("unable to get properties associated with expense")
 			continue

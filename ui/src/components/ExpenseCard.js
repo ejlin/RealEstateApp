@@ -47,7 +47,7 @@ class ExpenseCard extends React.Component {
                 <div className="expenses_table_subtitle_row">
                     <div className="expenses_table_first_row_long">
                         <p className="expenses_table_first_row_subtitle">
-                            {this.state.expense["title"]}
+                            {capitalizeName(this.state.expense["title"])}
                         </p>
                     </div>
                     <div className="expenses_table_first_row_long">
@@ -62,7 +62,7 @@ class ExpenseCard extends React.Component {
                     </div>
                     <div className="expenses_table_first_row_short">
                         <p className="expenses_table_first_row_subtitle">
-                            {this.state.expense["date"]}
+                            {this.convertDate(this.state.expense["date"])}
                         </p>
                     </div>
                     <div className="expenses_table_first_row_short">
@@ -70,6 +70,10 @@ class ExpenseCard extends React.Component {
                             ${this.state.expense["amount"]}
                         </p>
                     </div>
+                    <IoTrashSharp 
+                        onClick={() => this.state.deleteExpense}
+                        className="expenses_table_first_row_subtitle_icon"></IoTrashSharp>
+                    <MdEdit className="expenses_table_first_row_subtitle_icon"></MdEdit>
                 </div>
                 <div className="clearfix"/>
                 <div className="expenses_table_title_row_subdivider">

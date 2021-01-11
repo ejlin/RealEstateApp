@@ -57,12 +57,12 @@ func (handle *Handle) AddExpense(expense *Expense, propertyIDs []string) error {
 			if propertyID == "" {
 				continue
 			}
-			expensesProperties := ExpensesProperties {
+			propertyReference := PropertiesReferences {
 				ExpenseID: expense.ID,
 				PropertyID: propertyID,
 			}
 
-			if err := tx.FirstOrCreate(&expensesProperties, expensesProperties).Error; err != nil {
+			if err := tx.FirstOrCreate(&propertyReference, propertyReference).Error; err != nil {
 				return err
 			}
 		}
@@ -135,7 +135,7 @@ func (handle *Handle) DeleteExpenseByID(userID, expenseID string) error {
 			ID: expenseID,
 		}
 
-		expenseProperties := ExpensesProperties {
+		propertyReference := PropertiesReferences {
 			ExpenseID: expenseID,
 		}
 
@@ -143,7 +143,7 @@ func (handle *Handle) DeleteExpenseByID(userID, expenseID string) error {
 			return err
 		}
 
-		if err := tx.Where("expense_id = ?", expenseID).Delete(&expenseProperties).Error; err != nil {
+		if err := tx.Where("expense_id = ?", expenseID).Delete(&propertyReference).Error; err != nil {
 			return err
 		}
 		
@@ -153,14 +153,6 @@ func (handle *Handle) DeleteExpenseByID(userID, expenseID string) error {
 
 /*****************************************************************************/
 
-// ExpensesProperties is a mapping of expenses to properties. One expense can map to multiple propeties and
-// one property can map to multiple expenses. This is a separate table within our database.
-type ExpensesProperties struct {
-	ExpenseID string `json:"expense_id",sql:"type:uuid; foreign key"`
-	PropertyID string `json:"property_id",sql:"type:uuid; foreign key"`
-}
-
-
 func (handle *Handle) GetPropertiesAssociatedWithExpense(expenseID string) ([]string, error) {
 
 	_, err := uuid.Parse(expenseID)
@@ -168,15 +160,15 @@ func (handle *Handle) GetPropertiesAssociatedWithExpense(expenseID string) ([]st
 		return nil, fmt.Errorf("invalid UUID: %w", err)
 	}
 
-	var expensesProperties []ExpensesProperties
-	if err := handle.DB.Select("property_id").Where("expense_id = ?", expenseID).Find(&expensesProperties).Error; err != nil {
+	var propertiesReferences []PropertiesReferences
+	if err := handle.DB.Select("property_id").Where("expense_id = ?", expenseID).Find(&propertiesReferences).Error; err != nil {
 		return nil, err
 	}
 
 	var properties []string
 
-	for _, expenseProperties := range expensesProperties {
-		properties = append(properties, expenseProperties.PropertyID)
+	for _, propertyReference := range propertiesReferences {
+		properties = append(properties, propertyReference.PropertyID)
 	}
 
 	return properties, nil

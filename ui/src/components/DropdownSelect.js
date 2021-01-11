@@ -4,17 +4,10 @@ import axios from 'axios';
 import './CSS/DropdownSelect.css';
 import './CSS/Style.css';
 
-import { IoCloseOutline, IoTrashSharp } from 'react-icons/io5';
+import { IoTrashSharp } from 'react-icons/io5';
 
 const All = "All";
 const None = "None";
-
-const title = "title";
-const description = "description";
-const amount = "amount";
-const date = "date";
-const frequency = "frequency";
-const properties = "properties";
 
 class DropdownSelect extends React.Component {
     

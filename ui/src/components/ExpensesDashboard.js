@@ -9,9 +9,7 @@ import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 import ExpenseCard from './ExpenseCard.js';
 
-import { capitalizeName } from './MainDashboard.js';
-
-import { MdError } from 'react-icons/md';
+var URLBuilder = require('url-join');
 
 class ExpensesDashboard extends React.Component {
     
@@ -43,7 +41,7 @@ class ExpensesDashboard extends React.Component {
         // Load our properties list.
         axios({
             method: 'get',
-            url:  'api/user/property/' + this.state.user["id"],
+            url:  URLBuilder('api/user/property/',this.state.user["id"]),
         }).then(response => {
             var propertiesList = response.data.sort();
 
@@ -53,6 +51,9 @@ class ExpensesDashboard extends React.Component {
                 var propertyAddress = propertiesList[i]["address"];
                 propertiesMap.set(propertyID, propertyAddress);
             }
+            /* Set 'None' and 'All' to handle cases where expenses are not mapped to any/are mapped to all properties */
+            propertiesMap.set("None", "None");
+            propertiesMap.set("All", "All");
             this.setState({
                 propertiesMap: propertiesMap,
                 isLoading: false
@@ -66,14 +67,20 @@ class ExpensesDashboard extends React.Component {
 
         axios({
             method: 'get',
-            url: 'api/user/expenses/' + this.state.user["id"],
+            url: URLBuilder('api/user/expenses/',this.state.user["id"]),
         }).then(response => {
             var propertiesToExpenses = this.state.propertiesToExpenses;
             // response.data is an array of expenses. Order them by property IDs -> expenses.
             var expenses = response.data;
+            console.log(expenses);
             for (var i = 0; i < expenses.length; i++) {
                 let expense = expenses[i];
-                let associatedProperties = expense["properties"];
+                let associatedProperties;
+                if (expense["properties"]) {
+                    associatedProperties = expense["properties"];
+                } else {
+                    associatedProperties = ["None"];
+                }
                 for (var j = 0; j < associatedProperties.length; j++) {
                     let propertyID = associatedProperties[j];
                     if (!propertiesToExpenses.has(propertyID)){
@@ -288,7 +295,14 @@ class ExpensesDashboard extends React.Component {
             let expensesArr = value;
             for (var i = 0; i < expensesArr.length; i++) {
                 let expense = expensesArr[i];
-                let expenseProperties = expense["properties"];
+
+                let expenseProperties;
+
+                if (expense["properties"]){
+                    expenseProperties = expense["properties"];
+                } else {
+                    expenseProperties = ["None"];
+                }
                 
                 var properties = [];
                 if (expenseProperties.length > 0) {
@@ -297,33 +311,24 @@ class ExpensesDashboard extends React.Component {
                     for (var i = 0; i < maxLength; i++) {
                         let expensePropertyID = expenseProperties[i];
                         properties.push(
-                            <div>
-                                <p className="expenses_table_first_row_subtitle">
-                                    {propertiesMap.get(expensePropertyID)}
-                                </p>
-                                <div className="clearfix"/>
-                            </div>
+                            <p className="expenses_table_first_row_subtitle">
+                                {propertiesMap.get(expensePropertyID)}
+                            </p>
                         );
                     }
                     /* If we have more than 5 associated properties, only show the first 5 and show an element saying "more" */
                     if (expenseProperties.length > maxLength) {
                         properties.push(
-                            <div>
-                                <p className="expenses_table_first_row_subtitle">
-                                    {"More..."}
-                                </p>
-                                <div className="clearfix"/>
-                            </div>
+                            <p className="expenses_table_first_row_subtitle">
+                                {"More..."}
+                            </p>
                         )
                     }
                 } else {
                     properties.push(
-                        <div>
-                            <p className="expenses_table_first_row_subtitle">
-                                {"None"}
-                            </p>
-                            <div className="clearfix"/>
-                        </div>
+                        <p className="expenses_table_first_row_subtitle">
+                            {"None"}
+                        </p>
                     );
                 }
                 
@@ -364,6 +369,7 @@ class ExpensesDashboard extends React.Component {
                                 data={{
                                 state: {
                                     user: this.state.user,
+                                    propertiesMap: this.state.propertiesMap,
                                     addExpense: this.addExpense,
                                     closeCreateExpenseModal: this.closeCreateExpenseModal,
                                 }                       
@@ -395,21 +401,7 @@ class ExpensesDashboard extends React.Component {
                             {this.state.isLoading ? <div></div> : 
                             <div className="expenses_dashboard_body_inner_box">
                                 <div className="expenses_dashboard_body_inner_box_most_recent_box">
-                                    {/* <p className="expenses_dashboard_body_inner_box_title">
-                                        Most Recent
-                                    </p>
-                                    {this.state.mostRecentExpenses ? 
-                                    <div></div> :
-                                    <div className="expenses_dashboard_body_inner_box_no_expenses_box">
-                                        <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
-                                            <MdError className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></MdError>
-                                            <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
-                                                No Expenses to show
-                                            </p>
-                                        </div>
-                                    </div>} */}
                                     {this.renderExpenseTable()}
-                                    {/* {this.renderPropertyBoxes()} */}
                                 </div>
                             </div>}
                         </div>

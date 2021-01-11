@@ -2,9 +2,10 @@
     background-color: white;
     float: left;
     min-height: 450px;
-    margin-left: 10%;
+    margin-left: max(10%, calc((100% - 850px)/2));
     margin-right: 10%;
-    margin-top: 150px;
+    margin-top: 75px;
+    max-width: 850px;
     padding-bottom: 30px;
     width: 80%; 
     z-index: 11;
@@ -72,7 +73,7 @@
     border-radius: 4px;
     font-size: 1.1em;
     height: 125px;
-    margin-top: 10px;
+    margin-top: 0px;
     padding: 7.5px 15px 7.5px 15px;
     resize: none;
     width: calc(100% - 4px - 30px);
@@ -260,7 +261,7 @@
 .create_expense_modal_actual_box {
     float: right;
     margin-left: 40px;
-    width: calc((100% - 200px - 40px));
+    width: calc((100%));
 }
 
 .create_expense_modal_button {
@@ -285,6 +286,7 @@
 
 .create_expense_modal_info_text_box {
     display: inline-block;
+    margin-top: 10px;
 }
 
 .create_expense_modal_info_text_box_icon {
@@ -305,11 +307,11 @@
 
 .create_expense_modal_upload_file_icon {
     color: grey;
-    height: 40px;
-    margin-left: calc((100% - 60px)/2);
-    margin-top: 20px;
+    height: 30px;
+    margin-left: calc((100% - 50px)/2);
+    margin-top: 10px;
     padding: 10px;
-    width: 40px;
+    width: 30px;
 }
 
 .create_expense_modal_upload_file_icon:hover  {
@@ -323,7 +325,7 @@
     border-style: dashed;
     cursor: pointer;
     float: left;
-    height: 150px;
+    height: 100px;
     margin-bottom: 10px;
     margin-top: 15px;
     position: relative;
@@ -363,4 +365,12 @@
 
 .create_expense_modal_back_button_text {
     cursor: pointer;
+}
+
+.create_expense_modal_upload_file_title {
+    color: grey;
+    font-size: 1.0em;
+    font-weight: bold;
+    margin-top: -10px;
+    text-align: center;
 }

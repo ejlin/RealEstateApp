@@ -113,3 +113,25 @@
 .expense_card_expanded_box_bottom_box_right_box_inner_box {
     margin-top: 5px;
 }
+
+.expenses_table_first_row_subtitle_icon {
+    /* border: 2px solid #296CF6; */
+    border-radius: 4px;
+    color: #296CF6;
+    cursor: pointer;
+    float: right;
+    height: 20px;
+    margin-right: 10px;
+    padding: 5px;
+    transition: 0.5s;
+    width: 20px;
+}
+
+.expenses_table_first_row_subtitle_icon:first-child {
+    margin-right: 25px !important;
+}
+
+.expenses_table_first_row_subtitle_icon:hover {
+    background-color: #296CF6 !important;
+    color: white;
+}

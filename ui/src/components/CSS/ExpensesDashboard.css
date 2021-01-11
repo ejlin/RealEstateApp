@@ -153,21 +153,23 @@
     float: left;
     margin-bottom: 15px;
     padding-left: 30px;
-    padding-right: 30px;
+    padding-right: 20px;
     padding-top: 30px;
-    width: calc(100% - 60px);
+    width: calc(100% - 50px);
+}
+.expenses_table_first_row_long:first-child {
+    margin-left: max(3%, 15px);
 }
 
 .expenses_table_first_row_long {
     float: left;
-    width: 33%;
+    width: 30%;
 }
-
 
 .expenses_table_first_row_short {
     float: left;
     min-width: 100px;
-    width: 10%;
+    width: calc((34% - 100px)/3);
 }
 
 .expenses_table_first_row_title {
@@ -186,8 +188,8 @@
     padding-bottom: 15px;
     padding-top: 15px;
     padding-left: 30px;
-    padding-right: 30px;
-    width: calc(100% - 60px);
+    padding-right: 20px;
+    width: calc(100% - 50px);
 }
 
 .expenses_table_subtitle_row:hover {
@@ -196,11 +198,11 @@
 
 .expenses_table_first_row_subtitle {
     font-size: 1.0em;
+    line-height: 30px;
 }
 
 .expenses_table_title_row_subdivider {
     background-color: #f1f1f1;
     height: 1px;
-    margin-bottom: 25px;
     width: 100%;
 }
