@@ -1,6 +1,8 @@
 package db
 
 import (
+	"context"
+	"database/sql"
 	"errors"
 	"fmt"
 	"time"
@@ -51,7 +53,7 @@ func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, property
 	return handle.DB.Transaction(func(tx *gorm.DB) error {
 		
 		if err := tx.FirstOrCreate(&expense, expense).Error; err != nil {
-			return err
+			return fmt.Errorf("error adding expense: %w", err)
 		}
 
 		for _, propertyID := range propertyIDs {
@@ -59,19 +61,43 @@ func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, property
 			if propertyID == "" {
 				continue
 			}
-			propertyReference := PropertiesReferences {
-				ExpenseID: expense.ID,
-				PropertyID: propertyID,
+
+			var fileID string
+			var fileValid bool
+			if file != nil {
+				fileID = file.ID
+				fileValid = true
+			} 
+
+			var expenseID string
+			var expenseValid bool
+			if expense != nil {
+				expenseID = expense.ID
+				expenseValid = true
 			}
 
+			propertyReference := PropertiesReferences {
+				PropertyID: propertyID,
+				ExpenseID: sql.NullString{
+					String: expenseID,
+					Valid: expenseValid,
+				},
+				FileID: sql.NullString{
+					String: fileID,
+					Valid: fileValid,
+				},
+			}
+
+			fmt.Println(propertyReference)
+
 			if err := tx.FirstOrCreate(&propertyReference, propertyReference).Error; err != nil {
-				return err
+				return fmt.Errorf("error adding property reference: %w", err)
 			}
 		}
 
 		if file != nil {
 			if err := tx.FirstOrCreate(&file, file).Error; err != nil {
-				return err
+				return fmt.Errorf("error adding file: %w", err)
 			}
 
 			// Note: We MUST perform file operations in this order. First
@@ -157,7 +183,9 @@ func (handle *Handle) DeleteExpenseByID(userID, expenseID string) error {
 		}
 
 		propertyReference := PropertiesReferences {
-			ExpenseID: expenseID,
+			ExpenseID: sql.NullString{
+				String: expenseID,
+			},
 		}
 
 		if err := tx.Where("user_id = ?", userID).Delete(&expense).Error; err != nil {

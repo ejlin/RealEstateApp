@@ -5,6 +5,7 @@ import './CSS/CreateExpenseModal.css';
 import './CSS/Style.css';
 
 import DropdownSelect from './DropdownSelect.js';
+import Loader from './Loader.js';
 import { mapFileTypeToIcon } from './FilesDashboard.js';
 
 import { IoCloseOutline } from 'react-icons/io5';
@@ -27,6 +28,14 @@ const once = "Once";
 
 const frequencyOptions = ['Once', 'Daily', 'Weekly', 'Bi-Weekly', 'Monthly', 'Semi-Annually', 'Annually'];
 
+const getByValue = (map, searchValue) => {
+    for (let [key, value] of map.entries()) {
+      if (value === searchValue)
+        return key;
+    }
+    return null;
+}
+
 class CreateExpenseModal extends React.Component {
     
     constructor(props) {
@@ -47,6 +56,7 @@ class CreateExpenseModal extends React.Component {
             frequency: once,
             fileToUpload: null,
             filteredList: [],
+            loadAddExpense: false,
         };
         this.handleFieldChange = this.handleFieldChange.bind(this);
         this.verifyAndAddExpense = this.verifyAndAddExpense.bind(this);
@@ -107,6 +117,8 @@ class CreateExpenseModal extends React.Component {
         var associatedProperties = [];
         var propertiesMap = this.state.propertiesMap;
 
+        console.log(propertiesMap);
+
         if (indexAll >= 0) {
             // Add all of our properties.
             propertiesMap.forEach((value, key, map) => {
@@ -118,16 +130,22 @@ class CreateExpenseModal extends React.Component {
             // Add all the ids of the properties selected.
             for (var i = 0; i < currSelectedAssociatedProperties.length; i++) {
                 let currSelectedAssociatedProperty = currSelectedAssociatedProperties[i];
-                if (propertiesMap.has(currSelectedAssociatedProperty)) {
-                    associatedProperties.push(propertiesMap.get(currSelectedAssociatedProperty));
+                console.log(currSelectedAssociatedProperty);
+                let propertyID = getByValue(propertiesMap, currSelectedAssociatedProperty);
+                if (propertyID !== null){
+                    associatedProperties.push(propertyID);
+                } else {
+                    associatedProperties.push("None");
                 }
             }
         }   
 
         expense.append(properties, associatedProperties);
-        
+        this.setState({
+            loadAddExpense: true,
+        })
         this.state.addExpense(expense);
-    }
+    }      
 
     renderFrequencyOptions() {
 
@@ -208,7 +226,7 @@ class CreateExpenseModal extends React.Component {
                     {this.state.fileToUpload ? 
                     <div alt={this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "Unknown File"}>
                         <div className="create_expense_modal_upload_file_button_icon_box">
-                            {mapFileTypeToIcon(this.state.fileToUpload["type"], false)}
+                            {mapFileTypeToIcon(this.state.fileToUpload["type"], "medium", false)}
                             <p className="create_expense_modal_uploaded_file_name">
                                 {this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "Unable to Upload File"}
                             </p>
@@ -248,7 +266,10 @@ class CreateExpenseModal extends React.Component {
                 <div
                     onClick={() => this.verifyAndAddExpense()}
                     className="create_expense_modal_button">
-                    Add Expense
+                                                {/* <Loader/> */}
+                    {this.state.loadAddExpense ? 
+                    <Loader/> :
+                    "Add Expense"}
                 </div>
             </div>
         );

@@ -1,16 +1,23 @@
 package server
 
 import (
+	"context"
 	"net/http"
+	"path"
 	"strconv"
 	"strings"
 	"time"
 
 	"../db"
+	"../cloudstorage"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
+)
+
+const (
+	expensesDelimiter = "expenses"
 )
 
 // RestExpense is an expense sent back by the server to the client.
@@ -112,6 +119,7 @@ func (s *Server) getExpensesByUser(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 
+	ctx := r.Context()
 	vars := mux.Vars(r)
 
 	userID, ok := vars["id"]
@@ -211,12 +219,18 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		Date: date,
 	}
 
-	func getYear(date string) string {
+	getYear := func(date string) int {
 		dateSpl := strings.Split(date, "-")
-		return dateSpl[0]
+		year, err := strconv.Atoi(dateSpl[0])
+		if err != nil {
+			// If we are unable to return the year, set the current year.
+			y := time.Now().Year()
+			return y
+		}
+		return year 
 	}
 
-	var file *File
+	var file *db.File
 	if formFile != nil {
 		file = &db.File {
 			ID: uuid.New().String(),
@@ -231,16 +245,17 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		file = nil
 	}
 	
-	key := path.Join()
+	// The key to an expense file is {userID}/expenses/{expense_name}/{file_name}
+	key := path.Join(userID, expensesDelimiter, expense.Title, fileName)
 
 	addFileToCloudStorage := func() func(ctx context.Context) error {
 		return func(ctx context.Context) error {
-			cloudstorage.AddCloudstorageFile(ctx, s.StorageClient, formFile, s.UsersBucket, key)
+			return cloudstorage.AddCloudstorageFile(ctx, s.StorageClient, formFile, s.UsersBucket, key)
 		}
 	}
 
 	// Add our expense to our expenses table.
-	err = s.DBHandle.AddExpense(ctx, expense, associatedProperties, file, addFileToCloudStorage)
+	err = s.DBHandle.AddExpense(ctx, expense, associatedProperties, file, addFileToCloudStorage())
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to add expense to database")
 		http.Error(w, "unable to add expense to database", http.StatusInternalServerError)

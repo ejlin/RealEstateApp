@@ -229,7 +229,7 @@
 }
 
 .create_expense_modal_bottom_box {
-    margin-top: 20px;
+    margin-top: 30px;
     width: 100%;
 }
 
@@ -272,6 +272,7 @@
     padding-right: 15px;
     text-align: center;
     transition: 0.5s;
+    width: 90px;
 }
 
 .create_expense_modal_button:hover {

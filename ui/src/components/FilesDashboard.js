@@ -34,6 +34,9 @@ import {
  * and passing it in to renderFiles(). 
  */
 
+const small = "small";
+const medium = "medium";
+
 export const openSignedURL = (userID, fileKey)  => {
     var url = "api/user/files/" + userID + "/" + fileKey;
     axios({
@@ -52,9 +55,15 @@ export const openSignedURL = (userID, fileKey)  => {
 
 
  // isSmall is used for small icons
- export const mapFileTypeToIcon = (imageType, isSmall, isActive) => {
-    
-    var classNames = isSmall ? "files_dashboard_upload_image_type_mini_icon" : "files_dashboard_upload_image_type";
+ export const mapFileTypeToIcon = (imageType, size, isActive) => {
+    var classNames;
+    if (size === small) {
+         classNames = "files_dashboard_upload_image_type_mini_icon";
+    } else if (size === medium) {
+        classNames = "files_dashboard_upload_image_type_medium_icon";
+    } else {
+        classNames = "files_dashboard_upload_image_type";
+    }
 
     if (imageType === null || imageType === undefined) {
         classNames += isActive? " card_white" : " card_grey";

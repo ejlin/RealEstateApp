@@ -119,7 +119,7 @@
 }
 
 .expenses_dashboard_display_add_expense_box {
-    background-color: rgba(245,245,250, 0.85);
+    background-color: rgba(245,245,250, 0.90);
     border-radius: 4px;
     content: '';
     height: 100vh;
@@ -145,7 +145,9 @@
     background-color: white;
     border-radius: 4px;
     float: left;
-    min-height: 650px;
+    height: calc(75vh);
+    min-height: 700px;
+    overflow: scroll;
     width: 100%;
 }
 

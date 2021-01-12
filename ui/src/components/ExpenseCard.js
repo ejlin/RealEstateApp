@@ -25,6 +25,7 @@ class ExpenseCard extends React.Component {
 
     componentDidMount() {
         console.log(this.state.expense);
+        console.log(this.state.properties);
         this.clickTimeout = null;
     }
 

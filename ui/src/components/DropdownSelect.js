@@ -98,6 +98,9 @@ class DropdownSelect extends React.Component {
         var filteredInputList = inputList.filter(address => address.startsWith(value));
         for (var i = 0; i < filteredInputList.length; i++) {
             let filteredInput = filteredInputList[i];
+            if (filteredInput === None || filteredInput === All) {
+                continue;
+            }
             var index = currSelectedListElements.indexOf(filteredInput);
             // Only show properties that are not currently selected.
             if (index < 0){

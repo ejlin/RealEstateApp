@@ -293,6 +293,13 @@
     width: 70px;
 }
 
+.files_dashboard_upload_image_type_medium_icon {
+    height: 50px;
+    margin-left: calc((100% - 40px)/2);
+    margin-top: 35px;
+    width: 40px;
+}
+
 .files_dashboard_upload_image_type_mini_icon {
     float: left;
     height: 40px;
