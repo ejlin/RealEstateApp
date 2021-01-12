@@ -369,3 +369,9 @@
     margin-top: -10px;
     text-align: center;
 }
+
+.loading_button {
+    cursor: default;
+    opacity: 0.8;
+    pointer-events: none;
+}

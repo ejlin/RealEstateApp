@@ -6,14 +6,14 @@
     height: 2.5em;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
-    -webkit-animation: load7 1s infinite ease-in-out;
-    animation: load7 1s infinite ease-in-out;
+    -webkit-animation: load7 1.2s infinite ease-in-out;
+    animation: load7 1.2s infinite ease-in-out;
 }
 .loader {
     color: #ffffff;
-    font-size: 2px;
-    margin-left: auto;
-    margin-right: auto;
+    font-size: 4px;
+    margin: auto;
+    margin-top: 5px;
     position: relative;
     text-indent: -9999em;
     -webkit-transform: translateZ(0);

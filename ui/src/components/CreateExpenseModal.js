@@ -265,8 +265,8 @@ class CreateExpenseModal extends React.Component {
                 />
                 <div
                     onClick={() => this.verifyAndAddExpense()}
-                    className="create_expense_modal_button">
-                                                {/* <Loader/> */}
+                    className={this.state.loadAddExpense ? "create_expense_modal_button loading_button" :
+                        "create_expense_modal_button"}>
                     {this.state.loadAddExpense ? 
                     <Loader/> :
                     "Add Expense"}
