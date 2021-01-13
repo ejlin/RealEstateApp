@@ -146,9 +146,17 @@
     border-radius: 4px;
     float: left;
     height: calc(75vh);
-    min-height: 700px;
-    overflow: scroll;
+    min-height: 650px;
+    min-width: 1200px;
+    overflow: hidden;
     width: 100%;
+}
+
+.expenses_table_body {
+    height: calc(75vh);
+    margin-bottom: 30px;
+    overflow: scroll;
+    padding-bottom: 30px;
 }
 
 .expenses_table_title_row {
@@ -159,13 +167,14 @@
     padding-top: 25px;
     width: calc(100% - 50px);
 }
+
 .expenses_table_first_row_long:first-child {
     margin-left: max(3%, 15px);
 }
 
 .expenses_table_first_row_long {
     float: left;
-    width: 30%;
+    width: 27.5%;
 }
 
 .expenses_table_first_row_short {
@@ -175,6 +184,7 @@
 }
 
 .expenses_table_first_row_title {
+    float: left;
     font-size: 1.0em;
     font-weight: bold;
 }
@@ -207,4 +217,13 @@
     background-color: #f1f1f1;
     height: 1px;
     width: 100%;
+}
+
+.expenses_table_arrow_icon {
+    cursor: pointer;
+    float: left;
+    height: 17.5px;
+    margin-left: 5px;
+    margin-top: calc((20px - 15px)/2);
+    width: 20px;
 }

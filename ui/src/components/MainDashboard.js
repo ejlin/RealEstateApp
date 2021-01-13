@@ -47,6 +47,10 @@ export const capitalizeName = (x) => {
     return x.charAt(0).toUpperCase() + x.slice(1);
 }
 
+export const numberWithCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 class MainDashboard extends React.Component {
     constructor(props) {
         super(props);
@@ -65,7 +69,6 @@ class MainDashboard extends React.Component {
             yoyGrowthToggleIsYear: true
         };
 
-        this.numberWithCommas = this.numberWithCommas.bind(this);
         this.getDate = this.getDate.bind(this);
         this.estimateLostRent = this.estimateLostRent.bind(this);
         this.ltvToText = this.ltvToText.bind(this);
@@ -83,13 +86,13 @@ class MainDashboard extends React.Component {
             var propertiesSummary = userSummary["properties_summary"];
             var expensesSummary = userSummary["expenses_summary"];
             this.setState({
-                // totalEstimateWorth: propertiesSummary["total_estimate_worth"] this.numberWithCommas(propertiesSummary["total_estimate_worth"]),
+                // totalEstimateWorth: propertiesSummary["total_estimate_worth"] numberWithCommas(propertiesSummary["total_estimate_worth"]),
                 totalEstimateWorth: propertiesSummary["total_estimate_worth"],
-                totalNetWorth: this.numberWithCommas(propertiesSummary["total_net_worth"]),
-                totalRent: this.numberWithCommas(propertiesSummary["total_rent"]),
-                totalCost: this.numberWithCommas(Number(propertiesSummary["total_cost"].toFixed(2))),
+                totalNetWorth: numberWithCommas(propertiesSummary["total_net_worth"]),
+                totalRent: numberWithCommas(propertiesSummary["total_rent"]),
+                totalCost: numberWithCommas(Number(propertiesSummary["total_cost"].toFixed(2))),
                 annualRateOfReturn: Number(propertiesSummary["annual_rate_of_return"].toFixed(3)),
-                totalProperties: this.numberWithCommas(propertiesSummary["total_properties"]),
+                totalProperties: numberWithCommas(propertiesSummary["total_properties"]),
                 averageLTV: Number(propertiesSummary["average_ltv"].toFixed(2)),
                 averageDTI: Number(propertiesSummary["average_dti"].toFixed(2)),
                 missingEstimate: propertiesSummary["missing_estimate"],
@@ -113,9 +116,7 @@ class MainDashboard extends React.Component {
         }).catch(error => console.log(error))
     }
 
-    numberWithCommas(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
+
 
     getDate() {
         var monthArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -251,7 +252,7 @@ class MainDashboard extends React.Component {
                     <div className="rent_schedule_bullet_point">
                     </div>
                     <li key={daysUntil} className="rent_schedule_bullet_point_text">
-                        {daysUntil} {daysUntil === 1 ? "day" : "days"} until {value["num_properties"]} {value["num_properties"] === 1 ? "property pays" : "properties pay"} ${this.numberWithCommas(value["total_rent"])} in rent
+                        {daysUntil} {daysUntil === 1 ? "day" : "days"} until {value["num_properties"]} {value["num_properties"] === 1 ? "property pays" : "properties pay"} ${numberWithCommas(value["total_rent"])} in rent
                     </li>
                 </div>
             );
@@ -380,10 +381,10 @@ class MainDashboard extends React.Component {
                                                 width={"700"}
                                                 
                                                 data={[
-                                                    {x: "Jan", y: 6}, 
-                                                    {x: "Feb", y: 5}, 
-                                                    {x: "Mar", y: 6}, 
-                                                    {x: "Apr", y: 8}, 
+                                                    {x: "Jan", y: 61}, 
+                                                    {x: "Feb", y: 25}, 
+                                                    {x: "Mar", y: 16}, 
+                                                    {x: "Apr", y: 28}, 
                                                     {x: "May", y: 11}, 
                                                     {x: "Jun", y: 9}, 
                                                     {x: "Jul", y: 10}, 
@@ -495,7 +496,7 @@ class MainDashboard extends React.Component {
                                              </p>
                                              <div className="clearfix"/>
                                              <p className="main_dashboard_yoy_subtitle">
-                                                Your portfolio {this.state.totalEstimateWorth >= this.state.yearAgoTotalEstimateWorth ? "grew" : "decreased"} from {this.numberWithCommas(this.state.yearAgoTotalEstimateWorth)} to {this.numberWithCommas(this.state.totalEstimateWorth)} year over year
+                                                Your portfolio {this.state.totalEstimateWorth >= this.state.yearAgoTotalEstimateWorth ? "grew" : "decreased"} from {numberWithCommas(this.state.yearAgoTotalEstimateWorth)} to {numberWithCommas(this.state.totalEstimateWorth)} year over year
                                             </p>
                                         </div>
                                         

@@ -9,7 +9,36 @@ import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 import ExpenseCard from './ExpenseCard.js';
 
+import { BsArrowUp } from 'react-icons/bs';
+
 var URLBuilder = require('url-join');
+
+// sortByStringField is a custom sort comparator function that allows us to sort our
+// elements according to the field we want if the field is a string. 
+export const sortByStringField = (isUp, field) => {
+    return function(x, y) {
+        return isUp ? x[0][field].localeCompare(y[0][field]) : y[0][field].localeCompare(x[0][field]);
+    }
+}
+
+export const sortByNumField = (isUp, field) => {
+    return function(x, y) {
+        if (x[field] > y[field]){
+            return isUp ? 1 : -1;
+        } else if (x[field] < y[field]){
+            return isUp ? -1 : 1;
+        } else {
+            return 0;
+        }
+    }
+}
+
+const title = "title";
+const properties = "properties";
+const frequency = "frequency";
+const created_at = "created_at";
+const amount = "amount";
+const defaultFieldToggled = "last_modified_at";
 
 class ExpensesDashboard extends React.Component {
     
@@ -24,16 +53,19 @@ class ExpensesDashboard extends React.Component {
             propertiesMap: null,
             displayAddExpense: false,
             expensesMap: new Map(),
-            isLoading: true
+            isLoading: true,
+            currFieldToggledDirectionIsUp: false,
+            currFieldToggled: defaultFieldToggled,
+            currExpensesSortFunc: null,
         };
         this.addExpense = this.addExpense.bind(this);
         this.closeCreateExpenseModal = this.closeCreateExpenseModal.bind(this);
-        // this.renderPropertyBoxes = this.renderPropertyBoxes.bind(this);
         this.expenseFormDataToExpense = this.expenseFormDataToExpense.bind(this);
         // this.deleteExpense = this.deleteExpense.bind(this);
-        this.renderExpenseTable = this.renderExpenseTable.bind(this);
         this.renderExpenseTableTitle = this.renderExpenseTableTitle.bind(this);
         this.renderExpenseTableElements = this.renderExpenseTableElements.bind(this);
+        this.setToggleFields = this.setToggleFields.bind(this);
+        this.getSortFunction = this.getSortFunction.bind(this);
     }
 
     componentDidMount() {
@@ -43,7 +75,8 @@ class ExpensesDashboard extends React.Component {
             method: 'get',
             url:  URLBuilder('api/user/property/',this.state.user["id"]),
         }).then(response => {
-            var propertiesList = response.data.sort();
+
+            var propertiesList = response.data
 
             var propertiesMap = new Map();
             for (var i = 0; i < propertiesList.length; i++) {
@@ -71,7 +104,10 @@ class ExpensesDashboard extends React.Component {
         }).then(response => {
             var expensesMap = this.state.expensesMap;
             // response.data is an array of expenses. Order them by property IDs -> expenses.
-            var expenses = response.data;
+            var expenses = response.data.sort(
+                this.getSortFunction(this.state.currFieldToggledDirectionIsUp, this.state.currFieldToggled)
+            );
+            console.log(expenses);
             for (var i = 0; i < expenses.length; i++) {
                 let expense = expenses[i];
                 expensesMap.set(expense["id"], expense);
@@ -151,61 +187,52 @@ class ExpensesDashboard extends React.Component {
     //     })
     // }
 
-    renderExpenseTableTitle() {
-        return (
-            <div className="expenses_table">
-                <div className="expenses_table_title_row">
-                    <div className="expenses_table_first_row_long">
-                        <p className="expenses_table_first_row_title">
-                            Name
-                        </p>
-                    </div>
-                    <div className="expenses_table_first_row_long">
-                        <p className="expenses_table_first_row_title">
-                            Properties
-                        </p>
-                    </div>
-                    <div className="expenses_table_first_row_short">
-                        <p className="expenses_table_first_row_title">
-                            Frequency
-                        </p>
-                    </div>
-                    <div className="expenses_table_first_row_short">
-                        <p className="expenses_table_first_row_title">
-                            Date
-                        </p>
-                    </div>
-                    <div className="expenses_table_first_row_short">
-                        <p className="expenses_table_first_row_title">
-                            Amount
-                        </p>
-                    </div>
-                </div>
-                <div className="clearfix"/>
-                <div className="expenses_table_title_row_divider">
-                </div>
-                {this.renderExpenseTableElements()}
-            </div>
-        )
+    setToggleFields(field) {
+        // This is a state machine. If the currFieldToggled is not this field,
+        // set it to be in the "UP" direction. If it already is and in the "UP" direction,
+        // then we set it to be the "DOWN" direction. If it is already in the "DOWN" direction,
+        // then we set it to be the default (allow the user to cycle back to the original state). 
+        if (this.state.currFieldToggled !== field) {
+            this.setState({
+                currFieldToggledDirectionIsUp: true,
+                currFieldToggled: field,
+            })
+        } else {
+            if (this.state.currFieldToggledDirectionIsUp) {
+                this.setState({
+                    currFieldToggledDirectionIsUp: false,
+                    currFieldToggled: field,
+                })
+            } else {
+                this.setState({
+                    currFieldToggledDirectionIsUp: true,
+                    currFieldToggled: defaultFieldToggled,
+                })
+            }
+            
+        } 
     }
 
-    renderExpenseTable() {
-        return (
-            <div>
-                {this.renderExpenseTableTitle()}
-                <div className="clearfix"/>
-            </div>
-        )
+    getSortFunction(field, isUp) {
+        switch(field) {
+            case title, properties, frequency:
+                return sortByStringField(isUp, field);
+            case created_at, amount, defaultFieldToggled:
+                return sortByNumField(isUp, field);
+        }
     }
 
     renderExpenseTableElements() {
         
         var expensesMap = this.state.expensesMap;
-
         var propertiesMap = this.state.propertiesMap;
-        console.log(propertiesMap);
+
+        // We need to sort our expensesMap by the current user selection.
+        let sortFn = this.getSortFunction(this.state.currFieldToggled, this.state.currFieldToggledDirectionIsUp);
+        var sortedExpensesMap = new Map([...expensesMap].sort(sortFn));
+
         var elements = [];
-        expensesMap.forEach((expense, expenseID, map) => {
+        sortedExpensesMap.forEach((expense, expenseID, map) => {
 
             let expenseProperties = expense["properties"] ? expense["properties"] : ["None"];
             
@@ -248,6 +275,83 @@ class ExpensesDashboard extends React.Component {
             );
         });
         return elements;
+    }
+
+    renderExpenseTableTitle() {
+        return (
+            <div className="expenses_table">
+                <div className="expenses_table_title_row">
+                    <div className="expenses_table_down_icon_box">
+                    </div>
+                    <div className="expenses_table_first_row_long">
+                        <p className="expenses_table_first_row_title">
+                            Name
+                        </p>
+                        <BsArrowUp 
+                            onClick={() => {
+                                this.setToggleFields(title);
+                            }}
+                            className={this.state.currFieldToggled === title ?
+                                "expenses_table_arrow_icon toggled_icon"
+                                : "expenses_table_arrow_icon"}></BsArrowUp>
+                    </div>
+                    <div className="expenses_table_first_row_long">
+                        <p className="expenses_table_first_row_title">
+                            Properties
+                        </p>
+                        <BsArrowUp 
+                            onClick={() => {
+                                this.setToggleFields(properties);
+                            }}
+                            className={this.state.currFieldToggled === properties ?
+                                "expenses_table_arrow_icon toggled_icon"
+                                : "expenses_table_arrow_icon"}></BsArrowUp>
+                    </div>
+                    <div className="expenses_table_first_row_short">
+                        <p className="expenses_table_first_row_title">
+                            Frequency
+                        </p>
+                        <BsArrowUp 
+                            onClick={() => {
+                                this.setToggleFields(frequency);
+                            }}
+                            className={this.state.currFieldToggled === frequency ?
+                                "expenses_table_arrow_icon toggled_icon"
+                                : "expenses_table_arrow_icon"}></BsArrowUp>
+                    </div>
+                    <div className="expenses_table_first_row_short">
+                        <p className="expenses_table_first_row_title">
+                            Date
+                        </p>
+                        <BsArrowUp 
+                            onClick={() => {
+                                this.setToggleFields(created_at);
+                            }}
+                            className={this.state.currFieldToggled === created_at ?
+                                "expenses_table_arrow_icon toggled_icon"
+                                : "expenses_table_arrow_icon"}></BsArrowUp>
+                    </div>
+                    <div className="expenses_table_first_row_short">
+                        <p className="expenses_table_first_row_title">
+                            Amount
+                        </p>
+                        <BsArrowUp 
+                            onClick={() => {
+                                this.setToggleFields(amount);
+                            }}
+                            className={this.state.currFieldToggled === amount ?
+                                "expenses_table_arrow_icon toggled_icon"
+                                : "expenses_table_arrow_icon"}></BsArrowUp>
+                    </div>
+                </div>
+                <div className="clearfix"/>
+                <div className="expenses_table_title_row_divider">
+                </div>
+                <div className="expenses_table_body">
+                    {this.renderExpenseTableElements()}
+                </div>
+            </div>
+        )
     }
 
     render() {
@@ -300,7 +404,7 @@ class ExpensesDashboard extends React.Component {
                             {this.state.isLoading ? <div></div> : 
                             <div className="expenses_dashboard_body_inner_box">
                                 <div className="expenses_dashboard_body_inner_box_most_recent_box">
-                                    {this.renderExpenseTable()}
+                                    {this.renderExpenseTableTitle()}
                                 </div>
                             </div>}
                         </div>

@@ -135,3 +135,36 @@
     background-color: #296CF6 !important;
     color: white;
 }
+
+.expenses_table_down_icon_box {
+    float: left;
+    height: 1px;
+    width: 5%;
+}
+
+.expenses_table_down_icon {
+    cursor: pointer;
+    height: 17.5px;
+    margin-top: calc((30px - 17.5px)/2);
+    transition: 0.2s;
+    width: 17.5px;
+}
+
+.expenses_table_down_icon:hover {
+    opacity: 0.8;
+}
+
+.expenses_card_expanded_view {
+    width: 100%;
+}
+
+.toggled_icon {
+    transform: rotate(180deg);
+}
+
+.expenses_card_expanded_view_text {
+    font-style: italic;
+    padding-bottom: 15px;
+    padding-left: calc(30px + 5%);
+    padding-top: 15px;
+}
