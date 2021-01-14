@@ -21,6 +21,31 @@ function sortByStringField(isUp, field){
     }
 }
 
+// sortByStringSliceField is a custom sort comparator function that allows us to sort our
+// elements according to the field we want if the field is a string slice. 
+function sortByStringSliceField(isUp, field){
+    return function(x, y) {
+        if (x[field] === undefined || y[field] === undefined) {
+            return isUp ? 1 : -1;
+        }
+        
+        if (x[field].length === 0 || y[field].length === 0){
+            return x[field].length - y[field].length;
+        }
+        if (x.length !== y.length) {
+            if (x.length > y.length) {
+                return isUp ? 1 : -1;
+            } else if (x.length < y.length) {
+                return isUp ? -1 : 1;
+            }
+            return 0;
+        }
+        var fieldX = x[field][0];
+        var fieldY = y[field][0];
+        return isUp ? fieldX.localeCompare(fieldY) : fieldY.localeCompare(fieldX);
+    }
+}
+
 function sortByTimeField(isUp, field) {
     return function(x, y) {
         var xDate = new Date(x[field]);
@@ -51,31 +76,6 @@ function sortByFrequencyField(isUp, field){
             return isUp? 1 : -1;
         }
         return 0;
-    }
-}
-
-// sortByStringSliceField is a custom sort comparator function that allows us to sort our
-// elements according to the field we want if the field is a string slice. 
-function sortByStringSliceField(isUp, field){
-    return function(x, y) {
-        if (x[field] === undefined || y[field] === undefined) {
-            return isUp ? 1 : -1;
-        }
-        
-        if (x[field].length === 0 || y[field].length === 0){
-            return x[field].length - y[field].length;
-        }
-        if (x.length !== y.length) {
-            if (x.length > y.length) {
-                return isUp ? 1 : -1;
-            } else if (x.length < y.length) {
-                return isUp ? -1 : 1;
-            }
-            return 0;
-        }
-        var fieldX = x[field][0];
-        var fieldY = y[field][0];
-        return isUp ? fieldX.localeCompare(fieldY) : fieldY.localeCompare(fieldX);
     }
 }
 
@@ -124,6 +124,10 @@ class ExpensesDashboard extends React.Component {
         this.renderExpenseTableElements = this.renderExpenseTableElements.bind(this);
         this.setToggleFields = this.setToggleFields.bind(this);
         this.getSortFunction = this.getSortFunction.bind(this);
+        this.handleSearchBar = this.handleSearchBar.bind(this);
+        this.renderActiveSearchExpenses = this.renderActiveSearchExpenses.bind(this);
+        this.renderNoExpenses = this.renderNoExpenses.bind(this);
+        this.convertExpenseToExpenseCard = this.convertExpenseToExpenseCard.bind(this);
     }
 
     componentDidMount() {
@@ -160,14 +164,11 @@ class ExpensesDashboard extends React.Component {
             url: URLBuilder('api/user/expenses/',this.state.user["id"]),
         }).then(response => {
 
-            var expenses = response.data;
-
             var expensesMap = this.state.expensesMap;
             // response.data is an array of expenses. Order them by property IDs -> expenses.
             var expenses = response.data.sort(
                 this.getSortFunction(this.state.currFieldToggledDirectionIsUp, this.state.currFieldToggled)
             );
-            console.log(expenses);
             for (var i = 0; i < expenses.length; i++) {
                 let expense = expenses[i];
                 expensesMap.set(expense["id"], expense);
@@ -176,9 +177,18 @@ class ExpensesDashboard extends React.Component {
                 expenses: expenses,
                 expensesMap: expensesMap,
                 isLoading: false,
-            }, () => console.log(this.state.expenses))
+            })
         }).catch(error => {
 
+        })
+    }
+
+    handleSearchBar(e) {
+        var searchValue = e.target.value.toLowerCase().replace(/\s/g, "");
+        this.setState({
+            activeSearchExpenses: this.state.expenses.filter(expense => {
+                return expense["title"].toLowerCase().replace(/\s/g, "").startsWith(searchValue);
+            })
         })
     }
 
@@ -295,7 +305,6 @@ class ExpensesDashboard extends React.Component {
     renderExpenseTableElements() {
         
         var expensesMap = this.state.expensesMap;
-        var propertiesMap = this.state.propertiesMap;
 
         // We need to sort our expensesMap by the current user selection.
         var sortFn = this.getSortFunction(this.state.currFieldToggled, this.state.currFieldToggledDirectionIsUp);
@@ -305,61 +314,84 @@ class ExpensesDashboard extends React.Component {
             expensesArr.push(expense);
         })
 
-        var isUp = this.state.currFieldToggledDirectionIsUp;
         expensesArr.sort();
         var elements = [];
 
-        var expenses = this.state.expenses;
-        console.log(expenses);
-        expenses = expenses.sort(sortFn);
-        console.log(expenses);
-
+        var expenses = this.state.expenses.sort(sortFn);
 
         for (var i = 0; i < expenses.length; i++) {
             let expense = expenses[i];
-        // sortedExpensesMap.forEach((expense, expenseID, map) => {
 
-            let expenseProperties = expense["properties"] ? expense["properties"] : ["None"];
-            
-            var properties = [];
-            if (expenseProperties.length > 0) {
-                /* If we have more than 5 associated properties, only show the first 5 */
-                var maxLength = expenseProperties.length < 5 ? expenseProperties.length : 5;
-                for (var j = 0; j < maxLength; j++) {
-                    let expensePropertyID = expenseProperties[j];
-                    properties.push(
-                        <p className="expenses_table_first_row_subtitle">
-                            {propertiesMap.has(expensePropertyID) ? propertiesMap.get(expensePropertyID) : "None"}
-                        </p>
-                    );
-                }
-                /* If we have more than 5 associated properties, only show the first 5 and show an element saying "more" */
-                if (expenseProperties.length > maxLength) {
-                    properties.push(
-                        <p className="expenses_table_first_row_subtitle">
-                            {"More..."}
-                        </p>
-                    )
-                }
-            } else {
+            var expenseCard = this.convertExpenseToExpenseCard(expense);
+            elements.push(expenseCard);
+        }
+        return elements;
+    }
+
+    convertExpenseToExpenseCard(expense) {
+        let expenseProperties = expense["properties"] ? expense["properties"] : ["None"];
+        var propertiesMap = this.state.propertiesMap;
+
+        var properties = [];
+        if (expenseProperties.length > 0) {
+            /* If we have more than 5 associated properties, only show the first 5 */
+            var maxLength = expenseProperties.length < 5 ? expenseProperties.length : 5;
+            for (var j = 0; j < maxLength; j++) {
+                let expensePropertyID = expenseProperties[j];
                 properties.push(
                     <p className="expenses_table_first_row_subtitle">
-                        {"None"}
+                        {propertiesMap.has(expensePropertyID) ? propertiesMap.get(expensePropertyID) : "None"}
                     </p>
                 );
             }
-            
-            elements.push(
-                <ExpenseCard key={expense["id"]} data={{
-                    state: {
-                        properties: properties,
-                        expense: expense,
-                        deleteExpense: this.deleteExpense
-                    }
-                }}/>
+            /* If we have more than 5 associated properties, only show the first 5 and show an element saying "more" */
+            if (expenseProperties.length > maxLength) {
+                properties.push(
+                    <p className="expenses_table_first_row_subtitle">
+                        {"More..."}
+                    </p>
+                )
+            }
+        } else {
+            properties.push(
+                <p className="expenses_table_first_row_subtitle">
+                    {"None"}
+                </p>
             );
         }
-        return elements;
+        
+        return (
+            <ExpenseCard key={expense["id"]} data={{
+                state: {
+                    properties: properties,
+                    expense: expense,
+                    deleteExpense: this.deleteExpense
+                }
+            }}/>
+        );
+    }
+
+    renderActiveSearchExpenses() {
+        if (this.state.activeSearchExpenses && this.state.activeSearchExpenses.length > 0){
+            var activeSearchExpenses = this.state.activeSearchExpenses;
+            var elements = [];
+            for (var i = 0; i < activeSearchExpenses.length; i++) {
+                let activeSearchExpense = activeSearchExpenses[i];
+                elements.push(this.convertExpenseToExpenseCard(activeSearchExpense));
+            }
+            return elements;
+        }
+        return this.renderNoExpenses();
+    }
+
+    renderNoExpenses() {
+        return (
+            <div>
+                <p>
+                    No Expenses
+                </p>
+            </div>
+        )
     }
 
     renderExpenseTableTitle() {
@@ -433,7 +465,14 @@ class ExpensesDashboard extends React.Component {
                 <div className="expenses_table_title_row_divider">
                 </div>
                 <div className="expenses_table_body">
-                    {this.renderExpenseTableElements()}
+                    {
+                        (this.state.activeSearchExpenses && (this.state.activeSearchExpenses.length > 0 || document.getElementById("expenses_dashboard_search_bar").value !== "")) ? 
+                        this.renderActiveSearchExpenses() :
+                        (this.state.expenses ?
+                            this.renderExpenseTableElements() : 
+                        this.renderNoExpenses()
+                        )
+                    }
                 </div>
             </div>
         )
@@ -471,7 +510,7 @@ class ExpensesDashboard extends React.Component {
                             <div className="expenses_dashboard_parent_inner_box_title">
                                 Expenses
                             </div>
-                            <input className="expenses_dashboard_search_bar" placeholder="Search..." onChange={this.handleSearchBar}>
+                            <input id="expenses_dashboard_search_bar" className="expenses_dashboard_search_bar" placeholder="Search..." onChange={this.handleSearchBar}>
                             </input>
                         </div>
                         <div className="expenses_dashboard_body_box">
