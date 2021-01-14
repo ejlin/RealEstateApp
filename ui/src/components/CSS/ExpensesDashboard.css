@@ -145,7 +145,7 @@
     background-color: white;
     border-radius: 4px;
     float: left;
-    height: calc(75vh);
+    height: calc(72vh);
     min-height: 650px;
     min-width: 1200px;
     overflow: hidden;
@@ -153,10 +153,10 @@
 }
 
 .expenses_table_body {
-    height: calc(75vh);
-    margin-bottom: 30px;
+    height: calc(72vh - 50px);
+    min-height: 600px;
+    margin-bottom: 100px;
     overflow: scroll;
-    padding-bottom: 30px;
 }
 
 .expenses_table_title_row {
@@ -187,6 +187,7 @@
     float: left;
     font-size: 1.0em;
     font-weight: bold;
+    user-select: none;
 }
 
 .expenses_table_title_row_divider {

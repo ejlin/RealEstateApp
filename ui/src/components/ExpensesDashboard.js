@@ -15,13 +15,56 @@ var URLBuilder = require('url-join');
 
 // sortByStringField is a custom sort comparator function that allows us to sort our
 // elements according to the field we want if the field is a string. 
-export const sortByStringField = (isUp, field) => {
+function sortByStringField(isUp, field){
     return function(x, y) {
-        return isUp ? x[0][field].localeCompare(y[0][field]) : y[0][field].localeCompare(x[0][field]);
+        return isUp ? x[field].localeCompare(y[field]) : y[field].localeCompare(x[field]);
     }
 }
 
-export const sortByNumField = (isUp, field) => {
+function sortByFrequencyField(isUp, field){
+    return function(x, y) {
+
+        var order = ['once', 'daily', 'weekly', 'bi-weekly', 'monthly', 'semi-annually', 'annually'];
+        console.log(x[field]);
+        console.log(y[field]);
+        var xIdx = order.indexOf(x[field]);
+        var yIdx = order.indexOf(y[field]);
+
+        if (xIdx < yIdx) {
+            return isUp? -1 : 1;
+        } else if (xIdx > yIdx) {
+            return isUp? 1 : -1;
+        }
+        return 0;
+    }
+}
+
+// sortByStringSliceField is a custom sort comparator function that allows us to sort our
+// elements according to the field we want if the field is a string slice. 
+function sortByStringSliceField(isUp, field){
+    return function(x, y) {
+        if (x[field] === undefined || y[field] === undefined) {
+            return isUp ? 1 : -1;
+        }
+        
+        if (x[field].length === 0 || y[field].length === 0){
+            return x[field].length - y[field].length;
+        }
+        if (x.length !== y.length) {
+            if (x.length > y.length) {
+                return isUp ? 1 : -1;
+            } else if (x.length < y.length) {
+                return isUp ? -1 : 1;
+            }
+            return 0;
+        }
+        var fieldX = x[field][0];
+        var fieldY = y[field][0];
+        return isUp ? fieldX.localeCompare(fieldY) : fieldY.localeCompare(fieldX);
+    }
+}
+
+function sortByNumField(isUp, field){
     return function(x, y) {
         if (x[field] > y[field]){
             return isUp ? 1 : -1;
@@ -89,7 +132,6 @@ class ExpensesDashboard extends React.Component {
             propertiesMap.set("All", "All");
             this.setState({
                 propertiesMap: propertiesMap,
-                isLoading: false
             });
         }).catch(error => {
             console.log(error);
@@ -102,6 +144,9 @@ class ExpensesDashboard extends React.Component {
             method: 'get',
             url: URLBuilder('api/user/expenses/',this.state.user["id"]),
         }).then(response => {
+
+            var expenses = response.data;
+
             var expensesMap = this.state.expensesMap;
             // response.data is an array of expenses. Order them by property IDs -> expenses.
             var expenses = response.data.sort(
@@ -113,8 +158,10 @@ class ExpensesDashboard extends React.Component {
                 expensesMap.set(expense["id"], expense);
             }
             this.setState({
+                expenses: expenses,
                 expensesMap: expensesMap,
-            })
+                isLoading: false,
+            }, () => console.log(this.state.expenses))
         }).catch(error => {
 
         })
@@ -215,10 +262,17 @@ class ExpensesDashboard extends React.Component {
 
     getSortFunction(field, isUp) {
         switch(field) {
-            case title, properties, frequency:
+            case title:
+            case created_at:
                 return sortByStringField(isUp, field);
-            case created_at, amount, defaultFieldToggled:
+            case frequency:
+                return sortByFrequencyField(isUp, field);
+            case properties: 
+                return sortByStringSliceField(isUp, field);
+            case amount:
+            case defaultFieldToggled:
                 return sortByNumField(isUp, field);
+            default: 
         }
     }
 
@@ -228,11 +282,26 @@ class ExpensesDashboard extends React.Component {
         var propertiesMap = this.state.propertiesMap;
 
         // We need to sort our expensesMap by the current user selection.
-        let sortFn = this.getSortFunction(this.state.currFieldToggled, this.state.currFieldToggledDirectionIsUp);
-        var sortedExpensesMap = new Map([...expensesMap].sort(sortFn));
+        var sortFn = this.getSortFunction(this.state.currFieldToggled, this.state.currFieldToggledDirectionIsUp);
+        // var sortedExpensesArr = expensesMap.entries().sort(sortFn);
+        var expensesArr = [];
+        expensesMap.forEach((expense, expenseID, map) => {
+            expensesArr.push(expense);
+        })
 
+        var isUp = this.state.currFieldToggledDirectionIsUp;
+        expensesArr.sort();
         var elements = [];
-        sortedExpensesMap.forEach((expense, expenseID, map) => {
+
+        var expenses = this.state.expenses;
+        console.log(expenses);
+        expenses = expenses.sort(sortFn);
+        console.log(expenses);
+
+
+        for (var i = 0; i < expenses.length; i++) {
+            let expense = expenses[i];
+        // sortedExpensesMap.forEach((expense, expenseID, map) => {
 
             let expenseProperties = expense["properties"] ? expense["properties"] : ["None"];
             
@@ -273,7 +342,7 @@ class ExpensesDashboard extends React.Component {
                     }
                 }}/>
             );
-        });
+        }
         return elements;
     }
 

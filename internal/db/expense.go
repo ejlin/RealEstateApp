@@ -88,8 +88,6 @@ func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, property
 				},
 			}
 
-			fmt.Println(propertyReference)
-
 			if err := tx.FirstOrCreate(&propertyReference, propertyReference).Error; err != nil {
 				return fmt.Errorf("error adding property reference: %w", err)
 			}
