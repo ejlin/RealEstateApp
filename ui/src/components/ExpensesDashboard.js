@@ -21,6 +21,21 @@ function sortByStringField(isUp, field){
     }
 }
 
+function sortByTimeField(isUp, field) {
+    return function(x, y) {
+        var xDate = new Date(x[field]);
+        var yDate = new Date(y[field]);
+        console.log(xDate);
+        console.log(yDate);
+        if (xDate > yDate) {
+            return isUp ? 1 : -1;
+        } else if (xDate < yDate) {
+            return isUp ? -1 : 1;
+        }
+        return 0;
+    }
+}
+
 function sortByFrequencyField(isUp, field){
     return function(x, y) {
 
@@ -79,7 +94,7 @@ function sortByNumField(isUp, field){
 const title = "title";
 const properties = "properties";
 const frequency = "frequency";
-const created_at = "created_at";
+const date = "date";
 const amount = "amount";
 const defaultFieldToggled = "last_modified_at";
 
@@ -263,8 +278,9 @@ class ExpensesDashboard extends React.Component {
     getSortFunction(field, isUp) {
         switch(field) {
             case title:
-            case created_at:
                 return sortByStringField(isUp, field);
+            case date:
+                return sortByTimeField(isUp, field);
             case frequency:
                 return sortByFrequencyField(isUp, field);
             case properties: 
@@ -360,7 +376,7 @@ class ExpensesDashboard extends React.Component {
                             onClick={() => {
                                 this.setToggleFields(title);
                             }}
-                            className={this.state.currFieldToggled === title ?
+                            className={this.state.currFieldToggled === title && this.state.currFieldToggledDirectionIsUp ?
                                 "expenses_table_arrow_icon toggled_icon"
                                 : "expenses_table_arrow_icon"}></BsArrowUp>
                     </div>
@@ -372,7 +388,7 @@ class ExpensesDashboard extends React.Component {
                             onClick={() => {
                                 this.setToggleFields(properties);
                             }}
-                            className={this.state.currFieldToggled === properties ?
+                            className={this.state.currFieldToggled === properties && this.state.currFieldToggledDirectionIsUp ?
                                 "expenses_table_arrow_icon toggled_icon"
                                 : "expenses_table_arrow_icon"}></BsArrowUp>
                     </div>
@@ -384,7 +400,7 @@ class ExpensesDashboard extends React.Component {
                             onClick={() => {
                                 this.setToggleFields(frequency);
                             }}
-                            className={this.state.currFieldToggled === frequency ?
+                            className={this.state.currFieldToggled === frequency && this.state.currFieldToggledDirectionIsUp ?
                                 "expenses_table_arrow_icon toggled_icon"
                                 : "expenses_table_arrow_icon"}></BsArrowUp>
                     </div>
@@ -394,9 +410,9 @@ class ExpensesDashboard extends React.Component {
                         </p>
                         <BsArrowUp 
                             onClick={() => {
-                                this.setToggleFields(created_at);
+                                this.setToggleFields(date);
                             }}
-                            className={this.state.currFieldToggled === created_at ?
+                            className={this.state.currFieldToggled === date && this.state.currFieldToggledDirectionIsUp ?
                                 "expenses_table_arrow_icon toggled_icon"
                                 : "expenses_table_arrow_icon"}></BsArrowUp>
                     </div>
@@ -408,7 +424,7 @@ class ExpensesDashboard extends React.Component {
                             onClick={() => {
                                 this.setToggleFields(amount);
                             }}
-                            className={this.state.currFieldToggled === amount ?
+                            className={this.state.currFieldToggled === amount && this.state.currFieldToggledDirectionIsUp ?
                                 "expenses_table_arrow_icon toggled_icon"
                                 : "expenses_table_arrow_icon"}></BsArrowUp>
                     </div>
