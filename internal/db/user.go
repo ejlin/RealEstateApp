@@ -34,10 +34,10 @@ type User struct {
 type PlanType string
 
 const (
-	Inactivated      PlanType = "inactivated"
-	Starter     PlanType = "starter"
-	Professional   PlanType = "professional"
-	Enterprise PlanType = "enterprise"
+	Inactivated  PlanType = "inactivated"
+	Starter      PlanType = "starter"
+	Professional PlanType = "professional"
+	Enterprise   PlanType = "enterprise"
 )
 
 func ConvertStringTosPlanType(plan string) (PlanType, error) {

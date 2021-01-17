@@ -212,7 +212,9 @@ func (s *Server) getFile(w http.ResponseWriter, r *http.Request) {
 		s.getFileData(ctx, userID, propertyID, fileName, w, r)
 		return
 	case "signed_url":
-		url, err := s.getSignedURL(ctx, userID, propertyID, fileName)
+		key := path.Join(userID, propertyDelimiter, propertyID, fileName)
+
+		url, err := s.getSignedURL(ctx, key)
 		if err != nil {
 			ll.Warn().Err(err).Msg("error getting signed url")
 			http.Error(w, "error getting signed url", http.StatusBadRequest)
@@ -221,6 +223,64 @@ func (s *Server) getFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	return
+}
+
+type RestFile struct {
+	ID             string    `json:"id,omitempty"`
+	Name           string    `json:"name,omitempty"`
+	CreatedAt      time.Time `json:"created_at,omitempty"`
+	LastModifiedAt time.Time `json:"last_modified_at,omitempty"`
+	GetSignedURL   string    `json:"get_signed_url,omitempty"`
+}
+
+func (s *Server) getFileByID(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Info().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	fileID, ok := vars["file_id"]
+	if !ok {
+		ll.Warn().Msg("file id not set")
+		http.Error(w, "file id not set", http.StatusBadRequest)
+		return
+	}
+
+	ll = ll.With().Str("file_id", fileID).Logger()
+
+	file, err := s.DBHandle.GetFileById(userID, fileID)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to get file by id")
+		http.Error(w, "unable to get file by id", http.StatusInternalServerError)
+		return
+	}
+
+	key := file.Path
+	fileGetSignedURL, err := s.getSignedURL(ctx, key)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to get file signed URL")
+		http.Error(w, "unable to get file signed URL", http.StatusInternalServerError)
+		return
+	}
+
+	restFile := &RestFile{
+		ID:             file.ID,
+		Name:           file.Name,
+		CreatedAt:      file.CreatedAt,
+		LastModifiedAt: file.LastModifiedAt,
+		GetSignedURL:   fileGetSignedURL,
+	}
+
+	RespondToRequest(w, restFile)
 	return
 }
 

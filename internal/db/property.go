@@ -22,22 +22,22 @@ type Property struct {
 	BoughtDate           string  `json:"bought_date,omitempty",sql:"type:VARCHAR(5)"`
 	PriceBought          float64 `json:"price_bought,omitempty",sql:"type:NUMERIC(16,2)"`
 	PriceRented          float64 `json:"price_rented,omitempty",sql:"type:NUMERIC(10,2)"`
-	Estimate        float64 `json:"estimate,omitempty",sql:"type:NUMERIC(16,2)"`
+	Estimate             float64 `json:"estimate,omitempty",sql:"type:NUMERIC(16,2)"`
 	PriceMortgage        float64 `json:"price_mortgage,omitempty",sql:"type:NUMERIC(12,2)"`
-	DownPayment     float64 `json:"down_payment,omitempty",sql:"type:NUMERIC(12,2)"`
+	DownPayment          float64 `json:"down_payment,omitempty",sql:"type:NUMERIC(12,2)"`
 	PricePropertyManager float64 `json:"price_property_manager,omitempty",sql:"type:NUMERIC(12,2)"`
 
 	MortgageCompany      string       `json:"mortgage_company,omitempty",sql:"type:VARCHAR(64)"`
 	MortgageInterestRate float64      `json:"mortgage_interest_rate,omitempty",sql:"type:NUMERIC(5,1)"`
 	PropertyType         PropertyType `json:"property_type,omitempty",sql:"type:ENUM('SFH', 'Manufactured', 'Condo/Op', 'Multi-family', 'Apartment', 'Lot/Land', 'Townhome', 'Commercial')"`
 
-	NumUnits int `json:"num_units,omitempty",sql:"type:INT"`
-	NumBeds int `json:"num_beds,omitempty",sql:"type:INT"`
-	NumBaths int `json:"num_baths,omitempty",sql:"type:INT"`
+	NumUnits      int `json:"num_units,omitempty",sql:"type:INT"`
+	NumBeds       int `json:"num_beds,omitempty",sql:"type:INT"`
+	NumBaths      int `json:"num_baths,omitempty",sql:"type:INT"`
 	SquareFootage int `json:"square_footage,omitempty",sql:"type:INT"`
 
 	// The day the user can expect rent to come in for this property.
-	RentPaymentDate int `json:"rent_payment_date,omitempty",sql:"type:INT"`
+	RentPaymentDate     int `json:"rent_payment_date,omitempty",sql:"type:INT"`
 	MortgagePaymentDate int `json:"mortgage_payment_date,omitempty",sql:"type:INT"`
 
 	CurrentlyRented bool `json:"currently_rented,omitempty",sql:"type:BOOLEAN"`
@@ -126,7 +126,7 @@ func (handle *Handle) GetSpecificPropertiesByOwner(userID string, propertyIDs []
 		return nil, err
 	}
 	return properties, nil
-	
+
 }
 
 // RemovePropertyByID will delete a property from our database.
@@ -162,7 +162,7 @@ func (handle *Handle) RemovePropertyByID(ownerID, propertyID string) error {
 // PropertiesReferences is a mapping of properties expenses and files. One expense can map to multiple properties and
 // one property can map to multiple expenses. This is a separate table within our database.
 type PropertiesReferences struct {
-	PropertyID string `json:"property_id",sql:"type:uuid; primary key"`
-	ExpenseID sql.NullString `json:"expense_id",sql:"type:uuid; foreign key"`
-	FileID sql.NullString `json:"file_id",sql:"type:uuid; foreign key"`
+	PropertyID string         `json:"property_id",sql:"type:uuid; primary key"`
+	ExpenseID  sql.NullString `json:"expense_id",sql:"type:uuid; foreign key"`
+	FileID     sql.NullString `json:"file_id",sql:"type:uuid; foreign key"`
 }

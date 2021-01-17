@@ -3,19 +3,22 @@ package db
 import (
 	"errors"
 	"time"
-	
+
+	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 )
 
 type File struct {
-	ID        string     `json:"id",sql:"type:uuid; primary key"`
-	UserID string `json:"user_id",sql:"type:uuid; foreign key"`
-	CreatedAt *time.Time `json:"created_at,omitempty",sql:"type:timestamp"`
+	ID             string     `json:"id",sql:"type:uuid; primary key"`
+	UserID         string     `json:"user_id",sql:"type:uuid; foreign key"`
+	CreatedAt      *time.Time `json:"created_at,omitempty",sql:"type:timestamp"`
 	LastModifiedAt *time.Time `json:"last_modified_at,omitempty",sql:"type:timestamp"`
 
-	Name string `json:"name,omitempty",sql:"type:VARCHAR(45)"`
+	Name string   `json:"name,omitempty",sql:"type:VARCHAR(45)"`
 	Type FileType `json:"type,omitempty",sql:"type:ENUM('mortgage', 'contracting', 'property', 'receipts', 'repairs', 'taxes', 'other')"`
-	Year int `json:"year,omitempty",sql:"type:integer"`
+	Year int      `json:"year,omitempty",sql:"type:integer"`
+
+	// Path is the path to our file within our GCS bucket.
 	Path string `json:"path,omitempty",sql:"varchar(255)"`
 }
 
@@ -26,25 +29,34 @@ const (
 )
 
 func (handle *Handle) AddFile(file *File, propertyID string) error {
-	
+
 	if file == nil {
 		return errors.New("nil file")
 	}
 
-	return handle.DB.Transaction(func(tx *gorm.DB) error {
-		
-		if err := tx.FirstOrCreate(&file, file).Error; err != nil {
-			return err
-		}
+	if err := handle.DB.FirstOrCreate(&file, file).Error; err != nil {
+		return err
+	}
 
-		propertyReference := PropertiesReferences {
-			PropertyID: propertyID,
-		}
+	return nil
+}
 
-		if err := tx.FirstOrCreate(&propertyReference, propertyReference).Error; err != nil {
-			return err
-		}
+func (handle *Handle) GetFileById(userID, fileID string) (*File, error) {
 
-		return nil
-	})
+	_, err := uuid.Parse(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err := uuid.Parse(fileID)
+	if err != nil {
+		return nil, err
+	}
+
+	var file *File
+	if err := handle.DB.Where("user_id = ? AND file_id = ?", userID, fileID).Fine(&file).Error; err != nil {
+		return nil, err
+	}
+
+	return file, nil
 }

@@ -28,13 +28,14 @@ func (s *Server) HandleRoutes() {
 	r.HandleFunc("/api/user/property/{id}", s.removePropertyByUser).Queries("property_id", "{property_id}").Methods("DELETE")
 	r.HandleFunc("/api/user/property/{id}", s.addPropertyByUser).Methods("POST")
 
-	// Used to display our main dashboard page. Provides a summary for users. 
+	// Used to display our main dashboard page. Provides a summary for users.
 	r.HandleFunc("/api/user/summary/{id}", s.getUserSummary).Methods("GET")
 
 	// Order matters. Routing is done sequentially, so the first one must be the one that doesn't satisfy the second one.
 	r.HandleFunc("/api/user/files/{id}/{property_id}/{file_name}", s.getFile).Queries("request", "{request}").Methods("GET")
 	r.HandleFunc("/api/user/files/{id}/{property_id}/{file_name}", s.deleteFile).Methods("DELETE")
 	r.HandleFunc("/api/user/files/{id}/{property_id}", s.getPropertyFileslistByUser).Methods("GET")
+	r.HandleFunc("/api/user/files/{id}/{file_id}", s.getFileByID).Methods("GET")
 	r.HandleFunc("/api/user/files/{id}", s.getFileslistByUser).Methods("GET")
 	// r.HandleFunc("/api/user/files/upload/{id}/{property_id}", s.getStoreFileSignedURL).Queries("file_name", "{file_name}").Methods("GET")
 	r.HandleFunc("/api/user/files/upload/{id}", s.uploadFileByUser).Methods("POST")
@@ -148,13 +149,13 @@ func (s *Server) addUser(w http.ResponseWriter, r *http.Request) {
 // ResponseUser is a user struct that we can send back in our API that is stripped of internal information like
 // passwords, last login time, etc.
 type ResponseUser struct {
-	ID        string `json:"id"`
-	Email     string `json:"email"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	CreatedAt *time.Time `json:"created_at"`
-	LastLogin *time.Time `json:"last_login"`
-	Plan db.PlanType `json:"plan"`
+	ID        string      `json:"id"`
+	Email     string      `json:"email"`
+	FirstName string      `json:"first_name"`
+	LastName  string      `json:"last_name"`
+	CreatedAt *time.Time  `json:"created_at"`
+	LastLogin *time.Time  `json:"last_login"`
+	Plan      db.PlanType `json:"plan"`
 }
 
 func (s *Server) loginUserByEmail(w http.ResponseWriter, r *http.Request) {
@@ -201,7 +202,7 @@ func convertToResponseUser(user *db.User) ResponseUser {
 		LastName:  user.LastName,
 		CreatedAt: user.CreatedAt,
 		LastLogin: user.LastLogin,
-		Plan: user.Plan,
+		Plan:      user.Plan,
 	}
 }
 
@@ -413,7 +414,7 @@ func (s *Server) getPropertiesAnalysis(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ll := log.With().Str("owner_id", ownerID).Logger() 
+	ll := log.With().Str("owner_id", ownerID).Logger()
 
 	propertySummary, err := s.calculatePropertiesAnalysis(ownerID, nil, nil)
 	if err != nil {
@@ -425,7 +426,6 @@ func (s *Server) getPropertiesAnalysis(w http.ResponseWriter, r *http.Request) {
 	RespondToRequest(w, propertySummary)
 	return
 }
-
 
 /****** Helper Functions ******/
 

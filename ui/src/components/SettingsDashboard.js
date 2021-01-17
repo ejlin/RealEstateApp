@@ -340,6 +340,7 @@ class SettingsDashboard extends React.Component {
                                     this.capitalizeName(this.state.user["first_name"])}
                                 </p>
                             </div>
+                            <div className="clearfix"/>
                             <div className="right_box_page_content_inner_box_list">
                                 <p className="right_box_page_content_inner_box_list_text">
                                     Last Name
@@ -353,6 +354,7 @@ class SettingsDashboard extends React.Component {
                                     this.capitalizeName(this.state.user["last_name"])}
                                 </p>
                             </div>
+                            <div className="clearfix"/>
                             <div className="right_box_page_content_inner_box_list">
                                 <p className="right_box_page_content_inner_box_list_text">
                                     Email
@@ -366,6 +368,7 @@ class SettingsDashboard extends React.Component {
                                         this.state.user["email"]}
                                 </p>
                             </div>
+                            <div className="clearfix"/>
                             {/* <div className="right_box_page_content_inner_box_list">
                                 <p className="right_box_page_content_inner_box_list_text">
                                     Phone Number

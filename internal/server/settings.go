@@ -12,14 +12,14 @@ func createDefaultSettings() json.RawMessage {
 
 	settings := map[string]map[string]interface{}{
 		"emails": {
-			"receive_digest": true,
+			"receive_digest":     true,
 			"receive_newsletter": true,
-			"receive_marketing": true,
+			"receive_marketing":  true,
 		},
 		"notifications": {
-			"rent_pay_date": true,
+			"rent_pay_date":     true,
 			"mortgage_pay_date": true,
-			"property_value": true,
+			"property_value":    true,
 		},
 	}
 
@@ -105,7 +105,7 @@ func (s *Server) updateSettingsPreferences(w http.ResponseWriter, r *http.Reques
 	settingsVal := r.FormValue("settings")
 
 	jsonSettingsVal := json.RawMessage(settingsVal)
-	
+
 	err := s.DBHandle.UpdateSettingsPreferencesByUser(userID, &jsonSettingsVal)
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to store user preference settings")
@@ -166,7 +166,7 @@ func (s *Server) getProfilePictureByUser(w http.ResponseWriter, r *http.Request)
 		http.Error(w, "unable to get profile picture data by user", http.StatusInternalServerError)
 		return
 	}
-	
+
 	RespondToRequest(w, url)
 	return
 }
@@ -192,7 +192,7 @@ func (s *Server) getSettings(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "unable to get user settings", http.StatusBadRequest)
 		return
 	}
-	
+
 	// If user is missing settings, give them the default ones.
 	if settings == nil {
 		defaultSettings := createDefaultSettings()

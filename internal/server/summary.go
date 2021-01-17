@@ -1,15 +1,10 @@
 package server
 
-import (
-)
-
-
-
-// UserSummary returns general information about a user. It pulls in information from multiple places (properties, expenses, 
+// UserSummary returns general information about a user. It pulls in information from multiple places (properties, expenses,
 // historical data, etc.)
 type UserSummary struct {
 	Properties *PropertiesSummary `json:"properties_summary,omitempty"`
-	Expenses *ExpensesSummary `json:"expenses_summary,omitempty"`
+	Expenses   *ExpensesSummary   `json:"expenses_summary,omitempty"`
 }
 
 func (s *Server) calculateUserSummary(userID string) (*UserSummary, error) {
@@ -26,6 +21,6 @@ func (s *Server) calculateUserSummary(userID string) (*UserSummary, error) {
 
 	return &UserSummary{
 		Properties: propertiesSummary,
-		Expenses: expensesSummary,
+		Expenses:   expensesSummary,
 	}, nil
 }

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"../db"
 	"../cloudstorage"
+	"../db"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -22,22 +22,23 @@ const (
 
 // RestExpense is an expense sent back by the server to the client.
 type RestExpense struct {
-	ID        string     `json:"id"`
-	UserID string `json:"user_id"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	LastModifiedAt *time.Time `json:"last_modified_at,omitempty"`
-	Title string `json:"title,omitempty"`
-	Description string `json:"description,omitempty"`
-	Amount float64 `json:"amount,omitempty"`
-	Frequency db.FrequencyType `json:"frequency,omitempty"`
-	Properties []string `json:"properties,omitempty"`
+	ID             string           `json:"id"`
+	UserID         string           `json:"user_id"`
+	CreatedAt      *time.Time       `json:"created_at,omitempty"`
+	LastModifiedAt *time.Time       `json:"last_modified_at,omitempty"`
+	Title          string           `json:"title,omitempty"`
+	Description    string           `json:"description,omitempty"`
+	Amount         float64          `json:"amount,omitempty"`
+	Frequency      db.FrequencyType `json:"frequency,omitempty"`
+	Properties     []string         `json:"properties,omitempty"`
+	FileID         string           `json:"file_id,omitempty"`
 	// Date is the date of the expense in MM/DD/YYYY format. It is not stored as a timestamp
 	// for user ease.
 	Date string `json:"date,omitempty"`
-} 
+}
 
 func (s *Server) getExpensesByProperty(w http.ResponseWriter, r *http.Request) {
-	
+
 	vars := mux.Vars(r)
 
 	userID, ok := vars["id"]
@@ -64,7 +65,7 @@ func (s *Server) getExpensesByProperty(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "unable to get expenses by property", http.StatusInternalServerError)
 		return
 	}
-	
+
 	RespondToRequest(w, expenses)
 	return
 }
@@ -92,23 +93,34 @@ func (s *Server) getExpensesByUser(w http.ResponseWriter, r *http.Request) {
 	var restExpenses []*RestExpense
 
 	for _, expense := range expenses {
-		properties, err := s.DBHandle.GetPropertiesAssociatedWithExpense(expense.ID)
+		propertiesReferences, err := s.DBHandle.GetPropertyReferencesAssociatedWithExpense(expense.ID)
 		if err != nil {
 			// Don't error out so we still return what expenses we can.
 			ll.Warn().Err(err).Str("expense_id", expense.ID).Msg("unable to get properties associated with expense")
 			continue
 		}
-		restExpenses = append(restExpenses, &RestExpense {
-			ID: expense.ID,
-			UserID: expense.UserID,
-			CreatedAt: expense.CreatedAt,
+
+		var fileID string
+		var properties []string
+		for _, propertyReferences := range propertiesReferences {
+			// This will overwrite every iteration of our loop, but each expense can only have one file
+			// mapped to it currently, so it will overwrite with the same value every time.
+			fileID = propertyReferences.FileID.String
+			properties = append(properties, propertyReferences.PropertyID)
+		}
+
+		restExpenses = append(restExpenses, &RestExpense{
+			ID:             expense.ID,
+			UserID:         expense.UserID,
+			CreatedAt:      expense.CreatedAt,
 			LastModifiedAt: expense.LastModifiedAt,
-			Title: expense.Title,
-			Description: expense.Description,
-			Amount: expense.Amount,
-			Frequency: expense.Frequency,
-			Properties: properties,
-			Date: expense.Date,
+			Title:          expense.Title,
+			Description:    expense.Description,
+			Amount:         expense.Amount,
+			Frequency:      expense.Frequency,
+			Properties:     properties,
+			FileID:         fileID,
+			Date:           expense.Date,
 		})
 	}
 
@@ -137,7 +149,7 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "failed to parse multipart message", http.StatusBadRequest)
 		return
 	}
-	
+
 	title := r.FormValue("title")
 	if title == "" {
 		ll.Error().Msg("missing expense title")
@@ -151,7 +163,7 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "missing expense description", http.StatusBadRequest)
 		return
 	}
-	
+
 	formFile, handler, err := r.FormFile("file")
 	if err != nil {
 		ll.Error().Err(err).Msg("error retrieving the file")
@@ -207,16 +219,16 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	expense := &db.Expense {
-		ID: uuid.New().String(),
-		UserID: userID, 
-		CreatedAt: &now,
+	expense := &db.Expense{
+		ID:             uuid.New().String(),
+		UserID:         userID,
+		CreatedAt:      &now,
 		LastModifiedAt: &now,
-		Title: title,
-		Description: description,
-		Amount: amount,
-		Frequency: getFrequency(frequency),
-		Date: date,
+		Title:          title,
+		Description:    description,
+		Amount:         amount,
+		Frequency:      getFrequency(frequency),
+		Date:           date,
 	}
 
 	getYear := func(date string) int {
@@ -227,30 +239,32 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 			y := time.Now().Year()
 			return y
 		}
-		return year 
+		return year
 	}
 
 	var file *db.File
+
+	// The key to an expense file is {userID}/expenses/{expense_name}/{file_name}
+	fileKey := path.Join(userID, "expenses", title, fileName)
+
 	if formFile != nil {
-		file = &db.File {
-			ID: uuid.New().String(),
-			UserID: userID,
-			CreatedAt: &now,
+		file = &db.File{
+			ID:             uuid.New().String(),
+			UserID:         userID,
+			CreatedAt:      &now,
 			LastModifiedAt: &now,
-			Name: fileName,
-			Year: getYear(date),
-			Type: db.FileType("other"),
+			Name:           fileName,
+			Year:           getYear(date),
+			Type:           db.FileType("other"),
+			Path: 			fileKey,
 		}
 	} else {
 		file = nil
 	}
-	
-	// The key to an expense file is {userID}/expenses/{expense_name}/{file_name}
-	key := path.Join(userID, expensesDelimiter, expense.Title, fileName)
 
 	addFileToCloudStorage := func() func(ctx context.Context) error {
 		return func(ctx context.Context) error {
-			return cloudstorage.AddCloudstorageFile(ctx, s.StorageClient, formFile, s.UsersBucket, key)
+			return cloudstorage.AddCloudstorageFile(ctx, s.StorageClient, formFile, s.UsersBucket, fileKey)
 		}
 	}
 
@@ -262,17 +276,17 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	RespondToRequest(w, &RestExpense {
-		ID: expense.ID,
-		UserID: expense.UserID, 
-		CreatedAt: expense.CreatedAt,
+	RespondToRequest(w, &RestExpense{
+		ID:             expense.ID,
+		UserID:         expense.UserID,
+		CreatedAt:      expense.CreatedAt,
 		LastModifiedAt: expense.LastModifiedAt,
-		Title: expense.Title,
-		Description: expense.Description,
-		Amount: expense.Amount,
-		Frequency: expense.Frequency,
-		Date: expense.Date,
-		Properties: associatedProperties,
+		Title:          expense.Title,
+		Description:    expense.Description,
+		Amount:         expense.Amount,
+		Frequency:      expense.Frequency,
+		Date:           expense.Date,
+		Properties:     associatedProperties,
 	})
 	return
 }
@@ -324,20 +338,20 @@ func (s *Server) calculateExpensesAnalysis(userID string) (*ExpensesSummary, err
 		totalExpenses += expense.Amount
 	}
 
-	return &ExpensesSummary {
+	return &ExpensesSummary{
 		TotalExpenses: totalExpenses,
 	}, nil
 }
 
 func getFrequency(frequency string) db.FrequencyType {
-	
+
 	frequency = strings.ToLower(frequency)
 
 	frequencyType := db.FrequencyType(frequency)
 
 	if frequencyType != db.Once && frequencyType != db.Daily && frequencyType != db.Weekly &&
 		frequencyType != db.BiWeekly && frequencyType != db.Monthly && frequencyType != db.Annually && frequencyType != db.SemiAnnually {
-			return db.Once
+		return db.Once
 	}
 	return frequencyType
 }

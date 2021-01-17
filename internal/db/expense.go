@@ -12,14 +12,14 @@ import (
 )
 
 type Expense struct {
-	ID        string     `json:"id",sql:"type:uuid; primary key"`
-	UserID string `json:"user_id",sql:"type:uuid; foreign key"`
-	CreatedAt *time.Time `json:"created_at,omitempty",sql:"type:timestamp"`
-	LastModifiedAt *time.Time `json:"last_modified_at,omitempty",sql:"type:timestamp"`
-	Title string `json:"title,omitempty",sql:"type:VARCHAR(128)"`
-	Description string `json:"description,omitempty",sql:"type:VARCHAR(300)"`
-	Amount float64 `json:"amount,omitempty",sql:"type:type:NUMERIC(10,2)"`
-	Frequency FrequencyType `json:"frequency,omitempty",sql:"type:ENUM('once', 'daily', 'weekly', 'bi-weekly', 'monthly', 'annually', 'semi-annually')"`
+	ID             string        `json:"id",sql:"type:uuid; primary key"`
+	UserID         string        `json:"user_id",sql:"type:uuid; foreign key"`
+	CreatedAt      *time.Time    `json:"created_at,omitempty",sql:"type:timestamp"`
+	LastModifiedAt *time.Time    `json:"last_modified_at,omitempty",sql:"type:timestamp"`
+	Title          string        `json:"title,omitempty",sql:"type:VARCHAR(128)"`
+	Description    string        `json:"description,omitempty",sql:"type:VARCHAR(300)"`
+	Amount         float64       `json:"amount,omitempty",sql:"type:type:NUMERIC(10,2)"`
+	Frequency      FrequencyType `json:"frequency,omitempty",sql:"type:ENUM('once', 'daily', 'weekly', 'bi-weekly', 'monthly', 'annually', 'semi-annually')"`
 	// Date is the date of the expense in MM/DD/YYYY format. It is not stored as a timestamp
 	// for user ease.
 	Date string `json:"date,omitempty", sql:"type:VARCHAR(10)"`
@@ -28,20 +28,20 @@ type Expense struct {
 type FrequencyType string
 
 const (
-	Once FrequencyType = "once"
-	Daily FrequencyType = "daily"
-	Weekly FrequencyType = "weekly"
-	BiWeekly FrequencyType = "bi-weekly"
-	Monthly FrequencyType = "monthly"
-	Annually FrequencyType = "annually"
+	Once         FrequencyType = "once"
+	Daily        FrequencyType = "daily"
+	Weekly       FrequencyType = "weekly"
+	BiWeekly     FrequencyType = "bi-weekly"
+	Monthly      FrequencyType = "monthly"
+	Annually     FrequencyType = "annually"
 	SemiAnnually FrequencyType = "semi-annually"
 )
 
 // AddExpense will add a record of a expense for a user.
 // We need to add three types of records to our database. The first is in our expenses table.
 // This contains information about the expense. The second is in our properties_references table.
-// This is just a mapping of properties -> {expenses, files}. We need to perform the three additions 
-// within a transaction so we can roll them back if any of them fail. 
+// This is just a mapping of properties -> {expenses, files}. We need to perform the three additions
+// within a transaction so we can roll them back if any of them fail.
 // We also need to upload our file to google cloud storage. If it fails to upload, roll back these
 // transactions.
 func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, propertyIDs []string, file *File, fn func(ctx context.Context) error) error {
@@ -51,7 +51,7 @@ func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, property
 	}
 
 	return handle.DB.Transaction(func(tx *gorm.DB) error {
-		
+
 		if err := tx.FirstOrCreate(&expense, expense).Error; err != nil {
 			return fmt.Errorf("error adding expense: %w", err)
 		}
@@ -67,7 +67,7 @@ func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, property
 			if file != nil {
 				fileID = file.ID
 				fileValid = true
-			} 
+			}
 
 			var expenseID string
 			var expenseValid bool
@@ -76,15 +76,15 @@ func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, property
 				expenseValid = true
 			}
 
-			propertyReference := PropertiesReferences {
+			propertyReference := PropertiesReferences{
 				PropertyID: propertyID,
 				ExpenseID: sql.NullString{
 					String: expenseID,
-					Valid: expenseValid,
+					Valid:  expenseValid,
 				},
 				FileID: sql.NullString{
 					String: fileID,
-					Valid: fileValid,
+					Valid:  fileValid,
 				},
 			}
 
@@ -99,10 +99,10 @@ func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, property
 			}
 
 			// Note: We MUST perform file operations in this order. First
-			// create the db record, _then_ create the GCS file. This is in 
+			// create the db record, _then_ create the GCS file. This is in
 			// case we successfully create the record, but cannot successfully
 			// upload to GCS. Then we can roll back all of our transactions.
-			// 
+			//
 			// TLDR: File upload to GCS _must_ come last after all db operations
 			// because we can rollback db operations, but we cannot rollback
 			// GCS uploads.
@@ -175,12 +175,12 @@ func (handle *Handle) DeleteExpenseByID(userID, expenseID string) error {
 	}
 
 	return handle.DB.Transaction(func(tx *gorm.DB) error {
-		
+
 		expense := Expense{
 			ID: expenseID,
 		}
 
-		propertyReference := PropertiesReferences {
+		propertyReference := PropertiesReferences{
 			ExpenseID: sql.NullString{
 				String: expenseID,
 			},
@@ -193,14 +193,14 @@ func (handle *Handle) DeleteExpenseByID(userID, expenseID string) error {
 		if err := tx.Where("expense_id = ?", expenseID).Delete(&propertyReference).Error; err != nil {
 			return err
 		}
-		
+
 		return nil
 	})
 }
 
 /*****************************************************************************/
 
-func (handle *Handle) GetPropertiesAssociatedWithExpense(expenseID string) ([]string, error) {
+func (handle *Handle) GetPropertyReferencesAssociatedWithExpense(expenseID string) ([]PropertiesReferences, error) {
 
 	_, err := uuid.Parse(expenseID)
 	if err != nil {
@@ -208,15 +208,8 @@ func (handle *Handle) GetPropertiesAssociatedWithExpense(expenseID string) ([]st
 	}
 
 	var propertiesReferences []PropertiesReferences
-	if err := handle.DB.Select("property_id").Where("expense_id = ?", expenseID).Find(&propertiesReferences).Error; err != nil {
+	if err := handle.DB.Select("property_id, file_id").Where("expense_id = ?", expenseID).Find(&propertiesReferences).Error; err != nil {
 		return nil, err
 	}
-
-	var properties []string
-
-	for _, propertyReference := range propertiesReferences {
-		properties = append(properties, propertyReference.PropertyID)
-	}
-
-	return properties, nil
+	return propertiesReferences, nil
 }

@@ -1,0 +1,99 @@
+.expanded_expense_card_box {
+    background-color: white;
+    border-radius: 4px;
+    float: left;
+    margin-left: calc((100% - 425px)/2);
+    margin-top: 150px;
+    padding-bottom: 25px;
+    width: 425px;
+}
+
+.expanded_expense_card_title_box {
+    float: left;
+    margin-top: 22.5px;
+    width: 100%;
+}
+
+.expanded_expense_card_title_text {
+    float: left;
+    font-weight: bold;
+    font-size: 1.2em;
+    line-height: 30px;
+    margin-left: 35px;
+}
+
+.expanded_expense_card_title_box_close_icon {
+    cursor: pointer;
+    float: right;
+    height: 30px;
+    margin-right: 25px;
+    width: 30px;
+}
+
+.expanded_expense_card_body_box {
+    float: left;
+    margin-left: 35px;
+    margin-right: 35px;
+    margin-top: 20px;
+    width: calc(100% - 70px);
+}
+
+.expanded_expense_card_name_text {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.expanded_expense_card_description_text {
+    font-style: italic;
+}
+
+.expanded_expense_card_bullet_point_box {
+    float: left;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.expanded_expense_card_bullet_point_box_icon {
+    float: left;
+    height: 20px;
+    width: 20px;
+}
+
+.expanded_expense_card_bullet_point_box_text {
+    float: left;
+    margin-left: 10px;
+}
+
+.expanded_expense_card_bullet_point_box {
+    float: left;
+}
+
+.expanded_expense_card_inner_body_box {
+    float: left;
+    width: 100%;
+}
+
+.expanded_expense_card_body_left_box_element_box {
+    height: 22.5px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.expanded_expense_card_body_left_box_element_box_icon {
+    color:  #296CF6;
+    float: left;
+    height: 22.5px;
+    width: 22.5px;
+}
+
+.expanded_expense_card_body_left_box_element_box_text {
+    float: left;
+    line-height: 22.5px;
+    margin-left: 10px;
+}
+
+.expanded_expense_card_body_left_box_element_box_actual_text {
+    float: right;
+    font-weight: bold;
+}

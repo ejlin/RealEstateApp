@@ -11,9 +11,9 @@ import UploadFileModal from './UploadFileModal.js';
 
 import ProgressBar from './../utility/ProgressBar.js';
 
-import { MdFileDownload, MdFileUpload, MdEdit } from 'react-icons/md';
-import { IoMdTrash, IoMdArrowDropdown } from 'react-icons/io';
-import { IoCloseSharp, IoTrashSharp } from 'react-icons/io5';
+import { MdFileDownload, MdEdit } from 'react-icons/md';
+import { IoMdArrowDropdown } from 'react-icons/io';
+import { IoTrashSharp } from 'react-icons/io5';
 import { 
     AiFillFile, 
     AiFillFileImage, 

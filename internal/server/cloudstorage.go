@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	propertyIDLabel = "property_id"
+	propertyIDLabel   = "property_id"
 	addressLabel      = "address"
 	fileCategoryLabel = "file_category"
 	yearLabel         = "year"
@@ -79,12 +79,12 @@ func (s *Server) getCloudFileslistByUser(ctx context.Context, userID string) ([]
 		name = dir[len(dir)-1]
 
 		sanitizedFilesInfo = append(sanitizedFilesInfo, &FileInfo{
-			Name:       name,
-			Address: fileInfo.Address,
-			Year: fileInfo.Year,
+			Name:         name,
+			Address:      fileInfo.Address,
+			Year:         fileInfo.Year,
 			FileCategory: fileInfo.FileCategory,
-			PropertyID: dir[0],
-			Metadata:   fileInfo.Metadata,
+			PropertyID:   dir[0],
+			Metadata:     fileInfo.Metadata,
 		})
 	}
 	return sanitizedFilesInfo, nil
@@ -153,10 +153,10 @@ func (s *Server) addStorageFile(ctx context.Context, f io.Reader, userID, proper
 	wc := o.NewWriter(tCtx)
 
 	wc.Metadata = map[string]string{
-		propertyIDLabel: propertyID,
-		yearLabel:        year,
-		fileTypeLabel:   fileType,
-		addressLabel: address,
+		propertyIDLabel:   propertyID,
+		yearLabel:         year,
+		fileTypeLabel:     fileType,
+		addressLabel:      address,
 		fileCategoryLabel: fileCategory,
 	}
 
@@ -184,11 +184,11 @@ func (s *Server) addStorageFile(ctx context.Context, f io.Reader, userID, proper
 	}, nil
 }
 
-// addStorageProfilePictureFile stores the user's profile picture in the cloud at their directory. 
-// `{bucket_name}/{user_id}/{profile}/picture` 
+// addStorageProfilePictureFile stores the user's profile picture in the cloud at their directory.
+// `{bucket_name}/{user_id}/{profile}/picture`
 func (s *Server) addStorageProfilePictureFile(ctx context.Context, f io.Reader, userID string) error {
 
-	tCtx, cancel := context.WithTimeout(ctx, 30 * time.Second)
+	tCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
 
 	prefix := path.Join(userID, profile)
@@ -226,7 +226,6 @@ func (s *Server) getProfilePictureData(ctx context.Context, userID string) (stri
 	})
 }
 
-
 // deleteFile removes a file from cloudstorage bucket.
 func (s *Server) deleteStorageFile(ctx context.Context, userID, propertyID, fileName string) error {
 
@@ -248,7 +247,7 @@ func (s *Server) generateStoreFileSignedURL(ctx context.Context, userID, propert
 	key := path.Join(userID, propertyDelimiter, propertyID, fileName)
 
 	ll := log.With().Str("key", key).Logger()
-	
+
 	url, err := storage.SignedURL(s.UsersBucket, key, &storage.SignedURLOptions{
 		GoogleAccessID: s.GoogleAccessID,
 		PrivateKey:     []byte(s.GooglePrivateKey),
@@ -266,7 +265,7 @@ func (s *Server) generateStoreFileSignedURL(ctx context.Context, userID, propert
 }
 
 // getSignedURL returns a signed url.
-func (s *Server) getSignedURL(ctx context.Context, userID, propertyID, fileName string) (string, error) {
+func (s *Server) getSignedURL(ctx context.Context, key string) (string, error) {
 
 	key := path.Join(userID, propertyDelimiter, propertyID, fileName)
 
@@ -353,4 +352,3 @@ func getFileInfoFromAttrs(attrs *storage.ObjectAttrs, prefix string) *FileInfo {
 	}
 	return nil
 }
-

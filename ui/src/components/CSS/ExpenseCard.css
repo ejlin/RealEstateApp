@@ -163,8 +163,40 @@
 }
 
 .expenses_card_expanded_view_text {
-    font-style: italic;
     padding-bottom: 15px;
     padding-left: calc(30px + 5%);
     padding-top: 15px;
+}
+
+.expenses_card_expanded_view_left_box {
+    float: left;
+    width: calc(100% - 150px);
+}
+
+.expenses_card_expanded_view_left_box_title {
+    float: left;
+    font-weight: bold;
+}
+
+.expenses_card_expanded_view_left_box_text {
+    float: left;
+    font-style: italic;
+    line-height: 25px;
+    margin-left: 7.5px;
+}
+
+.file_title {
+    margin-top: 25px;
+}
+
+.expenses_card_expanded_view_left_box_element {
+    float: left;
+    margin-bottom: 15px;
+}
+
+.expenses_card_expanded_view_left_box_element_icon {
+    color: #296CF6;
+    float: left;
+    height: 25px;
+    width: 25px;
 }

@@ -8,10 +8,25 @@ import CreateExpenseModal from './CreateExpenseModal.js';
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 import ExpenseCard from './ExpenseCard.js';
+import ExpandedExpenseCard from './ExpandedExpenseCard.js';
 
 import { BsArrowUp } from 'react-icons/bs';
+import { RiErrorWarningFill } from 'react-icons/ri';
 
-var URLBuilder = require('url-join');
+export function convertDate(date){
+
+    date = date.split("T")[0];
+
+    let split = date.split("-");
+
+    let day = split[2];
+    let month = split[1];
+    let year = split[0];
+
+    return month + "/" + day + "/" + year;
+}
+
+let URLBuilder = require('url-join');
 
 // sortByStringField is a custom sort comparator function that allows us to sort our
 // elements according to the field we want if the field is a string. 
@@ -40,16 +55,16 @@ function sortByStringSliceField(isUp, field){
             }
             return 0;
         }
-        var fieldX = x[field][0];
-        var fieldY = y[field][0];
+        let fieldX = x[field][0];
+        let fieldY = y[field][0];
         return isUp ? fieldX.localeCompare(fieldY) : fieldY.localeCompare(fieldX);
     }
 }
 
 function sortByTimeField(isUp, field) {
     return function(x, y) {
-        var xDate = new Date(x[field]);
-        var yDate = new Date(y[field]);
+        let xDate = new Date(x[field]);
+        let yDate = new Date(y[field]);
         console.log(xDate);
         console.log(yDate);
         if (xDate > yDate) {
@@ -64,11 +79,11 @@ function sortByTimeField(isUp, field) {
 function sortByFrequencyField(isUp, field){
     return function(x, y) {
 
-        var order = ['once', 'daily', 'weekly', 'bi-weekly', 'monthly', 'semi-annually', 'annually'];
+        let order = ['once', 'daily', 'weekly', 'bi-weekly', 'monthly', 'semi-annually', 'annually'];
         console.log(x[field]);
         console.log(y[field]);
-        var xIdx = order.indexOf(x[field]);
-        var yIdx = order.indexOf(y[field]);
+        let xIdx = order.indexOf(x[field]);
+        let yIdx = order.indexOf(y[field]);
 
         if (xIdx < yIdx) {
             return isUp? -1 : 1;
@@ -111,10 +126,11 @@ class ExpensesDashboard extends React.Component {
             propertiesMap: null,
             displayAddExpense: false,
             expensesMap: new Map(),
-            isLoading: true,
             currFieldToggledDirectionIsUp: false,
             currFieldToggled: defaultFieldToggled,
             currExpensesSortFunc: null,
+            currActiveExpandedExpense: null,
+            isLoading: true,
         };
         this.addExpense = this.addExpense.bind(this);
         this.closeCreateExpenseModal = this.closeCreateExpenseModal.bind(this);
@@ -128,63 +144,66 @@ class ExpensesDashboard extends React.Component {
         this.renderActiveSearchExpenses = this.renderActiveSearchExpenses.bind(this);
         this.renderNoExpenses = this.renderNoExpenses.bind(this);
         this.convertExpenseToExpenseCard = this.convertExpenseToExpenseCard.bind(this);
+        this.setActiveExpandedExpenseCard = this.setActiveExpandedExpenseCard.bind(this);
+        this.renderPageLoadingView = this.renderPageLoadingView.bind(this);
     }
 
+    /* We make two API requests when our component mounts. We make an api call to return the list of
+     * properties associated with the user. We also make an API request to return the list of
+     * expenses associated with the user.
+     */
     componentDidMount() {
+        
+        let userID = this.state.user["id"];
+        let getPropertiesListURL = URLBuilder('api/user/property/', userID);
+        let getExpensesListURL = URLBuilder('api/user/expenses/', userID);
 
-        // Load our properties list.
-        axios({
-            method: 'get',
-            url:  URLBuilder('api/user/property/',this.state.user["id"]),
-        }).then(response => {
+        const getPropertiesRequest = axios.get(getPropertiesListURL);
+        const getExpensesRequest = axios.get(getExpensesListURL);
 
-            var propertiesList = response.data
+        axios.all(
+            [getPropertiesRequest, getExpensesRequest]
+        ).then(axios.spread((...responses) => {
+            const propertiesRequestReponse = responses[0];
+            const expensesRequestResponse = responses[1];
 
-            var propertiesMap = new Map();
-            for (var i = 0; i < propertiesList.length; i++) {
-                var propertyID = propertiesList[i]["id"];
-                var propertyAddress = propertiesList[i]["address"];
+            /* Handle our properties response */
+            let propertiesList = propertiesRequestReponse.data;
+            let propertiesMap = new Map();
+            for (let i = 0; i < propertiesList.length; i++) {
+                let property = propertiesList[i];
+                let propertyID = property["id"];
+                let propertyAddress = property["address"];
                 propertiesMap.set(propertyID, propertyAddress);
             }
             /* Set 'None' and 'All' to handle cases where expenses are not mapped to any/are mapped to all properties */
             propertiesMap.set("None", "None");
             propertiesMap.set("All", "All");
-            this.setState({
-                propertiesMap: propertiesMap,
-            });
-        }).catch(error => {
-            console.log(error);
-            this.setState({
-                isLoading: false
-            })
-        });
 
-        axios({
-            method: 'get',
-            url: URLBuilder('api/user/expenses/',this.state.user["id"]),
-        }).then(response => {
-
-            var expensesMap = this.state.expensesMap;
+            /* Handle our expenses response */
+            let expensesMap = new Map();
             // response.data is an array of expenses. Order them by property IDs -> expenses.
-            var expenses = response.data.sort(
+            let expenses = expensesRequestResponse.data.sort(
                 this.getSortFunction(this.state.currFieldToggledDirectionIsUp, this.state.currFieldToggled)
             );
-            for (var i = 0; i < expenses.length; i++) {
+            for (let i = 0; i < expenses.length; i++) {
                 let expense = expenses[i];
                 expensesMap.set(expense["id"], expense);
             }
+
             this.setState({
+                propertiesMap: propertiesMap,
                 expenses: expenses,
                 expensesMap: expensesMap,
-                isLoading: false,
-            })
-        }).catch(error => {
-
-        })
+                isLoading: false
+            });
+        })).catch(errors => {
+            console.log(errors);
+        });
     }
 
     handleSearchBar(e) {
-        var searchValue = e.target.value.toLowerCase().replace(/\s/g, "");
+        let searchValue = e.target.value.toLowerCase().replace(/\s/g, "");
         this.setState({
             activeSearchExpenses: this.state.expenses.filter(expense => {
                 return expense["title"].toLowerCase().replace(/\s/g, "").startsWith(searchValue);
@@ -199,7 +218,7 @@ class ExpensesDashboard extends React.Component {
     }
 
     expenseFormDataToExpense(expenseFormData) {
-        var object = [];
+        let object = [];
         for (const [key, value]  of expenseFormData) {
             object[key] = value;
         }
@@ -212,9 +231,9 @@ class ExpensesDashboard extends React.Component {
             url: 'api/user/expenses/' + this.state.user["id"],
             data: expenseFormData
         }).then(response => {
-            var expense = response.data;
+            let expense = response.data;
 
-            var expensesMap = this.state.expensesMap;
+            let expensesMap = this.state.expensesMap;
             expensesMap.set(expense["id"], expense);
 
             this.setState({
@@ -226,6 +245,12 @@ class ExpensesDashboard extends React.Component {
         })
     }
 
+    setActiveExpandedExpenseCard(expense) {
+        this.setState({
+            currActiveExpandedExpense: expense,
+        })
+    }
+
     // deleteExpense(expenseID, properties) {
     //     console.log(properties);
     //     axios({
@@ -233,15 +258,15 @@ class ExpensesDashboard extends React.Component {
     //         url: 'api/user/expenses/' + this.state.user["id"] + "/" + expenseID,
     //     }).then(response => {
     //         console.log(response);
-    //         var propertiesToExpenses = this.state.propertiesToExpenses;
+    //         let propertiesToExpenses = this.state.propertiesToExpenses;
 
-    //         for (var i = 0; i < properties.length; i++) {
+    //         for (let i = 0; i < properties.length; i++) {
     //             let propertyID = properties[i];
     //             if (!propertiesToExpenses.has(propertyID)) {
     //                 continue;
     //             }
     //             let propertiesToExpensesArr = propertiesToExpenses.get(propertyID);
-    //             for (var j = 0; j < propertiesToExpensesArr.length; j++) {
+    //             for (let j = 0; j < propertiesToExpensesArr.length; j++) {
     //                 if (propertiesToExpensesArr[j]["id"] === expenseID){
     //                     propertiesToExpensesArr.splice(j, 1);
     //                 }
@@ -304,25 +329,25 @@ class ExpensesDashboard extends React.Component {
 
     renderExpenseTableElements() {
         
-        var expensesMap = this.state.expensesMap;
+        let expensesMap = this.state.expensesMap;
 
         // We need to sort our expensesMap by the current user selection.
-        var sortFn = this.getSortFunction(this.state.currFieldToggled, this.state.currFieldToggledDirectionIsUp);
-        // var sortedExpensesArr = expensesMap.entries().sort(sortFn);
-        var expensesArr = [];
+        let sortFn = this.getSortFunction(this.state.currFieldToggled, this.state.currFieldToggledDirectionIsUp);
+        // let sortedExpensesArr = expensesMap.entries().sort(sortFn);
+        let expensesArr = [];
         expensesMap.forEach((expense, expenseID, map) => {
             expensesArr.push(expense);
         })
 
         expensesArr.sort();
-        var elements = [];
+        let elements = [];
 
-        var expenses = this.state.expenses.sort(sortFn);
+        let expenses = this.state.expenses.sort(sortFn);
 
-        for (var i = 0; i < expenses.length; i++) {
+        for (let i = 0; i < expenses.length; i++) {
             let expense = expenses[i];
 
-            var expenseCard = this.convertExpenseToExpenseCard(expense);
+            let expenseCard = this.convertExpenseToExpenseCard(expense);
             elements.push(expenseCard);
         }
         return elements;
@@ -330,13 +355,13 @@ class ExpensesDashboard extends React.Component {
 
     convertExpenseToExpenseCard(expense) {
         let expenseProperties = expense["properties"] ? expense["properties"] : ["None"];
-        var propertiesMap = this.state.propertiesMap;
+        let propertiesMap = this.state.propertiesMap;
 
-        var properties = [];
+        let properties = [];
         if (expenseProperties.length > 0) {
             /* If we have more than 5 associated properties, only show the first 5 */
-            var maxLength = expenseProperties.length < 5 ? expenseProperties.length : 5;
-            for (var j = 0; j < maxLength; j++) {
+            let maxLength = expenseProperties.length < 5 ? expenseProperties.length : 5;
+            for (let j = 0; j < maxLength; j++) {
                 let expensePropertyID = expenseProperties[j];
                 properties.push(
                     <p className="expenses_table_first_row_subtitle">
@@ -365,7 +390,8 @@ class ExpensesDashboard extends React.Component {
                 state: {
                     properties: properties,
                     expense: expense,
-                    deleteExpense: this.deleteExpense
+                    deleteExpense: this.deleteExpense,
+                    setActiveExpandedExpenseCard: this.setActiveExpandedExpenseCard,
                 }
             }}/>
         );
@@ -373,9 +399,9 @@ class ExpensesDashboard extends React.Component {
 
     renderActiveSearchExpenses() {
         if (this.state.activeSearchExpenses && this.state.activeSearchExpenses.length > 0){
-            var activeSearchExpenses = this.state.activeSearchExpenses;
-            var elements = [];
-            for (var i = 0; i < activeSearchExpenses.length; i++) {
+            let activeSearchExpenses = this.state.activeSearchExpenses;
+            let elements = [];
+            for (let i = 0; i < activeSearchExpenses.length; i++) {
                 let activeSearchExpense = activeSearchExpenses[i];
                 elements.push(this.convertExpenseToExpenseCard(activeSearchExpense));
             }
@@ -386,9 +412,10 @@ class ExpensesDashboard extends React.Component {
 
     renderNoExpenses() {
         return (
-            <div>
-                <p>
-                    No Expenses
+            <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
+                <RiErrorWarningFill className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></RiErrorWarningFill>
+                <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
+                    No Expenses Found
                 </p>
             </div>
         )
@@ -478,6 +505,20 @@ class ExpensesDashboard extends React.Component {
         )
     }
 
+    renderPageLoadingView() {
+        return (
+            <div className="expenses_dashboard_body_inner_box">
+                <div className="expenses_dashboard_body_inner_box_most_recent_box">
+                <div className="expenses_table">
+                    <div className="expenses_table_title_row">
+                        
+                    </div>
+                </div>
+                </div>
+            </div>
+        );
+    }
+
     render() {
         return (
             <div>
@@ -505,6 +546,17 @@ class ExpensesDashboard extends React.Component {
                             ></CreateExpenseModal>
                         </div> :
                         <div></div>}
+                    {this.state.currActiveExpandedExpense !== null ? 
+                        <div className="expenses_dashboard_display_add_expense_box">
+                            <ExpandedExpenseCard data={{
+                                state: {
+                                    expense: this.state.currActiveExpandedExpense,
+                                    setActiveExpandedExpenseCard: this.setActiveExpandedExpenseCard,
+                                }
+                            }}>
+                            </ExpandedExpenseCard>
+                        </div> :
+                        <div></div>}
                     <div className="expenses_dashboard_parent_inner_box">
                         <div className="expenses_dashboard_title_box">
                             <div className="expenses_dashboard_parent_inner_box_title">
@@ -525,7 +577,8 @@ class ExpensesDashboard extends React.Component {
                                     Add Expense
                                 </div>
                             </div>
-                            {this.state.isLoading ? <div></div> : 
+                            {this.state.isLoading ? 
+                            this.renderPageLoadingView() : 
                             <div className="expenses_dashboard_body_inner_box">
                                 <div className="expenses_dashboard_body_inner_box_most_recent_box">
                                     {this.renderExpenseTableTitle()}

@@ -72,7 +72,7 @@ class FileCard extends React.Component {
                 // onDoubleClick={() => this.doubleClickCard()}
                 onMouseDown={() => this.clickCard()}
                 >
-                {this.state.mapFileTypeToIcon(this.state.file["metadata"]["file_type"], true, this.state.isClicked)}
+                {this.state.mapFileTypeToIcon(this.state.file["metadata"]["file_type"], "small", this.state.isClicked)}
                 <div className="file_card_individual_file_footer">
                     <p className={
                         this.state.isClicked ?
