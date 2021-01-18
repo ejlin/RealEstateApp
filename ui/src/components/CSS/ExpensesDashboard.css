@@ -147,7 +147,7 @@
     float: left;
     height: calc(72vh);
     min-height: 650px;
-    min-width: 1200px;
+    min-width: 1000px;
     overflow: hidden;
     width: 100%;
 }
@@ -174,13 +174,13 @@
 
 .expenses_table_first_row_long {
     float: left;
-    width: 27.5%;
+    width: 25%;
 }
 
 .expenses_table_first_row_short {
     float: left;
     min-width: 100px;
-    width: calc((34% - 60px)/3);
+    width: calc((50% - 5% - 80px)/3);
 }
 
 .expenses_table_first_row_title {

@@ -7,6 +7,8 @@ import './CSS/Style.css';
 import { capitalizeName, numberWithCommas } from './MainDashboard.js';
 import { convertDate } from './ExpensesDashboard.js';
 
+import { trimTrailingName } from '../utility/Util.js';
+
 import { 
     IoCalendarClearSharp, 
     IoCloseOutline, 
@@ -15,9 +17,9 @@ import {
     IoCardSharp, 
     IoDocumentTextSharp, 
     IoAttachSharp,
-    IoFlag } from 'react-icons/io5';
-import { SiGooglecalendar } from 'react-icons/si';
-import { FaMoneyCheck } from 'react-icons/fa';
+    IoFlag,
+    IoPaperPlane } from 'react-icons/io5';
+import { BsFillHouseFill } from 'react-icons/bs';
 
 let URLBuilder = require('url-join');
 
@@ -27,58 +29,68 @@ class ExpandedExpenseCard extends React.Component {
         super(props);
 
         this.state = {
+            user: this.props.data.state.user,
             expense: this.props.data.state.expense,
+            propertiesMap: this.props.data.state.propertiesMap,
             setActiveExpandedExpenseCard: this.props.data.state.setActiveExpandedExpenseCard,
+            isLoading: true,
         };
+
+        this.renderAssociatedPropertiesTags = this.renderAssociatedPropertiesTags.bind(this);
     }
 
     componentDidMount() {
 
         let userID = this.state.user["id"];
-        let getPropertiesListURL = URLBuilder('api/user/property/', userID);
+        let fileID = this.state.expense["file_id"];
+        if (fileID !== null && fileID !== undefined && fileID !== "") {
+            let getFileURL = URLBuilder('api/user/files/', userID, fileID);
 
-        const getPropertiesRequest = axios.get(getPropertiesListURL);
-        const getExpensesRequest = axios.get(getExpensesListURL);
-
-        axios.all(
-            [getPropertiesRequest, getExpensesRequest]
-        ).then(axios.spread((...responses) => {
-            const propertiesRequestReponse = responses[0];
-            const expensesRequestResponse = responses[1];
-
-            /* Handle our properties response */
-            let propertiesList = propertiesRequestReponse.data;
-            let propertiesMap = new Map();
-            for (let i = 0; i < propertiesList.length; i++) {
-                let property = propertiesList[i];
-                let propertyID = property["id"];
-                let propertyAddress = property["address"];
-                propertiesMap.set(propertyID, propertyAddress);
-            }
-            /* Set 'None' and 'All' to handle cases where expenses are not mapped to any/are mapped to all properties */
-            propertiesMap.set("None", "None");
-            propertiesMap.set("All", "All");
-
-            /* Handle our expenses response */
-            let expensesMap = new Map();
-            // response.data is an array of expenses. Order them by property IDs -> expenses.
-            let expenses = expensesRequestResponse.data.sort(
-                this.getSortFunction(this.state.currFieldToggledDirectionIsUp, this.state.currFieldToggled)
-            );
-            for (let i = 0; i < expenses.length; i++) {
-                let expense = expenses[i];
-                expensesMap.set(expense["id"], expense);
-            }
-
-            this.setState({
-                propertiesMap: propertiesMap,
-                expenses: expenses,
-                expensesMap: expensesMap,
-                isLoading: false
+            const getFileRequest = axios.get(getFileURL);
+    
+            axios.all(
+                [getFileRequest]
+            ).then(axios.spread((...responses) => {
+                const fileRequestResponse = responses[0];
+    
+                // Response is an object with
+                // [id, name, created_at, last_modified_at, get_signed_url]
+                let file = fileRequestResponse.data;
+    
+                this.setState({
+                    file: file,
+                    isLoading: false,
+                })
+            })).catch(errors => {
+                console.log(errors);
             });
-        })).catch(errors => {
-            console.log(errors);
-        });
+        }
+    }
+
+    renderAssociatedPropertiesTags() {
+
+        let expense = this.state.expense;
+        let propertiesMap = this.state.propertiesMap;
+
+        let properties = [];
+        let expenseProperties = expense["properties"];
+
+        for (let i = 0; i < expenseProperties.length; i++) {
+            let propertyID = expenseProperties[i];
+            // Only add if we can map a property id to an address.
+            if (propertiesMap.has(propertyID)) {
+                let address = propertiesMap.get(propertyID);
+                properties.push(
+                    <div className="expanded_expense_card_property_tag">
+                        <p className="expanded_expense_card_property_tag_text">
+                            {trimTrailingName(address, 18)}
+                        </p>
+                    </div>
+                );
+            }
+        }
+
+        return properties;
     }
 
     render() {
@@ -127,12 +139,28 @@ class ExpandedExpenseCard extends React.Component {
                                 File
                             </p>
                             <p className="expanded_expense_card_body_left_box_element_box_actual_text">
-                                {this.state.expense["file_id"]}
+                                {this.state.file && this.state.file["name"] ? trimTrailingName(this.state.file["name"], 20) : "None"}
                             </p>
                         </div>
                     </div>
-                    <div className="expanded_expense_card_body_right_box">
-
+                    {this.state.expense["properties"] ? 
+                    <div className="expanded_expense_card_body_associated_properties_box">
+                        <BsFillHouseFill className="expanded_expense_card_body_left_box_element_box_icon"></BsFillHouseFill>
+                        <p className="expanded_expense_card_body_left_box_element_box_text">
+                            Properties
+                        </p>
+                        <div className="clearfix"></div>
+                        {this.renderAssociatedPropertiesTags()}
+                    </div> : <div></div>}
+                    <div className="expanded_expense_card_body_associated_properties_box">
+                        <IoPaperPlane className="expanded_expense_card_body_left_box_element_box_icon"></IoPaperPlane>
+                        <p className="expanded_expense_card_body_left_box_element_box_text">
+                            Description
+                        </p>
+                        <div className="clearfix"></div>
+                        <p className="expanded_expense_card_body_left_box_element_box_subtext">
+                            {this.state.expense["description"]}
+                        </p>
                     </div>
                     {/* <p className="expanded_expense_card_name_text expanded_expense_card_description_text">
                         {this.state.expense["description"]}

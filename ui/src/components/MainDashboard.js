@@ -189,11 +189,11 @@ class MainDashboard extends React.Component {
         return (
             <div className="main_dashboard_bottom_left_box_bottom_inner_box_text_box">
                 <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_title_two">
-                    ${this.state.totalExpenses ? this.state.totalExpenses : 0}
+                    ${this.state.totalExpenses ? numberWithCommas(this.state.totalExpenses) : 0}
                 </p>
                 <div className="clearfix"/>
                 <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_subtitle_two">
-                    in expenses this month
+                    expenses this month
                 </p>
             </div>  
         )

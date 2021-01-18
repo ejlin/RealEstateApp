@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"net/http"
+	"path"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -229,8 +230,8 @@ func (s *Server) getFile(w http.ResponseWriter, r *http.Request) {
 type RestFile struct {
 	ID             string    `json:"id,omitempty"`
 	Name           string    `json:"name,omitempty"`
-	CreatedAt      time.Time `json:"created_at,omitempty"`
-	LastModifiedAt time.Time `json:"last_modified_at,omitempty"`
+	CreatedAt      *time.Time `json:"created_at,omitempty"`
+	LastModifiedAt *time.Time `json:"last_modified_at,omitempty"`
 	GetSignedURL   string    `json:"get_signed_url,omitempty"`
 }
 
@@ -280,6 +281,8 @@ func (s *Server) getFileByID(w http.ResponseWriter, r *http.Request) {
 		GetSignedURL:   fileGetSignedURL,
 	}
 
+	ll.Info().Msg("returned file by id")
+	
 	RespondToRequest(w, restFile)
 	return
 }

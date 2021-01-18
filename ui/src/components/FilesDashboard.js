@@ -14,6 +14,8 @@ import ProgressBar from './../utility/ProgressBar.js';
 import { MdFileDownload, MdEdit } from 'react-icons/md';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { IoTrashSharp } from 'react-icons/io5';
+import { GoFileDirectory } from 'react-icons/go';
+import { FaFolder } from 'react-icons/fa';
 import { 
     AiFillFile, 
     AiFillFileImage, 
@@ -209,6 +211,7 @@ class FilesDashboard extends React.Component {
         this.trimTrailingFileName = this.trimTrailingFileName.bind(this);
         this.convertPropertyToFilesMapToElements = this.convertPropertyToFilesMapToElements.bind(this);
         this.closeFileUpload = this.closeFileUpload.bind(this);
+        this.renderFolders = this.renderFolders.bind(this);
     }
 
     componentDidMount() {
@@ -269,7 +272,7 @@ class FilesDashboard extends React.Component {
                 propertiesMap.set(propertyID, propertyAddress);
             }
             this.setState({
-                properties: [...propertiesMap],
+                propertiesMap: propertiesMap,
                 isPropertiesLoading: false
             });
         }).catch(error => {
@@ -588,6 +591,35 @@ class FilesDashboard extends React.Component {
     //     </div>);
     // }
 
+    renderFolders() {
+
+        let propertiesMap = this.state.propertiesMap;
+
+        let folders = [];
+
+        // Add our All folder(s).
+        folders.push(
+            <div className="files_dashboard_folder_card">
+                <GoFileDirectory className="files_dashboard_folder_card_icon"></GoFileDirectory>
+                <p className="files_dashboard_folder_card_text">
+                    All
+                </p>
+            </div>
+        );
+        
+        propertiesMap.forEach((value, key, map) => {
+            folders.push(
+                <div className="files_dashboard_folder_card">
+                    <GoFileDirectory className="files_dashboard_folder_card_icon"></GoFileDirectory>
+                    <p className="files_dashboard_folder_card_text">
+                        {value}
+                    </p>
+                </div>
+            )
+        })
+        return folders;
+    }
+
     render() {
         return (
             <div>
@@ -624,7 +656,7 @@ class FilesDashboard extends React.Component {
                     {this.state.isFileLoading || this.state.isPropertiesLoading ? <div></div> : 
                     <div>
                         <div id="files_dashboard_icons_box">
-                            <div   
+                            {/*<div   
                                 id="files_dashboard_category_parent"
                                 className="files_dashboard_filter_and_sort_box" 
                                 onMouseEnter={() => this.setState({displayCategoryBox: true})} 
@@ -739,15 +771,15 @@ class FilesDashboard extends React.Component {
                                     <IoMdArrowDropdown id="files_dashboard_sort_icon" className={this.state.sortTypeArrowDown ? "" : "files_dashboard_sort_icon_up"}></IoMdArrowDropdown>
                                     
                                 </div>
-                            </div>
-                            {
+                            </div> */}
+                            {/* {
                                 this.state.displaySortBox ? 
                                 <div 
                                     id="files_dashboard_sort_options_box" 
                                     className="files_dashboard_category_and_sort_options_box"
                                     onMouseEnter={() => this.setState({displaySortBox: true})} 
                                     onMouseLeave={() => this.setState({displaySortBox: false})}>
-                                    {/* {this.renderSortOptions()} */}
+                                    {this.renderSortOptions()}
                                     <li className={
                                             this.state.sortType === "A-Z" ? 
                                             "files_dashboard_sort_options_list files_dashboard_sort_focus" : 
@@ -773,7 +805,7 @@ class FilesDashboard extends React.Component {
                                     </li>
                                 </div> : 
                                 <div></div>
-                            }
+                            } */}
                             <div 
                                 className="files_dashboard_upload_file_text_button" 
                                 onClick={() => this.setState({
@@ -793,7 +825,11 @@ class FilesDashboard extends React.Component {
                         </div>                        
                         <div className="clearfix"/>
                         <div id="files_dashboard_files_box">
-                            {
+                            {this.state.isLoading ? 
+                                <div></div> : 
+                                this.renderFolders()    
+                            }
+                            {/* {
                                 this.state.isLoading ? 
                                 <div></div> : 
                                 (
@@ -804,7 +840,7 @@ class FilesDashboard extends React.Component {
                                     this.renderNoFiles()
                                     )
                                 )
-                            }
+                            } */}
                         </div>
                     </div>}
                     <NotificationSidebar data={{

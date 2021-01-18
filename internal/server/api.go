@@ -32,9 +32,9 @@ func (s *Server) HandleRoutes() {
 	r.HandleFunc("/api/user/summary/{id}", s.getUserSummary).Methods("GET")
 
 	// Order matters. Routing is done sequentially, so the first one must be the one that doesn't satisfy the second one.
-	r.HandleFunc("/api/user/files/{id}/{property_id}/{file_name}", s.getFile).Queries("request", "{request}").Methods("GET")
-	r.HandleFunc("/api/user/files/{id}/{property_id}/{file_name}", s.deleteFile).Methods("DELETE")
-	r.HandleFunc("/api/user/files/{id}/{property_id}", s.getPropertyFileslistByUser).Methods("GET")
+	r.HandleFunc("/api/user/files/property/{id}/{property_id}/{file_name}", s.getFile).Queries("request", "{request}").Methods("GET")
+	r.HandleFunc("/api/user/files/property/{id}/{property_id}/{file_name}", s.deleteFile).Methods("DELETE")
+	r.HandleFunc("/api/user/files/property/{id}/{property_id}", s.getPropertyFileslistByUser).Methods("GET")
 	r.HandleFunc("/api/user/files/{id}/{file_id}", s.getFileByID).Methods("GET")
 	r.HandleFunc("/api/user/files/{id}", s.getFileslistByUser).Methods("GET")
 	// r.HandleFunc("/api/user/files/upload/{id}/{property_id}", s.getStoreFileSignedURL).Queries("file_name", "{file_name}").Methods("GET")

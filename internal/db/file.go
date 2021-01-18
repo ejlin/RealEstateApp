@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/jinzhu/gorm"
 )
 
 type File struct {
@@ -48,15 +47,15 @@ func (handle *Handle) GetFileById(userID, fileID string) (*File, error) {
 		return nil, err
 	}
 
-	_, err := uuid.Parse(fileID)
+	_, err = uuid.Parse(fileID)
 	if err != nil {
 		return nil, err
 	}
 
-	var file *File
-	if err := handle.DB.Where("user_id = ? AND file_id = ?", userID, fileID).Fine(&file).Error; err != nil {
+	file := File{}
+	if err := handle.DB.Where("user_id = ? AND id = ?", userID, fileID).Find(&file).Error; err != nil {
 		return nil, err
 	}
 
-	return file, nil
+	return &file, nil
 }

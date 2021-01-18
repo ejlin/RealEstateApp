@@ -75,7 +75,7 @@
 }
 
 .expanded_expense_card_body_left_box_element_box {
-    height: 22.5px;
+    height: 17.5px;
     margin-bottom: 15px;
     width: 100%;
 }
@@ -83,17 +83,61 @@
 .expanded_expense_card_body_left_box_element_box_icon {
     color:  #296CF6;
     float: left;
-    height: 22.5px;
-    width: 22.5px;
+    height: 17.5px;
+    width: 17.5px;
 }
 
 .expanded_expense_card_body_left_box_element_box_text {
     float: left;
-    line-height: 22.5px;
+    line-height: 17.5px;
+    margin-bottom: 10px;
     margin-left: 10px;
 }
 
 .expanded_expense_card_body_left_box_element_box_actual_text {
     float: right;
     font-weight: bold;
+}
+
+.expanded_expense_card_body_right_box {
+    float: left;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.expanded_expense_card_body_associated_properties_box {
+    float: left;
+    margin-bottom: 15px;
+    margin-top: 0px;
+    width: 100%;
+}
+
+.expanded_expense_card_property_tag {
+    background-color: #296CF6;
+    border-radius: 4px;
+    height: 35px;
+    margin-top: 10px;
+    width: 48%;
+}
+
+.expanded_expense_card_property_tag:nth-child(even) {
+    float: left;
+}
+
+.expanded_expense_card_property_tag:nth-child(odd) {
+    float: right;
+}
+
+.expanded_expense_card_property_tag_text {
+    color: white;
+    line-height: 35px;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: center;
+    width: calc(100% - 20px);
+}
+
+.expanded_expense_card_body_left_box_element_box_subtext {
+    float: left;
+    margin-top: 15px;
 }

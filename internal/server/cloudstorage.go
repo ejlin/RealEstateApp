@@ -267,8 +267,6 @@ func (s *Server) generateStoreFileSignedURL(ctx context.Context, userID, propert
 // getSignedURL returns a signed url.
 func (s *Server) getSignedURL(ctx context.Context, key string) (string, error) {
 
-	key := path.Join(userID, propertyDelimiter, propertyID, fileName)
-
 	ll := log.With().Str("key", key).Logger()
 
 	url, err := storage.SignedURL(s.UsersBucket, key, &storage.SignedURLOptions{

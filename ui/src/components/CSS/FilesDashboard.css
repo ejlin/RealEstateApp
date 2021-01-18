@@ -248,6 +248,7 @@
 #files_dashboard_files_box {
     margin-left: 60px;
     margin-right: 60px;
+    margin-top: 15px;
     width: calc(100% - 120px);
 }
 
@@ -417,4 +418,31 @@ input[type=number] {
     position: absolute;
     width: calc(100%);
     z-index: 5;
+}
+
+.files_dashboard_folder_card {
+    background-color: white;
+    border-radius: 4px;
+    float: left;
+    height: 60px;
+    margin-right: 25px;
+    width: calc((100% - 75px)/4);
+}
+
+.files_dashboard_folder_card_icon {
+    color: #296CF6;
+    float: left;
+    height: 30px;
+    margin-left: 20px;
+    margin-right: 15px;
+    margin-top: calc((60px - 30px)/2);
+    width: 30px;
+}
+
+.files_dashboard_folder_card_text {
+    color: grey;
+    float: left;
+    font-weight: bold;
+    line-height: 60px;
+    user-select: none;
 }

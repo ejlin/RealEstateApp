@@ -550,7 +550,9 @@ class ExpensesDashboard extends React.Component {
                         <div className="expenses_dashboard_display_add_expense_box">
                             <ExpandedExpenseCard data={{
                                 state: {
+                                    user: this.state.user,
                                     expense: this.state.currActiveExpandedExpense,
+                                    propertiesMap: this.state.propertiesMap,
                                     setActiveExpandedExpenseCard: this.setActiveExpandedExpenseCard,
                                 }
                             }}>

@@ -249,7 +249,7 @@
 }
 
 .analysis_dashboard_inner_box_middle_cards_right_element_box_title {
-    font-size: 1.8em;
+    font-size: 1.5em;
     font-weight: bold;
     margin-top: 10px;
     text-align: center;
@@ -258,7 +258,7 @@
 .analysis_dashboard_inner_box_middle_cards_right_element_box_subtitle {
     font-size: 1em;
     margin-left: 10%;
-    margin-top: 5px;
+    margin-top: 0px;
     text-align: center;
     width: 80%;
 }
