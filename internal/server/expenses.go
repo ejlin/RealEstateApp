@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"path"
 	"strconv"
@@ -164,17 +165,19 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var noFileAttached bool
 	formFile, handler, err := r.FormFile("file")
 	if err != nil {
-		ll.Error().Err(err).Msg("error retrieving the file")
-		http.Error(w, "error retrieving the file", http.StatusBadRequest)
-		return
+		if errors.Is(err, http.ErrMissingFile) {
+			noFileAttached = true	
+		} else {
+			ll.Error().Err(err).Msg("error retrieving the file")
+			http.Error(w, "error retrieving the file", http.StatusBadRequest)
+			return
+		}
 	}
-	defer formFile.Close()
-
-	fileName := handler.Filename
-	if fileName == "" {
-		fileName = title + "-file"
+	if !noFileAttached {
+		defer formFile.Close()
 	}
 
 	frequency := r.FormValue("frequency")
@@ -243,11 +246,16 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var file *db.File
-
-	// The key to an expense file is {userID}/expenses/{expense_name}/{file_name}
-	fileKey := path.Join(userID, "expenses", title, fileName)
-
-	if formFile != nil {
+	var fileKey string 
+	if !noFileAttached {
+		fileName := handler.Filename
+		if fileName == "" {
+			fileName = title + "-file"
+		}
+	
+		// The key to an expense file is {userID}/expenses/{expense_name}/{file_name}
+		fileKey = path.Join(userID, "expenses", title, fileName)
+	
 		file = &db.File{
 			ID:             uuid.New().String(),
 			UserID:         userID,
@@ -261,7 +269,7 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 	} else {
 		file = nil
 	}
-
+	
 	addFileToCloudStorage := func() func(ctx context.Context) error {
 		return func(ctx context.Context) error {
 			return cloudstorage.AddCloudstorageFile(ctx, s.StorageClient, formFile, s.UsersBucket, fileKey)
@@ -293,6 +301,7 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) deleteExpense(w http.ResponseWriter, r *http.Request) {
 
+	ctx := r.Context()
 	vars := mux.Vars(r)
 
 	userID, ok := vars["id"]
@@ -311,7 +320,11 @@ func (s *Server) deleteExpense(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := s.DBHandle.DeleteExpenseByID(userID, expenseID)
+	deleteFileFromCloudstorage := func(ctx context.Context, filePath string) error {
+		return s.deleteStorageFile(ctx, filePath)
+	}
+
+	err := s.DBHandle.DeleteExpenseByID(ctx, userID, expenseID, deleteFileFromCloudstorage)
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to delete expense")
 		http.Error(w, "unable to delete expense", http.StatusInternalServerError)

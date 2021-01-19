@@ -282,7 +282,7 @@ func (s *Server) getFileByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ll.Info().Msg("returned file by id")
-	
+
 	RespondToRequest(w, restFile)
 	return
 }
@@ -319,7 +319,9 @@ func (s *Server) deleteFile(w http.ResponseWriter, r *http.Request) {
 
 	ll = ll.With().Str("file_name", fileName).Logger()
 
-	err := s.deleteStorageFile(ctx, userID, propertyID, fileName)
+	key := path.Join(userID, propertyDelimiter, propertyID, fileName)
+
+	err := s.deleteStorageFile(ctx, key)
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to delete file")
 		http.Error(w, "unable to delete file", http.StatusInternalServerError)

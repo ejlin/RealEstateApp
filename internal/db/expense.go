@@ -44,7 +44,7 @@ const (
 // within a transaction so we can roll them back if any of them fail.
 // We also need to upload our file to google cloud storage. If it fails to upload, roll back these
 // transactions.
-func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, propertyIDs []string, file *File, fn func(ctx context.Context) error) error {
+func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, propertyIDs []string, file *File, addFileToCloudstorage func(ctx context.Context) error) error {
 
 	if expense == nil {
 		return errors.New("nil expense")
@@ -56,17 +56,17 @@ func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, property
 			return fmt.Errorf("error adding expense: %w", err)
 		}
 
+		var fileID string
+		var fileValid bool
+		if file != nil {
+			fileID = file.ID
+			fileValid = true
+		}
+
 		for _, propertyID := range propertyIDs {
 
 			if propertyID == "" {
 				continue
-			}
-
-			var fileID string
-			var fileValid bool
-			if file != nil {
-				fileID = file.ID
-				fileValid = true
 			}
 
 			var expenseID string
@@ -106,7 +106,7 @@ func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, property
 			// TLDR: File upload to GCS _must_ come last after all db operations
 			// because we can rollback db operations, but we cannot rollback
 			// GCS uploads.
-			if err := fn(ctx); err != nil {
+			if err := addFileToCloudstorage(ctx); err != nil {
 				return err
 			}
 		}
@@ -160,7 +160,7 @@ func (handle *Handle) GetExpensesByUser(userID string) ([]*Expense, error) {
 }
 
 // RemoveExpenseByID will delete an expense from our database.
-func (handle *Handle) DeleteExpenseByID(userID, expenseID string) error {
+func (handle *Handle) DeleteExpenseByID(ctx context.Context, userID, expenseID string, deleteFileFromCloudstorage func(ctx context.Context, filePath string) error) error {
 
 	// TODO: eric.lin to explore gorm soft delete options. Provide users with undo method.
 
@@ -172,6 +172,28 @@ func (handle *Handle) DeleteExpenseByID(userID, expenseID string) error {
 	_, err = uuid.Parse(expenseID)
 	if err != nil {
 		return fmt.Errorf("invalid UUID: %w", err)
+	}
+
+	// Fetch our file first so we can delete it from GCS.
+	propertyReference := PropertiesReferences{
+		ExpenseID: sql.NullString{
+			String: expenseID,
+		},
+	}
+
+	// Fetch any associated files.
+	if err := handle.DB.Where("expense_id = ?", expenseID).Find(&propertyReference).Error; err != nil {
+		return err
+	}
+
+	fileID := propertyReference.FileID.String
+
+	// If there is a file associated with this expense, fetch the file path so we can delete it from our cloudstorage.
+	file := File{}
+	if fileID != "" {
+		if err := handle.DB.Where("id = ?", fileID).Find(&file).Error; err != nil {
+			return err
+		}
 	}
 
 	return handle.DB.Transaction(func(tx *gorm.DB) error {
@@ -190,8 +212,23 @@ func (handle *Handle) DeleteExpenseByID(userID, expenseID string) error {
 			return err
 		}
 
+		if fileID != "" {
+			if err := tx.Where("id = ?", fileID).Delete(&file).Error; err != nil {
+				return err
+			}
+		}
+
 		if err := tx.Where("expense_id = ?", expenseID).Delete(&propertyReference).Error; err != nil {
 			return err
+		}
+
+		// Delete our file from cloudstorage. This line must go last. File upload to GCS _must_ 
+		// come last after all db operations because we can rollback db operations, but we cannot 
+		// rollback GCS uploads.
+		if file.Path != "" {
+			if err := deleteFileFromCloudstorage(ctx, file.Path); err != nil {
+				return err
+			}
 		}
 
 		return nil

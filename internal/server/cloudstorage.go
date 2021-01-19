@@ -227,12 +227,10 @@ func (s *Server) getProfilePictureData(ctx context.Context, userID string) (stri
 }
 
 // deleteFile removes a file from cloudstorage bucket.
-func (s *Server) deleteStorageFile(ctx context.Context, userID, propertyID, fileName string) error {
+func (s *Server) deleteStorageFile(ctx context.Context, key string) error {
 
 	tCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
-
-	key := path.Join(userID, propertyDelimiter, propertyID, fileName)
 
 	o := s.StorageClient.Bucket(s.UsersBucket).Object(key)
 	if err := o.Delete(tCtx); err != nil {
