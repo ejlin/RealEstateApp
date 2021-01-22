@@ -14,6 +14,7 @@ import { trimTrailingName } from '../utility/Util.js';
 import { MdEdit } from 'react-icons/md';
 
 import { IoMdAttach } from 'react-icons/io';
+import { IoTrashSharp } from 'react-icons/io5';
 
 import { 
     IoCalendarClearSharp, 
@@ -141,6 +142,11 @@ class ExpandedExpenseCard extends React.Component {
                         <p className="expanded_expense_card_property_tag_text">
                             {trimTrailingName(address, 18)}
                         </p>
+                        {
+                            this.state.editInputs ?
+                            <IoTrashSharp className="expanded_expense_card_property_tag_trash_can_icon"></IoTrashSharp>:
+                            <div></div>
+                        }
                     </div>
                 );
             }
@@ -248,7 +254,7 @@ class ExpandedExpenseCard extends React.Component {
                             </p>
                             <p 
                                 onClick={() => {
-                                    if (this.state.file && this.state.file["get_signed_url"] && !this.state.editInputs) {
+                                    if (this.state.file && this.state.file["get_signed_url"] && !this.state) {
                                         let url = this.state.file["get_signed_url"];
                                         if (url !== "") {
                                             window.open(url, '_blank', 'noopener,noreferrer')
@@ -337,8 +343,14 @@ class ExpandedExpenseCard extends React.Component {
                                 {this.state.expense["description"]}
                             </p>
                         }
-                        
                     </div>
+                    {
+                        this.state.editInputs ?
+                        <div className="expanded_expense_card_save_edits_button">
+                            Save
+                        </div>:
+                        <div></div>
+                    }
                 </div>
             </div>
         );
