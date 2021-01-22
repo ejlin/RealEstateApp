@@ -107,7 +107,7 @@ func (s *Server) getExpensesByUser(w http.ResponseWriter, r *http.Request) {
 			// This will overwrite every iteration of our loop, but each expense can only have one file
 			// mapped to it currently, so it will overwrite with the same value every time.
 			fileID = propertyReferences.FileID.String
-			properties = append(properties, propertyReferences.PropertyID)
+			properties = append(properties, propertyReferences.PropertyID.String)
 		}
 
 		restExpenses = append(restExpenses, &RestExpense{
@@ -284,7 +284,7 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	RespondToRequest(w, &RestExpense{
+	restExpense := &RestExpense{
 		ID:             expense.ID,
 		UserID:         expense.UserID,
 		CreatedAt:      expense.CreatedAt,
@@ -295,8 +295,37 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		Frequency:      expense.Frequency,
 		Date:           expense.Date,
 		Properties:     associatedProperties,
-	})
+	}
+
+	if file != nil && file.ID != "" {
+		restExpense.FileID = file.ID
+	}
+
+	RespondToRequest(w, restExpense)
 	return
+}
+
+func (s *Server) editExpense(w http.ResponseWriter, r *http.Request) {
+
+	// vars := mux.Vars(r)
+
+	// userID, ok := vars["id"]
+	// if !ok {
+	// 	log.Info().Msg("missing user id")
+	// 	http.Error(w, "missing user id", http.StatusBadRequest)
+	// 	return
+	// }
+
+	// ll := log.With().Str("user_id", userID).Logger()
+
+	// expenseID, ok := vars["expense_id"]
+	// if !ok {
+	// 	ll.Info().Msg("missing expense id")
+	// 	http.Error(w, "missing expense id", http.StatusBadRequest)
+	// 	return
+	// }
+
+
 }
 
 func (s *Server) deleteExpense(w http.ResponseWriter, r *http.Request) {

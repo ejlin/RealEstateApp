@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 
+	"cloud.google.com/go/storage"
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 )
@@ -55,48 +56,53 @@ func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, property
 		if err := tx.FirstOrCreate(&expense, expense).Error; err != nil {
 			return fmt.Errorf("error adding expense: %w", err)
 		}
-
-		var fileID string
-		var fileValid bool
-		if file != nil {
-			fileID = file.ID
-			fileValid = true
-		}
-
-		for _, propertyID := range propertyIDs {
-
-			if propertyID == "" {
-				continue
-			}
-
-			var expenseID string
-			var expenseValid bool
-			if expense != nil {
-				expenseID = expense.ID
-				expenseValid = true
-			}
-
-			propertyReference := PropertiesReferences{
-				PropertyID: propertyID,
-				ExpenseID: sql.NullString{
-					String: expenseID,
-					Valid:  expenseValid,
-				},
-				FileID: sql.NullString{
-					String: fileID,
-					Valid:  fileValid,
-				},
-			}
-
-			if err := tx.FirstOrCreate(&propertyReference, propertyReference).Error; err != nil {
-				return fmt.Errorf("error adding property reference: %w", err)
-			}
-		}
-
+		
 		if file != nil {
 			if err := tx.FirstOrCreate(&file, file).Error; err != nil {
 				return fmt.Errorf("error adding file: %w", err)
 			}
+		}
+
+		var fileID string
+		if file != nil {
+			fileID = file.ID
+		}
+
+		var expenseID string
+		if expense != nil {
+			expenseID = expense.ID
+		}
+
+		fmt.Println(propertyIDs)
+
+		for _, propertyID := range propertyIDs {
+
+
+			propertyReference := PropertiesReferences{
+				ExpenseID: sql.NullString{
+					String: expenseID,
+					Valid:  true,
+				},
+				FileID: sql.NullString{
+					String: fileID,
+					Valid:  true,
+				},
+			}
+
+			if propertyID != "" {
+				propertyReference.PropertyID = sql.NullString{
+					String: propertyID,
+					Valid: true,
+				}
+			}
+
+			if err := tx.FirstOrCreate(&propertyReference, propertyReference).Error; err != nil {
+				return err
+			}
+		}
+		
+
+		if file != nil {
 
 			// Note: We MUST perform file operations in this order. First
 			// create the db record, _then_ create the GCS file. This is in
@@ -183,18 +189,29 @@ func (handle *Handle) DeleteExpenseByID(ctx context.Context, userID, expenseID s
 
 	// Fetch any associated files.
 	if err := handle.DB.Where("expense_id = ?", expenseID).Find(&propertyReference).Error; err != nil {
-		return err
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// If record is not found, continue.
+		} else {
+			return err
+		}
 	}
 
 	fileID := propertyReference.FileID.String
 
+	var fileRecordExists bool
 	// If there is a file associated with this expense, fetch the file path so we can delete it from our cloudstorage.
 	file := File{}
 	if fileID != "" {
 		if err := handle.DB.Where("id = ?", fileID).Find(&file).Error; err != nil {
-			return err
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				fileRecordExists = false
+			} else {
+				return err
+			}
 		}
+		fileRecordExists = true
 	}
+
 
 	return handle.DB.Transaction(func(tx *gorm.DB) error {
 
@@ -209,17 +226,24 @@ func (handle *Handle) DeleteExpenseByID(ctx context.Context, userID, expenseID s
 		}
 
 		if err := tx.Where("user_id = ?", userID).Delete(&expense).Error; err != nil {
-			return err
-		}
-
-		if fileID != "" {
-			if err := tx.Where("id = ?", fileID).Delete(&file).Error; err != nil {
+			if !errors.Is(err, gorm.ErrRecordNotFound) {
 				return err
+			}
+		}
+		
+
+		if fileID != "" && fileRecordExists{
+			if err := tx.Where("id = ?", fileID).Delete(&file).Error; err != nil {
+				if !errors.Is(err, gorm.ErrRecordNotFound) {
+					return err
+				}
 			}
 		}
 
 		if err := tx.Where("expense_id = ?", expenseID).Delete(&propertyReference).Error; err != nil {
-			return err
+			if !errors.Is(err, gorm.ErrRecordNotFound) {
+				return err
+			}
 		}
 
 		// Delete our file from cloudstorage. This line must go last. File upload to GCS _must_ 
@@ -227,7 +251,9 @@ func (handle *Handle) DeleteExpenseByID(ctx context.Context, userID, expenseID s
 		// rollback GCS uploads.
 		if file.Path != "" {
 			if err := deleteFileFromCloudstorage(ctx, file.Path); err != nil {
-				return err
+				if !errors.Is(err, storage.ErrObjectNotExist) {
+					return err
+				}
 			}
 		}
 

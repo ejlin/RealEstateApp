@@ -47,6 +47,7 @@ func (s *Server) HandleRoutes() {
 	r.HandleFunc("/api/user/expenses/{id}/{property_id}", s.getExpensesByProperty).Methods("GET")
 	r.HandleFunc("/api/user/expenses/{id}", s.getExpensesByUser).Methods("GET")
 	r.HandleFunc("/api/user/expenses/{id}", s.addExpensesByUser).Methods("POST")
+	r.HandleFunc("/api/user/expenses/{id}/{expense_id}", s.editExpense).Methods("PATCH")
 	r.HandleFunc("/api/user/expenses/{id}/{expense_id}", s.deleteExpense).Methods("DELETE")
 
 	// User Settings Flow

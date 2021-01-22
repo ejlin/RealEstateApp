@@ -162,7 +162,7 @@ func (handle *Handle) RemovePropertyByID(ownerID, propertyID string) error {
 // PropertiesReferences is a mapping of properties expenses and files. One expense can map to multiple properties and
 // one property can map to multiple expenses. This is a separate table within our database.
 type PropertiesReferences struct {
-	PropertyID string         `json:"property_id",sql:"type:uuid; primary key"`
+	PropertyID sql.NullString         `json:"property_id",sql:"type:uuid; foreign key"`
 	ExpenseID  sql.NullString `json:"expense_id",sql:"type:uuid; foreign key"`
 	FileID     sql.NullString `json:"file_id",sql:"type:uuid; foreign key"`
 }
