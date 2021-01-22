@@ -5,6 +5,7 @@ import './CSS/ExpensesDashboard.css';
 import './CSS/Style.css';
 
 import CreateExpenseModal from './CreateExpenseModal.js';
+import EditExpenseModal from './EditExpenseModal.js';
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 import ExpenseCard from './ExpenseCard.js';
@@ -133,9 +134,11 @@ class ExpensesDashboard extends React.Component {
             isLoading: true,
         };
         this.addExpense = this.addExpense.bind(this);
+        this.displayEditExpenseModal = this.displayEditExpenseModal.bind(this);
         this.closeCreateExpenseModal = this.closeCreateExpenseModal.bind(this);
+        this.closeEditExpenseModal = this.closeEditExpenseModal.bind(this);
         this.expenseFormDataToExpense = this.expenseFormDataToExpense.bind(this);
-        // this.deleteExpense = this.deleteExpense.bind(this);
+        this.deleteExpense = this.deleteExpense.bind(this);
         this.renderExpenseTableTitle = this.renderExpenseTableTitle.bind(this);
         this.renderExpenseTableElements = this.renderExpenseTableElements.bind(this);
         this.setToggleFields = this.setToggleFields.bind(this);
@@ -182,15 +185,18 @@ class ExpensesDashboard extends React.Component {
 
             /* Handle our expenses response */
             let expensesMap = new Map();
+            let expenses;
             // response.data is an array of expenses. Order them by property IDs -> expenses.
-            let expenses = expensesRequestResponse.data.sort(
-                this.getSortFunction(this.state.currFieldToggledDirectionIsUp, this.state.currFieldToggled)
-            );
-            for (let i = 0; i < expenses.length; i++) {
-                let expense = expenses[i];
-                expensesMap.set(expense["id"], expense);
+            if (expensesRequestResponse.data) {
+                expenses = expensesRequestResponse.data.sort(
+                    this.getSortFunction(this.state.currFieldToggledDirectionIsUp, this.state.currFieldToggled)
+                );
+                for (let i = 0; i < expenses.length; i++) {
+                    let expense = expenses[i];
+                    expensesMap.set(expense["id"], expense);
+                }    
             }
-
+            
             this.setState({
                 propertiesMap: propertiesMap,
                 expenses: expenses,
@@ -217,6 +223,12 @@ class ExpensesDashboard extends React.Component {
         })
     }
 
+    closeEditExpenseModal()  {
+        this.setState({
+            expenseToEdit: null
+        })
+    }
+
     expenseFormDataToExpense(expenseFormData) {
         let object = [];
         for (const [key, value]  of expenseFormData) {
@@ -234,10 +246,14 @@ class ExpensesDashboard extends React.Component {
             let expense = response.data;
 
             let expensesMap = this.state.expensesMap;
+            let expenses = this.state.expenses;
+
             expensesMap.set(expense["id"], expense);
+            expenses.unshift(expense);
 
             this.setState({
                 expensesMap: expensesMap,
+                expenses: expenses,
                 displayAddExpense: false
             })
         }).catch(error => {
@@ -251,38 +267,31 @@ class ExpensesDashboard extends React.Component {
         })
     }
 
-    // deleteExpense(expenseID, properties) {
-    //     console.log(properties);
-    //     axios({
-    //         method: 'delete',
-    //         url: 'api/user/expenses/' + this.state.user["id"] + "/" + expenseID,
-    //     }).then(response => {
-    //         console.log(response);
-    //         let propertiesToExpenses = this.state.propertiesToExpenses;
+    deleteExpense(expenseID) {
 
-    //         for (let i = 0; i < properties.length; i++) {
-    //             let propertyID = properties[i];
-    //             if (!propertiesToExpenses.has(propertyID)) {
-    //                 continue;
-    //             }
-    //             let propertiesToExpensesArr = propertiesToExpenses.get(propertyID);
-    //             for (let j = 0; j < propertiesToExpensesArr.length; j++) {
-    //                 if (propertiesToExpensesArr[j]["id"] === expenseID){
-    //                     propertiesToExpensesArr.splice(j, 1);
-    //                 }
-    //             }
-    //             propertiesToExpenses.set(propertyID, propertiesToExpensesArr);
-    //         }
-    //         console.log(propertiesToExpenses);
+        let userID = this.state.user["id"];
+        let deleteExpenseURL = URLBuilder('api/user/expenses/', userID, expenseID);
+        
+        axios({
+            method: 'delete',
+            url: deleteExpenseURL,
+        }).then(response => {
+            let expensesMap = this.state.expensesMap;
+            expensesMap.delete(expenseID);
 
-    //         this.setState({
-    //             propertiesToExpenses: propertiesToExpenses,
-    //             displayAddExpense: false
-    //         }, () => console.log(this.state.propertiesToExpenses))
-    //     }).catch(error => {
-    //         console.log(error)
-    //     })
-    // }
+            this.setState({
+                expensesMap: expensesMap,
+            })
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+    displayEditExpenseModal(expense) {
+        this.setState({
+            expenseToEdit: expense,
+        })
+    }
 
     setToggleFields(field) {
         // This is a state machine. If the currFieldToggled is not this field,
@@ -328,9 +337,8 @@ class ExpensesDashboard extends React.Component {
     }
 
     renderExpenseTableElements() {
-        
-        let expensesMap = this.state.expensesMap;
 
+        let expensesMap = this.state.expensesMap;
         // We need to sort our expensesMap by the current user selection.
         let sortFn = this.getSortFunction(this.state.currFieldToggled, this.state.currFieldToggledDirectionIsUp);
         // let sortedExpensesArr = expensesMap.entries().sort(sortFn);
@@ -339,10 +347,9 @@ class ExpensesDashboard extends React.Component {
             expensesArr.push(expense);
         })
 
-        expensesArr.sort();
         let elements = [];
 
-        let expenses = this.state.expenses.sort(sortFn);
+        let expenses = expensesArr.sort(sortFn);
 
         for (let i = 0; i < expenses.length; i++) {
             let expense = expenses[i];
@@ -350,32 +357,45 @@ class ExpensesDashboard extends React.Component {
             let expenseCard = this.convertExpenseToExpenseCard(expense);
             elements.push(expenseCard);
         }
-        return elements;
+        if (elements.length > 0 ) {
+            return elements;
+        }
+        return this.renderNoExpenses();
     }
 
     convertExpenseToExpenseCard(expense) {
         let expenseProperties = expense["properties"] ? expense["properties"] : ["None"];
         let propertiesMap = this.state.propertiesMap;
 
+
         let properties = [];
         if (expenseProperties.length > 0) {
-            /* If we have more than 5 associated properties, only show the first 5 */
-            let maxLength = expenseProperties.length < 5 ? expenseProperties.length : 5;
-            for (let j = 0; j < maxLength; j++) {
-                let expensePropertyID = expenseProperties[j];
+            // 2 are for "None" and "All". It means all the properties were added.
+            if (expenseProperties.length === propertiesMap.size - 2) {
                 properties.push(
                     <p className="expenses_table_first_row_subtitle">
-                        {propertiesMap.has(expensePropertyID) ? propertiesMap.get(expensePropertyID) : "None"}
+                        {"All"}
                     </p>
                 );
-            }
-            /* If we have more than 5 associated properties, only show the first 5 and show an element saying "more" */
-            if (expenseProperties.length > maxLength) {
-                properties.push(
-                    <p className="expenses_table_first_row_subtitle">
-                        {"More..."}
-                    </p>
-                )
+            } else {
+                /* If we have more than 5 associated properties, only show the first 5 */
+                let maxLength = expenseProperties.length < 5 ? expenseProperties.length : 5;
+                for (let j = 0; j < maxLength; j++) {
+                    let expensePropertyID = expenseProperties[j];
+                    properties.push(
+                        <p className="expenses_table_first_row_subtitle">
+                            {propertiesMap.has(expensePropertyID) ? propertiesMap.get(expensePropertyID) : "None"}
+                        </p>
+                    );
+                }
+                /* If we have more than 5 associated properties, only show the first 5 and show an element saying "more" */
+                if (expenseProperties.length > maxLength) {
+                    properties.push(
+                        <p className="expenses_table_first_row_subtitle">
+                            {"More..."}
+                        </p>
+                    )
+                }
             }
         } else {
             properties.push(
@@ -391,6 +411,7 @@ class ExpensesDashboard extends React.Component {
                     properties: properties,
                     expense: expense,
                     deleteExpense: this.deleteExpense,
+                    displayEditExpenseModal: this.displayEditExpenseModal,
                     setActiveExpandedExpenseCard: this.setActiveExpandedExpenseCard,
                 }
             }}/>
@@ -415,7 +436,7 @@ class ExpensesDashboard extends React.Component {
             <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
                 <RiErrorWarningFill className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></RiErrorWarningFill>
                 <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
-                    No Expenses Found
+                    No Expenses
                 </p>
             </div>
         )
@@ -544,6 +565,16 @@ class ExpensesDashboard extends React.Component {
                                 }                       
                             }}
                             ></CreateExpenseModal>
+                        </div> :
+                        <div></div>}
+                    {this.state.expenseToEdit ?
+                        <div className="expenses_dashboard_display_add_expense_box">
+                            <EditExpenseModal data={{
+                                state: {
+                                    expense: this.state.expenseToEdit,
+                                    closeEditExpenseModal: this.closeEditExpenseModal,
+                                }
+                            }}/>
                         </div> :
                         <div></div>}
                     {this.state.currActiveExpandedExpense !== null ? 

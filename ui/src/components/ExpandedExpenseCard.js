@@ -4,10 +4,16 @@ import axios from 'axios';
 import './CSS/ExpandedExpenseCard.css';
 import './CSS/Style.css';
 
-import { capitalizeName, numberWithCommas } from './MainDashboard.js';
+import { capitalizeName } from '../utility/Util.js'; 
+
+import { numberWithCommas } from './MainDashboard.js';
 import { convertDate } from './ExpensesDashboard.js';
 
 import { trimTrailingName } from '../utility/Util.js';
+
+import { MdEdit } from 'react-icons/md';
+
+import { IoMdAttach } from 'react-icons/io';
 
 import { 
     IoCalendarClearSharp, 
@@ -23,6 +29,8 @@ import { BsFillHouseFill } from 'react-icons/bs';
 
 let URLBuilder = require('url-join');
 
+const frequencyOptions = ['Once', 'Daily', 'Weekly', 'Bi-Weekly', 'Monthly', 'Semi-Annually', 'Annually'];
+
 class ExpandedExpenseCard extends React.Component {
     
     constructor(props) {
@@ -33,16 +41,20 @@ class ExpandedExpenseCard extends React.Component {
             expense: this.props.data.state.expense,
             propertiesMap: this.props.data.state.propertiesMap,
             setActiveExpandedExpenseCard: this.props.data.state.setActiveExpandedExpenseCard,
+            editInputs: false,
             isLoading: true,
         };
 
+        this.handleFileUploadChange = this.handleFileUploadChange.bind(this);
         this.renderAssociatedPropertiesTags = this.renderAssociatedPropertiesTags.bind(this);
+        this.renderFrequencyOptions = this.renderFrequencyOptions.bind(this);
     }
 
     componentDidMount() {
 
         let userID = this.state.user["id"];
         let fileID = this.state.expense["file_id"];
+        console.log(fileID);
         if (fileID !== null && fileID !== undefined && fileID !== "") {
             let getFileURL = URLBuilder('api/user/files/', userID, fileID);
 
@@ -67,6 +79,40 @@ class ExpandedExpenseCard extends React.Component {
         }
     }
 
+    // handleFileUploadChange will reset our state.file value in the case the user changes the file to upload.
+    handleFileUploadChange(event) {
+        var file = event.target.files[0];
+        if (file !== null && file !== undefined) {
+            this.setState({
+                fileToUpload: file
+            })
+        }
+    }
+
+    renderFrequencyOptions() {
+
+        let currFrequency = capitalizeName(this.state.expense["frequency"] ? this.state.expense["frequency"] : "Once"); 
+
+        let options = [];
+        options.push(
+            <option>
+                {currFrequency}
+            </option>
+        );
+        for (let i = 0; i < frequencyOptions.length; i++) {
+            let frequencyOption = frequencyOptions[i];
+            if (frequencyOption != currFrequency) {
+                options.push(
+                    <option>
+                        {frequencyOption}
+                    </option>
+                );
+            }
+    
+        }
+        return options;
+    }
+
     renderAssociatedPropertiesTags() {
 
         let expense = this.state.expense;
@@ -74,6 +120,16 @@ class ExpandedExpenseCard extends React.Component {
 
         let properties = [];
         let expenseProperties = expense["properties"];
+        if (!expenseProperties) {
+            properties.push(
+                <div className="expanded_expense_card_property_tag">
+                    <p className="expanded_expense_card_property_tag_text">
+                        None
+                    </p>
+                </div>
+            );
+            return properties;
+        }
 
         for (let i = 0; i < expenseProperties.length; i++) {
             let propertyID = expenseProperties[i];
@@ -97,12 +153,36 @@ class ExpandedExpenseCard extends React.Component {
         return (
             <div className="expanded_expense_card_box" key={"active_expanded_expense_card"}>
                 <div className="expanded_expense_card_title_box">
-                    <p className="expanded_expense_card_title_text">
-                        {capitalizeName(this.state.expense["title"])}
-                    </p>
+                    {
+                        this.state.editInputs ? 
+                        <input 
+                            placeholder={capitalizeName(this.state.expense["title"])}
+                            className="expanded_expense_title_input">
+                        </input> :
+                        <p className="expanded_expense_card_title_text">
+                            {capitalizeName(this.state.expense["title"])}
+                        </p>
+                    }
                     <IoCloseOutline 
                         onClick={() => this.state.setActiveExpandedExpenseCard(null)}
                         className="expanded_expense_card_title_box_close_icon"></IoCloseOutline>
+                    <p onClick={() => {
+                            if (this.state.editInputs) {
+                                this.setState({
+                                    fileToUpload: null,
+                                })
+                            }
+                            this.setState({
+                                editInputs: !this.state.editInputs,
+                            })
+                        }} 
+                        className="expanded_expense_card_title_box_edit_icon">
+                        {
+                            this.state.editInputs ? 
+                            "Cancel":
+                            "Edit"
+                        }
+                    </p>
                 </div>
                 <div className="expanded_expense_card_body_box">
                     <div className="expanded_expense_card_inner_body_box">
@@ -111,39 +191,125 @@ class ExpandedExpenseCard extends React.Component {
                             <p className="expanded_expense_card_body_left_box_element_box_text">
                                 Date
                             </p>
-                            <p className="expanded_expense_card_body_left_box_element_box_actual_text">
-                                {convertDate(this.state.expense["date"])}
-                            </p>
+                            {
+                                this.state.editInputs ? 
+                                <input 
+                                    type="date"
+                                    className="expanded_expense_card_body_amount_input">
+                                </input> :
+                                <p className="expanded_expense_card_body_left_box_element_box_actual_text">
+                                    {convertDate(this.state.expense["date"])}
+                                </p>
+                            }
+                            
                         </div>
+                        <div className="expanded_expense_card_element_divider"></div>
                         <div className="expanded_expense_card_body_left_box_element_box">
                             <IoCardSharp className="expanded_expense_card_body_left_box_element_box_icon"></IoCardSharp>
                             <p className="expanded_expense_card_body_left_box_element_box_text">
                                 Amount
                             </p>
-                            <p className="expanded_expense_card_body_left_box_element_box_actual_text">
-                                ${numberWithCommas(this.state.expense["amount"])}
-                            </p>
+                            {
+                                this.state.editInputs ? 
+                                <input 
+                                    placeholder={"$" + numberWithCommas(this.state.expense["amount"])}
+                                    className="expanded_expense_card_body_amount_input">
+                                </input> :
+                                <p className="expanded_expense_card_body_left_box_element_box_actual_text">
+                                    ${numberWithCommas(this.state.expense["amount"])}
+                                </p>
+                            }
+                            
                         </div>
+                        <div className="expanded_expense_card_element_divider"></div>
                         <div className="expanded_expense_card_body_left_box_element_box">
                             <IoFlag className="expanded_expense_card_body_left_box_element_box_icon"></IoFlag>
                             <p className="expanded_expense_card_body_left_box_element_box_text">
                                 Frequency
                             </p>
-                            <p className="expanded_expense_card_body_left_box_element_box_actual_text">
-                                {capitalizeName(this.state.expense["frequency"])}
-                            </p>
+                            {
+                                this.state.editInputs ?
+                                <select 
+                                    onChange={this.handleFieldChange} 
+                                    name="frequency"
+                                    className="expanded_expense_card_body_frequency_input">
+                                    {this.renderFrequencyOptions()}
+                                </select> : 
+                                <p className="expanded_expense_card_body_left_box_element_box_actual_text">
+                                    {capitalizeName(this.state.expense["frequency"])}
+                                </p>
+                            }
                         </div>
+                        <div className="expanded_expense_card_element_divider"></div>
                         <div className="expanded_expense_card_body_left_box_element_box">
                             <IoDocumentTextSharp className="expanded_expense_card_body_left_box_element_box_icon"></IoDocumentTextSharp>
                             <p className="expanded_expense_card_body_left_box_element_box_text">
                                 File
                             </p>
-                            <p className="expanded_expense_card_body_left_box_element_box_actual_text">
-                                {this.state.file && this.state.file["name"] ? trimTrailingName(this.state.file["name"], 20) : "None"}
+                            <p 
+                                onClick={() => {
+                                    if (this.state.file && this.state.file["get_signed_url"] && !this.state.editInputs) {
+                                        let url = this.state.file["get_signed_url"];
+                                        if (url !== "") {
+                                            window.open(url, '_blank', 'noopener,noreferrer')
+                                        }
+                                    } 
+                                }}
+                                className={
+                                    this.state.file && this.state.file["name"] ?
+                                    "expanded_expense_card_body_left_box_element_box_actual_text expanded_expense_card_file_link" :
+                                    "expanded_expense_card_body_left_box_element_box_actual_text"
+                                }>
+                                {
+                                    this.state.file && this.state.file["name"] ? 
+                                    (
+                                        this.state.editInputs ? 
+                                        <div>
+                                            <label htmlFor="expanded_expense_card_upload_file_button" className="expanded_expense_card_attach_file_button">
+                                                {
+                                                    this.state.fileToUpload ? 
+                                                    <p className="expense_card_attach_file_text">
+                                                        {this.state.fileToUpload["name"]}
+                                                    </p>:
+                                                    <div>
+                                                        <IoMdAttach className="expanse_card_attach_file_icon"></IoMdAttach>
+                                                        <p className="expense_card_attach_file_text">
+                                                            Change File
+                                                        </p>
+                                                    </div>
+                                                }
+                                            </label>
+                                        </div>:
+                                        trimTrailingName(this.state.file["name"], 20) 
+                                    ): 
+                                    (
+                                        this.state.editInputs ?
+                                        (
+                                            <div>
+                                                <label htmlFor="expanded_expense_card_upload_file_button" className="expanded_expense_card_attach_file_button">
+                                                    {
+                                                        this.state.fileToUpload ? 
+                                                        <p className="expense_card_attach_file_text">
+                                                            {this.state.fileToUpload["name"]}
+                                                        </p>:
+                                                        <div>
+                                                            <IoMdAttach className="expanse_card_attach_file_icon"></IoMdAttach>
+                                                            <p className="expense_card_attach_file_text">
+                                                                Attach a File
+                                                            </p>
+                                                        </div>
+                                                    }
+                                                </label>
+                                                <input id="expanded_expense_card_upload_file_button" type="file" onChange={this.handleFileUploadChange}></input>
+                                            </div>
+                                        ):
+                                        "None"
+                                    )
+                                }
                             </p>
                         </div>
+                        <div className="expanded_expense_card_element_divider"></div>
                     </div>
-                    {this.state.expense["properties"] ? 
                     <div className="expanded_expense_card_body_associated_properties_box">
                         <BsFillHouseFill className="expanded_expense_card_body_left_box_element_box_icon"></BsFillHouseFill>
                         <p className="expanded_expense_card_body_left_box_element_box_text">
@@ -151,39 +317,28 @@ class ExpandedExpenseCard extends React.Component {
                         </p>
                         <div className="clearfix"></div>
                         {this.renderAssociatedPropertiesTags()}
-                    </div> : <div></div>}
+                        <div className="clearfix"/>
+                    </div>
+                    <div className="clearfix"/>
+                    <div className="expanded_expense_card_element_divider"></div>         
                     <div className="expanded_expense_card_body_associated_properties_box">
                         <IoPaperPlane className="expanded_expense_card_body_left_box_element_box_icon"></IoPaperPlane>
                         <p className="expanded_expense_card_body_left_box_element_box_text">
                             Description
                         </p>
                         <div className="clearfix"></div>
-                        <p className="expanded_expense_card_body_left_box_element_box_subtext">
-                            {this.state.expense["description"]}
-                        </p>
+                        {
+                            this.state.editInputs ?
+                            <textarea 
+                                placeholder={this.state.expense["description"]}
+                                className="expanded_expense_card_body_textarea_input"
+                            ></textarea> :
+                            <p className="expanded_expense_card_body_left_box_element_box_subtext">
+                                {this.state.expense["description"]}
+                            </p>
+                        }
+                        
                     </div>
-                    {/* <p className="expanded_expense_card_name_text expanded_expense_card_description_text">
-                        {this.state.expense["description"]}
-                    </p> */}
-
-                    {/* <div className="expanded_expense_card_bullet_point_box">
-                        <IoCalendarClearSharp className="expanded_expense_card_bullet_point_box_icon"></IoCalendarClearSharp>
-                        <p className="expanded_expense_card_bullet_point_box_text">
-                            {convertDate(this.state.expense["date"])}
-                        </p>
-                    </div>
-                    <div className="expanded_expense_card_bullet_point_box">
-                        <IoArrowRedoSharp className="expanded_expense_card_bullet_point_box_icon"></IoArrowRedoSharp>
-                        <p className="expanded_expense_card_bullet_point_box_text">
-                            {capitalizeName(this.state.expense["frequency"])}
-                        </p>
-                    </div>
-                    <div className="expanded_expense_card_bullet_point_box">
-                        <FaMoneyCheck className="expanded_expense_card_bullet_point_box_icon"></FaMoneyCheck>
-                        <p className="expanded_expense_card_bullet_point_box_text">
-                            ${numberWithCommas(this.state.expense["amount"])}
-                        </p>
-                    </div> */}
                 </div>
             </div>
         );

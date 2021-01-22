@@ -4,16 +4,17 @@ import './CSS/Loader.css';
 
 class Loader extends React.Component {
     
-    constructor(props) {
+    constructor(props) { 
         super(props);
-    }
 
-    componentDidMount() {
+        this.state = {
+            class: this.props.data.state.class,
+        }
     }
 
     render() {
         return (
-            <div class="loader">Loading...</div>
+            <div className={this.state.class ? "loader " + this.state.class : "loader"}></div>
         )
     }
 }

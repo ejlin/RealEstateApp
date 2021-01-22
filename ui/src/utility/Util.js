@@ -4,3 +4,7 @@ export function trimTrailingName(name, maxLength) {
     }
     return name.substring(0, maxLength) + "...";
 }
+
+export function capitalizeName(x) {
+    return x.charAt(0).toUpperCase() + x.slice(1);
+}

@@ -63,9 +63,9 @@ class DropdownSelect extends React.Component {
                         selectedPropertyInput.value = "";
                         this.state.setParentList(currSelectedListElements);
                         this.setState({
-                            currSelectedListElements: [...currSelectedListElements],
+                            currSelectedListElements: currSelectedListElements,
                             filteredListElements: null,
-                        })
+                        }, () => console.log(this.state.currSelectedListElements))
                     }} 
                     className="associated_properties_dropdown_elements">
                     {All}
@@ -84,9 +84,9 @@ class DropdownSelect extends React.Component {
                         selectedPropertyInput.value = "";
                         this.state.setParentList(currSelectedListElements);
                         this.setState({
-                            currSelectedListElements: [...currSelectedListElements],
+                            currSelectedListElements: currSelectedListElements,
                             filteredListElements: null,
-                        })
+                        }, () => console.log(this.state.currSelectedListElements))
                     }} 
                     className="associated_properties_dropdown_elements">
                     {None}
@@ -113,15 +113,14 @@ class DropdownSelect extends React.Component {
                             let index = currSelectedListElements.indexOf(None);
                             if (index >= 0) {
                                 currSelectedListElements.splice(index, 1);
-                                console.log(currSelectedListElements);
                             }
                             // reset the search bar to empty.
                             selectedPropertyInput.value = "";
                             this.state.setParentList(currSelectedListElements);
                             this.setState({
-                                currSelectedListElements: [...currSelectedListElements],
+                                currSelectedListElements: currSelectedListElements,
                                 filteredListElements: null,
-                            })
+                            }, () => console.log(this.state.currSelectedListElements))
                         }} 
                         className="associated_properties_dropdown_elements">
                         {filteredInput}

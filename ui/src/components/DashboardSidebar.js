@@ -7,7 +7,7 @@ import './CSS/Style.css';
 
 import { Link, Redirect } from 'react-router-dom';
 
-import { capitalizeName } from './MainDashboard.js';
+import { capitalizeName } from '../utility/Util.js'; 
 
 import { BsFillHouseFill } from 'react-icons/bs';
 import { GoFileDirectory } from 'react-icons/go';

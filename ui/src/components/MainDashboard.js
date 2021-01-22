@@ -8,6 +8,8 @@ import './CSS/Style.css';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
+import { capitalizeName } from '../utility/Util.js';
+
 import PropertyCard from './PropertyCard.js';
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
@@ -41,10 +43,6 @@ export const getDaysUntil = (rentDay) => {
 
     var daysUntilEndOfMonth = numDaysInMonth - date;
     return rentDay < date ? daysUntilEndOfMonth + rentDay : rentDay- date;
-}
-
-export const capitalizeName = (x) => {
-    return x.charAt(0).toUpperCase() + x.slice(1);
 }
 
 export const numberWithCommas = (x) => {

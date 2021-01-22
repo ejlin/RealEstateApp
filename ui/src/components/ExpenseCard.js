@@ -3,8 +3,12 @@ import React from 'react';
 import './CSS/ExpenseCard.css';
 import './CSS/Style.css';
 
-import { capitalizeName, numberWithCommas } from './MainDashboard.js';
+import Loader from './Loader.js';
+
+import { numberWithCommas } from './MainDashboard.js';
 import { convertDate } from './ExpensesDashboard.js';
+
+import { capitalizeName } from '../utility/Util.js'; 
 
 import { MdEdit } from 'react-icons/md';
 import { IoTrashSharp, IoReturnDownForwardSharp, IoAttachSharp } from 'react-icons/io5';
@@ -21,8 +25,10 @@ class ExpenseCard extends React.Component {
             properties: this.props.data.state.properties,
             expandCard: false,
             deleteExpense: this.props.data.state.deleteExpense,
+            displayEditExpenseModal: this.props.data.state.displayEditExpenseModal,
             displayExpandedView: false,
             setActiveExpandedExpenseCard: this.props.data.state.setActiveExpandedExpenseCard,
+            isDeleting: false,
         };
     }
 
@@ -32,7 +38,7 @@ class ExpenseCard extends React.Component {
 
     render() {
         return (
-            <div key={this.state.expense["id"]}>
+            <div>
                 <div className="expenses_table_subtitle_row">
                     <div className="expenses_table_down_icon_box">
                         <VscExpandAll 
@@ -66,10 +72,25 @@ class ExpenseCard extends React.Component {
                             ${numberWithCommas(this.state.expense["amount"])}
                         </div>
                     </div>
+                    {this.state.isDeleting ?
+                    <div className="expense_card_delete_loader_box">
+                        <Loader data={{
+                            state: {
+                                class: "expense_card_delete_loader",
+                            }
+                        }}></Loader>
+                    </div> :
                     <IoTrashSharp 
-                        onClick={() => this.state.deleteExpense}
-                        className="expenses_table_first_row_subtitle_icon"></IoTrashSharp>
-                    <MdEdit className="expenses_table_first_row_subtitle_icon"></MdEdit>
+                        onClick={() => {
+                            this.setState({
+                                isDeleting: true,
+                            })
+                            this.state.deleteExpense(this.state.expense["id"])
+                        }}
+                        className="expenses_table_first_row_subtitle_icon"></IoTrashSharp>}
+                    {/* <MdEdit
+                        onClick={() => this.state.displayEditExpenseModal(this.state.expense)} 
+                        className="expenses_table_first_row_subtitle_icon"></MdEdit> */}
                 </div>
                 <div className="clearfix"/>
                 

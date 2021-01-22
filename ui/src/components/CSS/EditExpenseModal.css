@@ -1,23 +1,23 @@
-.create_expense_modal_parent_box {
+.edit_expense_modal_parent_box {
     background-color: white;
     float: left;
     min-height: 450px;
-    margin-left: max(15%, calc((100% - 650px)/2));
+    margin-left: max(20%, calc((100% - 550px)/2));
     margin-right: 10%;
     margin-top: 75px;
-    max-width: 650px;
+    max-width: 550px;
     padding-bottom: 30px;
-    width: 70%; 
+    width: 60%; 
     z-index: 11;
 }
 
-.create_expense_modal_parent_box_title_box {
+.edit_expense_modal_parent_box_title_box {
     float: right;
     height: 30px;
     margin-top: 25px;
 }
 
-.create_expense_modal_parent_box_title_box_close_icon {
+.edit_expense_modal_parent_box_title_box_close_icon {
     cursor: pointer;
     height: 30px;
     float: right;
@@ -26,30 +26,30 @@
     width: 30px;
 }
 
-.create_expense_modal_parent_box_title_box_close_icon:hover {
+.edit_expense_modal_parent_box_title_box_close_icon:hover {
     opacity: 0.7;
 }
 
-.create_expense_modal_parent_box_title {
+.edit_expense_modal_parent_box_title {
     border-bottom: 4px solid #296CF6;
     float: left;
     font-weight: bold;
-    font-size: 1.1em;
+    font-size: 1.2em;
     margin-top: 40px;
     padding-bottom: 5px;
 }
 
-.create_expense_modal_parent_box_subtitle {
+.edit_expense_modal_parent_box_subtitle {
     margin-top: 15px;
 }
 
-.create_expense_modal_parent_box_inner_box {
+.edit_expense_modal_parent_box_inner_box {
     margin-left: 40px;
     margin-right: 40px;
     width: calc((100% - 80px));
 }
 
-.create_expense_modal_parent_box_title_input {
+.edit_expense_modal_parent_box_title_input {
     background-color: #F5F5FA;
     border: none;
     border-radius: 4px;
@@ -58,16 +58,16 @@
     width: calc((100% - 4px - 30px));
 }
 
-.create_expense_modal_parent_box_title_input:focus, 
-.create_expense_modal_parent_box_inner_box_right_box_date_input:focus, 
-.create_expense_modal_parent_box_title_textarea:focus,
-.create_expense_modal_parent_box_inner_box_right_box_amount_input:focus,
-.create_expense_modal_associated_properties_input:focus,
-.create_expense_modal_parent_box_inner_box_right_box_date_select:focus {
+.edit_expense_modal_parent_box_title_input:focus, 
+.edit_expense_modal_parent_box_inner_box_right_box_date_input:focus, 
+.edit_expense_modal_parent_box_title_textarea:focus,
+.edit_expense_modal_parent_box_inner_box_right_box_amount_input:focus,
+.edit_expense_modal_associated_properties_input:focus,
+.edit_expense_modal_parent_box_inner_box_right_box_date_select:focus {
     outline: none;
 }
 
-.create_expense_modal_parent_box_title_textarea {
+.edit_expense_modal_parent_box_title_textarea {
     background-color: #F5F5FA;
     border: none;
     border-radius: 4px;
@@ -79,39 +79,40 @@
     width: calc(100% - 4px - 30px);
 }
 
-.create_expense_modal_parent_box_inner_box_left_box {
+.edit_expense_modal_parent_box_inner_box_left_box {
     float: left;
     margin-top: 15px;
     width: 57%;
 }
 
-.create_expense_modal_parent_box_inner_box_right_box {
+.edit_expense_modal_parent_box_inner_box_right_box {
     float: right;
     margin-top: 15px;
 }
 
-.create_expense_modal_parent_box_inner_box_input_box {
+.edit_expense_modal_parent_box_inner_box_input_box {
     float: left;
-    width: calc(37%);
+    margin-bottom: 5px;
+    width: 100%;
 }
 
-.create_expense_modal_parent_box_inner_box_small_input_box {
+.edit_expense_modal_parent_box_inner_box_small_input_box {
     float: left;
-    margin-left: 25px;
-    width: calc(100% - 37% - 37% - 25px);
+    width: 100%;
 }
 
-.create_expense_modal_parent_box_inner_box_right_box_date_input {
+.edit_expense_modal_parent_box_inner_box_right_box_date_input {
     background-color: #F5F5FA;
     border: none;
     border-radius: 4px;
     font-size: 1.0em;
+    margin-bottom: 0px;
     margin-top: 10px;
     padding: 7.5px 15px 7.5px 15px;
-    width: calc(100% - 4px - 30px - 25px);
+    width: calc(100% - 30px - 4px);
 }
 
-.create_expense_modal_parent_box_inner_box_right_box_amount_input {
+.edit_expense_modal_parent_box_inner_box_right_box_amount_input {
     background-color: #F5F5FA;
     border: none;
     border-radius: 4px;
@@ -121,29 +122,29 @@
     width: calc(100% - 4px - 30px);
 }
 
-.create_expense_modal_parent_box_inner_box_right_box_title {
+.edit_expense_modal_parent_box_inner_box_right_box_title {
     font-weight: bold;
     font-size: 1.0em;
     margin-top: 10px;
 }
 
-.create_expense_modal_parent_box_inner_box_right_box_date_select {
+.edit_expense_modal_parent_box_inner_box_right_box_date_select {
     background-color: #F5F5FA;
     border: none;
     border-radius: 4px;
     font-size: 1.0em;
     margin-top: 10px;
     padding: 7.5px 15px 7.5px 15px;
-    width: calc(100% );
+    width: calc(100% - 4px);
 }
 
-.create_expense_modal_parent_box_inner_box_bottom_box {
+.edit_expense_modal_parent_box_inner_box_bottom_box {
     float: right;
     margin-top: 25px;
     width: 40%;
 }
 
-.create_expense_modal_parent_box_inner_box_bottom_box_add_button {
+.edit_expense_modal_parent_box_inner_box_bottom_box_add_button {
     background-color: #296CF6;
     border-radius: 4px;
     color: white;
@@ -156,11 +157,11 @@
     transition: 0.5s;
 }
 
-.create_expense_modal_parent_box_inner_box_bottom_box_add_button:hover {
+.edit_expense_modal_parent_box_inner_box_bottom_box_add_button:hover {
     opacity: 0.7;
 }
 
-.create_expense_modal_associated_properties_input {
+.edit_expense_modal_associated_properties_input {
     background-color: #F5F5FA;
     border: none;
     border-radius: 4px;
@@ -171,7 +172,7 @@
     width: calc(100% - 30px);
 }
 
-.create_expense_modal_associated_properties_filtered_properties_box {
+.edit_expense_modal_associated_properties_filtered_properties_box {
     border: 2px solid grey;
     border-radius: 4px 4px 4px 4px;
     margin-top: -14px;
@@ -181,7 +182,7 @@
 .associated_properties_dropdown_elements {
     color: black;
     cursor: pointer;
-    font-size: 1.0em;
+    font-size: 1.1em;
     padding: 7.5px 15px 7.5px 15px;
 }
 
@@ -217,48 +218,48 @@
     opacity: 0.7;
 }
 
-.create_expense_modal_padding_bottom {
+.edit_expense_modal_padding_bottom {
     float: left;
     height: 75px;
     width: 100%;
 }
 
-.create_expense_modal_nav_bar_box {
+.edit_expense_modal_nav_bar_box {
     float: left;
     width: 200px;
 }
 
-.create_expense_modal_bottom_box {
+.edit_expense_modal_bottom_box {
     margin-top: 30px;
     width: 100%;
 }
 
-.create_expense_modal_nav_bar_list {
+.edit_expense_modal_nav_bar_list {
     border-radius: 4px;
     cursor: pointer;
     height: 40px;
     transition: 0.5s;
 }
 
-.create_expense_modal_nav_bar_list:hover, .create_expense_modal_nav_bar_list_active {
+.edit_expense_modal_nav_bar_list:hover, .edit_expense_modal_nav_bar_list_active {
     background-color: #F5F5FA;
     color: black;
 }
 
-.create_expense_modal_nav_bar_list_text {
+.edit_expense_modal_nav_bar_list_text {
     float: left;
     font-size: 1.05em;
     line-height: 40px;
 }
 
-.create_expense_modal_nav_bar_list_icon {
+.edit_expense_modal_nav_bar_list_icon {
     float: left;
     height: 20px;
     margin: calc((40px - 20px)/2);
     width: 20px;
 }
 
-.create_expense_modal_button {
+.edit_expense_modal_button {
     background-color: #296CF6;
     border-radius: 4px;
     color: white;
@@ -275,32 +276,31 @@
     width: 90px;
 }
 
-.create_expense_modal_button:hover {
+.edit_expense_modal_button:hover {
     opacity: 0.8;
 }
 
-.create_expense_modal_info_text_box {
+.edit_expense_modal_info_text_box {
     display: inline-block;
-    margin-top: 10px;
 }
 
-.create_expense_modal_info_text_box_icon {
+.edit_expense_modal_info_text_box_icon {
     float: left;
     margin-right: 5px;
     margin-top: 2px;
 }
 
-.create_expense_modal_info_text_box_text {
+.edit_expense_modal_info_text_box_text {
     float: left;
 }
 
-#create_expense_modal_upload_file_button {
+#edit_expense_modal_upload_file_button {
     opacity: 0;
     position: absolute;
     z-index: -1;
 }
 
-.create_expense_modal_upload_file_icon {
+.edit_expense_modal_upload_file_icon {
     color: grey;
     height: 30px;
     margin-left: calc((100% - 50px)/2);
@@ -309,11 +309,11 @@
     width: 30px;
 }
 
-.create_expense_modal_upload_file_icon:hover  {
+.edit_expense_modal_upload_file_icon:hover  {
     transform: scale(1.05);
 }
 
-.create_expense_modal_upload_file_button_label {
+.edit_expense_modal_upload_file_button_label {
     background-color: #F5F5FA;
     border: 1px solid black;
     border-radius: 2px;
@@ -328,15 +328,15 @@
     width: calc(100% - 2px);
 }
 
-.create_expense_modal_upload_file_button_label:hover {
+.edit_expense_modal_upload_file_button_label:hover {
     opacity: 0.7;
 }
 
-.create_expense_modal_upload_file_button_icon_box {
+.edit_expense_modal_upload_file_button_icon_box {
     margin-top: -20px;
 }
 
-.create_expense_modal_uploaded_file_name {
+.edit_expense_modal_uploaded_file_name {
     color: grey;
     font-size: 0.9em;
     font-weight: bold;
@@ -350,7 +350,7 @@
     text-align: center;
 }
 
-.create_expense_modal_back_button {
+.edit_expense_modal_back_button {
     cursor: pointer;
     float: right;
     line-height: 40px;
@@ -358,11 +358,11 @@
     margin-top: 10px;
 }
 
-.create_expense_modal_back_button_text {
+.edit_expense_modal_back_button_text {
     cursor: pointer;
 }
 
-.create_expense_modal_upload_file_title {
+.edit_expense_modal_upload_file_title {
     color: grey;
     font-size: 1.0em;
     font-weight: bold;

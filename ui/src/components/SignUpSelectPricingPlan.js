@@ -7,7 +7,7 @@ import './CSS/SignUpSelectPricingPlan.css';
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 
-import { capitalizeName } from './MainDashboard.js';
+import { capitalizeName } from '../utility/Util.js'; 
 
 import { Redirect } from "react-router-dom";
 import { IoIosCheckmarkCircleOutline } from 'react-icons/io';

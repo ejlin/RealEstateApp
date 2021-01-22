@@ -103,7 +103,7 @@
     color: grey;
     float: left;
     height: 25px;
-    left: calc(50% - 100px - 25px);
+    left: calc(50% - 70px - 25px);
     margin-top: 0px;
     position: absolute;
     width: 25px;
@@ -112,10 +112,10 @@
 .expenses_dashboard_body_inner_box_no_expenses_inner_box_text {
     color: grey;
     font-size: 1.3em;
-    margin-left: calc((100% - 200px)/2);
+    margin-left: calc((100% - 120px)/2);
     margin-top: 0px;
     text-align: center;
-    width: 200px;
+    width: 120px;
 }
 
 .expenses_dashboard_display_add_expense_box {
@@ -148,7 +148,8 @@
     height: calc(72vh);
     min-height: 650px;
     min-width: 1000px;
-    overflow: hidden;
+    overflow-x: scroll;
+    overflow-y: hidden;
     width: 100%;
 }
 

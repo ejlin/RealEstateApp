@@ -117,13 +117,13 @@ class CreateExpenseModal extends React.Component {
         var associatedProperties = [];
         var propertiesMap = this.state.propertiesMap;
 
-        console.log(propertiesMap);
-
         if (indexAll >= 0) {
             // Add all of our properties.
             propertiesMap.forEach((value, key, map) => {
                 // Add our propertyIDs
-                associatedProperties.push(key);
+                if (key != None && key != All){
+                    associatedProperties.push(key);
+                }
             })
         } else if (indexNone >= 0) {
         } else {
@@ -268,7 +268,11 @@ class CreateExpenseModal extends React.Component {
                     className={this.state.loadAddExpense ? "create_expense_modal_button loading_button" :
                         "create_expense_modal_button"}>
                     {this.state.loadAddExpense ? 
-                    <Loader/> :
+                    <Loader data={{
+                        state: {
+                            class: "",
+                        }
+                    }}/> :
                     "Add Expense"}
                 </div>
             </div>

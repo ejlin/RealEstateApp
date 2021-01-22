@@ -8,6 +8,7 @@ import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 import FileCard from './FileCard.js';
 import UploadFileModal from './UploadFileModal.js';
+import FolderCard from './FolderCard.js';
 
 import ProgressBar from './../utility/ProgressBar.js';
 
@@ -599,22 +600,24 @@ class FilesDashboard extends React.Component {
 
         // Add our All folder(s).
         folders.push(
-            <div className="files_dashboard_folder_card">
-                <GoFileDirectory className="files_dashboard_folder_card_icon"></GoFileDirectory>
-                <p className="files_dashboard_folder_card_text">
-                    All
-                </p>
-            </div>
+            <FolderCard data={{
+                state: {
+                    user: this.state.user,
+                    folderName: "All",
+                }
+            }}
+            ></FolderCard>
         );
-        
+
         propertiesMap.forEach((value, key, map) => {
             folders.push(
-                <div className="files_dashboard_folder_card">
-                    <GoFileDirectory className="files_dashboard_folder_card_icon"></GoFileDirectory>
-                    <p className="files_dashboard_folder_card_text">
-                        {value}
-                    </p>
-                </div>
+                <FolderCard data={{
+                    state: {
+                        user: this.state.user,
+                        folderName: value,
+                    }
+                }}
+                ></FolderCard>
             )
         })
         return folders;
