@@ -15,7 +15,8 @@ body {
 #main_dashboard_title {
     display: inline-block;
     margin-left: 60px;
-    width: calc(100% - 90px);
+    margin-right: 20px;
+    width: calc(100% - 80px);
 }
 
 #main_dashboard_welcome_box_date {

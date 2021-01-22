@@ -8,9 +8,9 @@
 
 #analysis_dashboard_parent_inner_box {
     margin-left: 60px;
-    margin-right: 60px;
+    margin-right: 20px;
     margin-top: 80px;
-    width: calc((100% - 120px));
+    width: calc((100% - 80px));
 }
 
 .analysis_dashboard_inner_box {
