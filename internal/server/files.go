@@ -230,6 +230,7 @@ func (s *Server) getFile(w http.ResponseWriter, r *http.Request) {
 type RestFile struct {
 	ID             string    `json:"id,omitempty"`
 	Name           string    `json:"name,omitempty"`
+	Year int `json:"year,omitempty"`
 	CreatedAt      *time.Time `json:"created_at,omitempty"`
 	LastModifiedAt *time.Time `json:"last_modified_at,omitempty"`
 	GetSignedURL   string    `json:"get_signed_url,omitempty"`
@@ -266,7 +267,13 @@ func (s *Server) getFileByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	key := file.Path
-	fileGetSignedURL, err := s.getSignedURL(ctx, key)
+	if key == "" {
+		ll.Warn().Err(err).Msg("missing cloudstorage path")
+		http.Error(w, "missing cloudstorage path", http.StatusInternalServerError)
+		return
+	}
+
+	fileGetSignedURL, err := s.getSignedURL(ctx, file.Path)
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to get file signed URL")
 		http.Error(w, "unable to get file signed URL", http.StatusInternalServerError)
@@ -276,6 +283,7 @@ func (s *Server) getFileByID(w http.ResponseWriter, r *http.Request) {
 	restFile := &RestFile{
 		ID:             file.ID,
 		Name:           file.Name,
+		Year: file.Year,
 		CreatedAt:      file.CreatedAt,
 		LastModifiedAt: file.LastModifiedAt,
 		GetSignedURL:   fileGetSignedURL,
@@ -285,6 +293,62 @@ func (s *Server) getFileByID(w http.ResponseWriter, r *http.Request) {
 
 	RespondToRequest(w, restFile)
 	return
+}
+
+
+func (s *Server) getFilesByProperty(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Info().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	propertyID, ok := vars["property_id"]
+	if !ok {
+		ll.Warn().Msg("property id not set")
+		http.Error(w, "property id not set", http.StatusBadRequest)
+		return
+	}
+
+	ll = ll.With().Str("property_id", propertyID).Logger()
+
+	files, err := s.DBHandle.GetFilesByProperty(userID, propertyID)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to get files by property")
+		http.Error(w, "unable to get files by property", http.StatusInternalServerError)
+		return
+	}
+
+	var restFiles []*RestFile
+	for _, file := range files {
+		fileGetSignedURL, err := s.getSignedURL(ctx, file.Path)
+		if err != nil {
+			ll.Warn().Err(err).Msg("unable to get file signed URL")
+			continue
+		}
+
+		restFile := &RestFile{
+			ID:             file.ID,
+			Name:           file.Name,
+			Year: file.Year,
+			CreatedAt:      file.CreatedAt,
+			LastModifiedAt: file.LastModifiedAt,
+			GetSignedURL:   fileGetSignedURL,
+		}
+
+		restFiles = append(restFiles, restFile)
+	}
+
+	RespondToRequest(w, restFiles)
+	return
+	
 }
 
 func (s *Server) deleteFile(w http.ResponseWriter, r *http.Request) {

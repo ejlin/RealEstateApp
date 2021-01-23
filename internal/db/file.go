@@ -1,10 +1,12 @@
 package db
 
 import (
+	"database/sql"
 	"errors"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/jinzhu/gorm"
 )
 
 type File struct {
@@ -27,17 +29,40 @@ const (
 	Other FileType = "Other"
 )
 
-func (handle *Handle) AddFile(file *File, propertyID string) error {
+func (handle *Handle) AddFile(file *File, propertyID []string) error {
 
 	if file == nil {
 		return errors.New("nil file")
 	}
 
-	if err := handle.DB.FirstOrCreate(&file, file).Error; err != nil {
-		return err
-	}
+	return handle.DB.Transaction(func(tx *gorm.DB) error {
 
-	return nil
+		if err := tx.FirstOrCreate(&file, file).Error; err != nil {
+			return err
+		}
+
+		// If there are property IDs to associate with this file, we need to create a reference to it.
+		for _, propertyID := range propertyID {
+
+			propertyID := propertyID
+
+			propertyReference := PropertiesReferences{
+				PropertyID: sql.NullString{
+					String: propertyID,
+					Valid:  true,
+				},
+				FileID: sql.NullString{
+					String: file.ID,
+					Valid:  true,
+				},
+			}
+			if err := tx.FirstOrCreate(&propertyReference, propertyReference).Error; err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
 }
 
 func (handle *Handle) GetFileById(userID, fileID string) (*File, error) {
@@ -58,4 +83,39 @@ func (handle *Handle) GetFileById(userID, fileID string) (*File, error) {
 	}
 
 	return &file, nil
+}
+
+
+func (handle *Handle) GetFilesByProperty(userID, propertyID string) ([]*File, error) {
+
+	_, err := uuid.Parse(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = uuid.Parse(propertyID)
+	if err != nil {
+		return nil, err
+	}
+
+	// We need to first query our properties_references table to find which properties have which files.
+	var propertyReferences []*PropertiesReferences
+	if err := handle.DB.Where("user_id = ? AND property_id = ? AND file_id NOT NULL", userID, propertyID).Find(&propertyReferences).Error; err != nil {
+		return nil, err
+	}
+
+	var files []*File
+
+	for _, propertyReference := range propertyReferences {
+
+		fileID := propertyReference.FileID.String
+		if fileID != "" {
+			file := &File{}
+			if err := handle.DB.Where("id = ?", fileID).Find(&file).Error; err != nil {
+				continue
+			}
+			files = append(files, file)
+		}	
+	}
+	return files, nil
 }

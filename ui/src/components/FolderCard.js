@@ -12,7 +12,9 @@ class FolderCard extends React.Component {
 
         this.state = {
             user: this.props.data.state.user,
+            folderPropertyID: this.props.data.state.folderPropertyID,
             folderName: this.props.data.state.folderName,
+            setActiveFolder: this.props.data.state.setActiveFolder,
             isClicked: false,
         };
 
@@ -22,26 +24,31 @@ class FolderCard extends React.Component {
     clickCard() {
 
         var now = Date.now();
-        var key = this.state.file["property_id"] + '/' + this.state.file["name"];
+        // var key = this.state.file["property_id"] + '/' + this.state.file["name"];
         if (this.state.timeClicked === null || (now - this.state.timeClicked) > 200) { 
             // Let parent know this file was clicked
-            var success = this.state.setActiveFileAttributes(key, this.state.file, this.state.isClicked);
-            if (success) {
-                this.setState({
-                    isClicked: !this.state.isClicked,
-                    timeClicked: Date.now()
-                });
-            }
+            // var success = this.state.setActiveFileAttributes(key, this.state.file, this.state.isClicked);
+            // if (success) {
+            //     this.setState({
+            //         isClicked: !this.state.isClicked,
+            //         timeClicked: Date.now()
+            //     });
+            // }
+            // this.state.setActiveFolder(this.state.folderPropertyID);
+            this.state.setActiveFolder(this.state.folderPropertyID);
         } else {
-            console.log("yooooo")
-            this.state.openSignedURL(this.state.user["id"], key);
-            if (this.state.setActiveFileAttributes(key, this.state.file, false)) {
-                this.setState({
-                    isClicked: true,
-                    timeClicked: Date.now()
-                })
-            }
+            // this.state.openSignedURL(this.state.user["id"], key);
+            // if (this.state.setActiveFileAttributes(key, this.state.file, false)) {
+            //     this.setState({
+            //         isClicked: true,
+            //         timeClicked: Date.now()
+            //     })
+            // }
         }
+        this.setState({
+            isClicked: !this.state.isClicked,
+            timeClicked: now,
+        })
     }
 
     componentDidMount() {
@@ -51,11 +58,7 @@ class FolderCard extends React.Component {
     render() {
         return (
             <div
-                onClick={() => {
-                    this.setState({
-                        isClicked: !this.state.isClicked,
-                    })
-                }} 
+                onMouseDown={() => this.clickCard()}
                 className={this.state.isClicked ? "files_dashboard_folder_card clicked_folder_card" : "files_dashboard_folder_card"}>
                 <GoFileDirectory className={this.state.isClicked ? "files_dashboard_folder_card_icon clicked_folder_card_icon" : "files_dashboard_folder_card_icon"}></GoFileDirectory>
                 <p className={this.state.isClicked ? "files_dashboard_folder_card_text clicked_folder_card_text" : "files_dashboard_folder_card_text"}>

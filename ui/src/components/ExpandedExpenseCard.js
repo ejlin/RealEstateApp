@@ -9,6 +9,8 @@ import { capitalizeName } from '../utility/Util.js';
 import { numberWithCommas } from './MainDashboard.js';
 import { convertDate } from './ExpensesDashboard.js';
 
+import DropdownSelect from './DropdownSelect.js';
+
 import { trimTrailingName } from '../utility/Util.js';
 
 import { MdEdit } from 'react-icons/md';
@@ -266,26 +268,29 @@ class ExpandedExpenseCard extends React.Component {
                                     "expanded_expense_card_body_left_box_element_box_actual_text expanded_expense_card_file_link" :
                                     "expanded_expense_card_body_left_box_element_box_actual_text"
                                 }>
+                                <input id="expanded_expense_card_upload_file_button" type="file" onChange={this.handleFileUploadChange}></input>
                                 {
                                     this.state.file && this.state.file["name"] ? 
                                     (
                                         this.state.editInputs ? 
-                                        <div>
-                                            <label htmlFor="expanded_expense_card_upload_file_button" className="expanded_expense_card_attach_file_button">
-                                                {
-                                                    this.state.fileToUpload ? 
-                                                    <p className="expense_card_attach_file_text">
-                                                        {this.state.fileToUpload["name"]}
-                                                    </p>:
-                                                    <div>
-                                                        <IoMdAttach className="expanse_card_attach_file_icon"></IoMdAttach>
+                                        (
+                                            <div>
+                                                <label htmlFor="expanded_expense_card_upload_file_button" className="expanded_expense_card_attach_file_button">
+                                                    {
+                                                        this.state.fileToUpload ? 
                                                         <p className="expense_card_attach_file_text">
-                                                            Change File
-                                                        </p>
-                                                    </div>
-                                                }
-                                            </label>
-                                        </div>:
+                                                            {trimTrailingName(this.state.fileToUpload["name"], 20)}
+                                                        </p>:
+                                                        <div>
+                                                            <IoMdAttach className="expanse_card_attach_file_icon"></IoMdAttach>
+                                                            <p className="expense_card_attach_file_text">
+                                                                Change File
+                                                            </p>
+                                                        </div>
+                                                    }
+                                                </label>
+                                            </div>
+                                        ):
                                         trimTrailingName(this.state.file["name"], 20) 
                                     ): 
                                     (
@@ -296,7 +301,7 @@ class ExpandedExpenseCard extends React.Component {
                                                     {
                                                         this.state.fileToUpload ? 
                                                         <p className="expense_card_attach_file_text">
-                                                            {this.state.fileToUpload["name"]}
+                                                            {trimTrailingName(this.state.fileToUpload["name"], 20)}
                                                         </p>:
                                                         <div>
                                                             <IoMdAttach className="expanse_card_attach_file_icon"></IoMdAttach>
@@ -306,7 +311,6 @@ class ExpandedExpenseCard extends React.Component {
                                                         </div>
                                                     }
                                                 </label>
-                                                <input id="expanded_expense_card_upload_file_button" type="file" onChange={this.handleFileUploadChange}></input>
                                             </div>
                                         ):
                                         "None"
@@ -323,6 +327,23 @@ class ExpandedExpenseCard extends React.Component {
                         </p>
                         <div className="clearfix"></div>
                         {this.renderAssociatedPropertiesTags()}
+                        {
+                            this.state.editInputs ?
+                            <DropdownSelect 
+                                data={{
+                                    state: {
+                                        inputMap: this.state.propertiesMap,
+                                        inputList: this.state.propertiesAddresses,
+                                        includeNone: true,
+                                        includeAll: true,
+                                        placeholderText: "Add a Property",
+                                        closePotentialList: this.closePotentialList,
+                                        setParentList: this.setParentList,
+                                    }
+                                }}
+                            />:
+                            <div></div>
+                        }
                         <div className="clearfix"/>
                     </div>
                     <div className="clearfix"/>

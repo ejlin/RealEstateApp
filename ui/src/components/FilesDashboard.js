@@ -40,6 +40,9 @@ import {
 const small = "small";
 const medium = "medium";
 
+const folders = "folders";
+const files = "files";
+
 export const openSignedURL = (userID, fileKey)  => {
     var url = "api/user/files/" + userID + "/" + fileKey;
     axios({
@@ -201,6 +204,8 @@ class FilesDashboard extends React.Component {
             sortTypeArrowDown: true,
             isFileLoading: true,
             isPropertiesLoading: true,
+            pageToDisplay: folders,
+            activeFolderPropertyID: null,
         };
 
         this.setActiveFileAttributes = this.setActiveFileAttributes.bind(this);
@@ -213,6 +218,8 @@ class FilesDashboard extends React.Component {
         this.convertPropertyToFilesMapToElements = this.convertPropertyToFilesMapToElements.bind(this);
         this.closeFileUpload = this.closeFileUpload.bind(this);
         this.renderFolders = this.renderFolders.bind(this);
+        this.setActiveFolder = this.setActiveFolder.bind(this);
+        this.renderActiveFolderFiles = this.renderActiveFolderFiles.bind(this);
     }
 
     componentDidMount() {
@@ -405,7 +412,6 @@ class FilesDashboard extends React.Component {
         return this.state.activeSearchFiles.length > 0 ? this.state.activeSearchFiles : this.renderNoFiles();
     }
 
-
     // file Key = propertyID + '/' + fileName
     setActiveFileAttributes(fileKey, file, toRemove) {
         var currentActiveFiles = this.state.activeFiles;
@@ -564,6 +570,16 @@ class FilesDashboard extends React.Component {
         return files;
     }
 
+    setActiveFolder(folderPropertyID) {
+
+
+
+        this.setState({
+            activeFolderPropertyID: folderPropertyID,
+            pageToDisplay: files,
+        })
+    }
+
     renderFiles(propertyToFilesMap) {
         this.setState({
             filesToDisplay: [...this.convertPropertyToFilesMapToElements(propertyToFilesMap)]
@@ -592,6 +608,10 @@ class FilesDashboard extends React.Component {
     //     </div>);
     // }
 
+    renderActiveFolderFiles() {
+
+    }
+
     renderFolders() {
 
         let propertiesMap = this.state.propertiesMap;
@@ -603,7 +623,9 @@ class FilesDashboard extends React.Component {
             <FolderCard data={{
                 state: {
                     user: this.state.user,
+                    folderPropertyID: "All",
                     folderName: "All",
+                    setActiveFolder: this.setActiveFolder,
                 }
             }}
             ></FolderCard>
@@ -614,6 +636,7 @@ class FilesDashboard extends React.Component {
                 <FolderCard data={{
                     state: {
                         user: this.state.user,
+                        folderPropertyID: key,
                         folderName: value,
                     }
                 }}
@@ -641,7 +664,7 @@ class FilesDashboard extends React.Component {
                             <UploadFileModal
                                 data={{
                                     state: {
-                                        properties: this.state.properties,
+                                        propertiesMap: this.state.propertiesMap,
                                         closeFileUpload: this.closeFileUpload
                                     }                       
                                 }}/>
@@ -828,10 +851,23 @@ class FilesDashboard extends React.Component {
                         </div>                        
                         <div className="clearfix"/>
                         <div id="files_dashboard_files_box">
-                            {this.state.isLoading ? 
-                                <div></div> : 
-                                this.renderFolders()    
+                            {
+                                this.state.pageToDisplay === folders ?
+                                (this.state.isLoading ? 
+                                    <div></div> : 
+                                    <div>
+                                        <p className="files_dashboard_page_to_display_title">Folders</p>
+                                        {this.renderFolders()}
+                                    </div>
+                                ): (
+                                    this.state.pageToDisplay === files ?
+                                    <div>
+                                        {this.renderActiveFolderFiles()}
+                                    </div>:
+                                    <div></div>
+                                )
                             }
+                            
                             {/* {
                                 this.state.isLoading ? 
                                 <div></div> : 

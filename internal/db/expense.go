@@ -45,7 +45,11 @@ const (
 // within a transaction so we can roll them back if any of them fail.
 // We also need to upload our file to google cloud storage. If it fails to upload, roll back these
 // transactions.
-func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, propertyIDs []string, file *File, addFileToCloudstorage func(ctx context.Context) error) error {
+func (handle *Handle) AddExpense(ctx context.Context, userID string, expense *Expense, propertyIDs []string, file *File, addFileToCloudstorage func(ctx context.Context) error) error {
+
+	if _, err := uuid.Parse(userID); err != nil {
+		return err
+	}	
 
 	if expense == nil {
 		return errors.New("nil expense")
@@ -79,6 +83,7 @@ func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, property
 
 
 			propertyReference := PropertiesReferences{
+				UserID: userID, 
 				ExpenseID: sql.NullString{
 					String: expenseID,
 					Valid:  true,
@@ -122,7 +127,7 @@ func (handle *Handle) AddExpense(ctx context.Context, expense *Expense, property
 }
 
 // GetExpenseByID will fetch the expense by its unique ID.
-func (handle *Handle) GetExpenseByID(expenseID string) (*Expense, error) {
+func (handle *Handle) GetExpenseByID(userID, expenseID string) (*Expense, error) {
 
 	_, err := uuid.Parse(expenseID)
 	if err != nil {
@@ -130,7 +135,7 @@ func (handle *Handle) GetExpenseByID(expenseID string) (*Expense, error) {
 	}
 
 	var expense Expense
-	if err := handle.DB.Where("id = ?", expenseID).First(&expense).Error; err != nil {
+	if err := handle.DB.Where("id = ? AND user_id = ?", expenseID, userID).First(&expense).Error; err != nil {
 		return nil, err
 	}
 	return &expense, nil
@@ -202,7 +207,7 @@ func (handle *Handle) DeleteExpenseByID(ctx context.Context, userID, expenseID s
 	// If there is a file associated with this expense, fetch the file path so we can delete it from our cloudstorage.
 	file := File{}
 	if fileID != "" {
-		if err := handle.DB.Where("id = ?", fileID).Find(&file).Error; err != nil {
+		if err := handle.DB.Where("id = ? AND user_id = ?", fileID, userID).Find(&file).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				fileRecordExists = false
 			} else {
@@ -233,14 +238,14 @@ func (handle *Handle) DeleteExpenseByID(ctx context.Context, userID, expenseID s
 		
 
 		if fileID != "" && fileRecordExists{
-			if err := tx.Where("id = ?", fileID).Delete(&file).Error; err != nil {
+			if err := tx.Where("id = ? AND user_id = ?", fileID, userID).Delete(&file).Error; err != nil {
 				if !errors.Is(err, gorm.ErrRecordNotFound) {
 					return err
 				}
 			}
 		}
 
-		if err := tx.Where("expense_id = ?", expenseID).Delete(&propertyReference).Error; err != nil {
+		if err := tx.Where("expense_id = ? AND user_id = ?", expenseID, userID).Delete(&propertyReference).Error; err != nil {
 			if !errors.Is(err, gorm.ErrRecordNotFound) {
 				return err
 			}
@@ -263,15 +268,20 @@ func (handle *Handle) DeleteExpenseByID(ctx context.Context, userID, expenseID s
 
 /*****************************************************************************/
 
-func (handle *Handle) GetPropertyReferencesAssociatedWithExpense(expenseID string) ([]PropertiesReferences, error) {
+func (handle *Handle) GetPropertyReferencesAssociatedWithExpense(userID, expenseID string) ([]PropertiesReferences, error) {
 
-	_, err := uuid.Parse(expenseID)
+	_, err := uuid.Parse(userID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid UUID: %w", err)
+	}
+
+	_, err = uuid.Parse(expenseID)
 	if err != nil {
 		return nil, fmt.Errorf("invalid UUID: %w", err)
 	}
 
 	var propertiesReferences []PropertiesReferences
-	if err := handle.DB.Select("property_id, file_id").Where("expense_id = ?", expenseID).Find(&propertiesReferences).Error; err != nil {
+	if err := handle.DB.Select("property_id, file_id").Where("expense_id = ? AND user_id = ?", expenseID, userID).Find(&propertiesReferences).Error; err != nil {
 		return nil, err
 	}
 	return propertiesReferences, nil

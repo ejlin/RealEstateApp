@@ -107,7 +107,6 @@ class DashboardSidebar extends React.Component {
                         }
                     }}>
                         <div id="BsFillPlusSquareFill">New Property</div>
-                        {/* New Property */}
                     </Link> 
                     <div className="clearfix"/>
                     <div className="dashboard_sidebar_link">

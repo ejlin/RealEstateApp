@@ -1,26 +1,28 @@
 .upload_file_modal_parent_box {
     background-color: white;
     float: left;
-    margin-left: 10%;
+    min-height: 450px;
+    margin-left: max(15%, calc((100% - 650px)/2));
     margin-right: 10%;
-    margin-top: 150px;
+    margin-top: 125px;
+    max-width: 650px;
     padding-bottom: 30px;
-    width: 80%; 
+    width: 70%; 
     z-index: 11;
 }
 
 #files_dashboard_upload_file_button_label {
-    background-color: #F1F1F1;
+    background-color: #F5f5fa;
     border: 1px solid black;
     border-radius: 2px;
     border-style: dashed;
     cursor: pointer;
     float: left;
-    height: 200px;
-    margin-top: 25px;
+    height: 100px;
+    margin-top: 15px;
     position: relative;
     transition: 0.5s;
-    width: 200px;
+    width: 100%;
 }
 
 #files_dashboard_upload_file_button_label:hover {
@@ -34,8 +36,15 @@
 }
 
 .files_dashboard_upload_file_title {
+    float: left;
+    font-weight: bold;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.files_dashboard_upload_box_file_title {
     color: grey;
-    font-size: 1.2em;
+    font-size: 1.0em;
     font-weight: bold;
     text-align: center;
 }
@@ -51,11 +60,28 @@
     width: calc((100% - 30px));
 }
 
+.upload_file_input:focus, .files_dashboard_file_type:focus, .files_dashboard_associated_properties_input:focus {
+    outline: none;
+}
+
+.files_dashboard_left_box {
+    float: left;
+    width: 70%;
+}
+
+.files_dashboard_right_box {
+    float: right;
+    width: calc(30% - 20px);
+}
+
 .files_dashboard_upload_file_right_box {
     float: left;
-    margin-left: 25px;
     margin-top: 25px;
-    width: calc(100% - 200px - 2px - 25px);
+    width: 100%;
+}
+
+.upload_files_dashboard_inner_parent_box {
+    margin-top: 10px;
 }
 
 .upload_file_modal_parent_box_inner_box {
@@ -80,15 +106,16 @@
     cursor: pointer;
     float: right;
     font-weight: bold;
-    margin-top: 25px;
+    margin-top: 10px;
     padding: 7.5px 15px 7.5px 15px;
     transition: 0.5s;
 }
 
 .files_dashboard_title {
-    font-size: 1.1em;
+    font-size: 1.0em;
     font-weight: bold;
     margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .files_dashboard_upload_file_right_box_left_box {
@@ -120,6 +147,7 @@
     border: none;
     border-radius: 4px;
     font-size: 1.0em;
+    margin-bottom: 10px;
     padding: 7.5px 15px 7.5px 15px;
     width: 100%;
 }
@@ -128,11 +156,10 @@
 
 #files_dashboard_upload_file_icon {
     color: grey;
-    height: 40px;
-    margin-left: calc((100% - 60px)/2);
-    margin-top: 40px;
-    padding: 10px;
-    width: 40px;
+    height: 30px;
+    margin-left: calc((100% - 30px)/2);
+    margin-top: 20px;
+    width: 30px;
 }
 
 #files_dashboard_upload_file_icon:hover  {

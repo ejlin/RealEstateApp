@@ -24,6 +24,7 @@ class DropdownSelect extends React.Component {
             setParentList: this.props.data.state.setParentList,
             closePotentialList: this.props.data.state.closePotentialList,
         };
+        
         this.handleFieldChange = this.handleFieldChange.bind(this);
         this.displayPotentialElements = this.displayPotentialElements.bind(this);
         this.removeSelectedElement = this.removeSelectedElement.bind(this);

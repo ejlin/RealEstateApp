@@ -15,10 +15,12 @@ import { IoSettingsSharp } from 'react-icons/io5';
 import { IoMdSettings, IoMdNotifications, IoIosSend } from 'react-icons/io';
 import { FaUserTie, FaBuilding } from 'react-icons/fa';
 import { TiUser } from 'react-icons/ti';
+import { BsFillHouseFill } from 'react-icons/bs';
 
 const general = "general";
 const email = "email";
 const notifications = "notifications";
+const properties = "properties";
 const plan = "plan";
 
 class SettingsDashboard extends React.Component {
@@ -577,6 +579,54 @@ class SettingsDashboard extends React.Component {
                         </div>
                     </div>
                 );
+            case properties:
+                return (
+                    <div className="right_box_page_inner_box">
+                        <p className="right_box_page_title">
+                            Property Settings
+                        </p>
+                        <p 
+                            className="right_box_page_edit_button"
+                            onClick={() => {
+                                if (this.state.editProperties) {
+                                    this.setState({
+                                        checkboxStates: this.deepCopyMap(this.state.originalCheckboxStates)
+                                    })
+                                }
+                                this.setState({
+                                    editProperties: !this.state.editProperties,
+                                })}}>
+                            {this.state.editProperties ? "Cancel" : "Edit"}
+                        </p>
+                        <div className="right_box_page_content_inner_box">
+                            <div className="right_box_page_content_inner_box_list">
+                                <p className="right_box_page_content_inner_box_list_text">
+                                    Automatically Estimate property values
+                                </p>
+                                <p className="right_box_page_content_inner_box_list_value_text">
+                                    {this.state.editProperties ? 
+                                    <label className="switch">
+                                        <input
+                                        type="checkbox"
+                                        name="rent_pay_date"
+                                        checked={this.state.checkboxStates.get('automatically_estimate_property_values')}
+                                        onChange={this.handleCheckboxChange}></input>
+                                        <span className="slider round"></span>
+                                    </label>: 
+                                    (this.state.checkboxStates.get('automatically_estimate_property_values') ? "Yes" : "No")}
+                                </p>
+                            </div>
+                            <div className="clearfix"/>
+                            {this.state.editProperties ? 
+                            <div 
+                                onClick={this.updateUserSettingsPreferences}
+                                className="right_box_page_content_save_edits_button">
+                                Save
+                            </div> :
+                            <div></div>}
+                        </div>
+                    </div>
+                );
             case plan:
                 return (
                     <div className="right_box_page_inner_box">
@@ -807,6 +857,7 @@ class SettingsDashboard extends React.Component {
                                             toDisplay: email,
                                             editGeneral: false,
                                             editNotifications: false,
+                                            editProperties: false,
                                             editPlan: false
                                         })}
                                     className={
@@ -825,6 +876,7 @@ class SettingsDashboard extends React.Component {
                                             toDisplay: notifications,
                                             editGeneral: false,
                                             editEmail: false,
+                                            editProperties: false,
                                             editPlan: false
                                         })}
                                     className={
@@ -840,10 +892,30 @@ class SettingsDashboard extends React.Component {
                                 <li 
                                     onClick={() => 
                                         this.setState({
+                                            toDisplay: properties,
+                                            editGeneral: false,
+                                            editEmail: false,
+                                            editNotifications: false,
+                                            editPlan: false
+                                        })}
+                                    className={
+                                        this.state.toDisplay === properties ? 
+                                        "settings_dashboard_right_box_nav_bar_list settings_dashboard_right_box_nav_bar_active_list" : 
+                                        "settings_dashboard_right_box_nav_bar_list"}>
+                                    <BsFillHouseFill className="settings_dashboard_right_box_nav_bar_list_icon"></BsFillHouseFill>
+                                    <p className="settings_dashboard_right_box_nav_bar_list_text">
+                                        Properties
+                                    </p>
+                                </li>
+                                <div className="clearfix"/>
+                                <li 
+                                    onClick={() => 
+                                        this.setState({
                                             toDisplay: plan,
                                             editGeneral: false,
                                             editEmail: false,
-                                            editNotifications: false
+                                            editNotifications: false,
+                                            editProperties: false,
                                         })}
                                     className={
                                         this.state.toDisplay === plan ? 

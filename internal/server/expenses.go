@@ -94,7 +94,7 @@ func (s *Server) getExpensesByUser(w http.ResponseWriter, r *http.Request) {
 	var restExpenses []*RestExpense
 
 	for _, expense := range expenses {
-		propertiesReferences, err := s.DBHandle.GetPropertyReferencesAssociatedWithExpense(expense.ID)
+		propertiesReferences, err := s.DBHandle.GetPropertyReferencesAssociatedWithExpense(userID, expense.ID)
 		if err != nil {
 			// Don't error out so we still return what expenses we can.
 			ll.Warn().Err(err).Str("expense_id", expense.ID).Msg("unable to get properties associated with expense")
@@ -277,7 +277,7 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Add our expense to our expenses table.
-	err = s.DBHandle.AddExpense(ctx, expense, associatedProperties, file, addFileToCloudStorage())
+	err = s.DBHandle.AddExpense(ctx, userID, expense, associatedProperties, file, addFileToCloudStorage())
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to add expense to database")
 		http.Error(w, "unable to add expense to database", http.StatusInternalServerError)

@@ -18,12 +18,14 @@ class UploadFileModal extends React.Component {
 
         this.state = {
             closeFileUpload: this.props.data.state.closeFileUpload,
-            properties: this.props.data.state.properties,
+            propertiesMap: this.props.data.state.propertiesMap,
+            propertiesAddresses: Array.from(this.props.data.state.propertiesMap.values()),
         };
-    
+
         this.renderFileUploadPropertiesSelection = this.renderFileUploadPropertiesSelection.bind(this);
         this.handleFileUploadChange = this.handleFileUploadChange.bind(this);
         this.handleFileUpload = this.handleFileUpload.bind(this);
+        this.setParentList = this.setParentList.bind(this);
     }
 
     componentDidMount() {
@@ -39,7 +41,7 @@ class UploadFileModal extends React.Component {
 
     renderFileUploadPropertiesSelection() {
         return (
-            this.state.properties.map((property, i) => 
+            this.state.propertiesMap.map((property, i) => 
             <option name={property[1]} key={property[1] + i} value={property[0]}>{property[1]}</option>
         ))
     }
@@ -159,6 +161,12 @@ class UploadFileModal extends React.Component {
         }).catch(error => console.log(error));
     }
 
+    setParentList(properties) {
+        this.setState({
+            currSelectedAssociatedProperties: properties,
+        })
+    }
+
     render() {
         return (
             <div>
@@ -175,72 +183,82 @@ class UploadFileModal extends React.Component {
                             Add a File 
                         </p>
                         <div className="clearfix"/>
-                        <label htmlFor="files_dashboard_upload_file_button" id="files_dashboard_upload_file_button_label">
-                            {this.state.fileToUpload ? 
-                            <div alt={this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "Unknown File"}>
-                                <div>
-                                    {this.mapFileTypeToIcon(this.state.fileToUpload["type"], false)}
-                                </div>
-                                <p id="files_dashboard_uploaded_file_name">
-                                    {this.state.fileToUpload["name"] ? this.trimTrailingFileName(this.state.fileToUpload["name"]) : "Unable to Upload File"}
-                                </p>
-                            </div> : 
-                            <div>
-                                <MdFileUpload id="files_dashboard_upload_file_icon"></MdFileUpload>
-                                <p className="files_dashboard_upload_file_title">
-                                    Choose File
-                                </p>
-                            </div>}
-                        </label>
-                        <input id="files_dashboard_upload_file_button" type="file" onChange={this.handleFileUploadChange}></input>
                         <div className="files_dashboard_upload_file_right_box">
                             <input 
                                 id="files_dashboard_upload_file_name_input"
                                 placeholder={this.state.fileToUpload && this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "File Name"} 
                                 className={this.state.fileToUpload && this.state.fileToUpload["name"] ? "upload_file_input dark_placeholder" : "upload_file_input"}>
                             </input>
+
                             <div className="clearfix"/>
-                            <div className="files_dashboard_upload_file_right_box_left_box">
-                                <p className="files_dashboard_title">
-                                    Associated Properties
-                                </p>
-                                <DropdownSelect data={{
-                                    state: {
-                                        inputMap: this.state.properties,
-                                        inputList: this.state.propertyAddresses,
-                                        includeNone: true,
-                                        includeAll: true,
-                                        placeholderText: "Add a Property",
-                                    }
-                                }}/>
-                                <div className="create_expense_modal_render_associated_properties_box">
-                                    {/* {this.renderAssociatedProperties()} */}
+                            <p className="files_dashboard_upload_file_title">Attach a File</p>
+                            <div className="clearfix"/>
+
+                            <label htmlFor="files_dashboard_upload_file_button" id="files_dashboard_upload_file_button_label">
+                                {this.state.fileToUpload ? 
+                                <div alt={this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "Unknown File"}>
+                                    <div>
+                                        {this.mapFileTypeToIcon(this.state.fileToUpload["type"], false)}
+                                    </div>
+                                    <p id="files_dashboard_uploaded_file_name">
+                                        {this.state.fileToUpload["name"] ? this.trimTrailingFileName(this.state.fileToUpload["name"]) : "Unable to Upload File"}
+                                    </p>
+                                </div> : 
+                                <div>
+                                    <MdFileUpload id="files_dashboard_upload_file_icon"></MdFileUpload>
+                                    <p className="files_dashboard_upload_box_file_title">
+                                        Choose File
+                                    </p>
+                                </div>}
+                            </label>
+                            <input id="files_dashboard_upload_file_button" type="file" onChange={this.handleFileUploadChange}></input>
+                            <div className="clearfix"/>
+                            <div className="upload_files_dashboard_inner_parent_box">
+                                <div className="files_dashboard_left_box">
+                                    <p className="files_dashboard_title">
+                                        File Type
+                                    </p>
+                                    <select id="files_dashboard_upload_file_category_select" className="files_dashboard_file_type">
+                                        <option value="" disabled selected>File Type</option>
+                                        <option name="mortgage" value="mortgage">Mortgage</option>
+                                        <option name="contracting" value="contracting">Contracting</option>
+                                        <option name="property" value="property">Property</option>
+                                        <option name="receipts" value="receipts">Receipts</option>
+                                        <option name="repairs" value="repairs">Repairs</option>
+                                        <option name="taxes" value="taxes">Taxes</option>
+                                        <option name="other" value="other">Other</option>
+                                    </select>
+                                    
+                                </div>
+                                <div className="files_dashboard_right_box">
+                                    <p className="files_dashboard_title">
+                                        Year
+                                    </p>
+                                    <input 
+                                        type="number" 
+                                        maxlength="4"
+                                        placeholder="YYYY"
+                                        onChange={this.enforceYearInput}
+                                        className="files_dashboard_associated_properties_input">
+                                    </input>
                                 </div>
                             </div>
-                            <div className="files_dashboard_upload_file_right_box_right_box">
-                                <p className="files_dashboard_title">
-                                    Year
-                                </p>
-                                <input 
-                                    type="number" 
-                                    maxlength="4"
-                                    placeholder="YYYY"
-                                    onChange={this.enforceYearInput}
-                                    className="files_dashboard_associated_properties_input">
-                                </input>
-                                <p className="files_dashboard_title">
-                                    File Type
-                                </p>
-                                <select id="files_dashboard_upload_file_category_select" className="files_dashboard_file_type">
-                                    <option value="" disabled selected>File Type</option>
-                                    <option name="mortgage" value="mortgage">Mortgage</option>
-                                    <option name="contracting" value="contracting">Contracting</option>
-                                    <option name="property" value="property">Property</option>
-                                    <option name="receipts" value="receipts">Receipts</option>
-                                    <option name="repairs" value="repairs">Repairs</option>
-                                    <option name="taxes" value="taxes">Taxes</option>
-                                    <option name="other" value="other">Other</option>
-                                </select>
+                            <div className="clearfix"/>
+                            <p className="files_dashboard_title">
+                                Associated Properties
+                            </p>
+                            <DropdownSelect data={{
+                                state: {
+                                    inputMap: this.state.properties,
+                                    inputList: this.state.propertiesAddresses,
+                                    includeNone: true,
+                                    includeAll: true,
+                                    placeholderText: "Add a Property",
+                                    setParentList: this.setParentList,
+                                }
+                            }}/>
+                            <div className="create_expense_modal_render_associated_properties_box">
+                                {/* {this.renderAssociatedProperties()} */}
                             </div>
                             {/* <select id="files_dashboard_upload_file_property_select" className="upload_file_select">
                                 <option value="" disabled selected>Property</option>
