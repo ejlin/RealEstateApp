@@ -2,10 +2,10 @@
     background-color: white;
     float: left;
     min-height: 450px;
-    margin-left: max(15%, calc((100% - 650px)/2));
+    margin-left: max(15%, calc((100% - 550px)/2));
     margin-right: 10%;
     margin-top: 125px;
-    max-width: 650px;
+    max-width: 550px;
     padding-bottom: 30px;
     width: 70%; 
     z-index: 11;
@@ -106,9 +106,12 @@
     cursor: pointer;
     float: right;
     font-weight: bold;
+    height: 35px;
+    line-height: 35px;
     margin-top: 10px;
-    padding: 7.5px 15px 7.5px 15px;
+    text-align: center;
     transition: 0.5s;
+    width: 100px;
 }
 
 .files_dashboard_title {
@@ -164,4 +167,32 @@
 
 #files_dashboard_upload_file_icon:hover  {
     transform: scale(1.05);
+}
+
+.upload_file_modal_file_type_icon {
+    height: 40px;
+    margin-left: calc((100% - 40px)/2);
+    margin-right: calc((100% - 40px)/2);
+    margin-top: 20px;
+    width: 40px;
+}
+
+.upload_file_modal_uploaded_file_name {
+    text-align: center;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.upload_file_modal_loader {
+    color: #ffffff;
+    font-size: 3px;
+    margin: auto;
+    margin-top: 5px;
+    position: relative;
+    text-indent: -9999em;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s;
 }

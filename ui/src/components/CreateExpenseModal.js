@@ -6,11 +6,12 @@ import './CSS/Style.css';
 
 import DropdownSelect from './DropdownSelect.js';
 import Loader from './Loader.js';
-import { mapFileTypeToIcon } from './FilesDashboard.js';
 
 import { IoCloseOutline } from 'react-icons/io5';
 import { AiFillQuestionCircle} from 'react-icons/ai';
 import { MdFileUpload } from 'react-icons/md';
+
+import { getByValue, mapFileTypeToIcon } from '../utility/Util.js';
 
 const All = "All";
 const None = "None";
@@ -27,14 +28,6 @@ var URLBuilder = require('url-join');
 const once = "Once";
 
 const frequencyOptions = ['Once', 'Daily', 'Weekly', 'Bi-Weekly', 'Monthly', 'Semi-Annually', 'Annually'];
-
-const getByValue = (map, searchValue) => {
-    for (let [key, value] of map.entries()) {
-      if (value === searchValue)
-        return key;
-    }
-    return null;
-}
 
 class CreateExpenseModal extends React.Component {
     

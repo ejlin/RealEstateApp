@@ -172,10 +172,13 @@
 }
 
 .create_expense_modal_associated_properties_filtered_properties_box {
+    background-color: white;
     border: 2px solid grey;
     border-radius: 4px 4px 4px 4px;
     margin-top: -14px;
+    position: absolute;
     width: calc((100% - 4px));
+    z-index: 11 !important;
 }
 
 .associated_properties_dropdown_elements {

@@ -5,7 +5,6 @@ import './CSS/ExpensesDashboard.css';
 import './CSS/Style.css';
 
 import CreateExpenseModal from './CreateExpenseModal.js';
-import EditExpenseModal from './EditExpenseModal.js';
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 import ExpenseCard from './ExpenseCard.js';

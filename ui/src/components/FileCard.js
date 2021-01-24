@@ -3,6 +3,8 @@ import React from 'react';
 import './CSS/FileCard.css';
 import './CSS/Style.css';
 
+import { trimTrailingName, mapFileTypeToIcon } from '../utility/Util.js';
+
 class FileCard extends React.Component {
     
     constructor(props) {
@@ -14,29 +16,18 @@ class FileCard extends React.Component {
             backgroundColor: this.props.data.state.backgroundColor,
             setActiveFileAttributes: this.props.data.state.setActiveFileAttributes,
             openSignedURL: this.props.data.state.openSignedURL,
-            mapFileTypeToIcon: this.props.data.state.mapFileTypeToIcon,
             timeClicked: null,
             isClicked: false
         };
-
-        this.trimTrailingFileName = this.trimTrailingFileName.bind(this);
         this.clickCard = this.clickCard.bind(this);
     }
 
-    trimTrailingFileName(fileName) {
-        if (fileName.length > 18) {
-            return fileName.substring(0,18) + "...";
-        }
-        return fileName;
-    }
-
     clickCard() {
-
-        var now = Date.now();
-        var key = this.state.file["property_id"] + '/' + this.state.file["name"];
+        let now = Date.now();
+        let file = this.state.file;
         if (this.state.timeClicked === null || (now - this.state.timeClicked) > 200) { 
             // Let parent know this file was clicked
-            var success = this.state.setActiveFileAttributes(key, this.state.file, this.state.isClicked);
+            let success = this.state.setActiveFileAttributes(file["id"], this.state.file, this.state.isClicked);
             if (success) {
                 this.setState({
                     isClicked: !this.state.isClicked,
@@ -45,8 +36,8 @@ class FileCard extends React.Component {
             }
         } else {
             console.log("yooooo")
-            this.state.openSignedURL(this.state.user["id"], key);
-            if (this.state.setActiveFileAttributes(key, this.state.file, false)) {
+            this.state.openSignedURL(this.state.user["id"], file["id"]);
+            if (this.state.setActiveFileAttributes(file["id"], this.state.file, false)) {
                 this.setState({
                     isClicked: true,
                     timeClicked: Date.now()
@@ -61,25 +52,32 @@ class FileCard extends React.Component {
 
     render() {
 
-        var className = "file_card_individual_file";
+        let className = "file_card_individual_file";
         if (this.state.isClicked) {
             className += " file_card_active";
         } else {
             className += " " + this.state.backgroundColor;
+        }
+
+        let fileType;
+        if (this.state.file["metadata"] && this.state.file["metadata"]["file_type"]) {
+            fileType = this.state.file["metadata"]["file_type"];
+        } else {
+            fileType = "";
         }
         return (
             <div className={className} 
                 // onDoubleClick={() => this.doubleClickCard()}
                 onMouseDown={() => this.clickCard()}
                 >
-                {this.state.mapFileTypeToIcon(this.state.file["metadata"]["file_type"], "small", this.state.isClicked)}
+                {mapFileTypeToIcon(fileType, this.state.isClicked, "file_card_file_type_icon")}
                 <div className="file_card_individual_file_footer">
                     <p className={
                         this.state.isClicked ?
                         "file_card_individual_file_footer_title file_card_individual_file_footer_title_active":
                         "file_card_individual_file_footer_title"}
                         title={this.state.file["name"] ? this.state.file["name"] : "Unknown File"}>
-                        {this.state.file["name"] ? this.trimTrailingFileName(this.state.file["name"]) : "Unknown File"}
+                        {this.state.file["name"] ? trimTrailingName(this.state.file["name"], 20) : "Unknown File"}
                     </p>
                 </div>
             </div>

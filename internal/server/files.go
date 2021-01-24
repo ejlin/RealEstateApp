@@ -1,11 +1,19 @@
 package server
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"path"
+	"strings"
 	"time"
 
+	"../cloudstorage"
+	"../db"
+	"../util"
+
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
 )
@@ -104,36 +112,13 @@ func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	file, handler, err := r.FormFile("file")
+	uploadedFile, handler, err := r.FormFile("file")
 	if err != nil {
 		ll.Error().Err(err).Msg("error retrieving the file")
 		http.Error(w, "error retrieving the file", http.StatusBadRequest)
 		return
 	}
-	defer file.Close()
-
-	propertyID := r.FormValue("property_id")
-	if propertyID == "" {
-		ll.Error().Msg("missing property id")
-		http.Error(w, "missing property id", http.StatusBadRequest)
-		return
-	}
-
-	ll = ll.With().Str("property_id", propertyID).Logger()
-
-	fileCategory := r.FormValue("file_category")
-	if fileCategory == "" {
-		ll.Error().Msg("missing file category")
-		http.Error(w, "missing file category", http.StatusBadRequest)
-		return
-	}
-
-	address := r.FormValue("address")
-	if address == "" {
-		ll.Error().Msg("missing file address")
-		http.Error(w, "missing file address", http.StatusBadRequest)
-		return
-	}
+	defer uploadedFile.Close()
 
 	fileName := r.FormValue("file_name")
 	if fileName == "" {
@@ -142,6 +127,11 @@ func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
 
 	fileType := r.FormValue("file_type")
 	if fileType == "" {
+		fileType = "other"
+	}
+
+	metadataFileType := r.FormValue("metadata_file_type")
+	if metadataFileType == "" {
 		fileType = "unknown"
 	}
 
@@ -151,17 +141,52 @@ func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
 		year = fmt.Sprint(y)
 	}
 
-	ll = ll.With().Str("file_category", fileCategory).Str("file_name", fileName).Logger()
+	properties := r.FormValue("properties")
+	associatedProperties := strings.Split(properties, ",")
 
-	fInfo, err := s.addStorageFile(ctx, file, userID, propertyID, fileName, fileType, fileCategory, address, year)
+	ll = ll.With().Str("file_name", fileName).Logger()
+
+	fileID := uuid.New().String()
+	filePath := path.Join(userID, "files", fileID, fileName)
+
+	now := time.Now()
+	metadata := map[string]interface{}{
+		"file_type": metadataFileType,
+	}
+
+	marshalledMetadata, err := json.Marshal(metadata)
 	if err != nil {
-		ll.Error().Err(err).Msg("unable to add file to cloudstorage")
-		http.Error(w, "unable to add file to cloudstorage", http.StatusBadRequest)
+		// log and continue.
+		ll.Warn().Err(err).Msg("unable to marshal file metadata")
+	}
+
+	file := &db.File{
+		ID: fileID,
+		UserID: userID,
+		CreatedAt: &now,
+		LastModifiedAt: &now,
+		Name: fileName,
+		Type: db.FileType(fileType),
+		Year: util.GetYear(year),
+		Path: filePath,
+		Metadata: json.RawMessage(marshalledMetadata),
+	}
+
+	addFileToCloudStorage := func() func(ctx context.Context) error {
+		return func(ctx context.Context) error {
+			return cloudstorage.AddCloudstorageFile(ctx, s.StorageClient, uploadedFile, s.UsersBucket, filePath)
+		}
+	}
+
+	err = s.DBHandle.AddFile(ctx, userID, file, associatedProperties, addFileToCloudStorage())
+	if err != nil {
+		ll.Error().Err(err).Msg("unable to add file")
+		http.Error(w, "unable to add file", http.StatusInternalServerError)
 		return
 	}
 
-	ll.Info().Interface("info", fInfo).Msg("successfully stored file in GCS")
-	RespondToRequest(w, fInfo)
+	ll.Info().Msg("successfully created file")
+	RespondToRequest(w, file)
 	return
 
 }
@@ -234,6 +259,7 @@ type RestFile struct {
 	CreatedAt      *time.Time `json:"created_at,omitempty"`
 	LastModifiedAt *time.Time `json:"last_modified_at,omitempty"`
 	GetSignedURL   string    `json:"get_signed_url,omitempty"`
+	Metadata json.RawMessage `json:"metadata,omitempty"`
 }
 
 func (s *Server) getFileByID(w http.ResponseWriter, r *http.Request) {
@@ -287,6 +313,7 @@ func (s *Server) getFileByID(w http.ResponseWriter, r *http.Request) {
 		CreatedAt:      file.CreatedAt,
 		LastModifiedAt: file.LastModifiedAt,
 		GetSignedURL:   fileGetSignedURL,
+		Metadata: file.Metadata,
 	}
 
 	ll.Info().Msg("returned file by id")
@@ -341,6 +368,7 @@ func (s *Server) getFilesByProperty(w http.ResponseWriter, r *http.Request) {
 			CreatedAt:      file.CreatedAt,
 			LastModifiedAt: file.LastModifiedAt,
 			GetSignedURL:   fileGetSignedURL,
+			Metadata: file.Metadata,
 		}
 
 		restFiles = append(restFiles, restFile)

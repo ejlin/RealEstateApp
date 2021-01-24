@@ -11,6 +11,7 @@ import (
 
 	"../cloudstorage"
 	"../db"
+	"../util"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -234,16 +235,6 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		Date:           date,
 	}
 
-	getYear := func(date string) int {
-		dateSpl := strings.Split(date, "-")
-		year, err := strconv.Atoi(dateSpl[0])
-		if err != nil {
-			// If we are unable to return the year, set the current year.
-			y := time.Now().Year()
-			return y
-		}
-		return year
-	}
 
 	var file *db.File
 	var fileKey string 
@@ -262,7 +253,7 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 			CreatedAt:      &now,
 			LastModifiedAt: &now,
 			Name:           fileName,
-			Year:           getYear(date),
+			Year:           util.GetYear(date),
 			Type:           db.FileType("other"),
 			Path: 			fileKey,
 		}

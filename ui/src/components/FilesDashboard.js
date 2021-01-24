@@ -10,6 +10,8 @@ import FileCard from './FileCard.js';
 import UploadFileModal from './UploadFileModal.js';
 import FolderCard from './FolderCard.js';
 
+import { trimTrailingName, mapFileTypeToIcon } from '../utility/Util.js';
+
 import ProgressBar from './../utility/ProgressBar.js';
 
 import { MdFileDownload, MdEdit } from 'react-icons/md';
@@ -17,16 +19,8 @@ import { IoMdArrowDropdown } from 'react-icons/io';
 import { IoTrashSharp } from 'react-icons/io5';
 import { GoFileDirectory } from 'react-icons/go';
 import { FaFolder } from 'react-icons/fa';
-import { 
-    AiFillFile, 
-    AiFillFileImage, 
-    AiFillFileExclamation, 
-    AiFillFilePdf, 
-    AiFillFileExcel, 
-    AiFillFilePpt, 
-    AiFillFileText, 
-    AiFillFileWord, 
-    AiFillFileZip } from 'react-icons/ai';
+
+let URLBuilder = require('url-join');
 
 /****
  * The UI is rendered using a field "filesToDisplay".
@@ -36,9 +30,6 @@ import {
  * All edits to the state should be done by editing this.state.propertyToFilesMap 
  * and passing it in to renderFiles(). 
  */
-
-const small = "small";
-const medium = "medium";
 
 const folders = "folders";
 const files = "files";
@@ -57,122 +48,6 @@ export const openSignedURL = (userID, fileKey)  => {
             window.open(url, '_blank', 'noopener,noreferrer')
         }
     }).catch(error => console.log(error));
-}
-
-
- // isSmall is used for small icons
- export const mapFileTypeToIcon = (imageType, size, isActive) => {
-    var classNames;
-    if (size === small) {
-         classNames = "files_dashboard_upload_image_type_mini_icon";
-    } else if (size === medium) {
-        classNames = "files_dashboard_upload_image_type_medium_icon";
-    } else {
-        classNames = "files_dashboard_upload_image_type";
-    }
-
-    if (imageType === null || imageType === undefined) {
-        classNames += isActive? " card_white" : " card_grey";
-        return (
-            <div>
-                <AiFillFileExclamation 
-                    className={classNames}>
-                </AiFillFileExclamation>
-            </div>
-        )
-    }
-
-    if (imageType.includes("image")){
-        classNames += isActive? " card_white" : " card_blue";
-        return (
-            <div>
-                <AiFillFileImage 
-                    className={classNames}>
-                </AiFillFileImage>
-            </div>
-        );
-    } else if (imageType.includes("pdf")) {
-        classNames += isActive? " card_white" : " card_red";
-        return (
-            <div>
-                <AiFillFilePdf
-                    className={classNames}>
-                </AiFillFilePdf>
-            </div>
-        )
-    } else if (imageType.includes("video")) {
-        classNames += isActive? " card_white" : " card_blue";
-        return (
-            <div>
-                <AiFillFile 
-                    className={classNames}>
-                </AiFillFile>
-            </div>
-        )
-    } else if (imageType.includes("audio")) {
-        classNames += isActive? " card_white" : " card_blue";
-        return (
-            <div>
-                <AiFillFile 
-                    className={classNames}>
-                </AiFillFile>
-            </div>
-        )
-    } else if (imageType.includes("zip")) {
-        classNames += isActive? " card_white" : " card_grey";
-        return (
-            <div>
-                <AiFillFileZip
-                    className={classNames}>
-                </AiFillFileZip>
-            </div>
-        )
-    } else if (imageType.includes("text")) {
-        classNames += isActive? " card_white" : " card_grey";
-        return (
-            <div>
-                <AiFillFileText
-                    className={classNames}>
-                </AiFillFileText>
-            </div>
-        )
-    } else if (imageType.includes("presentation")) {
-        classNames += isActive? " card_white" : " card_orange";
-        return (
-            <div>
-                <AiFillFilePpt
-                    className={classNames}>
-                </AiFillFilePpt>
-            </div>
-        )
-    } else if (imageType.includes("spreadsheet")) {
-        classNames += isActive? " card_white" : " card_green";
-        return (
-            <div>
-                <AiFillFileExcel
-                    className={classNames}>
-                </AiFillFileExcel>
-            </div>
-        )
-    } else if (imageType.includes("doc")) {
-        classNames += isActive? " card_white" : " card_blue";
-        return (
-            <div>
-                <AiFillFileWord
-                    className={classNames}>
-                </AiFillFileWord>
-            </div>
-        )
-    } else {
-        classNames += isActive? " card_white" : " card_grey";
-        return (
-            <div>
-                <AiFillFileExclamation
-                    className={classNames}>
-                </AiFillFileExclamation>
-            </div>
-        )
-    }
 }
 
 class FilesDashboard extends React.Component {
@@ -214,9 +89,8 @@ class FilesDashboard extends React.Component {
         this.deleteActiveFiles = this.deleteActiveFiles.bind(this);
         this.deleteFile = this.deleteFile.bind(this);
         this.handleSearchBar = this.handleSearchBar.bind(this);
-        this.trimTrailingFileName = this.trimTrailingFileName.bind(this);
         this.convertPropertyToFilesMapToElements = this.convertPropertyToFilesMapToElements.bind(this);
-        this.closeFileUpload = this.closeFileUpload.bind(this);
+        this.closeUploadFileModal = this.closeUploadFileModal.bind(this);
         this.renderFolders = this.renderFolders.bind(this);
         this.setActiveFolder = this.setActiveFolder.bind(this);
         this.renderActiveFolderFiles = this.renderActiveFolderFiles.bind(this);
@@ -291,7 +165,7 @@ class FilesDashboard extends React.Component {
         });
     }
 
-    closeFileUpload() {
+    closeUploadFileModal() {
         this.setState({
             displayUploadFileBox: false
         })
@@ -390,13 +264,6 @@ class FilesDashboard extends React.Component {
             propertyToFilesMap: currPropertyToFilesMap
         });
     }
-     
-    trimTrailingFileName(fileName) {
-        if (fileName.length > 20) {
-            return fileName.substring(0,20) + "...";
-        }
-        return fileName;
-    }
 
     handleSearchBar(e) {
         var searchValue = e.target.value.toLowerCase().replace(/\s/g, "");
@@ -412,8 +279,7 @@ class FilesDashboard extends React.Component {
         return this.state.activeSearchFiles.length > 0 ? this.state.activeSearchFiles : this.renderNoFiles();
     }
 
-    // file Key = propertyID + '/' + fileName
-    setActiveFileAttributes(fileKey, file, toRemove) {
+    setActiveFileAttributes(fileID, file, toRemove) {
         var currentActiveFiles = this.state.activeFiles;
         if (currentActiveFiles === null || currentActiveFiles === undefined || currentActiveFiles.length === 0) {
             currentActiveFiles = new Map();
@@ -422,10 +288,10 @@ class FilesDashboard extends React.Component {
             return false
         }
         if (!toRemove) {
-            currentActiveFiles.set(fileKey, file);
+            currentActiveFiles.set(fileID, file);
         } else {
             // Remove from active ("unclicked")
-            currentActiveFiles.delete(fileKey);
+            currentActiveFiles.delete(fileID);
         }
         this.setState({
             activeFiles: currentActiveFiles
@@ -572,12 +438,22 @@ class FilesDashboard extends React.Component {
 
     setActiveFolder(folderPropertyID) {
 
+        let userID = this.state.user["id"];
+        let getFilesByPropertyURL = URLBuilder("api/user/files/property", userID, folderPropertyID)
 
-
-        this.setState({
-            activeFolderPropertyID: folderPropertyID,
-            pageToDisplay: files,
-        })
+        axios({
+            method: 'get',
+            url: getFilesByPropertyURL
+        }).then(response => {
+            console.log(response.data);
+            // Downloads the file
+            // Credit: https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
+            this.setState({
+                activeFolderPropertyID: folderPropertyID,
+                activeFolderFiles: response.data,
+                pageToDisplay: files,
+            })
+        }).catch(error => console.log(error));
     }
 
     renderFiles(propertyToFilesMap) {
@@ -609,7 +485,29 @@ class FilesDashboard extends React.Component {
     // }
 
     renderActiveFolderFiles() {
+        let activeFolderFiles = this.state.activeFolderFiles;
 
+        let fileElements = [];
+
+        for (let i = 0; i < activeFolderFiles.length; i++) {
+            let activeFolderFile = activeFolderFiles[i];
+            fileElements.push(
+                <FileCard
+                    data={{
+                        state: {
+                            user: this.state.user,
+                            file: activeFolderFile,
+                            backgroundColor: "white",
+                            setActiveFileAttributes: this.setActiveFileAttributes,
+                            openSignedURL: this.openSignedURL,
+                        }
+                    }}
+                >
+
+                </FileCard>
+            )
+        }
+        return fileElements;
     }
 
     renderFolders() {
@@ -638,6 +536,7 @@ class FilesDashboard extends React.Component {
                         user: this.state.user,
                         folderPropertyID: key,
                         folderName: value,
+                        setActiveFolder: this.setActiveFolder,
                     }
                 }}
                 ></FolderCard>
@@ -664,8 +563,9 @@ class FilesDashboard extends React.Component {
                             <UploadFileModal
                                 data={{
                                     state: {
+                                        user: this.state.user,
                                         propertiesMap: this.state.propertiesMap,
-                                        closeFileUpload: this.closeFileUpload
+                                        closeUploadFileModal: this.closeUploadFileModal,
                                     }                       
                                 }}/>
                         </div> :

@@ -1,14 +1,13 @@
 .file_card_individual_file {
     background-color: white;
-    border: 1px solid white;
+    border: 1px solid grey;
     border-radius: 4px;
-    display: inline-block;
-    height: calc(40px + 12px);
-    margin-right: 30px;
+    float: left;
+    height: 55px;
     margin-top: 15px;
-    min-width: 200px;
     position: relative;
-    width: calc((100% - 150px - 20px) / 5);
+    margin-right: calc((100% - 1000px)/3);
+    width: 250px;
 }
 
 .file_card_individual_file:first-child {
@@ -18,7 +17,7 @@
 .file_card_individual_file_footer {
     border-radius: 4px 4px 0px 0px;
     float: left;
-    line-height: calc(40px + 12px);
+    line-height: 55px;
     margin-left: calc(30px + 16px);
     position: absolute;
     width: calc(100% - 30px - 16px);
@@ -73,6 +72,15 @@
     background-color: #F5F5FA;
 }
 
+.file_card_file_type_icon {
+    float: left;
+    height: 30px;
+    margin-bottom: calc((55px - 30px)/2);
+    margin-left: 10px;
+    margin-top: calc((55px - 30px)/2);
+    width: 30px;
+}
+/* 
 @media screen and (max-width: 2000px) {
     .file_card_individual_file {
         width: calc((100% - 150px - 20px) / 5);
@@ -107,4 +115,4 @@
     #file_card_search_bar {
         width: 200px;
     }
-}
+} */

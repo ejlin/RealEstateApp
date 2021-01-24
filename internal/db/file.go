@@ -1,6 +1,9 @@
 package db
 
 import (
+	"encoding/json"
+	"fmt"
+	"context"
 	"database/sql"
 	"errors"
 	"time"
@@ -21,6 +24,9 @@ type File struct {
 
 	// Path is the path to our file within our GCS bucket.
 	Path string `json:"path,omitempty",sql:"varchar(255)"`
+
+	// Metadata contains information about the uploaded file. 
+	Metadata json.RawMessage `json:"metadata,omitempty",sql:"type:JSONB"`
 }
 
 type FileType string
@@ -29,7 +35,7 @@ const (
 	Other FileType = "Other"
 )
 
-func (handle *Handle) AddFile(file *File, propertyID []string) error {
+func (handle *Handle) AddFile(ctx context.Context, userID string, file *File, propertyIDs []string, addFileToCloudStorage func(ctx context.Context) error) error {
 
 	if file == nil {
 		return errors.New("nil file")
@@ -42,11 +48,16 @@ func (handle *Handle) AddFile(file *File, propertyID []string) error {
 		}
 
 		// If there are property IDs to associate with this file, we need to create a reference to it.
-		for _, propertyID := range propertyID {
+		for _, propertyID := range propertyIDs {
 
 			propertyID := propertyID
 
+			if propertyID == "" {
+				continue
+			}
+
 			propertyReference := PropertiesReferences{
+				UserID: userID,
 				PropertyID: sql.NullString{
 					String: propertyID,
 					Valid:  true,
@@ -55,10 +66,16 @@ func (handle *Handle) AddFile(file *File, propertyID []string) error {
 					String: file.ID,
 					Valid:  true,
 				},
+				ExpenseID: sql.NullString{},
 			}
+
 			if err := tx.FirstOrCreate(&propertyReference, propertyReference).Error; err != nil {
 				return err
 			}
+		}
+
+		if err := addFileToCloudStorage(ctx); err != nil {
+			return err
 		}
 
 		return nil
@@ -100,22 +117,29 @@ func (handle *Handle) GetFilesByProperty(userID, propertyID string) ([]*File, er
 
 	// We need to first query our properties_references table to find which properties have which files.
 	var propertyReferences []*PropertiesReferences
-	if err := handle.DB.Where("user_id = ? AND property_id = ? AND file_id NOT NULL", userID, propertyID).Find(&propertyReferences).Error; err != nil {
+	if err := handle.DB.Where("user_id = ? AND property_id = ? AND file_id IS NOT NULL", userID, propertyID).Find(&propertyReferences).Error; err != nil {
 		return nil, err
 	}
 
-	var files []*File
-
+	var filesIDs []string
 	for _, propertyReference := range propertyReferences {
-
 		fileID := propertyReference.FileID.String
 		if fileID != "" {
-			file := &File{}
-			if err := handle.DB.Where("id = ?", fileID).Find(&file).Error; err != nil {
-				continue
-			}
-			files = append(files, file)
-		}	
+			filesIDs = append(filesIDs, fileID)
+		}
+	}
+
+	if len(filesIDs) == 0 {
+		return nil, nil
+	}
+
+	fmt.Println("HERE: ", filesIDs)
+	fmt.Println("yoo")
+
+	// We may need to filter by year if there are too many files.
+	var files []*File
+	if err := handle.DB.Where("id IN (?)", filesIDs).Find(&files).Error; err != nil {
+		return nil, err
 	}
 	return files, nil
 }

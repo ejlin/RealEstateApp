@@ -7,3 +7,7 @@
     padding: 2px;
     width: calc((100% - 4px));
 }
+
+.dropdown_select_parent_box {
+    position: relative;
+}

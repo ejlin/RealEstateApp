@@ -6,10 +6,20 @@ import './CSS/UploadFileModal.css';
 import './CSS/Style.css';
 import DropdownSelect from './DropdownSelect.js';
 
+import Loader from './Loader.js';
+
+
 import { IoCloseSharp, IoCloseOutline, IoTrashSharp } from 'react-icons/io5';
 import { MdFileUpload } from 'react-icons/md';
 
 import ProgressBar from './../utility/ProgressBar.js';
+
+import { getByValue, mapFileTypeToIcon } from '../utility/Util.js';
+
+const All = "All";
+const None = "None";
+
+const properties = "properties";
 
 class UploadFileModal extends React.Component {
     
@@ -17,9 +27,10 @@ class UploadFileModal extends React.Component {
         super(props);
 
         this.state = {
-            closeFileUpload: this.props.data.state.closeFileUpload,
+            user: this.props.data.state.user,
             propertiesMap: this.props.data.state.propertiesMap,
             propertiesAddresses: Array.from(this.props.data.state.propertiesMap.values()),
+            closeUploadFileModal: this.props.data.state.closeUploadFileModal,
         };
 
         this.renderFileUploadPropertiesSelection = this.renderFileUploadPropertiesSelection.bind(this);
@@ -60,6 +71,10 @@ class UploadFileModal extends React.Component {
     }
 
     handleFileUpload() {
+        this.setState({
+            loadUpload: true,
+        })
+        
         var file = this.state.fileToUpload;
         if (file === null || file === undefined) {
             return;
@@ -73,14 +88,10 @@ class UploadFileModal extends React.Component {
             fileName = nameInputValue;
         }
 
-        var propertySelect = document.getElementById("files_dashboard_upload_file_property_select");
-        var propertySelectValue = propertySelect.value;
-        var propertySelectAddress = propertySelect.options[propertySelect.selectedIndex].text;
-
-        var fileCategorySelect = document.getElementById("files_dashboard_upload_file_category_select");
+        var fileCategorySelect = document.getElementById("upload_file_modal_category_select");
         var fileCategorySelectValue = fileCategorySelect.value;
 
-        var yearInput = document.getElementById("files_dashboard_upload_file_year_input");
+        var yearInput = document.getElementById("upload_file_modal_year_input");
 
         // Year sanitization is handled server side. If empty, server will fill in with current year. 
         var yearInputValue = yearInput.value;
@@ -105,10 +116,8 @@ class UploadFileModal extends React.Component {
 
         var formData = new FormData();
         formData.append('file', file);
-        formData.append('property_id', propertySelectValue);
-        formData.append('file_category', fileCategorySelectValue);
-        formData.append('file_type', file["type"]);
-        formData.append('address', propertySelectAddress);
+        formData.append('file_type', fileCategorySelectValue);
+        formData.append('metadata_file_type', file["type"]);
         formData.append('year', yearInputValue);
 
 
@@ -116,6 +125,37 @@ class UploadFileModal extends React.Component {
         if (nameInputValue !== "") {
             formData.append('file_name', nameInputValue);
         }
+
+        var currSelectedAssociatedProperties = this.state.currSelectedAssociatedProperties;
+        var indexAll = currSelectedAssociatedProperties.indexOf(All);
+        var indexNone = currSelectedAssociatedProperties.indexOf(None);
+
+        var associatedProperties = [];
+        var propertiesMap = this.state.propertiesMap;
+
+        if (indexAll >= 0) {
+            // Add all of our properties.
+            propertiesMap.forEach((value, key, map) => {
+                // Add our propertyIDs
+                if (key != None && key != All){
+                    associatedProperties.push(key);
+                }
+            })
+        } else if (indexNone >= 0) {
+        } else {
+            // Add all the ids of the properties selected.
+            for (var i = 0; i < currSelectedAssociatedProperties.length; i++) {
+                let currSelectedAssociatedProperty = currSelectedAssociatedProperties[i];
+                let propertyID = getByValue(propertiesMap, currSelectedAssociatedProperty);
+                if (propertyID !== null){
+                    associatedProperties.push(propertyID);
+                } else {
+                    associatedProperties.push(None);
+                }
+            }
+        }   
+
+        formData.append(properties, associatedProperties);
 
         axios({
             method: 'post',
@@ -136,28 +176,29 @@ class UploadFileModal extends React.Component {
             },
             data: formData
         }).then(response => {
-            var currFiles = this.state.propertyToFilesMap;
-            if (!currFiles.has(propertySelectValue)) {
-                currFiles.set(propertySelectValue, []);
-            }
+            // var currFiles = this.state.propertyToFilesMap;
+            // if (!currFiles.has(propertySelectValue)) {
+            //     currFiles.set(propertySelectValue, []);
+            // }
 
-            var propertyArr = currFiles.get(propertySelectValue);
-            propertyArr.unshift(response.data);
+            // var propertyArr = currFiles.get(propertySelectValue);
+            // propertyArr.unshift(response.data);
 
-            currFiles.set(propertySelectValue, propertyArr);
+            // currFiles.set(propertySelectValue, propertyArr);
 
-            var files = this.state.files;
-            files.push(response.data);
+            // var files = this.state.files;
+            // files.push(response.data);
 
-            this.renderFiles(currFiles);
+            // this.renderFiles(currFiles);
 
-            this.setState({
-                files: [...files],
-                displayUploadFileBox: false,
-                fileToUpload: null,
-                fileUploadProgressBar: 0,
-                propertyToFilesMap: currFiles
-            })
+            // this.setState({
+            //     files: [...files],
+            //     displayUploadFileBox: false,
+            //     fileToUpload: null,
+            //     fileUploadProgressBar: 0,
+            //     propertyToFilesMap: currFiles
+            // })
+            this.state.closeUploadFileModal();
         }).catch(error => console.log(error));
     }
 
@@ -174,7 +215,7 @@ class UploadFileModal extends React.Component {
                     <div className="create_expense_modal_parent_box_title_box">
                         <IoCloseOutline 
                             onClick={() => {
-                                this.state.closeFileUpload();
+                                this.state.closeUploadFileModal();
                             }}
                             className="create_expense_modal_parent_box_title_box_close_icon"></IoCloseOutline>
                     </div>
@@ -198,9 +239,9 @@ class UploadFileModal extends React.Component {
                                 {this.state.fileToUpload ? 
                                 <div alt={this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "Unknown File"}>
                                     <div>
-                                        {this.mapFileTypeToIcon(this.state.fileToUpload["type"], false)}
+                                        {mapFileTypeToIcon(this.state.fileToUpload["type"], false, "upload_file_modal_file_type_icon")}
                                     </div>
-                                    <p id="files_dashboard_uploaded_file_name">
+                                    <p className="upload_file_modal_uploaded_file_name">
                                         {this.state.fileToUpload["name"] ? this.trimTrailingFileName(this.state.fileToUpload["name"]) : "Unable to Upload File"}
                                     </p>
                                 </div> : 
@@ -218,7 +259,7 @@ class UploadFileModal extends React.Component {
                                     <p className="files_dashboard_title">
                                         File Type
                                     </p>
-                                    <select id="files_dashboard_upload_file_category_select" className="files_dashboard_file_type">
+                                    <select id="upload_file_modal_category_select" className="files_dashboard_file_type">
                                         <option value="" disabled selected>File Type</option>
                                         <option name="mortgage" value="mortgage">Mortgage</option>
                                         <option name="contracting" value="contracting">Contracting</option>
@@ -235,6 +276,7 @@ class UploadFileModal extends React.Component {
                                         Year
                                     </p>
                                     <input 
+                                        id="upload_file_modal_year_input"
                                         type="number" 
                                         maxlength="4"
                                         placeholder="YYYY"
@@ -268,8 +310,19 @@ class UploadFileModal extends React.Component {
                             
                             <div className="clearfix"></div>
                             {/* <ProgressBar id="upload_file_progress_bar" bgColor="#296CF6" completed={this.state.fileUploadProgressBar}></ProgressBar> */}
-                            <div className="files_dashboard_upload_file_final_button" onClick={this.handleFileUpload}>
-                                Upload
+                            <div className={
+                                    this.state.loadUpload ? 
+                                    "files_dashboard_upload_file_final_button loading_button" :
+                                    "files_dashboard_upload_file_final_button"
+                                }
+                                onClick={this.handleFileUpload}>
+                                {this.state.loadUpload ? 
+                                <Loader data={{
+                                    state: {
+                                        class: "upload_file_modal_loader",
+                                    }
+                                }}/> :
+                                "Upload"}
                             </div>
                         </div>
                     </div>

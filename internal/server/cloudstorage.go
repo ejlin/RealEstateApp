@@ -31,8 +31,6 @@ const (
 
 type FileInfo struct {
 	Name string `json:"name"`
-	// PropertyID is the id of the property with which this file is associated with.
-	PropertyID string `json:"property_id"`
 	Address    string `json:"address"`
 	Year       string `json:"year"`
 
@@ -83,7 +81,6 @@ func (s *Server) getCloudFileslistByUser(ctx context.Context, userID string) ([]
 			Address:      fileInfo.Address,
 			Year:         fileInfo.Year,
 			FileCategory: fileInfo.FileCategory,
-			PropertyID:   dir[0],
 			Metadata:     fileInfo.Metadata,
 		})
 	}
@@ -141,19 +138,15 @@ func (s *Server) getFileData(ctx context.Context, userID, propertyID, fileName s
 }
 
 // addStorageFile adds a new file to cloudstorage bucket.
-func (s *Server) addStorageFile(ctx context.Context, f io.Reader, userID, propertyID, fileName, fileType, fileCategory, address, year string) (*FileInfo, error) {
+func (s *Server) addStorageFile(ctx context.Context, f io.Reader, key, fileName, fileType, fileCategory, address, year string) (*FileInfo, error) {
 
 	tCtx, cancel := context.WithTimeout(ctx, 60*time.Second)
 	defer cancel()
-
-	prefix := path.Join(userID, propertyDelimiter, propertyID)
-	key := path.Join(prefix, fileName)
 
 	o := s.StorageClient.Bucket(s.UsersBucket).Object(key)
 	wc := o.NewWriter(tCtx)
 
 	wc.Metadata = map[string]string{
-		propertyIDLabel:   propertyID,
 		yearLabel:         year,
 		fileTypeLabel:     fileType,
 		addressLabel:      address,
@@ -172,7 +165,6 @@ func (s *Server) addStorageFile(ctx context.Context, f io.Reader, userID, proper
 
 	return &FileInfo{
 		Name:         fileName,
-		PropertyID:   propertyID,
 		Year:         year,
 		Address:      address,
 		FileCategory: fileCategory,
@@ -323,10 +315,6 @@ func getFileInfoFromAttrs(attrs *storage.ObjectAttrs, prefix string) *FileInfo {
 		}
 
 		metadata := attrs.Metadata
-
-		if propertyID, ok := metadata[propertyIDLabel]; ok {
-			fInfo.PropertyID = propertyID
-		}
 
 		if fileCategory, ok := metadata[fileCategoryLabel]; ok {
 			fInfo.FileCategory = fileCategory
