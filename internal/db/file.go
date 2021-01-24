@@ -154,3 +154,41 @@ func (handle *Handle) GetFilesByProperty(userID, propertyID string) ([]*File, er
 	}
 	return files, nil
 }
+
+func (handle *Handle) DeleteFileByID(ctx context.Context, userID, fileID string, deleteFileFromCloudstorage func(ctx context.Context, filePath string) error) error {
+
+	_, err := uuid.Parse(userID)
+	if err != nil {
+		return err
+	}
+
+	_, err = uuid.Parse(fileID)
+	if err != nil {
+		return err
+	}
+
+	var file File
+	// We need to fetch the path first of the file.
+	if err := handle.DB.Select("path").Where("id = ? AND user_id = ?", fileID, userID).Find(&file).Error; err != nil {
+		return err
+	}
+
+	return handle.DB.Transaction(func(tx *gorm.DB) error {
+
+		filePath := file.Path
+
+		if err := tx.Where("id = ? AND user_id = ?", fileID, userID).Delete(&file).Error; err != nil {
+			if !errors.Is(err, gorm.ErrRecordNotFound) {
+				return err
+			}
+		}
+
+		// We _must_ delete from cloudstorage last, because there is no way to rollback cloudstorage operations.
+		if filePath != "" {
+			if err := deleteFileFromCloudstorage(ctx, filePath); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+}

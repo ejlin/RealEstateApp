@@ -156,10 +156,12 @@ class FilesDashboard extends React.Component {
     }
     
     downloadFile(value, key, map) {
-        var url = "api/user/files/" + this.state.user["id"] + "/" + key;
+        console.log(key);
+        let userID = this.state.user["id"];
+        let downloadFileURL = URLBuilder("api/user/files", userID, key);
         axios({
             method: 'get',
-            url: url,
+            url: downloadFileURL,
             params: {
                 request: "download"
             },
@@ -167,7 +169,8 @@ class FilesDashboard extends React.Component {
         }).then(response => {
             // Downloads the file
             // Credit: https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
-            const url = window.URL.createObjectURL(new Blob([response.data]));
+            let file = response.data;
+            const url = window.URL.createObjectURL(new Blob([file["get_signed_url"]]));
             const link = document.createElement('a');
             link.href = url;
             const contentDisposition = response.headers['content-disposition'];
@@ -187,12 +190,13 @@ class FilesDashboard extends React.Component {
         this.state.activeFiles.forEach(this.downloadFile)
     }
 
-    async deleteFile(key) {
-        var url = "api/user/files/" + this.state.user["id"] + "/" + key;
+    async deleteFile(fileID) {
+        let userID = this.state.user["id"];
+        let deleteFileURL = URLBuilder("api/user/files", userID, fileID)
         var success = false;
         await axios({
             method: 'delete',
-            url: url,
+            url: deleteFileURL,
         }).then(response => {
             if (response.status === 200) {
                 success = true;
@@ -265,10 +269,11 @@ class FilesDashboard extends React.Component {
 
     setActiveFileAttributes(fileID, file, toRemove) {
         var currentActiveFiles = this.state.activeFiles;
-        if (currentActiveFiles === null || currentActiveFiles === undefined || currentActiveFiles.length === 0) {
+        console.log(currentActiveFiles);
+        if (currentActiveFiles === null || currentActiveFiles === undefined) {
             currentActiveFiles = new Map();
         }
-        if (currentActiveFiles.size >= 25 && !toRemove) {
+        if (currentActiveFiles.size >= 15 && !toRemove) {
             return false
         }
         if (!toRemove) {

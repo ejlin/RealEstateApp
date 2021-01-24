@@ -416,32 +416,36 @@ func (s *Server) deleteFile(w http.ResponseWriter, r *http.Request) {
 
 	ll := log.With().Str("user_id", userID).Logger()
 
-	propertyID, ok := vars["property_id"]
+	fileID, ok := vars["file_id"]
 	if !ok {
-		ll.Warn().Msg("property id not set")
-		http.Error(w, "property id not set", http.StatusBadRequest)
+		ll.Warn().Msg("file id not set")
+		http.Error(w, "file id not set", http.StatusBadRequest)
 		return
 	}
 
-	ll = ll.With().Str("property_id", propertyID).Logger()
+	ll = ll.With().Str("file_id", fileID).Logger()
 
-	fileName, ok := vars["file_name"]
-	if !ok {
-		ll.Warn().Msg("file name not set")
-		http.Error(w, "file name not set", http.StatusBadRequest)
-		return
+	deleteFileFromCloudstorage := func() func(ctx context.Context, filePath string) error {
+		return func(ctx context.Context, filePath string) error {
+			return s.deleteStorageFile(ctx, filePath)
+		}
 	}
 
-	ll = ll.With().Str("file_name", fileName).Logger()
-
-	key := path.Join(userID, propertyDelimiter, propertyID, fileName)
-
-	err := s.deleteStorageFile(ctx, key)
+	err := s.DBHandle.DeleteFileByID(ctx, userID, fileID, deleteFileFromCloudstorage())
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to delete file")
 		http.Error(w, "unable to delete file", http.StatusInternalServerError)
 		return
 	}
+
+	// key := path.Join(userID, propertyDelimiter, propertyID, fileName)
+
+	// err := s.deleteStorageFile(ctx, key)
+	// if err != nil {
+	// 	ll.Warn().Err(err).Msg("unable to delete file")
+	// 	http.Error(w, "unable to delete file", http.StatusInternalServerError)
+	// 	return
+	// }
 
 	ll.Info().Msg("file deleted successfully")
 	w.Write([]byte("success"))

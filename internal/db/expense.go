@@ -177,7 +177,6 @@ func (handle *Handle) DeleteExpenseByID(ctx context.Context,
 										deleteFileFromCloudstorage func(ctx context.Context, filePath string) error) error {
 
 	// TODO: eric.lin to explore gorm soft delete options. Provide users with undo method.
-
 	_, err := uuid.Parse(userID)
 	if err != nil {
 		return fmt.Errorf("invalid UUID: %w", err)
