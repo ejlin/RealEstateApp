@@ -18,6 +18,16 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+type RestFile struct {
+	ID             string    `json:"id,omitempty"`
+	Name           string    `json:"name,omitempty"`
+	Year int `json:"year,omitempty"`
+	CreatedAt      *time.Time `json:"created_at,omitempty"`
+	LastModifiedAt *time.Time `json:"last_modified_at,omitempty"`
+	GetSignedURL   string    `json:"get_signed_url,omitempty"`
+	Metadata json.RawMessage `json:"metadata,omitempty"`
+}
+
 func (s *Server) getFileslistByUser(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
@@ -32,7 +42,7 @@ func (s *Server) getFileslistByUser(w http.ResponseWriter, r *http.Request) {
 
 	ll := log.With().Str("user_id", userID).Logger()
 
-	files, err := s.getCloudFileslistByUser(ctx, userID)
+	files, err := s.DBHandle.GetAllFiles(userID) 
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to get fileslist by user")
 		http.Error(w, "unable to get fileslist by user", http.StatusBadRequest)
@@ -45,7 +55,30 @@ func (s *Server) getFileslistByUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	RespondToRequest(w, files)
+	var restFiles []*RestFile
+
+	for _, file := range files {
+
+		// We may need to log how long this takes.
+		fileGetSignedURL, err := s.getSignedURL(ctx, file.Path)
+		if err != nil {
+			// Log and continue.
+			ll.Warn().Err(err).Msg("unable to get file signed URL")
+			continue
+		}
+
+		restFiles = append(restFiles, &RestFile{
+			ID:             file.ID,
+			Name:           file.Name,
+			Year: file.Year,
+			CreatedAt:      file.CreatedAt,
+			LastModifiedAt: file.LastModifiedAt,
+			GetSignedURL:   fileGetSignedURL,
+			Metadata: file.Metadata,
+		})
+	}
+	
+	RespondToRequest(w, restFiles)
 	return
 }
 
@@ -250,16 +283,6 @@ func (s *Server) getFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	return
-}
-
-type RestFile struct {
-	ID             string    `json:"id,omitempty"`
-	Name           string    `json:"name,omitempty"`
-	Year int `json:"year,omitempty"`
-	CreatedAt      *time.Time `json:"created_at,omitempty"`
-	LastModifiedAt *time.Time `json:"last_modified_at,omitempty"`
-	GetSignedURL   string    `json:"get_signed_url,omitempty"`
-	Metadata json.RawMessage `json:"metadata,omitempty"`
 }
 
 func (s *Server) getFileByID(w http.ResponseWriter, r *http.Request) {

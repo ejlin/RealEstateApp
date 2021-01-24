@@ -10,15 +10,13 @@ import FileCard from './FileCard.js';
 import UploadFileModal from './UploadFileModal.js';
 import FolderCard from './FolderCard.js';
 
-import { trimTrailingName, mapFileTypeToIcon } from '../utility/Util.js';
+import { trimTrailingName, mapFileTypeToIcon, openSignedURL } from '../utility/Util.js';
 
 import ProgressBar from './../utility/ProgressBar.js';
 
 import { MdFileDownload, MdEdit } from 'react-icons/md';
-import { IoMdArrowDropdown } from 'react-icons/io';
-import { IoTrashSharp } from 'react-icons/io5';
-import { GoFileDirectory } from 'react-icons/go';
-import { FaFolder } from 'react-icons/fa';
+import { IoTrashSharp, IoCaretBackOutline } from 'react-icons/io5';
+import { RiErrorWarningFill } from 'react-icons/ri';
 
 let URLBuilder = require('url-join');
 
@@ -34,21 +32,7 @@ let URLBuilder = require('url-join');
 const folders = "folders";
 const files = "files";
 
-export const openSignedURL = (userID, fileKey)  => {
-    var url = "api/user/files/" + userID + "/" + fileKey;
-    axios({
-        method: 'get',
-        url: url,
-        params: {
-            request: "signed_url"
-        }
-    }).then(response => {
-        var url = response.data;
-        if (url !== "") {
-            window.open(url, '_blank', 'noopener,noreferrer')
-        }
-    }).catch(error => console.log(error));
-}
+const All = "All";
 
 class FilesDashboard extends React.Component {
         
@@ -104,7 +88,7 @@ class FilesDashboard extends React.Component {
         }).then(response => {
             var filesList = response.data;
             filesList.sort(function(a,b){
-                return new Date(b["metadata"]["last_edited_at"]) - new Date(a["metadata"]["last_edited_at"]);
+                return new Date(b["last_modified_at"]) - new Date(a["last_modified_at"]);
             })
 
             var propertyToFilesMap = new Map();
@@ -439,7 +423,15 @@ class FilesDashboard extends React.Component {
     setActiveFolder(folderPropertyID) {
 
         let userID = this.state.user["id"];
-        let getFilesByPropertyURL = URLBuilder("api/user/files/property", userID, folderPropertyID)
+
+        let getFilesByPropertyURL;
+
+        // If we are in our All folder, list all our files.
+        if (folderPropertyID === All) {
+            getFilesByPropertyURL = URLBuilder("api/user/files", userID)
+        } else {
+            getFilesByPropertyURL = URLBuilder("api/user/files/property", userID, folderPropertyID)
+        }
 
         axios({
             method: 'get',
@@ -489,25 +481,51 @@ class FilesDashboard extends React.Component {
 
         let fileElements = [];
 
-        for (let i = 0; i < activeFolderFiles.length; i++) {
-            let activeFolderFile = activeFolderFiles[i];
+        if (activeFolderFiles && activeFolderFiles.length > 0) {
+            for (let i = 0; i < activeFolderFiles.length; i++) {
+                let activeFolderFile = activeFolderFiles[i];
+                fileElements.push(
+                    <FileCard
+                        data={{
+                            state: {
+                                user: this.state.user,
+                                file: activeFolderFile,
+                                backgroundColor: "white",
+                                setActiveFileAttributes: this.setActiveFileAttributes,
+                                openSignedURL: openSignedURL,
+                            }
+                        }}
+                    >
+    
+                    </FileCard>
+                )
+            }
+        } else {
             fileElements.push(
-                <FileCard
-                    data={{
-                        state: {
-                            user: this.state.user,
-                            file: activeFolderFile,
-                            backgroundColor: "white",
-                            setActiveFileAttributes: this.setActiveFileAttributes,
-                            openSignedURL: this.openSignedURL,
-                        }
-                    }}
-                >
-
-                </FileCard>
-            )
+                this.renderNoFiles()
+            );
         }
-        return fileElements;
+
+        
+        return (
+            <div>
+                <div 
+                    onClick={() => {
+                        this.setState({
+                            activeFiles: [],
+                            pageToDisplay: folders,
+                        })
+                    }}
+                    className="files_dashboard_back_to_folders_button">
+                    <IoCaretBackOutline className="files_dashboard_back_to_folders_button_icon"></IoCaretBackOutline>
+                    <p className="files_dashboard_back_to_folders_button_text">Folders</p>
+                </div>
+                <div className="clearfix"/>
+                <div>
+                    {fileElements}
+                </div>
+            </div>
+        );
     }
 
     renderFolders() {

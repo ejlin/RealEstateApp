@@ -378,3 +378,11 @@
     opacity: 0.8;
     pointer-events: none;
 }
+
+.create_expense_modal_file_type_icon {
+    height: 40px;
+    margin-left: calc((100% - 40px)/2);
+    margin-right: calc((100% - 40px)/2);
+    margin-top: 40px;
+    width: 40px;
+}

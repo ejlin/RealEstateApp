@@ -247,6 +247,10 @@ class ExpensesDashboard extends React.Component {
             let expensesMap = this.state.expensesMap;
             let expenses = this.state.expenses;
 
+            if (!expenses) {
+                expenses = [];
+            }
+
             expensesMap.set(expense["id"], expense);
             expenses.unshift(expense);
 
@@ -568,12 +572,6 @@ class ExpensesDashboard extends React.Component {
                         <div></div>}
                     {this.state.expenseToEdit ?
                         <div className="expenses_dashboard_display_add_expense_box">
-                            <EditExpenseModal data={{
-                                state: {
-                                    expense: this.state.expenseToEdit,
-                                    closeEditExpenseModal: this.closeEditExpenseModal,
-                                }
-                            }}/>
                         </div> :
                         <div></div>}
                     {this.state.currActiveExpandedExpense !== null ? 

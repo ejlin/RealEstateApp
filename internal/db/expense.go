@@ -171,7 +171,10 @@ func (handle *Handle) GetExpensesByUser(userID string) ([]*Expense, error) {
 }
 
 // RemoveExpenseByID will delete an expense from our database.
-func (handle *Handle) DeleteExpenseByID(ctx context.Context, userID, expenseID string, deleteFileFromCloudstorage func(ctx context.Context, filePath string) error) error {
+func (handle *Handle) DeleteExpenseByID(ctx context.Context, 
+										userID, 
+										expenseID string, 
+										deleteFileFromCloudstorage func(ctx context.Context, filePath string) error) error {
 
 	// TODO: eric.lin to explore gorm soft delete options. Provide users with undo method.
 

@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/http"
 	"path"
@@ -187,7 +188,7 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "missing expense frequency", http.StatusBadRequest)
 		return
 	}
-
+	
 	sAmount := r.FormValue("amount")
 	if sAmount == "" {
 		ll.Error().Msg("missing expense amount")
@@ -243,6 +244,26 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		if fileName == "" {
 			fileName = title + "-file"
 		}
+
+		metadataFileType := r.FormValue("metadata_file_type")
+		if metadataFileType == "" {
+			metadataFileType = "unknown"
+		}
+
+		fileMetadata := map[string]interface{}{
+			"file_type": metadataFileType,
+		}
+
+		var fileMetadataField json.RawMessage
+
+		marshalledFileMetadata, err := json.Marshal(fileMetadata)
+		if err != nil {
+			// log and continue.
+			ll.Warn().Err(err).Msg("unable to marshal file metadata")
+			fileMetadataField = json.RawMessage("")
+		} else {
+			fileMetadataField = json.RawMessage(marshalledFileMetadata)
+		}
 	
 		// The key to an expense file is {userID}/expenses/{expense_name}/{file_name}
 		fileKey = path.Join(userID, "expenses", title, fileName)
@@ -256,6 +277,7 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 			Year:           util.GetYear(date),
 			Type:           db.FileType("other"),
 			Path: 			fileKey,
+			Metadata: fileMetadataField,
 		}
 	} else {
 		file = nil

@@ -17,6 +17,7 @@ const All = "All";
 const None = "None";
 
 const file = "file";
+const metadataFileType = "metadata_file_type";
 const title = "title";
 const description = "description";
 const amount = "amount";
@@ -96,7 +97,10 @@ class CreateExpenseModal extends React.Component {
         
         // TODO: verify expense
         var expense = new FormData();
-        expense.append(file, this.state.fileToUpload);
+        if (this.state.fileToUpload) {
+            expense.append(file, this.state.fileToUpload);
+            expense.append(metadataFileType, this.state.fileToUpload["type"]);
+        }
         expense.append(title, this.state.title);
         expense.append(description, this.state.description);
         expense.append(date, this.state.date);
@@ -219,7 +223,7 @@ class CreateExpenseModal extends React.Component {
                     {this.state.fileToUpload ? 
                     <div alt={this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "Unknown File"}>
                         <div className="create_expense_modal_upload_file_button_icon_box">
-                            {mapFileTypeToIcon(this.state.fileToUpload["type"], "medium", false)}
+                            {mapFileTypeToIcon(this.state.fileToUpload["type"], false, "create_expense_modal_file_type_icon")}
                             <p className="create_expense_modal_uploaded_file_name">
                                 {this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "Unable to Upload File"}
                             </p>

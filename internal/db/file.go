@@ -2,7 +2,6 @@ package db
 
 import (
 	"encoding/json"
-	"fmt"
 	"context"
 	"database/sql"
 	"errors"
@@ -102,6 +101,21 @@ func (handle *Handle) GetFileById(userID, fileID string) (*File, error) {
 	return &file, nil
 }
 
+// GetAllFiles will return all files for a user.
+func (handle *Handle) GetAllFiles(userID string) ([]*File, error) {
+
+	_, err := uuid.Parse(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	// We may need to filter by year if there are too many files.
+	var files []*File
+	if err := handle.DB.Where("user_id = ?", userID).Find(&files).Error; err != nil {
+		return nil, err
+	}
+	return files, nil
+}
 
 func (handle *Handle) GetFilesByProperty(userID, propertyID string) ([]*File, error) {
 
@@ -132,9 +146,6 @@ func (handle *Handle) GetFilesByProperty(userID, propertyID string) ([]*File, er
 	if len(filesIDs) == 0 {
 		return nil, nil
 	}
-
-	fmt.Println("HERE: ", filesIDs)
-	fmt.Println("yoo")
 
 	// We may need to filter by year if there are too many files.
 	var files []*File

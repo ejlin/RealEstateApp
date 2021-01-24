@@ -11,8 +11,7 @@ import NotificationSidebar from './NotificationSidebar.js';
 
 import { getDaysUntil } from './MainDashboard.js';
 
-import { openSignedURL } from './FilesDashboard.js';
-import { mapFileTypeToIcon } from '../utility/Util.js';
+import { mapFileTypeToIcon, openSignedURL } from '../utility/Util.js';
 
 import { Link, Redirect } from 'react-router-dom';
 import { VictoryChart, VictoryLine, VictoryAxis, VictoryLabel } from 'victory';

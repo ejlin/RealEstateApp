@@ -3,6 +3,8 @@ import React from 'react';
 import './CSS/FolderCard.css';
 import './CSS/Style.css';
 
+import { trimTrailingName } from '../utility/Util.js';
+
 import { GoFileDirectory } from 'react-icons/go';
 
 class FolderCard extends React.Component {
@@ -35,7 +37,10 @@ class FolderCard extends React.Component {
             //     });
             // }
             // this.state.setActiveFolder(this.state.folderPropertyID);
-            this.state.setActiveFolder(this.state.folderPropertyID);
+            this.setState({
+                isClicked: !this.state.isClicked,
+                timeClicked: Date.now(),
+            })
         } else {
             // this.state.openSignedURL(this.state.user["id"], key);
             // if (this.state.setActiveFileAttributes(key, this.state.file, false)) {
@@ -44,25 +49,29 @@ class FolderCard extends React.Component {
             //         timeClicked: Date.now()
             //     })
             // }
+            if (this.state.isClicked) {
+                this.state.setActiveFolder(this.state.folderPropertyID);
+            }
+            this.setState({
+                isClicked: true,
+                timeClicked: Date.now(),
+            })
         }
-        this.setState({
-            isClicked: !this.state.isClicked,
-            timeClicked: now,
-        })
-    }
-
-    componentDidMount() {
-        this.clickTimeout = null;
     }
 
     render() {
+        let lengthToTrim = 18;
+        // If our name is close, then just allow the last character in. Otherwise trim it at 18.
+        if (this.state.folderName.length - lengthToTrim === 1) {
+            lengthToTrim = 19;
+        }
         return (
             <div
                 onMouseDown={() => this.clickCard()}
                 className={this.state.isClicked ? "files_dashboard_folder_card clicked_folder_card" : "files_dashboard_folder_card"}>
                 <GoFileDirectory className={this.state.isClicked ? "files_dashboard_folder_card_icon clicked_folder_card_icon" : "files_dashboard_folder_card_icon"}></GoFileDirectory>
                 <p className={this.state.isClicked ? "files_dashboard_folder_card_text clicked_folder_card_text" : "files_dashboard_folder_card_text"}>
-                    {this.state.folderName}
+                    {trimTrailingName(this.state.folderName, lengthToTrim)}
                 </p>
             </div>
         )

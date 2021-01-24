@@ -35,8 +35,7 @@ class FileCard extends React.Component {
                 });
             }
         } else {
-            console.log("yooooo")
-            this.state.openSignedURL(this.state.user["id"], file["id"]);
+            this.state.openSignedURL(this.state.file["get_signed_url"]);
             if (this.state.setActiveFileAttributes(file["id"], this.state.file, false)) {
                 this.setState({
                     isClicked: true,
@@ -44,10 +43,6 @@ class FileCard extends React.Component {
                 })
             }
         }
-    }
-
-    componentDidMount() {
-        this.clickTimeout = null;
     }
 
     render() {
@@ -71,15 +66,13 @@ class FileCard extends React.Component {
                 onMouseDown={() => this.clickCard()}
                 >
                 {mapFileTypeToIcon(fileType, this.state.isClicked, "file_card_file_type_icon")}
-                <div className="file_card_individual_file_footer">
-                    <p className={
-                        this.state.isClicked ?
-                        "file_card_individual_file_footer_title file_card_individual_file_footer_title_active":
-                        "file_card_individual_file_footer_title"}
-                        title={this.state.file["name"] ? this.state.file["name"] : "Unknown File"}>
-                        {this.state.file["name"] ? trimTrailingName(this.state.file["name"], 20) : "Unknown File"}
-                    </p>
-                </div>
+                <p className={
+                    this.state.isClicked ?
+                    "file_card_individual_file_footer_title file_card_individual_file_footer_title_active":
+                    "file_card_individual_file_footer_title"}
+                    title={this.state.file["name"] ? this.state.file["name"] : "Unknown File"}>
+                    {this.state.file["name"] ? trimTrailingName(this.state.file["name"], 20) : "Unknown File"}
+                </p>
             </div>
         )
     }

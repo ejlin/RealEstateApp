@@ -155,3 +155,9 @@ export function getByValue(map, searchValue){
         )
     }
 }
+
+export function openSignedURL(signedURL) {
+    if (signedURL !== "") {
+        window.open(signedURL, '_blank', 'noopener,noreferrer')
+    }
+}
