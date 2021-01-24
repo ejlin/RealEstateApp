@@ -191,51 +191,96 @@ class FilesDashboard extends React.Component {
     }
 
     async deleteActiveFiles() {
-        let currFiles = this.state.files;
+
+        let activeFolderFilesMap = this.state.activeFolderFilesMap;
         let activeFiles = this.state.activeFiles;
         let activeFilesIterator = activeFiles.entries();
-        let currPropertyToFilesMap = new Map([...this.state.propertyToFilesMap]);
 
-        let nextElem = activeFilesIterator.next();
-        while (nextElem !== null && nextElem.value !== undefined) {
-            let key = nextElem.value[0];
-            console.log(key);
-            let success = await this.deleteFile(key);
-            if (success === true) {
-                activeFiles.delete(key);
-                let propertyID = nextElem.value[1]["property_id"];
-                let arrAtPropertyID = currPropertyToFilesMap.get(propertyID);
-                
-                let arrAtPropertyIDLength = arrAtPropertyID.length;
-                for (let i = 0; i < arrAtPropertyIDLength; i++) {
-                    let fKey = arrAtPropertyID[i]["property_id"] + "/" + arrAtPropertyID[i]["name"]
-                    if (key === fKey) {
-                        arrAtPropertyID.splice(i, 1);
-                        currPropertyToFilesMap.set(propertyID, arrAtPropertyID);
-                        break;
-                    }
-                }
+        let activeFilesNextElem = activeFilesIterator.next();
+        while (activeFilesNextElem !== null && activeFilesNextElem.value !== undefined) {
 
-                for (let i = 0; i < currFiles.length; i++) {
-                    // When we filter by properties, we inject <div> elements which do not have a state.
-                    // Add this check to filter them out. 
-                    let file = currFiles[i];
-                    let fKey = file["property_id"] + "/" + file["name"];
-                    if (key === fKey) {
-                        currFiles.splice(i, 1);
-                        continue;
-                    }
+            let fileID = activeFilesNextElem.value[0];
+            let success = await this.deleteFile(fileID);
+            if (success) {
+                if (activeFolderFilesMap.has(fileID)){
+                    activeFolderFilesMap.delete(fileID);
                 }
+                activeFiles.delete(fileID);
             }
-            nextElem = activeFilesIterator.next();
+            activeFilesNextElem = activeFilesIterator.next();
         }
-        this.renderFiles(currPropertyToFilesMap);
 
         this.setState({
-            files: currFiles,
             activeFiles: activeFiles,
-            propertyToFilesMap: currPropertyToFilesMap
-        });
+            activeFolderFilesMap: activeFolderFilesMap,
+        })
+        // let currFiles = this.state.files;
+        // let activeFiles = this.state.activeFiles;
+        // let activeFilesIterator = activeFiles.entries();
+        // let currPropertyToFilesMap = new Map([...this.state.propertyToFilesMap]);
+
+        // let nextElem = activeFilesIterator.next();
+        // while (nextElem !== null && nextElem.value !== undefined) {
+        //     let key = nextElem.value[0];
+        //     console.log(key);
+        //     let success = await this.deleteFile(key);
+        //     if (success === true) {
+        //         activeFiles.delete(key);
+        //         let propertyID = nextElem.value[1]["property_id"];
+        //         let arrAtPropertyID = currPropertyToFilesMap.get(propertyID);
+                
+        //         let arrAtPropertyIDLength = arrAtPropertyID.length;
+        //         for (let i = 0; i < arrAtPropertyIDLength; i++) {
+        //             let fKey = arrAtPropertyID[i]["property_id"] + "/" + arrAtPropertyID[i]["name"]
+        //             if (key === fKey) {
+        //                 arrAtPropertyID.splice(i, 1);
+        //                 currPropertyToFilesMap.set(propertyID, arrAtPropertyID);
+        //                 break;
+        //             }
+        //         }
+
+        //         for (let i = 0; i < currFiles.length; i++) {
+        //             // When we filter by properties, we inject <div> elements which do not have a state.
+        //             // Add this check to filter them out. 
+        //             let file = currFiles[i];
+        //             let fKey = file["property_id"] + "/" + file["name"];
+        //             if (key === fKey) {
+        //                 currFiles.splice(i, 1);
+        //                 continue;
+        //             }
+        //         }
+        //     }
+        //     nextElem = activeFilesIterator.next();
+        // }
+        // this.renderFiles(currPropertyToFilesMap);
+
+        // this.setState({
+        //     files: currFiles,
+        //     activeFiles: activeFiles,
+        //     propertyToFilesMap: currPropertyToFilesMap
+        // });
+    }
+
+    setRecentlyUploadedFile(file, associatedProperties) {
+        let activeFolderPropertyID = this.state.activeFolderPropertyID;
+        let activeFolderFilesMap = this.state.activeFolderFilesMap;
+
+        let isAssociatedProperty = false;
+        for (let i = 0; i < associatedProperties.length; i++) {
+            let associatedPropertyID = associatedProperties[i];
+            if (associatedPropertyID === activeFolderPropertyID) {
+                isAssociatedProperty = true;
+                break;
+            }
+        }
+
+        if (isAssociatedProperty) {
+            activeFolderFilesMap.set(file["id"], file);
+        }
+
+        this.setState({
+            activeFolderFilesMap: activeFolderFilesMap,
+        })
     }
 
     handleSearchBar(e) {

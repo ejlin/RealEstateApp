@@ -31,6 +31,7 @@ class UploadFileModal extends React.Component {
             propertiesMap: this.props.data.state.propertiesMap,
             propertiesAddresses: Array.from(this.props.data.state.propertiesMap.values()),
             closeUploadFileModal: this.props.data.state.closeUploadFileModal,
+            setRecentlyUploadedFile: this.props.data.state.setRecentlyUploadedFile,
         };
 
         this.renderFileUploadPropertiesSelection = this.renderFileUploadPropertiesSelection.bind(this);
@@ -198,7 +199,9 @@ class UploadFileModal extends React.Component {
             //     fileUploadProgressBar: 0,
             //     propertyToFilesMap: currFiles
             // })
+            let file = response.data;
             this.state.closeUploadFileModal();
+            this.state.setRecentlyUploadedFile(file, associatedProperties);
         }).catch(error => console.log(error));
     }
 
