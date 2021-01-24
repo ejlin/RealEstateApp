@@ -227,62 +227,53 @@ func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
 // getFile either downloads an individual file or returns a signed URl.
 func (s *Server) getFile(w http.ResponseWriter, r *http.Request) {
 
-	ctx := r.Context()
-	vars := mux.Vars(r)
+	// ctx := r.Context()
+	// vars := mux.Vars(r)
 
-	userID, ok := vars["id"]
-	if !ok {
-		log.Info().Msg("missing user id")
-		http.Error(w, "missing user id", http.StatusBadRequest)
-		return
-	}
+	// userID, ok := vars["id"]
+	// if !ok {
+	// 	log.Info().Msg("missing user id")
+	// 	http.Error(w, "missing user id", http.StatusBadRequest)
+	// 	return
+	// }
 
-	ll := log.With().Str("user_id", userID).Logger()
+	// ll := log.With().Str("user_id", userID).Logger()
 
-	propertyID, ok := vars["property_id"]
-	if !ok {
-		ll.Warn().Msg("property id not set")
-		http.Error(w, "property id not set", http.StatusBadRequest)
-		return
-	}
+	// fileName, ok := vars["file_name"]
+	// if !ok {
+	// 	ll.Warn().Msg("file name not set")
+	// 	http.Error(w, "file name not set", http.StatusBadRequest)
+	// 	return
+	// }
 
-	ll = ll.With().Str("property_id", propertyID).Logger()
+	// ll = ll.With().Str("file_name", fileName).Logger()
 
-	fileName, ok := vars["file_name"]
-	if !ok {
-		ll.Warn().Msg("file name not set")
-		http.Error(w, "file name not set", http.StatusBadRequest)
-		return
-	}
+	// request, ok := vars["request"]
+	// if !ok {
+	// 	ll.Warn().Msg("file type not set")
+	// 	http.Error(w, "file type not set", http.StatusBadRequest)
+	// 	return
+	// }
 
-	ll = ll.With().Str("file_name", fileName).Logger()
+	// ll = ll.With().Str("request", request).Logger()
 
-	request, ok := vars["request"]
-	if !ok {
-		ll.Warn().Msg("file type not set")
-		http.Error(w, "file type not set", http.StatusBadRequest)
-		return
-	}
+	// switch request {
+	// case "download":
+	// 	s.getFileData(ctx, userID, propertyID, fileName, w, r)
+	// 	return
+	// case "signed_url":
+	// 	key := path.Join(userID, propertyDelimiter, propertyID, fileName)
 
-	ll = ll.With().Str("request", request).Logger()
+	// 	url, err := s.getSignedURL(ctx, key)
+	// 	if err != nil {
+	// 		ll.Warn().Err(err).Msg("error getting signed url")
+	// 		http.Error(w, "error getting signed url", http.StatusBadRequest)
+	// 	}
+	// 	RespondToRequest(w, url)
+	// 	return
+	// }
 
-	switch request {
-	case "download":
-		s.getFileData(ctx, userID, propertyID, fileName, w, r)
-		return
-	case "signed_url":
-		key := path.Join(userID, propertyDelimiter, propertyID, fileName)
-
-		url, err := s.getSignedURL(ctx, key)
-		if err != nil {
-			ll.Warn().Err(err).Msg("error getting signed url")
-			http.Error(w, "error getting signed url", http.StatusBadRequest)
-		}
-		RespondToRequest(w, url)
-		return
-	}
-
-	return
+	// return
 }
 
 func (s *Server) getFileByID(w http.ResponseWriter, r *http.Request) {

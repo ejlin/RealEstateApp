@@ -271,7 +271,6 @@ func (s *Server) getSignedURL(ctx context.Context, key string) (string, error) {
 		return "", err
 	}
 
-	ll.Info().Msg("generated get signed url")
 	return url, nil
 }
 

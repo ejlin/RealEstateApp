@@ -177,6 +177,14 @@ func (handle *Handle) DeleteFileByID(ctx context.Context, userID, fileID string,
 
 		filePath := file.Path
 
+		var propertyReferences PropertiesReferences
+		// Need to delete file from properties_references if linked to an expense. 
+		if err := tx.Where("file_id = ? AND user_id = ?", fileID, userID).Delete(&propertyReferences).Error; err != nil {
+			if !errors.Is(err, gorm.ErrRecordNotFound) {
+				return err
+			}
+		}
+
 		if err := tx.Where("id = ? AND user_id = ?", fileID, userID).Delete(&file).Error; err != nil {
 			if !errors.Is(err, gorm.ErrRecordNotFound) {
 				return err
