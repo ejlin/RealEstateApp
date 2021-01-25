@@ -18,6 +18,7 @@ const None = "None";
 
 const file = "file";
 const metadataFileType = "metadata_file_type";
+const metadataFileSizeBytes = "metadata_file_size_bytes";
 const title = "title";
 const description = "description";
 const amount = "amount";
@@ -97,9 +98,11 @@ class CreateExpenseModal extends React.Component {
         
         // TODO: verify expense
         var expense = new FormData();
-        if (this.state.fileToUpload) {
-            expense.append(file, this.state.fileToUpload);
-            expense.append(metadataFileType, this.state.fileToUpload["type"]);
+        let file = this.state.fileToUpload;
+        if (file) {
+            expense.append(file, file);
+            expense.append(metadataFileType, file["type"]);
+            expense.append(metadataFileSizeBytes, file["size"]);
         }
         expense.append(title, this.state.title);
         expense.append(description, this.state.description);

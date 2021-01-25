@@ -49,7 +49,7 @@ func (handle *Handle) AddExpense(ctx context.Context, userID string, expense *Ex
 
 	if _, err := uuid.Parse(userID); err != nil {
 		return err
-	}	
+	}
 
 	if expense == nil {
 		return errors.New("nil expense")
@@ -60,7 +60,7 @@ func (handle *Handle) AddExpense(ctx context.Context, userID string, expense *Ex
 		if err := tx.FirstOrCreate(&expense, expense).Error; err != nil {
 			return fmt.Errorf("error adding expense: %w", err)
 		}
-		
+
 		if file != nil {
 			if err := tx.FirstOrCreate(&file, file).Error; err != nil {
 				return fmt.Errorf("error adding file: %w", err)
@@ -81,9 +81,8 @@ func (handle *Handle) AddExpense(ctx context.Context, userID string, expense *Ex
 
 		for _, propertyID := range propertyIDs {
 
-
 			propertyReference := PropertiesReferences{
-				UserID: userID, 
+				UserID: userID,
 				ExpenseID: sql.NullString{
 					String: expenseID,
 					Valid:  true,
@@ -97,7 +96,7 @@ func (handle *Handle) AddExpense(ctx context.Context, userID string, expense *Ex
 			if propertyID != "" {
 				propertyReference.PropertyID = sql.NullString{
 					String: propertyID,
-					Valid: true,
+					Valid:  true,
 				}
 			}
 
@@ -105,7 +104,6 @@ func (handle *Handle) AddExpense(ctx context.Context, userID string, expense *Ex
 				return err
 			}
 		}
-		
 
 		if file != nil {
 
@@ -171,10 +169,10 @@ func (handle *Handle) GetExpensesByUser(userID string) ([]*Expense, error) {
 }
 
 // RemoveExpenseByID will delete an expense from our database.
-func (handle *Handle) DeleteExpenseByID(ctx context.Context, 
-										userID, 
-										expenseID string, 
-										deleteFileFromCloudstorage func(ctx context.Context, filePath string) error) error {
+func (handle *Handle) DeleteExpenseByID(ctx context.Context,
+	userID,
+	expenseID string,
+	deleteFileFromCloudstorage func(ctx context.Context, filePath string) error) error {
 
 	// TODO: eric.lin to explore gorm soft delete options. Provide users with undo method.
 	_, err := uuid.Parse(userID)
@@ -219,7 +217,6 @@ func (handle *Handle) DeleteExpenseByID(ctx context.Context,
 		fileRecordExists = true
 	}
 
-
 	return handle.DB.Transaction(func(tx *gorm.DB) error {
 
 		expense := Expense{
@@ -237,9 +234,8 @@ func (handle *Handle) DeleteExpenseByID(ctx context.Context,
 				return err
 			}
 		}
-		
 
-		if fileID != "" && fileRecordExists{
+		if fileID != "" && fileRecordExists {
 			if err := tx.Where("id = ? AND user_id = ?", fileID, userID).Delete(&file).Error; err != nil {
 				if !errors.Is(err, gorm.ErrRecordNotFound) {
 					return err
@@ -253,8 +249,8 @@ func (handle *Handle) DeleteExpenseByID(ctx context.Context,
 			}
 		}
 
-		// Delete our file from cloudstorage. This line must go last. File upload to GCS _must_ 
-		// come last after all db operations because we can rollback db operations, but we cannot 
+		// Delete our file from cloudstorage. This line must go last. File upload to GCS _must_
+		// come last after all db operations because we can rollback db operations, but we cannot
 		// rollback GCS uploads.
 		if file.Path != "" {
 			if err := deleteFileFromCloudstorage(ctx, file.Path); err != nil {

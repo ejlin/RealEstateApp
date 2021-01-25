@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"path"
+	"strconv"
 	"strings"
 	"time"
 
@@ -19,13 +20,14 @@ import (
 )
 
 type RestFile struct {
-	ID             string    `json:"id,omitempty"`
-	Name           string    `json:"name,omitempty"`
-	Year int `json:"year,omitempty"`
-	CreatedAt      *time.Time `json:"created_at,omitempty"`
-	LastModifiedAt *time.Time `json:"last_modified_at,omitempty"`
-	GetSignedURL   string    `json:"get_signed_url,omitempty"`
-	Metadata json.RawMessage `json:"metadata,omitempty"`
+	ID             string          `json:"id,omitempty"`
+	Name           string          `json:"name,omitempty"`
+	Year           int             `json:"year,omitempty"`
+	CreatedAt      *time.Time      `json:"created_at,omitempty"`
+	Type           string          `json:"type,omitempty"`
+	LastModifiedAt *time.Time      `json:"last_modified_at,omitempty"`
+	GetSignedURL   string          `json:"get_signed_url,omitempty"`
+	Metadata       json.RawMessage `json:"metadata,omitempty"`
 }
 
 func (s *Server) getFileslistByUser(w http.ResponseWriter, r *http.Request) {
@@ -42,16 +44,10 @@ func (s *Server) getFileslistByUser(w http.ResponseWriter, r *http.Request) {
 
 	ll := log.With().Str("user_id", userID).Logger()
 
-	files, err := s.DBHandle.GetAllFiles(userID) 
+	files, err := s.DBHandle.GetAllFiles(userID)
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to get fileslist by user")
 		http.Error(w, "unable to get fileslist by user", http.StatusBadRequest)
-		return
-	}
-
-	if len(files) == 0 {
-		ll.Warn().Msg("no files found for user")
-		http.Error(w, "no files found for user", http.StatusNotFound)
 		return
 	}
 
@@ -70,14 +66,14 @@ func (s *Server) getFileslistByUser(w http.ResponseWriter, r *http.Request) {
 		restFiles = append(restFiles, &RestFile{
 			ID:             file.ID,
 			Name:           file.Name,
-			Year: file.Year,
+			Year:           file.Year,
 			CreatedAt:      file.CreatedAt,
 			LastModifiedAt: file.LastModifiedAt,
 			GetSignedURL:   fileGetSignedURL,
-			Metadata: file.Metadata,
+			Metadata:       file.Metadata,
 		})
 	}
-	
+
 	RespondToRequest(w, restFiles)
 	return
 }
@@ -168,6 +164,13 @@ func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
 		fileType = "unknown"
 	}
 
+	metadataFileSizeBytesVal := r.FormValue("metadata_file_size_bytes")
+
+	metadataFileSizeBytes, err := strconv.Atoi(metadataFileSizeBytesVal)
+	if err != nil {
+		metadataFileSizeBytes = -1
+	}
+
 	year := r.FormValue("year")
 	if year == "" {
 		y := time.Now().Year()
@@ -184,7 +187,8 @@ func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
 
 	now := time.Now()
 	metadata := map[string]interface{}{
-		"file_type": metadataFileType,
+		"type":       metadataFileType,
+		"size_bytes": metadataFileSizeBytes,
 	}
 
 	marshalledMetadata, err := json.Marshal(metadata)
@@ -194,15 +198,15 @@ func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	file := &db.File{
-		ID: fileID,
-		UserID: userID,
-		CreatedAt: &now,
+		ID:             fileID,
+		UserID:         userID,
+		CreatedAt:      &now,
 		LastModifiedAt: &now,
-		Name: fileName,
-		Type: db.FileType(fileType),
-		Year: util.GetYear(year),
-		Path: filePath,
-		Metadata: json.RawMessage(marshalledMetadata),
+		Name:           fileName,
+		Type:           db.FileType(fileType),
+		Year:           util.GetYear(year),
+		Path:           filePath,
+		Metadata:       json.RawMessage(marshalledMetadata),
 	}
 
 	addFileToCloudStorage := func() func(ctx context.Context) error {
@@ -323,11 +327,12 @@ func (s *Server) getFileByID(w http.ResponseWriter, r *http.Request) {
 	restFile := &RestFile{
 		ID:             file.ID,
 		Name:           file.Name,
-		Year: file.Year,
+		Year:           file.Year,
 		CreatedAt:      file.CreatedAt,
+		Type:           string(file.Type),
 		LastModifiedAt: file.LastModifiedAt,
 		GetSignedURL:   fileGetSignedURL,
-		Metadata: file.Metadata,
+		Metadata:       file.Metadata,
 	}
 
 	ll.Info().Msg("returned file by id")
@@ -335,7 +340,6 @@ func (s *Server) getFileByID(w http.ResponseWriter, r *http.Request) {
 	RespondToRequest(w, restFile)
 	return
 }
-
 
 func (s *Server) getFilesByProperty(w http.ResponseWriter, r *http.Request) {
 
@@ -378,11 +382,12 @@ func (s *Server) getFilesByProperty(w http.ResponseWriter, r *http.Request) {
 		restFile := &RestFile{
 			ID:             file.ID,
 			Name:           file.Name,
-			Year: file.Year,
+			Year:           file.Year,
 			CreatedAt:      file.CreatedAt,
+			Type:           string(file.Type),
 			LastModifiedAt: file.LastModifiedAt,
 			GetSignedURL:   fileGetSignedURL,
-			Metadata: file.Metadata,
+			Metadata:       file.Metadata,
 		}
 
 		restFiles = append(restFiles, restFile)
@@ -390,7 +395,7 @@ func (s *Server) getFilesByProperty(w http.ResponseWriter, r *http.Request) {
 
 	RespondToRequest(w, restFiles)
 	return
-	
+
 }
 
 func (s *Server) deleteFile(w http.ResponseWriter, r *http.Request) {

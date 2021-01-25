@@ -376,6 +376,7 @@ class FilesDashboard extends React.Component {
             let activeFolderFile = activeFolderFileNextElem.value[1];
             fileElements.push(
                 <FileCard
+                    key={activeFolderFile["id"]}
                     data={{
                         state: {
                             user: this.state.user,

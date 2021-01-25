@@ -30,9 +30,9 @@ const (
 )
 
 type FileInfo struct {
-	Name string `json:"name"`
-	Address    string `json:"address"`
-	Year       string `json:"year"`
+	Name    string `json:"name"`
+	Address string `json:"address"`
+	Year    string `json:"year"`
 
 	FileCategory string `json:"file_category"`
 

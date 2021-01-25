@@ -1,9 +1,9 @@
 package db
 
 import (
-	"encoding/json"
 	"context"
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"time"
 
@@ -24,7 +24,7 @@ type File struct {
 	// Path is the path to our file within our GCS bucket.
 	Path string `json:"path,omitempty",sql:"varchar(255)"`
 
-	// Metadata contains information about the uploaded file. 
+	// Metadata contains information about the uploaded file.
 	Metadata json.RawMessage `json:"metadata,omitempty",sql:"type:JSONB"`
 }
 
@@ -178,7 +178,7 @@ func (handle *Handle) DeleteFileByID(ctx context.Context, userID, fileID string,
 		filePath := file.Path
 
 		var propertyReferences PropertiesReferences
-		// Need to delete file from properties_references if linked to an expense. 
+		// Need to delete file from properties_references if linked to an expense.
 		if err := tx.Where("file_id = ? AND user_id = ?", fileID, userID).Delete(&propertyReferences).Error; err != nil {
 			if !errors.Is(err, gorm.ErrRecordNotFound) {
 				return err

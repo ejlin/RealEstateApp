@@ -121,7 +121,7 @@ class DropdownSelect extends React.Component {
                             this.setState({
                                 currSelectedListElements: currSelectedListElements,
                                 filteredListElements: null,
-                            }, () => console.log(this.state.currSelectedListElements))
+                            })
                         }} 
                         className="associated_properties_dropdown_elements">
                         {filteredInput}

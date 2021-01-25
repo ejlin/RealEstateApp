@@ -63,7 +63,7 @@ class UploadFileModal extends React.Component {
     }
 
     handleFileUploadChange(event) {
-        var file = event.target.files[0];
+        let file = event.target.files[0];
         if (file !== null && file !== undefined) {
             this.setState({
                 fileToUpload: file
@@ -76,28 +76,28 @@ class UploadFileModal extends React.Component {
             loadUpload: true,
         })
         
-        var file = this.state.fileToUpload;
+        let file = this.state.fileToUpload;
         if (file === null || file === undefined) {
             return;
         }
 
-        var nameInput = document.getElementById("files_dashboard_upload_file_name_input");
-        var nameInputValue = nameInput.value;
+        let nameInput = document.getElementById("files_dashboard_upload_file_name_input");
+        let nameInputValue = nameInput.value;
 
-        var fileName = file["name"];
+        let fileName = file["name"];
         if (nameInputValue !== "") {
             fileName = nameInputValue;
         }
 
-        var fileCategorySelect = document.getElementById("upload_file_modal_category_select");
-        var fileCategorySelectValue = fileCategorySelect.value;
+        let fileCategorySelect = document.getElementById("upload_file_modal_category_select");
+        let fileCategorySelectValue = fileCategorySelect.value;
 
-        var yearInput = document.getElementById("upload_file_modal_year_input");
+        let yearInput = document.getElementById("upload_file_modal_year_input");
 
         // Year sanitization is handled server side. If empty, server will fill in with current year. 
-        var yearInputValue = yearInput.value;
+        let yearInputValue = yearInput.value;
 
-        // var signedURL;
+        // let signedURL;
         // axios({
         //     method: 'get',
         //     url: 'api/user/files/upload/' + this.state.user["id"] + '/' + propertySelectValue + '?file_name=' + fileName,
@@ -115,10 +115,11 @@ class UploadFileModal extends React.Component {
         // }).catch(error => {
         // });
 
-        var formData = new FormData();
+        let formData = new FormData();
         formData.append('file', file);
         formData.append('file_type', fileCategorySelectValue);
         formData.append('metadata_file_type', file["type"]);
+        formData.append('metadata_file_size_bytes', file["size"]);
         formData.append('year', yearInputValue);
 
 
@@ -127,12 +128,12 @@ class UploadFileModal extends React.Component {
             formData.append('file_name', nameInputValue);
         }
 
-        var currSelectedAssociatedProperties = this.state.currSelectedAssociatedProperties;
-        var indexAll = currSelectedAssociatedProperties.indexOf(All);
-        var indexNone = currSelectedAssociatedProperties.indexOf(None);
+        let currSelectedAssociatedProperties = this.state.currSelectedAssociatedProperties;
+        let indexAll = currSelectedAssociatedProperties.indexOf(All);
+        let indexNone = currSelectedAssociatedProperties.indexOf(None);
 
-        var associatedProperties = [];
-        var propertiesMap = this.state.propertiesMap;
+        let associatedProperties = [];
+        let propertiesMap = this.state.propertiesMap;
 
         if (indexAll >= 0) {
             // Add all of our properties.
@@ -145,7 +146,7 @@ class UploadFileModal extends React.Component {
         } else if (indexNone >= 0) {
         } else {
             // Add all the ids of the properties selected.
-            for (var i = 0; i < currSelectedAssociatedProperties.length; i++) {
+            for (let i = 0; i < currSelectedAssociatedProperties.length; i++) {
                 let currSelectedAssociatedProperty = currSelectedAssociatedProperties[i];
                 let propertyID = getByValue(propertiesMap, currSelectedAssociatedProperty);
                 if (propertyID !== null){
@@ -170,24 +171,24 @@ class UploadFileModal extends React.Component {
                 // Use Math.min because we currently upload to the server, then upload to GCS. The GCS step can take a while,
                 // but this only tracks progress from client -> server. Stop it at 90, then finish the last 10 once we 
                 // successfully write to GCS.
-                var progressCompleted = Math.min(Math.round((progressEvent.loaded * 100) / progressEvent.total), 98);
+                let progressCompleted = Math.min(Math.round((progressEvent.loaded * 100) / progressEvent.total), 98);
                 this.setState({
                     fileUploadProgressBar: progressCompleted
                 })
             },
             data: formData
         }).then(response => {
-            // var currFiles = this.state.propertyToFilesMap;
+            // let currFiles = this.state.propertyToFilesMap;
             // if (!currFiles.has(propertySelectValue)) {
             //     currFiles.set(propertySelectValue, []);
             // }
 
-            // var propertyArr = currFiles.get(propertySelectValue);
+            // let propertyArr = currFiles.get(propertySelectValue);
             // propertyArr.unshift(response.data);
 
             // currFiles.set(propertySelectValue, propertyArr);
 
-            // var files = this.state.files;
+            // let files = this.state.files;
             // files.push(response.data);
 
             // this.renderFiles(currFiles);

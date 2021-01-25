@@ -171,7 +171,7 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 	formFile, handler, err := r.FormFile("file")
 	if err != nil {
 		if errors.Is(err, http.ErrMissingFile) {
-			noFileAttached = true	
+			noFileAttached = true
 		} else {
 			ll.Error().Err(err).Msg("error retrieving the file")
 			http.Error(w, "error retrieving the file", http.StatusBadRequest)
@@ -188,7 +188,7 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "missing expense frequency", http.StatusBadRequest)
 		return
 	}
-	
+
 	sAmount := r.FormValue("amount")
 	if sAmount == "" {
 		ll.Error().Msg("missing expense amount")
@@ -236,9 +236,8 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		Date:           date,
 	}
 
-
 	var file *db.File
-	var fileKey string 
+	var fileKey string
 	if !noFileAttached {
 		fileName := handler.Filename
 		if fileName == "" {
@@ -250,8 +249,16 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 			metadataFileType = "unknown"
 		}
 
+		metadataFileSizeBytesVal := r.FormValue("metadata_file_size_bytes")
+
+		metadataFileSizeBytes, err := strconv.Atoi(metadataFileSizeBytesVal)
+		if err != nil {
+			metadataFileSizeBytes = -1
+		}
+
 		fileMetadata := map[string]interface{}{
-			"file_type": metadataFileType,
+			"type":       metadataFileType,
+			"size_bytes": metadataFileSizeBytes,
 		}
 
 		var fileMetadataField json.RawMessage
@@ -264,10 +271,10 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fileMetadataField = json.RawMessage(marshalledFileMetadata)
 		}
-	
+
 		// The key to an expense file is {userID}/expenses/{expense_name}/{file_name}
 		fileKey = path.Join(userID, "expenses", title, fileName)
-	
+
 		file = &db.File{
 			ID:             uuid.New().String(),
 			UserID:         userID,
@@ -276,13 +283,13 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 			Name:           fileName,
 			Year:           util.GetYear(date),
 			Type:           db.FileType("other"),
-			Path: 			fileKey,
-			Metadata: fileMetadataField,
+			Path:           fileKey,
+			Metadata:       fileMetadataField,
 		}
 	} else {
 		file = nil
 	}
-	
+
 	addFileToCloudStorage := func() func(ctx context.Context) error {
 		return func(ctx context.Context) error {
 			return cloudstorage.AddCloudstorageFile(ctx, s.StorageClient, formFile, s.UsersBucket, fileKey)
@@ -337,7 +344,6 @@ func (s *Server) editExpense(w http.ResponseWriter, r *http.Request) {
 	// 	http.Error(w, "missing expense id", http.StatusBadRequest)
 	// 	return
 	// }
-
 
 }
 
