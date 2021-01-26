@@ -50,7 +50,7 @@ class FolderCard extends React.Component {
             //     })
             // }
             if (this.state.isClicked) {
-                this.state.setActiveFolder(this.state.folderPropertyID);
+                this.state.setActiveFolder(this.state.folderPropertyID, this.state.folderName);
             }
             this.setState({
                 isClicked: true,

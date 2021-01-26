@@ -1,0 +1,9 @@
+#folder_page_parent_box {
+    background-color: #F5F5FA;
+    height: 100vh;
+    margin-left: 220px;
+    min-width: 700px;
+    overflow: scroll;
+    position: absolute;
+    width: calc(100% - 220px - 350px);
+}

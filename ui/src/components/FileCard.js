@@ -50,7 +50,6 @@ class FileCard extends React.Component {
     render() {
 
         let file = this.state.file;
-        console.log(file);
         let className = "file_card_individual_file";
         if (this.state.isClicked) {
             className += " file_card_active";
@@ -90,7 +89,12 @@ class FileCard extends React.Component {
                     title={this.state.file["name"] ? this.state.file["name"] : "Unknown File"}>
                     {this.state.file["name"] ? trimTrailingName(this.state.file["name"], 20) : "Unknown File"}
                 </p>
-                <div className="file_card_file_type_box">
+                <div className=
+                    {
+                        this.state.isClicked ?
+                        "file_card_file_type_box active_file_type_box":
+                        "file_card_file_type_box"
+                    }>
                     <p>
                         {file["type"] ? capitalizeName(file["type"]) : "Other"} &middot; {file["year"]} &middot; {bytesToSize(fileSize)}
                     </p>

@@ -3,7 +3,7 @@
     float: left;
     height: 100vh;
     margin-left: 220px;
-    width: calc(100% - 220px - 20%);
+    width: calc(100% - 220px - 350px);
 }
 
 #analysis_dashboard_parent_inner_box {

@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
 
-import './CSS/FilesDashboard.css';
+import './CSS/FolderPage.css';
 import './CSS/Style.css';
 
 import DashboardSidebar from './DashboardSidebar.js';
@@ -10,7 +10,6 @@ import NotificationSidebar from './NotificationSidebar.js';
 import FileCard from './FileCard.js';
 import UploadFileModal from './UploadFileModal.js';
 import FolderCard from './FolderCard.js';
-import FolderPage from './FolderPage.js';
 
 import { trimTrailingName, mapFileTypeToIcon, openSignedURL } from '../utility/Util.js';
 
@@ -36,13 +35,15 @@ const files = "files";
 
 const All = "All";
 
-class FilesDashboard extends React.Component {
+class FolderPage extends React.Component {
         
     constructor(props) {
         super(props);
 
         this.state = {
             user: this.props.location.state.user,
+            folderPropertyID: this.props.location.state.folderPropertyID,
+            folderName: this.props.location.state.folderName,
             totalEstimateWorth: this.props.location.state.totalEstimateWorth,
             missingEstimate: this.props.location.state.missingEstimate,
             profilePicture: this.props.location.state.profilePicture,
@@ -75,39 +76,53 @@ class FilesDashboard extends React.Component {
         this.deleteFile = this.deleteFile.bind(this);
         this.handleSearchBar = this.handleSearchBar.bind(this);
         this.closeUploadFileModal = this.closeUploadFileModal.bind(this);
-        this.renderFolders = this.renderFolders.bind(this);
-        this.setActiveFolder = this.setActiveFolder.bind(this);
         this.renderActiveFolderFiles = this.renderActiveFolderFiles.bind(this);
         this.setRecentlyUploadedFile = this.setRecentlyUploadedFile.bind(this);
     }
 
     componentDidMount() {
-        // Load our properties list.
-
         let userID = this.state.user["id"];
-        let getPropertiesURL = URLBuilder("api/user/property", userID);
+        let folderPropertyID = this.state.folderPropertyID;
+        
+        let getFilesByPropertyURL;
+
+        // If we are in our All folder, list all our files.
+        if (folderPropertyID === All) {
+            getFilesByPropertyURL = URLBuilder("http://localhost:3000/api/user/files", userID)
+        } else {
+            getFilesByPropertyURL = URLBuilder("http://localhost:3000/api/user/files/property", userID, folderPropertyID)
+        }
 
         axios({
             method: 'get',
-            url:  getPropertiesURL,
+            url: getFilesByPropertyURL
         }).then(response => {
-            let propertiesList = response.data;
-            // sort them according to last_modified_at.
-            let propertiesMap = new Map();
-            for (let i = 0; i < propertiesList.length; i++) {
-                let propertyID = propertiesList[i]["id"];
-                let propertyAddress = propertiesList[i]["address"];
-                propertiesMap.set(propertyID, propertyAddress);
+            // Downloads the file
+            // Credit: https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
+            let activeFolderFilesMap = new Map();
+            let activeFolderFiles = response.data;
+
+            activeFolderFiles = activeFolderFiles.sort(function(a, b){
+                if (a["last_modified_at"] < b["last_modified_at"]) {
+                    return 1;
+                } else if (a["last_modified_at"] > b["last_modified_at"]) {
+                    return -1;
+                }
+                return 0;
+            });
+            if (activeFolderFiles && activeFolderFiles.length > 0) {
+                for (let i = 0; i < activeFolderFiles.length; i++) {
+                    let activeFolderFile = activeFolderFiles[i];
+                    let fileID = activeFolderFile["id"];
+                    activeFolderFilesMap.set(fileID, activeFolderFile);
+                }
             }
             this.setState({
-                propertiesMap: propertiesMap,
-                isLoading: false
-            });
-        }).catch(error => {
-            this.setState({
-                isLoading: false
+                activeFolderFilesMap: activeFolderFilesMap,
+                pageToDisplay: files,
+                isLoading: false,
             })
-        });
+        }).catch(error => console.log(error));
     }
 
     closeUploadFileModal() {
@@ -339,18 +354,7 @@ class FilesDashboard extends React.Component {
             </div>
         );
     }
-
-    setActiveFolder(folderPropertyID, folderName) {
-
-        this.setState({
-            activeFolderPropertyID: folderPropertyID,
-            activeFolderName: folderName,
-            // activeFolderFilesMap: activeFolderFilesMap,
-            redirectToFolderPage: URLBuilder("files", folderPropertyID)
-        });
-
-    }
-
+    
     renderActiveFolderFiles() {
 
         let activeFolderFilesMap = this.state.activeFolderFilesMap;
@@ -385,21 +389,23 @@ class FilesDashboard extends React.Component {
             );
         }
 
+        console.log(fileElements);
+
         
         return (
+            
             <div>
                 <div 
                     onClick={() => {
                         this.setState({
-                            activeFiles: new Map(),
-                            pageToDisplay: folders,
+                            redirectToFoldersParent: "/files",
                         })
                     }}
                     className="files_dashboard_back_to_folders_button">
                     <IoCaretBackOutline className="files_dashboard_back_to_folders_button_icon"></IoCaretBackOutline>
                     <p className="files_dashboard_back_to_folders_button_text">Folders</p>
                 </div>
-                <p className="files_dashboard_folder_name_title">{this.state.activeFolderName}</p>
+                <p className="files_dashboard_folder_name_title">{this.state.folderName}</p>
                 <div className="clearfix"/>
                 <div>
                     {fileElements}
@@ -408,45 +414,10 @@ class FilesDashboard extends React.Component {
         );
     }
 
-    renderFolders() {
-
-        let propertiesMap = this.state.propertiesMap;
-
-        let folders = [];
-
-        // Add our All folder(s).
-        folders.push(
-            <FolderCard data={{
-                state: {
-                    user: this.state.user,
-                    folderPropertyID: "All",
-                    folderName: "All",
-                    setActiveFolder: this.setActiveFolder,
-                }
-            }}
-            ></FolderCard>
-        );
-
-        propertiesMap.forEach((value, key, map) => {
-            folders.push(
-                <FolderCard data={{
-                    state: {
-                        user: this.state.user,
-                        folderPropertyID: key,
-                        folderName: value,
-                        setActiveFolder: this.setActiveFolder,
-                    }
-                }}
-                ></FolderCard>
-            )
-        })
-        return folders;
-    }
-
     render() {
-        if (this.state.redirectToFolderPage) {
+        if (this.state.redirectToFoldersParent) {
             return <Redirect to={{
-                pathname: this.state.redirectToFolderPage,
+                pathname: this.state.redirectToFoldersParent,
                 state: {
                     user: this.state.user,
                     folderPropertyID: this.state.activeFolderPropertyID,
@@ -467,20 +438,7 @@ class FilesDashboard extends React.Component {
                         currentPage: "files"
                     }
                 }}/>
-                <div id="files_dashboard_parent_box">
-                    {this.state.displayUploadFileBox ? 
-                        <div className="files_dashboard_display_add_file_box">
-                            <UploadFileModal
-                                data={{
-                                    state: {
-                                        user: this.state.user,
-                                        propertiesMap: this.state.propertiesMap,
-                                        closeUploadFileModal: this.closeUploadFileModal,
-                                        setRecentlyUploadedFile: this.setRecentlyUploadedFile,
-                                    }                       
-                                }}/>
-                        </div> :
-                    <div></div>}
+                <div id="folder_page_parent_box">
                     <div id="files_dashboard_welcome_box">
                         <p id="files_dashboard_welcome_box_title">
                             Files
@@ -489,56 +447,42 @@ class FilesDashboard extends React.Component {
                         </input>
                     </div>
                     <div className="clearfix"/>
-                    {this.state.isLoading ? <div></div> : 
-                    <div>
-                        <div id="files_dashboard_icons_box">
-                            <div
-                                className="files_dashboard_upload_file_text_button" 
-                                onClick={() => this.setState({
-                                    displayUploadFileBox: true
-                                    })}>Add File</div>
-                            {this.state.activeFiles.size >= 1 ?
-                                <IoTrashSharp className="files_dashboard_icons" onClick={() => this.deleteActiveFiles()}></IoTrashSharp> : 
-                                <div></div>}
-                            {this.state.activeFiles.size >= 1 ? 
-                                <MdFileDownload className="files_dashboard_icons" onClick={() => this.downloadActiveFiles()}></MdFileDownload> : 
-                                <div></div>
-                            }
-                            {this.state.activeFiles.size === 1 ? 
-                                <MdEdit className="files_dashboard_icons"></MdEdit> : 
-                                <div></div>
-                            }
-                        </div>                        
-                        <div className="clearfix"/>
-                        <div id="files_dashboard_files_box">
-                            {
-                                this.state.pageToDisplay === folders ?
-                                (this.state.isLoading ? 
-                                    <div></div> : 
-                                    <div>
-                                        <p className="files_dashboard_page_to_display_title">Folders</p>
-                                        {this.renderFolders()}
-                                    </div>
-                                ): (
-                                    this.state.pageToDisplay === files ?
-                                    <div>
-                                        {this.renderActiveFolderFiles()}
-                                    </div>:
-                                    <div></div>
-                                )
-                            }
-                        </div>
-                    </div>}
-                    <NotificationSidebar data={{
-                        state: {
-                            totalEstimateWorth: this.state.totalEstimateWorth,
-                            missingEstimate: this.state.missingEstimate 
+                    <div id="files_dashboard_icons_box">
+                        <div
+                            className="files_dashboard_upload_file_text_button" 
+                            onClick={() => this.setState({
+                                displayUploadFileBox: true
+                                })}>Add File</div>
+                        {this.state.activeFiles.size >= 1 ?
+                            <IoTrashSharp className="files_dashboard_icons" onClick={() => this.deleteActiveFiles()}></IoTrashSharp> : 
+                            <div></div>}
+                        {this.state.activeFiles.size >= 1 ? 
+                            <MdFileDownload className="files_dashboard_icons" onClick={() => this.downloadActiveFiles()}></MdFileDownload> : 
+                            <div></div>
                         }
-                    }}/>
+                        {this.state.activeFiles.size === 1 ? 
+                            <MdEdit className="files_dashboard_icons"></MdEdit> : 
+                            <div></div>
+                        }
+                    </div>
+                    <div className="clearfix"/>
+                    {
+                        this.state.isLoading ? 
+                        <div></div> :
+                        <div id="files_dashboard_files_box">
+                            {this.renderActiveFolderFiles()}
+                        </div>
+                    }
                 </div>
+                <NotificationSidebar data={{
+                    state: {
+                        totalEstimateWorth: this.state.totalEstimateWorth,
+                        missingEstimate: this.state.missingEstimate 
+                    }
+                }}/>
             </div>
         )
     }
 }
 
-export default FilesDashboard;
+export default FolderPage;

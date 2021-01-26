@@ -3,7 +3,7 @@
     border: 1px solid grey;
     border-radius: 4px;
     float: left;
-    height: 150px;
+    height: 200px;
     margin-bottom: 5px;
     margin-top: 15px;
     position: relative;
@@ -34,7 +34,7 @@
     color: black;
     font-size: 0.9em;
     font-weight: bold;
-    margin-top: 5px;
+    margin-top: 17.5px;
     text-align: center;
     width: 100%;
     /* width: calc(100% - 65px); 15px + 25px + 10px + 15px */
@@ -48,8 +48,8 @@
     border: 1px solid #296CF6;
 }
 
-.file_card_individual_file_footer_title_active {
-    color: white;
+.file_card_individual_file_footer_title_active, .active_file_type_box {
+    color: white !important;
 }
 
 .white {
@@ -62,18 +62,26 @@
 
 .file_card_file_type_icon {
     float: left;
-    height: 75px;
+    height: 100px;
     margin-bottom: 0px;
-    margin-left: calc((100% - 75px)/2);
-    margin-top: calc((50px - 25px)/2);
-    width: 75px;
+    margin-left: calc((100% - 100px)/2);
+    margin-top: 22.5px;
+    width: 100px;
 }
+
+@media screen and (max-width: calc(220px + 350px + 0px + 0px + 60px + 1049px))  {
+    .file_card_individual_file:nth-child(4) {
+        margin-right: 0px;
+    }
+}
+
 /* 
 @media screen and (max-width: 2000px) {
     .file_card_individual_file {
         width: calc((100% - 150px - 20px) / 5);
     }
 }
+
 
 @media screen and (max-width: 1700px) {
     .file_card_individual_file {

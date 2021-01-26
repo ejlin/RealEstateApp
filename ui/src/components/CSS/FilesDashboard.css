@@ -5,7 +5,7 @@
     min-width: 700px;
     overflow: scroll;
     position: absolute;
-    width: calc(100% - 220px - 20%);
+    width: calc(100% - 220px - 350px);
 }
 
 #files_dashboard_welcome_box {
@@ -452,4 +452,11 @@ input[type=number] {
     line-height: 20px;
     margin-left: 2.5px;
     user-select: none;
+}
+
+.files_dashboard_folder_name_title {
+    float: left;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-left: 20px;
 }

@@ -7,7 +7,8 @@ import {
     AiFillFilePpt, 
     AiFillFileText, 
     AiFillFileWord, 
-    AiFillFileZip } from 'react-icons/ai';
+    AiFillFileZip,
+    AiFillFileMarkdown } from 'react-icons/ai';
 
 // trimTrailingName will take a name, and trim off any part of it longer than maxLength and append
 // a trailing ellipses (...) to it.
@@ -85,18 +86,18 @@ export function getByValue(map, searchValue){
         classNames += isActive? " card_white" : " card_blue";
         return (
             <div>
-                <AiFillFile 
+                <AiFillFileMarkdown
                     className={classNames}>
-                </AiFillFile>
+                </AiFillFileMarkdown>
             </div>
         )
     } else if (imageType.includes("audio")) {
         classNames += isActive? " card_white" : " card_blue";
         return (
             <div>
-                <AiFillFile 
+                <AiFillFileMarkdown
                     className={classNames}>
-                </AiFillFile>
+                </AiFillFileMarkdown>
             </div>
         )
     } else if (imageType.includes("zip")) {
