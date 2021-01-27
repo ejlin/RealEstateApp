@@ -117,14 +117,14 @@
     color: grey;
     font-size: 0.85em;
     font-weight: bold;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
     margin-top: 2.5px;
     padding-bottom: 7.5px;
     padding-top: 7.5px;
     text-align: center;
     user-select: none;
-    width: calc(100% - 40px);
+    width: calc(100% - 20px);
 }
 
 .file_card_file_year_size_text {

@@ -5,6 +5,8 @@ import { Redirect } from "react-router-dom";
 import './CSS/FolderPage.css';
 import './CSS/Style.css';
 
+import Loader from './Loader.js';
+
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 import FileCard from './FileCard.js';
@@ -46,7 +48,9 @@ class FolderPage extends React.Component {
             folderName: this.props.location.state.folderName,
             totalEstimateWorth: this.props.location.state.totalEstimateWorth,
             missingEstimate: this.props.location.state.missingEstimate,
+            propertiesMap: this.props.location.state.propertiesMap,
             profilePicture: this.props.location.state.profilePicture,
+            host: window.location.protocol + "//" + window.location.host,
             sortToggleMap: [['A-Z', false]],
             // files is the main point with how files are displayed.
             files: [],
@@ -81,6 +85,9 @@ class FolderPage extends React.Component {
     }
 
     componentDidMount() {
+
+        let host = this.state.host;
+
         let userID = this.state.user["id"];
         let folderPropertyID = this.state.folderPropertyID;
         
@@ -88,9 +95,9 @@ class FolderPage extends React.Component {
 
         // If we are in our All folder, list all our files.
         if (folderPropertyID === All) {
-            getFilesByPropertyURL = URLBuilder("http://localhost:3000/api/user/files", userID)
+            getFilesByPropertyURL = URLBuilder(host, "api/user/files", userID)
         } else {
-            getFilesByPropertyURL = URLBuilder("http://localhost:3000/api/user/files/property", userID, folderPropertyID)
+            getFilesByPropertyURL = URLBuilder(host, "api/user/files/property", userID, folderPropertyID)
         }
 
         axios({
@@ -194,8 +201,9 @@ class FolderPage extends React.Component {
     }
 
     async deleteFile(fileID) {
+        let host = this.state.host;
         let userID = this.state.user["id"];
-        let deleteFileURL = URLBuilder("api/user/files", userID, fileID)
+        let deleteFileURL = URLBuilder(host, "api/user/files", userID, fileID)
         let success = false;
         await axios({
             method: 'delete',
@@ -210,6 +218,10 @@ class FolderPage extends React.Component {
     }
 
     async deleteActiveFiles() {
+
+        this.setState({
+            isDeleting: true,
+        })
 
         let activeFolderFilesMap = this.state.activeFolderFilesMap;
         let activeFiles = this.state.activeFiles;
@@ -232,6 +244,7 @@ class FolderPage extends React.Component {
         this.setState({
             activeFiles: activeFiles,
             activeFolderFilesMap: activeFolderFilesMap,
+            isDeleting: false,
         })
         // let currFiles = this.state.files;
         // let activeFiles = this.state.activeFiles;
@@ -281,8 +294,12 @@ class FolderPage extends React.Component {
     }
 
     setRecentlyUploadedFile(file, associatedProperties) {
-        let activeFolderPropertyID = this.state.activeFolderPropertyID;
+
+        let activeFolderPropertyID = this.state.folderPropertyID;
         let activeFolderFilesMap = this.state.activeFolderFilesMap;
+
+        console.log(activeFolderPropertyID);
+        console.log(associatedProperties);
 
         let isAssociatedProperty = false;
         for (let i = 0; i < associatedProperties.length; i++) {
@@ -294,6 +311,7 @@ class FolderPage extends React.Component {
         }
 
         let newActiveFolderFilesMap;
+        console.log(isAssociatedProperty);
         if (isAssociatedProperty) {
             newActiveFolderFilesMap = new Map();
             newActiveFolderFilesMap.set(file["id"], file);
@@ -304,6 +322,8 @@ class FolderPage extends React.Component {
         } else {
             newActiveFolderFilesMap = activeFolderFilesMap;
         }
+
+        console.log(newActiveFolderFilesMap);
 
         this.setState({
             activeFolderFilesMap: newActiveFolderFilesMap,
@@ -439,6 +459,19 @@ class FolderPage extends React.Component {
                     }
                 }}/>
                 <div id="folder_page_parent_box">
+                    {this.state.displayUploadFileBox ? 
+                        <div className="files_dashboard_display_add_file_box">
+                            <UploadFileModal
+                                data={{
+                                    state: {
+                                        user: this.state.user,
+                                        propertiesMap: this.state.propertiesMap,
+                                        closeUploadFileModal: this.closeUploadFileModal,
+                                        setRecentlyUploadedFile: this.setRecentlyUploadedFile,
+                                    }                       
+                                }}/>
+                        </div> :
+                    <div></div>}
                     <div id="files_dashboard_welcome_box">
                         <p id="files_dashboard_welcome_box_title">
                             Files
@@ -454,7 +487,15 @@ class FolderPage extends React.Component {
                                 displayUploadFileBox: true
                                 })}>Add File</div>
                         {this.state.activeFiles.size >= 1 ?
-                            <IoTrashSharp className="files_dashboard_icons" onClick={() => this.deleteActiveFiles()}></IoTrashSharp> : 
+                            (this.state.isDeleting ? 
+                            <div className="folder_page_delete_loader_box">
+                                <Loader data={{
+                                    state: {
+                                        class: "folder_page_delete_loader",
+                                    }
+                                }}></Loader> 
+                            </div>:
+                            <IoTrashSharp className="files_dashboard_icons" onClick={() => this.deleteActiveFiles()}></IoTrashSharp>) : 
                             <div></div>}
                         {this.state.activeFiles.size >= 1 ? 
                             <MdFileDownload className="files_dashboard_icons" onClick={() => this.downloadActiveFiles()}></MdFileDownload> : 

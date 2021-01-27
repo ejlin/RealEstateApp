@@ -451,6 +451,7 @@ class FilesDashboard extends React.Component {
                     user: this.state.user,
                     folderPropertyID: this.state.activeFolderPropertyID,
                     folderName: this.state.activeFolderName,
+                    propertiesMap: this.state.propertiesMap,
                     // Pass in the profilePicture so we don't have to load it again.
                     profilePicture: this.state.profilePicture
                 }

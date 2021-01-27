@@ -16,6 +16,8 @@ import ProgressBar from './../utility/ProgressBar.js';
 
 import { getByValue, mapFileTypeToIcon } from '../utility/Util.js';
 
+let URLBuilder = require('url-join');
+
 const All = "All";
 const None = "None";
 
@@ -32,6 +34,7 @@ class UploadFileModal extends React.Component {
             propertiesAddresses: Array.from(this.props.data.state.propertiesMap.values()),
             closeUploadFileModal: this.props.data.state.closeUploadFileModal,
             setRecentlyUploadedFile: this.props.data.state.setRecentlyUploadedFile,
+            host: window.location.protocol + "//" + window.location.host,
         };
 
         this.renderFileUploadPropertiesSelection = this.renderFileUploadPropertiesSelection.bind(this);
@@ -159,9 +162,13 @@ class UploadFileModal extends React.Component {
 
         formData.append(properties, associatedProperties);
 
+        let userID = this.state.user["id"];
+        let host = this.state.host;
+        let uploadFileURL = URLBuilder(host, "api/user/files/upload", userID);
+        
         axios({
             method: 'post',
-            url: 'api/user/files/upload/' + this.state.user["id"],
+            url: uploadFileURL,
             config: {
                 headers: {
                     'Content-Type': 'multipart/form-data'

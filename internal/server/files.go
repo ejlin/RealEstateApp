@@ -161,7 +161,7 @@ func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
 
 	metadataFileType := r.FormValue("metadata_file_type")
 	if metadataFileType == "" {
-		fileType = "unknown"
+		metadataFileType = "unknown"
 	}
 
 	metadataFileSizeBytesVal := r.FormValue("metadata_file_size_bytes")
