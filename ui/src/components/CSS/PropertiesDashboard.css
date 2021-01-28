@@ -85,7 +85,7 @@
     overflow: scroll;
     margin-top: 25px;
     position: relative;
-    width: calc(100% + max(calc((100% - 975px) / 2), 15px));   
+    width: 100%;   
 }
 
 #properties_dashboard_property_inner_box::-webkit-scrollbar {

@@ -31,6 +31,10 @@ export function getByValue(map, searchValue){
     return null;
 }
 
+export function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 /*****************************************************************************/
 
  // isSmall is used for small icons

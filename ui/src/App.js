@@ -5,6 +5,7 @@ import SignUpSelectPricingPlan from './components/SignUpSelectPricingPlan.js';
 import Login from './components/Login.js';
 import MainDashboard from './components/MainDashboard.js';
 import PropertiesDashboard from './components/PropertiesDashboard.js';
+import PropertyPage from './components/PropertyPage.js';
 import AnalysisDashboard from './components/AnalysisDashboard.js';
 import ExpensesDashboard from './components/ExpensesDashboard.js';
 import FilesDashboard from './components/FilesDashboard.js';
@@ -40,6 +41,7 @@ function App() {
           </Route>
           <Route path="/addproperty" render={(props) => <NewPropertyForm {...props}/>}/>
           <Route path="/dashboard" render={(props) => <MainDashboard {...props}/>}/>
+          <Route path="/properties/:id" render={(props) => <PropertyPage {...props}/>}/>
           <Route path="/properties" render={(props) => <PropertiesDashboard {...props}/>}/>
           <Route path="/analysis" render={(props) => <AnalysisDashboard {...props}/>}/>
           <Route path="/expenses" render={(props) => <ExpensesDashboard {...props}/>}/>

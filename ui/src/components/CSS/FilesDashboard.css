@@ -104,15 +104,15 @@
 }
 
 .files_dashboard_icons {
-    color: #296CF6;
-    border: 2px solid #296CF6;
-    border-radius: 50px;
+    color: rgb(41, 108, 246);
+    border: 1px solid #296CF6;
+    border-radius: 4px;
     cursor: pointer;
     float: right;
-    height: 25px;
+    height: 27px;
     margin-left: 10px;
     padding: 5px;
-    width: 25px;
+    width: 27px;
     transition: 0.5s;
 }
 
