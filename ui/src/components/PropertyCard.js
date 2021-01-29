@@ -30,7 +30,7 @@ class PropertyCard extends React.Component {
             user: this.props.data.state.user,
             isFirstChild: this.props.data.state.isFirstChild,
             property: this.props.data.state.property_details,
-            isLoading: true
+            isLoading: false
         };
         
         // this.deletePropertyByUser = this.deletePropertyByUser.bind(this);
@@ -57,31 +57,7 @@ class PropertyCard extends React.Component {
     }
 
     componentDidMount() {
-
-        var estimate = this.state.priceEstimate ? this.state.priceEstimate : this.state.priceBought;
-        var loan = this.state.priceBought - this.state.downPayment;
-        var ltvRatio = loan / estimate * 100;
-
-        var url = 'api/user/files/' + this.state.user["id"] + '/' + this.state.property["id"];
-        var files;
-        axios({
-            method: 'get',
-            url: url,
-        }).then(response => {
-            if (response == null) {
-                return;
-            }
-
-            var data = response.data;
-            this.setState({
-                isLoading: false
-            })
-        }).catch(error => {
-            this.setState({
-                isLoading: false
-            })
-        });
-            
+  
     }
 
     render() {
