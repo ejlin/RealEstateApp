@@ -773,7 +773,7 @@ class PropertiesDashboard extends React.Component {
                                     <p className="properties_dashboard_title_box_title">
                                         Properties
                                     </p>
-                                    <input className="properties_dashboard_search_bar" placeholder="Search...">
+                                    <input className="search_bar" placeholder="Search...">
                                     </input>
                                 </div>
                                 <div className="clearfix"/>
@@ -787,7 +787,7 @@ class PropertiesDashboard extends React.Component {
                                             profilePicture: this.state.profilePicture
                                         }
                                     }}>
-                                        <div className="properties_dashboard_add_property_button">
+                                        <div className="page_button">
                                             New Property
                                         </div>
                                     </Link>

@@ -71,6 +71,7 @@
 #settings_dashboard_user_information_profile_picture {
     background-color: white;
     border-radius: 50%;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     float: left;
     height: 225px;
     margin-left: calc((100% - 225px)/2);

@@ -6,6 +6,8 @@ import './CSS/PropertyPage.css';
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 
+import { numberWithCommas } from '../utility/Util.js';
+
 import { Link, Redirect } from 'react-router-dom';
 
 import { IoTrashSharp, IoCaretBackOutline } from 'react-icons/io5';
@@ -33,13 +35,90 @@ class PropertyPage extends React.Component {
             user: this.props.location.state.user,
             property: this.props.location.state.property,
             profilePicture: this.props.location.state.profilePicture,
-            viewToDisplay: analysis,
+            viewToDisplay: overview,
             isLoading: false
         };
+
+        this.renderViewPage = this.renderViewPage.bind(this);
+        this.convertPropertyTypeToText = this.convertPropertyTypeToText.bind(this);
     }
 
     componentDidMount() {
         console.log(this.state.property);
+    }
+
+    convertPropertyTypeToText(propertyType){
+        switch (propertyType) {
+            case 'SFH':
+                return 'Single Family Home';
+            default:
+                return propertyType;
+        }
+    }
+
+    renderViewPage() {
+        switch (this.state.viewToDisplay) {
+            case overview:
+                return (
+                    <div className="view_to_display_box">
+                        <div className="view_to_display_info_box">
+                            <p className="view_to_display_info_box_title">
+                                Info
+                            </p>
+                            <div className="clearfix"/>
+                            <div className="view_to_display_info_left_box">
+                                <li className="view_to_display_info_box_bullet">
+                                    <p className="view_to_display_info_box_subtitle property_page_property_type">
+                                        {this.convertPropertyTypeToText(this.state.property["property_type"])}
+                                    </p>
+                                </li>
+                                <li className="view_to_display_info_box_bullet">
+                                    <p className="view_to_display_info_box_subtitle">
+                                        {this.state.property["address"]}&nbsp;&nbsp;{this.state.property["city"]}, {this.state.property["state"]} {this.state.property["zip_code"]}
+                                    </p>
+                                </li>
+                            </div>
+                            <div className="view_to_display_info_right_box">
+                                <li className="view_to_display_info_box_bullet">
+                                    <p className="view_to_display_info_box_subtitle">
+                                        <b>${numberWithCommas(this.state.property["estimate"])}</b>
+                                    </p>
+                                </li>
+                                <li className="view_to_display_info_box_bullet">
+                                    <p className="view_to_display_info_box_subtitle">
+                                        <b>{this.state.property["num_beds"]}</b> beds &nbsp;<b>{this.state.property["num_baths"]}</b> baths
+                                    </p>
+                                </li>
+                            </div>
+                            <div className="clearfix"/>
+                        </div>
+                    </div>
+                );
+            case analysis:
+                return (
+                    <div>
+
+                    </div>
+                );
+            case expenses:
+                return (
+                    <div>
+
+                    </div>
+                );
+            case files:
+                return (
+                    <div>
+
+                    </div>
+                );
+            case settings: 
+                    return (
+                        <div>
+
+                        </div>
+                    );
+        }
     }
 
     render() {
@@ -224,6 +303,7 @@ class PropertyPage extends React.Component {
                                 <div className="clearfix"/>
                                 <div className="property_page_view_box_bottom_border">
                                 </div>
+                                {this.renderViewPage()}
                             </div>
                         </div>
                         

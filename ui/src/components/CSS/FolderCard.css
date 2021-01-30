@@ -1,12 +1,13 @@
 .files_dashboard_folder_card {
     background-color: white;
-    border: 1px solid grey;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
+    /* border: 1px solid grey; */
     border-radius: 4px;
     float: left;
     height: 50px;
     margin-bottom: 25px;
     margin-right: max(15px, calc((100% - 1050px)/4));
-    width: 208px;
+    width: 210px;
 }
 
 .files_dashboard_folder_card:nth-child(5) {

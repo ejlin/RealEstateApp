@@ -49,26 +49,6 @@
     width: 100%;
 }
 
-.expenses_dashboard_add_expense_button {
-    background-color: #296CF6;
-    border: 2px solid #296CF6;
-    border-radius: 4px;
-    color: white;
-    cursor: pointer;
-    float: right;
-    font-weight: bold;
-    height: 20px;
-    line-height: 20px;
-    padding: 7.5px 15px 7.5px 15px;
-    text-align: center;
-    transition: 0.3s;
-    user-select: none;
-}
-
-.expenses_dashboard_add_expense_button:hover {
-    opacity: 0.7;
-}
-
 .expenses_dashboard_body_inner_box {
     float: left;
     margin-top: 25px;
@@ -143,7 +123,8 @@
 
 .expenses_table {
     background-color: white;
-    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
+    border-radius: 10px;
     float: left;
     height: calc(72vh);
     min-height: 650px;

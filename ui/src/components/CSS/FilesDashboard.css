@@ -122,12 +122,6 @@
 }
 
 #files_dashboard_search_bar {
-    border: 1px solid #d3d3d3;
-    border-radius: 8px;
-    float: right;
-    font-size: 1.1em;
-    padding: 7.5px 15px 7.5px 15px;
-    width: 500px;
 }
 
 #files_dashboard_search_bar::placeholder{

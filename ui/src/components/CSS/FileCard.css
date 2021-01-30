@@ -1,14 +1,14 @@
 .file_card_individual_file {
     background-color: white;
-    border: 1px solid grey;
     border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     float: left;
     height: 200px;
     margin-bottom: 5px;
     margin-top: 15px;
     position: relative;
     margin-right: max(15px, calc((100% - 1050px)/4));
-    width: 208px;
+    width: 210px;
 }
 
 .file_card_individual_file:nth-child(5) {
@@ -45,7 +45,7 @@
 .file_card_active {
     background-color: #296CF6;
     /* background-color: #eaf5fb; */
-    border: 1px solid #296CF6;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
 }
 
 .file_card_individual_file_footer_title_active, .active_file_type_box {

@@ -592,7 +592,7 @@ class ExpensesDashboard extends React.Component {
                             <div className="expenses_dashboard_parent_inner_box_title">
                                 Expenses
                             </div>
-                            <input id="expenses_dashboard_search_bar" className="expenses_dashboard_search_bar" placeholder="Search..." onChange={this.handleSearchBar}>
+                            <input id="expenses_dashboard_search_bar" className="search_bar" placeholder="Search..." onChange={this.handleSearchBar}>
                             </input>
                         </div>
                         <div className="expenses_dashboard_body_box">
@@ -603,7 +603,7 @@ class ExpensesDashboard extends React.Component {
                                             displayAddExpense: true
                                         })
                                     }}
-                                    className="expenses_dashboard_add_expense_button">
+                                    className="page_button">
                                     Add Expense
                                 </div>
                             </div>
