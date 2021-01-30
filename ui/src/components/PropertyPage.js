@@ -16,7 +16,7 @@ import { GoFileDirectory } from 'react-icons/go';
 import { SiGoogleanalytics } from 'react-icons/si';
 import { IoSettingsSharp } from 'react-icons/io5';
 import { FiChevronDown } from 'react-icons/fi';
-import { FaMoneyCheck } from 'react-icons/fa';
+import { FaMoneyCheck, FaCheckCircle } from 'react-icons/fa';
 import { MdFeedback, MdDashboard } from 'react-icons/md';
 
 let URLBuilder = require('url-join');
@@ -41,6 +41,7 @@ class PropertyPage extends React.Component {
 
         this.renderViewPage = this.renderViewPage.bind(this);
         this.convertPropertyTypeToText = this.convertPropertyTypeToText.bind(this);
+        this.convertBoughDateToText = this.convertBoughDateToText.bind(this);
     }
 
     componentDidMount() {
@@ -56,6 +57,22 @@ class PropertyPage extends React.Component {
         }
     }
 
+    convertBoughDateToText(boughtDate) {
+
+        let monthArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        // Format is 10/2020
+        let split = boughtDate.split("/");
+        if (split.length !== 2) {
+            return boughtDate;
+        }
+
+        let month = split[0];
+        let monthNum = parseInt(month);
+        let year = split[1];
+
+        return monthArr[monthNum - 1] + " " + year;
+    }
+
     renderViewPage() {
         switch (this.state.viewToDisplay) {
             case overview:
@@ -63,8 +80,16 @@ class PropertyPage extends React.Component {
                     <div className="view_to_display_box">
                         <div className="view_to_display_info_box">
                             <p className="view_to_display_info_box_title">
-                                Info
+                                Property Info
                             </p>
+                            {
+                                this.state.property["currently_rented"] ? 
+                                <div className="property_page_currently_rented_box">
+                                    <FaCheckCircle className="property_page_currently_rented_icon"></FaCheckCircle>
+                                    <p className="property_page_currently_rented_text">Currently Rented</p>
+                                </div>:
+                                <div></div>
+                            }
                             <div className="clearfix"/>
                             <div className="view_to_display_info_left_box">
                                 <li className="view_to_display_info_box_bullet">
@@ -74,14 +99,19 @@ class PropertyPage extends React.Component {
                                 </li>
                                 <li className="view_to_display_info_box_bullet">
                                     <p className="view_to_display_info_box_subtitle">
-                                        {this.state.property["address"]}&nbsp;&nbsp;{this.state.property["city"]}, {this.state.property["state"]} {this.state.property["zip_code"]}
+                                        <b>{this.state.property["address"]}</b>,&nbsp;&nbsp;{this.state.property["city"]}, {this.state.property["state"]} {this.state.property["zip_code"]}
+                                    </p>
+                                </li>
+                                <li className="view_to_display_info_box_bullet">
+                                    <p className="view_to_display_info_box_subtitle">
+                                        <b>{this.state.property["num_units"]}</b>&nbsp;unit(s)
                                     </p>
                                 </li>
                             </div>
                             <div className="view_to_display_info_right_box">
                                 <li className="view_to_display_info_box_bullet">
                                     <p className="view_to_display_info_box_subtitle">
-                                        <b>${numberWithCommas(this.state.property["estimate"])}</b>
+                                        Estimate:&nbsp;&nbsp;<b>${numberWithCommas(this.state.property["estimate"])}</b>
                                     </p>
                                 </li>
                                 <li className="view_to_display_info_box_bullet">
@@ -89,35 +119,132 @@ class PropertyPage extends React.Component {
                                         <b>{this.state.property["num_beds"]}</b> beds &nbsp;<b>{this.state.property["num_baths"]}</b> baths
                                     </p>
                                 </li>
+                                <li className="view_to_display_info_box_bullet">
+                                    <p className="view_to_display_info_box_subtitle">
+                                        <b>{numberWithCommas(this.state.property["square_footage"])}</b> square ft.
+                                    </p>
+                                </li>
                             </div>
+                            <div className="clearfix"/>
+                        </div>
+                        <div className="view_to_display_info_box">
+                            <p className="view_to_display_info_box_title">
+                                Financial Info
+                            </p>
+                            <div className="clearfix"/>
+                            <div className="view_to_display_info_left_box">
+                                <li className="view_to_display_info_box_bullet">
+                                    <p className="view_to_display_info_box_subtitle">
+                                        Bought on <b>{this.convertBoughDateToText(this.state.property["bought_date"])}</b>
+                                    </p>
+                                </li>
+                                <li className="view_to_display_info_box_bullet">
+                                    <p className="view_to_display_info_box_subtitle">
+                                        Price Bought: <b>${numberWithCommas(this.state.property["price_bought"])}</b>
+                                    </p>
+                                </li>
+                                <li className="view_to_display_info_box_bullet">
+                                    <p className="view_to_display_info_box_subtitle">
+                                        Down Payment: <b>${numberWithCommas(this.state.property["down_payment"])}</b>
+                                    </p>
+                                </li>
+                            </div>
+                            <div className="view_to_display_info_right_box">
+                                {
+                                    this.state.property["currently_rented"] ?
+                                    <li className="view_to_display_info_box_bullet">
+                                        <p className="view_to_display_info_box_subtitle">
+                                            Rent:&nbsp;<b>${numberWithCommas(this.state.property["price_rented"])}</b> / mo.
+                                        </p>
+                                    </li> :
+                                    <div></div>
+                                }
+                                <li className="view_to_display_info_box_bullet">
+                                    <p className="view_to_display_info_box_subtitle">
+                                        Loan/Mortgage:&nbsp;<b>${numberWithCommas(this.state.property["price_mortgage"])}</b> / mo.
+                                    </p>
+                                </li>
+                            </div>
+                            <div className="clearfix"/>
+                        </div>
+                        <div className="view_to_display_info_box">
+                            <p className="view_to_display_info_box_title">
+                                Miscellaneous Info
+                            </p>
+                            <div className="clearfix"/>
+                            <div className="view_to_display_info_left_box">
+                                <li className="view_to_display_info_box_bullet">
+                                    <p className="view_to_display_info_box_subtitle">
+                                        Bought on <b>{this.convertBoughDateToText(this.state.property["bought_date"])}</b>
+                                    </p>
+                                </li>
+                                <li className="view_to_display_info_box_bullet">
+                                    <p className="view_to_display_info_box_subtitle">
+                                        Price Bought: <b>${numberWithCommas(this.state.property["price_bought"])}</b>
+                                    </p>
+                                </li>
+                                <li className="view_to_display_info_box_bullet">
+                                    <p className="view_to_display_info_box_subtitle">
+                                        Down Payment: <b>${numberWithCommas(this.state.property["down_payment"])}</b>
+                                    </p>
+                                </li>
+                            </div>
+                            <div className="view_to_display_info_right_box">
+                                {
+                                    this.state.property["currently_rented"] ?
+                                    <li className="view_to_display_info_box_bullet">
+                                        <p className="view_to_display_info_box_subtitle">
+                                            Rent:&nbsp;<b>${numberWithCommas(this.state.property["price_rented"])}</b> / mo.
+                                        </p>
+                                    </li> :
+                                    <div></div>
+                                }
+                                <li className="view_to_display_info_box_bullet">
+                                    <p className="view_to_display_info_box_subtitle">
+                                        Loan/Mortgage:&nbsp;<b>${numberWithCommas(this.state.property["price_mortgage"])}</b> / mo.
+                                    </p>
+                                </li>
+                            </div>
+                            <div className="clearfix"/>
+                        </div>
+                        <div className="view_to_display_info_box">
+                            <p className="view_to_display_info_box_title">
+                                Map
+                            </p>
+                            <div className="clearfix"/>
+                            <img className="view_to_display_info_box_map" src='https://maps.googleapis.com/maps/api/staticmap?center=1396+Adagietto+Dr,Henderson,NV&zoom=15&size=1000x300&maptype=roadmap
+        &markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318
+        &markers=color:red%7Clabel:C%7C40.718217,-73.998284
+        &key=AIzaSyCbudHvO__fMV1eolNO_g5qtE2r2UNcjcA'>
+                            </img>
                             <div className="clearfix"/>
                         </div>
                     </div>
                 );
             case analysis:
                 return (
-                    <div>
+                    <div className="view_to_display_box">
 
                     </div>
                 );
             case expenses:
                 return (
-                    <div>
-
+                    <div className="view_to_display_box">
+                        
                     </div>
                 );
             case files:
                 return (
-                    <div>
-
+                    <div className="view_to_display_box">
+                        
                     </div>
                 );
-            case settings: 
-                    return (
-                        <div>
-
-                        </div>
-                    );
+            case settings:
+                return (
+                    <div className="view_to_display_box">
+                        
+                    </div>
+                );
         }
     }
 
@@ -148,15 +275,13 @@ class PropertyPage extends React.Component {
                 <div>
                     <div className="property_page_property_type_box">
                         <div className="property_page_inner_box">
-                            <div id="properties_dashboard_title_box">
+                            {/* <div id="properties_dashboard_title_box">
                                 <p className="properties_dashboard_title_box_title">
                                     Properties
                                 </p>
-                                <input className="properties_dashboard_search_bar" placeholder="Search...">
-                                </input>
-                            </div>
+                            </div> */}
                             <div className="clearfix"/>
-                            <div className="properties_dashboard_buttons_box">
+                            <div className="property_page_buttons_box">
                                 <Link to={{
                                     pathname: "/addproperty",
                                     state: {
@@ -166,7 +291,7 @@ class PropertyPage extends React.Component {
                                         profilePicture: this.state.profilePicture
                                     }
                                 }}>
-                                    <div className="properties_dashboard_add_property_button">
+                                    <div className="page_button">
                                         New Property
                                     </div>
                                 </Link>
@@ -301,8 +426,8 @@ class PropertyPage extends React.Component {
                                     </li>
                                 </div>
                                 <div className="clearfix"/>
-                                <div className="property_page_view_box_bottom_border">
-                                </div>
+                                {/* <div className="property_page_view_box_bottom_border">
+                                </div> */}
                                 {this.renderViewPage()}
                             </div>
                         </div>

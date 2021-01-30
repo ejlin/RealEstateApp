@@ -121,17 +121,6 @@
    color: white;
 }
 
-#files_dashboard_search_bar {
-}
-
-#files_dashboard_search_bar::placeholder{
-    user-select: none;
-}
-
-#files_dashboard_search_bar:focus {
-    outline: none;
-}
-
 #files_dashboard_sort_box {
     margin-left: 60px;
     margin-top: 40px;

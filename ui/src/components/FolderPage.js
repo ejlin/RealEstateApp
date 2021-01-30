@@ -476,13 +476,13 @@ class FolderPage extends React.Component {
                         <p id="files_dashboard_welcome_box_title">
                             Files
                         </p>
-                        <input id="files_dashboard_search_bar" placeholder="Search..." onChange={this.handleSearchBar}>
+                        <input id="files_dashboard_search_bar" className="search_bar" placeholder="Search..." onChange={this.handleSearchBar}>
                         </input>
                     </div>
                     <div className="clearfix"/>
                     <div id="files_dashboard_icons_box">
                         <div
-                            className="files_dashboard_upload_file_text_button" 
+                            className="page_button" 
                             onClick={() => this.setState({
                                 displayUploadFileBox: true
                                 })}>Add File</div>

@@ -2,6 +2,13 @@
     height: 30px;
 }
 
+.property_page_buttons_box {
+    float: left;
+    height: 40px;
+    margin-bottom: 0px;
+    width: 100%;
+}
+
 .property_page_back_to_folders_button {
     cursor: pointer;
     float: left;
@@ -47,12 +54,13 @@
 .property_page_property_type_box {
     background-color: #F5F5FA;
     float: left;
-    height: 100vh;
+    height: calc(100vh - 50px);
     margin-left: 220px;
     width: calc(100% - 220px - 350px);
 }
 
 .property_page_inner_box {
+    float: left;
     margin-left: 60px;
     margin-right: 20px;
     margin-top: 80px;
@@ -60,8 +68,7 @@
 }
 
 .property_page_view_box {
-    height: 100px;  
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .property_page_view_box_tabs_box {
@@ -112,20 +119,26 @@
 }
 
 .property_page_view_box_active_tab {
-    background-color: #d3d3d3;
-    border-radius: 4px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
 }
 
 .view_to_display_box {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
+    float: left;
+    height: calc(100vh - 80px - 160px - 40px);
+    margin-bottom: 50px;
     margin-top: 20px;
+    overflow-y: scroll;
     width: 100%;
 }
 
 .view_to_display_info_box {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
-    padding-bottom: 20px;
+    margin-bottom: 20px;
+    margin-top: 10px;
     width: calc(100%);
 }
 
@@ -134,13 +147,13 @@
     font-weight: bold;
     font-size: 1.2em;
     margin-bottom: 10px;
-    margin-left: 15px;
-    margin-top: 15px;
+    margin-left: 30px;
+    margin-top: 20px;
 }
 
 .view_to_display_info_box_subtitle {
     font-size: 1.0em;
-    margin-left: 15px;
+    margin-left: 30px;
     margin-top: 5px;
 }
 
@@ -159,4 +172,32 @@
 .view_to_display_info_right_box {
     float: left;
     width: 50%;
+}
+
+.property_page_currently_rented_box {
+    float: left;
+    height: 15px;
+    margin-left: 15px;
+    margin-top: 25px;
+}
+
+.property_page_currently_rented_icon {
+    color: #85BB85;
+    float: left;
+    height: 15px;
+    width: 15px;
+}
+
+.property_page_currently_rented_text {
+    color: #85BB85;
+    float: left;
+    font-weight: bold;
+    line-height: 15px;
+    margin-left: 7.5px;
+}
+
+.view_to_display_info_box_map {
+    margin-left: 30px;
+    margin-top: 20px;
+    width: 60%;
 }
