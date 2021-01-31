@@ -61,23 +61,19 @@ func (handle *Handle) AddExpense(ctx context.Context, userID string, expense *Ex
 			return fmt.Errorf("error adding expense: %w", err)
 		}
 
+		var fileID string
+
 		if file != nil {
+			fileID = file.ID
 			if err := tx.FirstOrCreate(&file, file).Error; err != nil {
 				return fmt.Errorf("error adding file: %w", err)
 			}
-		}
-
-		var fileID string
-		if file != nil {
-			fileID = file.ID
 		}
 
 		var expenseID string
 		if expense != nil {
 			expenseID = expense.ID
 		}
-
-		fmt.Println(propertyIDs)
 
 		for _, propertyID := range propertyIDs {
 
@@ -146,10 +142,26 @@ func (handle *Handle) GetExpensesByProperty(userID, propertyID string) ([]*Expen
 		return nil, fmt.Errorf("invalid UUID: %w", err)
 	}
 
-	var expenses []*Expense
-	if err := handle.DB.Where("user_id = ? AND property_id = ?", userID, propertyID).Find(&expenses).Error; err != nil {
+	_, err = uuid.Parse(propertyID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid UUID: %w", err)
+	}
+
+	var propertiesReferences []*PropertiesReferences
+	if err := handle.DB.Select("expense_id").Where("user_id = ? AND property_id = ? AND expense_id IS NOT NULL", userID, propertyID).Find(&propertiesReferences).Error; err != nil {
 		return nil, err
 	}
+
+	var expenseIDs []string
+	for _, propertiesReference := range propertiesReferences {
+		expenseIDs = append(expenseIDs, propertiesReference.ExpenseID.String)
+	}
+	
+	var expenses []*Expense
+	if err := handle.DB.Where("user_id = ? AND id IN (?)", userID, expenseIDs).Find(&expenses).Error; err != nil {
+		return nil, err
+	}
+
 	return expenses, nil
 }
 

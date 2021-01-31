@@ -206,3 +206,12 @@
     margin-right: 15px;
     width: calc((100% - 30px));
 }
+
+.analysis_circular_box {
+    border-radius: 10px;
+    /* box-shadow: 0px 2px 4px 0 rgba(0, 0, 0, 0.09), 3px 6px 20px 0 rgba(0, 0, 0, 0.19); */
+    height: 200px;
+    margin-left: 25px;
+    margin-top: 25px;
+    width: 200px;
+}

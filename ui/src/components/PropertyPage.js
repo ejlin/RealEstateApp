@@ -17,6 +17,8 @@ import { renderNoFiles } from './FilesDashboard.js';
 
 import { Link, Redirect } from 'react-router-dom';
 
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+
 import { IoTrashSharp, IoCaretBackOutline } from 'react-icons/io5';
 import { BsFillHouseFill } from 'react-icons/bs';
 import { GoFileDirectory } from 'react-icons/go';
@@ -357,7 +359,19 @@ class PropertyPage extends React.Component {
             case analysisView:
                 return (
                     <div className="view_to_display_box">
-
+                        <div className="analysis_circular_box">
+                            <CircularProgressbar 
+                                value={10}
+                                text={`${this.state.totalProperties ? (this.state.totalProperties - this.state.vacantProperties) / this.state.totalProperties * 100 : 0}%`}
+                                background
+                                backgroundPadding={5}
+                                styles={buildStyles({
+                                backgroundColor: "#fff",
+                                textColor: "#fff",
+                                pathColor: "#296CF6",
+                                trailColor: "#f5f5fa",
+                                })}/>
+                        </div>
                     </div>
                 );
             case expensesView:

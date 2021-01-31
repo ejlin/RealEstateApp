@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"context"
 	"encoding/json"
 	"errors"
@@ -296,6 +297,7 @@ func (s *Server) addExpensesByUser(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	fmt.Println(file)
 	// Add our expense to our expenses table.
 	err = s.DBHandle.AddExpense(ctx, userID, expense, associatedProperties, file, addFileToCloudStorage())
 	if err != nil {
