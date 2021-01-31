@@ -35,6 +35,29 @@ export function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+export function getDateSuffix(date) {
+    // convert string to int.
+    let strDate = parseInt(date);
+
+
+    if ((strDate >= 4 && strDate <= 20) || (strDate >= 24 && strDate <= 30)) {
+        return 'th';
+    }
+
+    if (strDate === 2 || strDate === 22) {
+        return 'nd';
+    }
+
+    if (strDate === 3 || strDate === 23) {
+        return 'rd';
+    }
+
+    if (strDate === 1 || strDate === 21 || strDate === 31) {
+        return 'st';
+    }
+
+}
+
 /*****************************************************************************/
 
  // isSmall is used for small icons

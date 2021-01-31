@@ -22,6 +22,17 @@ import { RiErrorWarningFill } from 'react-icons/ri';
 
 let URLBuilder = require('url-join');
 
+
+export function renderNoFiles() {
+    return (
+        <div id="files_dashboard_no_files_box">
+            <p id="files_dashboard_no_files_box_title">
+                No Files
+            </p>
+        </div>
+    );
+}
+
 /****
  * The UI is rendered using a field "filesToDisplay".
  * filesToDisplay is re-set every time we call renderFiles().
@@ -306,7 +317,7 @@ class FilesDashboard extends React.Component {
     }
 
     renderActiveSearchFiles() {
-        return this.state.activeSearchFiles.length > 0 ? this.state.activeSearchFiles : this.renderNoFiles();
+        return this.state.activeSearchFiles.length > 0 ? this.state.activeSearchFiles : renderNoFiles();
     }
 
     setActiveFileAttributes(fileID, file, toRemove) {
@@ -328,16 +339,6 @@ class FilesDashboard extends React.Component {
             activeFiles: currentActiveFiles
         })
         return true;
-    }
-
-    renderNoFiles() {
-        return (
-            <div id="files_dashboard_no_files_box">
-                <p id="files_dashboard_no_files_box_title">
-                    No Files
-                </p>
-            </div>
-        );
     }
 
     setActiveFolder(folderPropertyID, folderName) {
@@ -381,7 +382,7 @@ class FilesDashboard extends React.Component {
         }
         if (fileElements.length === 0){
             fileElements.push(
-                this.renderNoFiles()
+                renderNoFiles()
             );
         }
 

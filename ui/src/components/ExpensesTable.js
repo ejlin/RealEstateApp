@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-import './CSS/ExpensesDashboard.css';
+import './CSS/ExpensesTable.css';
 import './CSS/Style.css';
 
 import CreateExpenseModal from './CreateExpenseModal.js';
@@ -9,7 +9,6 @@ import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 import ExpenseCard from './ExpenseCard.js';
 import ExpandedExpenseCard from './ExpandedExpenseCard.js';
-import ExpensesTable from './ExpensesTable.js';
 
 import { BsArrowUp } from 'react-icons/bs';
 import { RiErrorWarningFill } from 'react-icons/ri';
@@ -28,17 +27,6 @@ export function convertDate(date){
 }
 
 let URLBuilder = require('url-join');
-
-export function renderNoExpenses() {
-    return (
-        <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
-            <RiErrorWarningFill className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></RiErrorWarningFill>
-            <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
-                No Expenses
-            </p>
-        </div>
-    )
-}
 
 // sortByStringField is a custom sort comparator function that allows us to sort our
 // elements according to the field we want if the field is a string. 
@@ -125,34 +113,33 @@ const date = "date";
 const amount = "amount";
 const defaultFieldToggled = "last_modified_at";
 
-class ExpensesDashboard extends React.Component {
+class ExpensesTable extends React.Component {
     
     constructor(props) {
         super(props);
 
         this.state = {
-            user: this.props.location.state.user,
-            profilePicture: this.props.location.state.profilePicture,
-            totalEstimateWorth: this.props.location.state.totalEstimateWorth,
-            missingEstimate: this.props.location.state.missingEstimate,
-            propertiesMap: null,
-            displayAddExpense: false,
-            expensesMap: new Map(),
-            currFieldToggledDirectionIsUp: false,
-            currFieldToggled: defaultFieldToggled,
-            currExpensesSortFunc: null,
-            currActiveExpandedExpense: null,
-            isLoading: true,
+            user: this.props.data.state.user,
+            expenses: this.props.data.state.expenses,
+            expensesMap: this.props.data.state.expensesMap,
+            propertiesMap: this.props.data.state.propertiesMap,
+            isSpecificProperty: this.props.data.state.isSpecificProperty,
+            specificPropertyAddress: this.props.data.state.specificPropertyAddress,
+            setActiveExpandedExpenseCard: this.props.data.state.setActiveExpandedExpenseCard,
+            host: window.location.protocol + "//" + window.location.host,
         };
         this.addExpense = this.addExpense.bind(this);
         this.displayEditExpenseModal = this.displayEditExpenseModal.bind(this);
         this.closeCreateExpenseModal = this.closeCreateExpenseModal.bind(this);
         this.closeEditExpenseModal = this.closeEditExpenseModal.bind(this);
         this.expenseFormDataToExpense = this.expenseFormDataToExpense.bind(this);
+        this.deleteExpense = this.deleteExpense.bind(this);
+        this.renderExpenseTableElements = this.renderExpenseTableElements.bind(this);
         this.setToggleFields = this.setToggleFields.bind(this);
         this.getSortFunction = this.getSortFunction.bind(this);
         this.handleSearchBar = this.handleSearchBar.bind(this);
         this.renderActiveSearchExpenses = this.renderActiveSearchExpenses.bind(this);
+        this.renderNoExpenses = this.renderNoExpenses.bind(this);
         this.convertExpenseToExpenseCard = this.convertExpenseToExpenseCard.bind(this);
         this.setActiveExpandedExpenseCard = this.setActiveExpandedExpenseCard.bind(this);
         this.renderPageLoadingView = this.renderPageLoadingView.bind(this);
@@ -163,56 +150,6 @@ class ExpensesDashboard extends React.Component {
      * expenses associated with the user.
      */
     componentDidMount() {
-        
-        let userID = this.state.user["id"];
-        let getPropertiesListURL = URLBuilder('api/user/property/', userID);
-        let getExpensesListURL = URLBuilder('api/user/expenses/', userID);
-
-        const getPropertiesRequest = axios.get(getPropertiesListURL);
-        const getExpensesRequest = axios.get(getExpensesListURL);
-
-        axios.all(
-            [getPropertiesRequest, getExpensesRequest]
-        ).then(axios.spread((...responses) => {
-            const propertiesRequestReponse = responses[0];
-            const expensesRequestResponse = responses[1];
-
-            /* Handle our properties response */
-            let propertiesList = propertiesRequestReponse.data;
-            let propertiesMap = new Map();
-            for (let i = 0; i < propertiesList.length; i++) {
-                let property = propertiesList[i];
-                let propertyID = property["id"];
-                let propertyAddress = property["address"];
-                propertiesMap.set(propertyID, propertyAddress);
-            }
-            /* Set 'None' and 'All' to handle cases where expenses are not mapped to any/are mapped to all properties */
-            propertiesMap.set("None", "None");
-            propertiesMap.set("All", "All");
-
-            /* Handle our expenses response */
-            let expensesMap = new Map();
-            let expenses;
-            // response.data is an array of expenses. Order them by property IDs -> expenses.
-            if (expensesRequestResponse.data) {
-                expenses = expensesRequestResponse.data.sort(
-                    this.getSortFunction(this.state.currFieldToggledDirectionIsUp, this.state.currFieldToggled)
-                );
-                for (let i = 0; i < expenses.length; i++) {
-                    let expense = expenses[i];
-                    expensesMap.set(expense["id"], expense);
-                }    
-            }
-            
-            this.setState({
-                propertiesMap: propertiesMap,
-                expenses: expenses,
-                expensesMap: expensesMap,
-                isLoading: false
-            });
-        })).catch(errors => {
-            console.log(errors);
-        });
     }
 
     handleSearchBar(e) {
@@ -273,8 +210,27 @@ class ExpensesDashboard extends React.Component {
     }
 
     setActiveExpandedExpenseCard(expense) {
-        this.setState({
-            currActiveExpandedExpense: expense,
+        this.state.setActiveExpandedExpenseCard(expense);
+    }
+
+    deleteExpense(expenseID) {
+
+        let userID = this.state.user["id"];
+        let host = this.state.host;
+        let deleteExpenseURL = URLBuilder(host, 'api/user/expenses/', userID, expenseID);
+        
+        axios({
+            method: 'delete',
+            url: deleteExpenseURL,
+        }).then(response => {
+            let expensesMap = this.state.expensesMap;
+            expensesMap.delete(expenseID);
+
+            this.setState({
+                expensesMap: expensesMap,
+            })
+        }).catch(error => {
+            console.log(error)
         })
     }
 
@@ -327,46 +283,83 @@ class ExpensesDashboard extends React.Component {
         }
     }
 
+    renderExpenseTableElements() {
+
+        let expensesMap = this.state.expensesMap;
+        // We need to sort our expensesMap by the current user selection.
+        let sortFn = this.getSortFunction(this.state.currFieldToggled, this.state.currFieldToggledDirectionIsUp);
+        // let sortedExpensesArr = expensesMap.entries().sort(sortFn);
+        let expensesArr = [];
+        expensesMap.forEach((expense, expenseID, map) => {
+            expensesArr.push(expense);
+        })
+
+        let elements = [];
+
+        let expenses = expensesArr.sort(sortFn);
+
+        for (let i = 0; i < expenses.length; i++) {
+            let expense = expenses[i];
+
+            let expenseCard = this.convertExpenseToExpenseCard(expense);
+            elements.push(expenseCard);
+        }
+        if (elements.length > 0 ) {
+            return elements;
+        }
+        return this.renderNoExpenses();
+    }
+
     convertExpenseToExpenseCard(expense) {
         let expenseProperties = expense["properties"] ? expense["properties"] : ["None"];
         let propertiesMap = this.state.propertiesMap;
 
 
         let properties = [];
-        if (expenseProperties.length > 0) {
-            // 2 are for "None" and "All". It means all the properties were added.
-            if (expenseProperties.length === propertiesMap.size - 2) {
-                properties.push(
-                    <p className="expenses_table_first_row_subtitle">
-                        {"All"}
-                    </p>
-                );
-            } else {
-                /* If we have more than 5 associated properties, only show the first 5 */
-                let maxLength = expenseProperties.length < 5 ? expenseProperties.length : 5;
-                for (let j = 0; j < maxLength; j++) {
-                    let expensePropertyID = expenseProperties[j];
-                    properties.push(
-                        <p className="expenses_table_first_row_subtitle">
-                            {propertiesMap.has(expensePropertyID) ? propertiesMap.get(expensePropertyID) : "None"}
-                        </p>
-                    );
-                }
-                /* If we have more than 5 associated properties, only show the first 5 and show an element saying "more" */
-                if (expenseProperties.length > maxLength) {
-                    properties.push(
-                        <p className="expenses_table_first_row_subtitle">
-                            {"More..."}
-                        </p>
-                    )
-                }
-            }
-        } else {
+
+        // If this is for a specific property, just put the property's address here.
+        if (this.state.isSpecificProperty && this.state.specificPropertyAddress) {
             properties.push(
                 <p className="expenses_table_first_row_subtitle">
-                    {"None"}
+                    {this.state.specificPropertyAddress}
                 </p>
-            );
+            )
+        } else {
+            if (expenseProperties.length > 0) {
+                // 2 are for "None" and "All". It means all the properties were added.
+                if (expenseProperties.length === propertiesMap.size - 2) {
+                    properties.push(
+                        <p className="expenses_table_first_row_subtitle">
+                            {"All"}
+                        </p>
+                    );
+                } else {
+                    /* If we have more than 5 associated properties, only show the first 5 */
+                    let maxLength = expenseProperties.length < 5 ? expenseProperties.length : 5;
+                    for (let j = 0; j < maxLength; j++) {
+                        let expensePropertyID = expenseProperties[j];
+                        properties.push(
+                            <p className="expenses_table_first_row_subtitle">
+                                {propertiesMap.has(expensePropertyID) ? propertiesMap.get(expensePropertyID) : "None"}
+                            </p>
+                        );
+                    }
+                    /* If we have more than 5 associated properties, only show the first 5 and show an element saying "more" */
+                    if (expenseProperties.length > maxLength) {
+                        properties.push(
+                            <p className="expenses_table_first_row_subtitle">
+                                {"More..."}
+                            </p>
+                        )
+                    }
+                }
+            } else {
+                properties.push(
+                    <p className="expenses_table_first_row_subtitle">
+                        {"None"}
+                    </p>
+                );
+            }
         }
         
         return (
@@ -392,10 +385,35 @@ class ExpensesDashboard extends React.Component {
             }
             return elements;
         }
-        return renderNoExpenses();
+        return this.renderNoExpenses();
     }
 
-    renderExpenseTableTitle() {
+    renderNoExpenses() {
+        return (
+            <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
+                <RiErrorWarningFill className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></RiErrorWarningFill>
+                <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
+                    No Expenses
+                </p>
+            </div>
+        )
+    }
+
+    renderPageLoadingView() {
+        return (
+            <div className="expenses_dashboard_body_inner_box">
+                <div className="expenses_dashboard_body_inner_box_most_recent_box">
+                <div className="expenses_table">
+                    <div className="expenses_table_title_row">
+                        
+                    </div>
+                </div>
+                </div>
+            </div>
+        );
+    }
+
+    render() {
         return (
             <div className="expenses_table">
                 <div className="expenses_table_title_row">
@@ -471,121 +489,13 @@ class ExpensesDashboard extends React.Component {
                         this.renderActiveSearchExpenses() :
                         (this.state.expenses ?
                             this.renderExpenseTableElements() : 
-                        renderNoExpenses()
+                        this.renderNoExpenses()
                         )
                     }
                 </div>
             </div>
-        )
-    }
-
-    renderPageLoadingView() {
-        return (
-            <div className="expenses_dashboard_body_inner_box">
-                <div className="expenses_dashboard_body_inner_box_most_recent_box">
-                <div className="expenses_table">
-                    <div className="expenses_table_title_row">
-                        
-                    </div>
-                </div>
-                </div>
-            </div>
         );
-    }
-
-    render() {
-        return (
-            <div>
-                <DashboardSidebar data={{
-                    state: {
-                        user: this.state.user,
-                        totalEstimateWorth: this.state.totalEstimateWorth,
-                        missingEstimate: this.state.missingEstimate,
-                        profilePicture: this.state.profilePicture,
-                        currentPage: "expenses"
-                    }
-                }}/>
-                <div id="expenses_dashboard_parent_box">
-                    {this.state.displayAddExpense ?
-                        <div className="expenses_dashboard_display_add_expense_box">
-                            <CreateExpenseModal
-                                data={{
-                                state: {
-                                    user: this.state.user,
-                                    propertiesMap: this.state.propertiesMap,
-                                    addExpense: this.addExpense,
-                                    closeCreateExpenseModal: this.closeCreateExpenseModal,
-                                }                       
-                            }}
-                            ></CreateExpenseModal>
-                        </div> :
-                        <div></div>}
-                    {this.state.expenseToEdit ?
-                        <div className="expenses_dashboard_display_add_expense_box">
-                        </div> :
-                        <div></div>}
-                    {this.state.currActiveExpandedExpense !== null ? 
-                        <div className="expenses_dashboard_display_add_expense_box">
-                            <ExpandedExpenseCard data={{
-                                state: {
-                                    user: this.state.user,
-                                    expense: this.state.currActiveExpandedExpense,
-                                    propertiesMap: this.state.propertiesMap,
-                                    setActiveExpandedExpenseCard: this.setActiveExpandedExpenseCard,
-                                }
-                            }}>
-                            </ExpandedExpenseCard>
-                        </div> :
-                        <div></div>}
-                    <div className="expenses_dashboard_parent_inner_box">
-                        <div className="expenses_dashboard_title_box">
-                            <div className="expenses_dashboard_parent_inner_box_title">
-                                Expenses
-                            </div>
-                            <input id="expenses_dashboard_search_bar" className="search_bar" placeholder="Search..." onChange={this.handleSearchBar}>
-                            </input>
-                        </div>
-                        <div className="expenses_dashboard_body_box">
-                            <div className="expenses_dashboard_buttons_box">
-                                <div 
-                                    onClick={() => {
-                                        this.setState({
-                                            displayAddExpense: true
-                                        })
-                                    }}
-                                    className="page_button">
-                                    Add Expense
-                                </div>
-                            </div>
-                            {this.state.isLoading ? 
-                            this.renderPageLoadingView() : 
-                            <div className="expenses_dashboard_body_inner_box">
-                                <div className="expenses_dashboard_body_inner_box_most_recent_box">
-                                    <ExpensesTable data={{
-                                        state:{
-                                            user: this.state.user,
-                                            expenses: this.state.expenses,
-                                            expensesMap: this.state.expensesMap,
-                                            propertiesMap: this.state.propertiesMap,
-                                            isSpecificProperty: false,
-                                            specificPropertyAddress: null,
-                                            setActiveExpandedExpenseCard: this.setActiveExpandedExpenseCard,
-                                        }
-                                    }}/>
-                                </div>
-                            </div>}
-                        </div>
-                    </div>
-                </div>
-                <NotificationSidebar data={{
-                    state: {
-                        totalEstimateWorth: this.state.totalEstimateWorth,
-                        missingEstimate: this.state.missingEstimate 
-                    }
-                }}/>
-            </div>
-        )
     }
 }
 
-export default ExpensesDashboard;
+export default ExpensesTable;

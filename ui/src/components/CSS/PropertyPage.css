@@ -130,7 +130,6 @@
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     float: left;
     height: calc(100vh - 80px - 160px - 40px);
-    margin-bottom: 50px;
     margin-top: 20px;
     overflow-y: scroll;
     width: 100%;
@@ -200,4 +199,10 @@
     margin-left: 30px;
     margin-top: 20px;
     width: 60%;
+}
+
+.files_view_to_display_box {
+    margin-left: 15px;
+    margin-right: 15px;
+    width: calc((100% - 30px));
 }

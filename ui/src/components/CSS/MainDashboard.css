@@ -39,7 +39,8 @@ body {
 .main_dashboard_title_cards {
     background-color: white;
     border: 1px solid #E0E2e4;
-    border-radius: 4px;
+    border-radius: 10px;;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     float: left;
     height: 130px;
     margin-left: 40px;
@@ -76,6 +77,7 @@ body {
 
 .main_dashboard_title_cards_summary {
     background-color: white;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     font-size: 0.90em;
     margin-top: 0;
 }
@@ -90,7 +92,7 @@ body {
 #main_dashboard_trending_graph {
     background-color: white;
     border: 1px solid #E0E2e4;
-    border-radius: 4px;
+    border-radius: 10px;;
     height: 450px;
     width: 864px; /* 260 + 260 + 260 + 40 + 40 + 4*/
     margin-left: 40px;
@@ -105,7 +107,8 @@ body {
 #main_dashboard_summary_cards_box {
     background-color: white;
     /* background-color: #296CF6; */
-    border-radius: 4px;
+    border-radius: 10px;;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     /* border: 1px solid #d3d3d3; */
     /* box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09); */
     height: 125px;
@@ -154,6 +157,7 @@ body {
 
 #main_dashboard_summary_cards_icon_properties {
     background-color: white;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     /* background-color: #FBE9E1;  */
     /* color: #EE9E77; */
     color: #296CF6; 
@@ -161,6 +165,7 @@ body {
 
 #main_dashboard_summary_cards_icon_monthly_income {
     background-color: white;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     /* background-color: #dbebd2;  */
     /* color: #85bb65; */
     color: #296CF6; 
@@ -168,12 +173,14 @@ body {
 
 #main_dashboard_summary_cards_icon_monthly_arr {
     background-color: white;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     /* background-color:#eaf5fb; */
     color: #296CF6; 
 }
 
 #main_dashboard_summary_cards_icon_monthly_total_cost {
     background-color: white;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     /* background-color: #ffe9f1; */
     /* color:#e13f71; */
     color: #296CF6; 
@@ -189,14 +196,14 @@ body {
 
 #main_dashboard_bottom_box_left {
     border: 2px solid #d3d3d3;
-    border-radius: 4px;
+    border-radius: 10px;;
     float: left;
     height: 350px;
 }
 
 #main_dashboard_bottom_box_right {
     border: 2px solid #d3d3d3;
-    border-radius: 4px;
+    border-radius: 10px;;
     float: right;
     width: 38%;
 }
@@ -244,7 +251,7 @@ body {
 }
 
 #main_dashboard_occupied_box {
-    border-radius: 4px;
+    border-radius: 10px;;
     /* box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.09), 0 12px 40px 0 rgba(0, 0, 0, 0.09); */
     float: right;
     min-width: 350px;
@@ -304,7 +311,8 @@ body {
 .main_dashboard_bottom_left_box_top {
     background-color: white;
     border: 1px solid #f1f1f1;
-    border-radius: 4px;
+    border-radius: 10px;;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     height: 350px;
     width: calc(100% - 2px);
 }
@@ -317,7 +325,8 @@ body {
 .main_dashboard_bottom_left_box_bottom_inner_box {
     background-color: white;
     border: 1px solid #f1f1f1;
-    border-radius: 4px;
+    border-radius: 10px;;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     float: left;
     height: 135px;
     margin-bottom: 25px;
@@ -378,7 +387,8 @@ body {
 
 #main_dashboard_yoy_growth_box {
     background-color: #296CF6;
-    border-radius: 4px;
+    border-radius: 10px;;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     height: 190px;
     margin-top: 40px;
     padding-bottom: 25px;
@@ -397,7 +407,8 @@ body {
 .main_dashboard_yoy_growth_toggle_element {
     background-color: white;
     border: 1px solid white;
-    border-radius: 4px;
+    border-radius: 10px;;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     color: #296CF6;
     cursor: pointer;
     float: left;
@@ -414,11 +425,11 @@ body {
 
 .main_dashboard_yoy_growth_toggle_element:first-child {
     border-right: none;
-    border-radius: 4px 0px 0px 4px;
+    border-radius: 6px 0px 0px 6px;
 }
 
 .main_dashboard_yoy_growth_toggle_element:last-child {
-    border-radius: 0px 4px 4px 0px;
+    border-radius: 0px 6px 6px 0px;
 }
 
 #main_dashboard_yoy_icon {
@@ -454,7 +465,8 @@ body {
 .main_dashboard_key_insights_box {
     background-color: white;
     border: 1px solid #f1f1f1;
-    border-radius: 4px;
+    border-radius: 10px;;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     padding-bottom: 30px;
     overflow: hidden;
     width: calc(100% - 2px);
@@ -511,7 +523,7 @@ body {
 
 .rent_schedule_bullet_point {
     background-color: #296CF6;
-    border-radius: 4px;
+    border-radius: 10px;;
     float: left;
     height: 10px;
     margin-left: 20px;

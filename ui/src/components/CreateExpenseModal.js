@@ -100,7 +100,7 @@ class CreateExpenseModal extends React.Component {
         var expense = new FormData();
         let file = this.state.fileToUpload;
         if (file) {
-            expense.append(file, file);
+            expense.append("file", file);
             expense.append(metadataFileType, file["type"]);
             expense.append(metadataFileSizeBytes, file["size"]);
         }
@@ -130,7 +130,6 @@ class CreateExpenseModal extends React.Component {
             // Add all the ids of the properties selected.
             for (var i = 0; i < currSelectedAssociatedProperties.length; i++) {
                 let currSelectedAssociatedProperty = currSelectedAssociatedProperties[i];
-                console.log(currSelectedAssociatedProperty);
                 let propertyID = getByValue(propertiesMap, currSelectedAssociatedProperty);
                 if (propertyID !== null){
                     associatedProperties.push(propertyID);

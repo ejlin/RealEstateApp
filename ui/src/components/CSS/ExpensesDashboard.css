@@ -82,20 +82,20 @@
 .expenses_dashboard_body_inner_box_no_expenses_inner_box_icon {
     color: grey;
     float: left;
-    height: 25px;
-    left: calc(50% - 70px - 25px);
+    height: 20px;
+    left: calc(50% - 70px - 10px);
     margin-top: 0px;
     position: absolute;
-    width: 25px;
+    width: 20px;
 }
 
 .expenses_dashboard_body_inner_box_no_expenses_inner_box_text {
     color: grey;
-    font-size: 1.3em;
-    margin-left: calc((100% - 120px)/2);
+    font-size: 1.1em;
+    margin-left: calc((100% - 100px)/2);
     margin-top: 0px;
     text-align: center;
-    width: 120px;
+    width: 100px;
 }
 
 .expenses_dashboard_display_add_expense_box {
@@ -126,7 +126,7 @@
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     border-radius: 10px;
     float: left;
-    height: calc(72vh);
+    height: calc(73vh);
     min-height: 650px;
     min-width: 1000px;
     overflow-x: scroll;
@@ -135,7 +135,7 @@
 }
 
 .expenses_table_body {
-    height: calc(72vh - 50px);
+    height: calc(73vh - 50px);
     min-height: 600px;
     margin-bottom: 100px;
     overflow: scroll;

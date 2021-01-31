@@ -37,6 +37,16 @@ const files = "files";
 
 const All = "All";
 
+export function renderNoFiles() {
+    return (
+        <div id="files_dashboard_no_files_box">
+            <p id="files_dashboard_no_files_box_title">
+                No Files
+            </p>
+        </div>
+    );
+}
+
 class FolderPage extends React.Component {
         
     constructor(props) {
@@ -82,6 +92,7 @@ class FolderPage extends React.Component {
         this.closeUploadFileModal = this.closeUploadFileModal.bind(this);
         this.renderActiveFolderFiles = this.renderActiveFolderFiles.bind(this);
         this.setRecentlyUploadedFile = this.setRecentlyUploadedFile.bind(this);
+        this.renderFileElements = this.renderFileElements.bind(this);
     }
 
     componentDidMount() {
@@ -341,7 +352,39 @@ class FolderPage extends React.Component {
     }
 
     renderActiveSearchFiles() {
-        return this.state.activeSearchFiles.length > 0 ? this.state.activeSearchFiles : this.renderNoFiles();
+        return this.state.activeSearchFiles.length > 0 ? this.state.activeSearchFiles : renderNoFiles();
+    }
+
+    renderFileElements(activeFolderFilesMap) {
+        let activeFolderFilesIterator = activeFolderFilesMap.entries();
+        let fileElements = [];
+    
+        let activeFolderFileNextElem = activeFolderFilesIterator.next();
+        while (activeFolderFileNextElem !== null && activeFolderFileNextElem !== undefined && activeFolderFileNextElem.value !== undefined){
+            // activeFolderFileNextElem: [0] is fileID, [1] is file.
+            let activeFolderFile = activeFolderFileNextElem.value[1];
+            fileElements.push(
+                <FileCard
+                    key={activeFolderFile["id"]}
+                    data={{
+                        state: {
+                            file: activeFolderFile,
+                            backgroundColor: "white",
+                            setActiveFileAttributes: this.setActiveFileAttributes,
+                            openSignedURL: openSignedURL,
+                            isSmall: false,
+                        }
+                    }}
+                />
+            );
+            activeFolderFileNextElem = activeFolderFilesIterator.next();
+        }
+        if (fileElements.length === 0){
+            fileElements.push(
+                renderNoFiles()
+            );
+        }
+        return fileElements;
     }
 
     setActiveFileAttributes(fileID, file, toRemove) {
@@ -364,54 +407,10 @@ class FolderPage extends React.Component {
         })
         return true;
     }
-
-    renderNoFiles() {
-        return (
-            <div id="files_dashboard_no_files_box">
-                <p id="files_dashboard_no_files_box_title">
-                    No Files
-                </p>
-            </div>
-        );
-    }
     
     renderActiveFolderFiles() {
 
-        let activeFolderFilesMap = this.state.activeFolderFilesMap;
-        let activeFolderFilesIterator = activeFolderFilesMap.entries();
-        let fileElements = [];
-
-        let activeFolderFileNextElem = activeFolderFilesIterator.next();
-        while (activeFolderFileNextElem !== null && activeFolderFileNextElem !== undefined && activeFolderFileNextElem.value !== undefined){
-            // activeFolderFileNextElem: [0] is fileID, [1] is file.
-            let activeFolderFile = activeFolderFileNextElem.value[1];
-            fileElements.push(
-                <FileCard
-                    key={activeFolderFile["id"]}
-                    data={{
-                        state: {
-                            user: this.state.user,
-                            file: activeFolderFile,
-                            backgroundColor: "white",
-                            setActiveFileAttributes: this.setActiveFileAttributes,
-                            openSignedURL: openSignedURL,
-                        }
-                    }}
-                >
-
-                </FileCard>
-            );
-            activeFolderFileNextElem = activeFolderFilesIterator.next();
-        }
-        if (fileElements.length === 0){
-            fileElements.push(
-                this.renderNoFiles()
-            );
-        }
-
-        console.log(fileElements);
-
-        
+        let fileElements = this.renderFileElements(this.state.activeFolderFilesMap);
         return (
             
             <div>

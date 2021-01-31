@@ -40,7 +40,7 @@ body {
 .page_button {
     background-color: #296CF6;
     border: 2px solid #296CF6;
-    border-radius: 4px;
+    border-radius: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.10), 0 6px 10px 0 rgba(0, 0, 0, 0.09);
     color: white;
     cursor: pointer;
