@@ -9,7 +9,7 @@ import ExpenseCard from './ExpenseCard.js';
 import ExpensesTable from './ExpensesTable.js';
 import FileCard from './FileCard.js';
 import ExpandedExpenseCard from './ExpandedExpenseCard.js';
-
+import BarChart from '../charts/BarChart.js';
 
 import { numberWithCommas, openSignedURL, getDateSuffix } from '../utility/Util.js';
 import { renderNoExpenses } from './ExpensesDashboard.js';
@@ -63,7 +63,6 @@ class PropertyPage extends React.Component {
         propertyGoogleMapsURL = propertyGoogleMapsURL.replace(" ", "+");
 
         let googleMapsURL = 'https://maps.googleapis.com/maps/api/staticmap?center=' + propertyGoogleMapsURL + '&zoom=15&size=1000x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=AIzaSyCbudHvO__fMV1eolNO_g5qtE2r2UNcjcA';
-        console.log(googleMapsURL);
         this.setState({
             googleMapsURL: googleMapsURL
         })
@@ -359,6 +358,27 @@ class PropertyPage extends React.Component {
             case analysisView:
                 return (
                     <div className="view_to_display_box">
+                        <div className="analysis_bar_chart">
+                            <BarChart 
+                                height={"300"}
+                                xAxisColor={"grey"}
+                                barColor={"#296CF6"}
+                                capitalizeXAxis={true}
+                                data={[
+                                {x: "JAN", y: 61}, 
+                                {x: "FEB", y: 25}, 
+                                {x: "MAR", y: 16}, 
+                                {x: "APR", y: 28}, 
+                                {x: "MAY", y: 11}, 
+                                {x: "JUN", y: 9}, 
+                                {x: "JUL", y: 10}, 
+                                {x: "AUG", y: 13}, 
+                                {x: "SEP", y: 17}, 
+                                {x: "OCT", y: 20}, 
+                                {x: "NOV", y: 18}, 
+                                {x: "DEC", y: 28}
+                            ]}/>
+                        </div>
                         <div className="analysis_circular_box">
                             <CircularProgressbar 
                                 value={10}

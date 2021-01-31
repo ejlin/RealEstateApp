@@ -215,3 +215,8 @@
     margin-top: 25px;
     width: 200px;
 }
+
+.analysis_bar_chart {
+    height: 300px;
+    width: 600px;
+}
