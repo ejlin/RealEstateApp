@@ -13,6 +13,7 @@ import { capitalizeName } from '../utility/Util.js';
 import PropertyCard from './PropertyCard.js';
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
+import BarChart from '../charts/BarChart.js';
 
 import { AiTwotonePushpin } from 'react-icons/ai';
 import { FaDollarSign } from 'react-icons/fa';
@@ -27,7 +28,7 @@ import { LineChart, PieChart } from 'react-chartkick'
 import 'chart.js'
 import { VictoryLine, VictoryAxis, VictoryChart } from 'victory';
 
-import { BarChart, XAxis, Bar } from 'recharts';
+import { XAxis, Bar } from 'recharts';
 
 export const getDaysInMonth = (month, year) => {
     return new Date(year, month+1, 0).getDate();
@@ -354,7 +355,30 @@ class MainDashboard extends React.Component {
                                             <p className="main_dashboard_box_title">
                                                 Portfolio Growth
                                             </p>
-                                            <VictoryChart
+                                            <div className="clearfix"/>
+                                            <BarChart 
+                                                height={"270"}
+                                                xAxisColor={"grey"}
+                                                barColor={"#296CF6"}
+                                                capitalizeXAxis={true}
+                                                marginTop={"20"}
+                                                displayTooltip={true}
+                                                data={[
+                                                {x: "JAN", y: 61}, 
+                                                {x: "FEB", y: 25}, 
+                                                {x: "MAR", y: 16}, 
+                                                {x: "APR", y: 28}, 
+                                                {x: "MAY", y: 11}, 
+                                                {x: "JUN", y: 9}, 
+                                                {x: "JUL", y: 10}, 
+                                                {x: "AUG", y: 13}, 
+                                                {x: "SEP", y: 17}, 
+                                                {x: "OCT", y: 20}, 
+                                                {x: "NOV", y: 18}, 
+                                                {x: "DEC", y: 28}
+                                            ]}/>
+                                            <div className="clearfix"/>
+                                            {/* <VictoryChart
                                                 width={"700"}
                                                 height={"250"}
                                                 padding={{
@@ -391,7 +415,7 @@ class MainDashboard extends React.Component {
                                                     {x: "Oct", y: 20}, 
                                                     {x: "Nov", y: 18}, 
                                                     {x: "Dec", y: 28}
-                                                ]} />
+                                                ]} /> */}
                                                 {/* <VictoryAxis
                                                     dependentAxis
                                                     tickFormat={(y) => {
@@ -402,7 +426,7 @@ class MainDashboard extends React.Component {
                                                             return y;                                            
                                                     }}                                             
                                                 /> */}
-                                                <VictoryAxis
+                                                {/* <VictoryAxis
                                                     tickFormat={(x) => {
                                                             // const dateObj = new Date(x);
                                                             // const year = dateObj.getFullYear().toString().substr(-2);
@@ -411,7 +435,7 @@ class MainDashboard extends React.Component {
                                                             return x;                                            
                                                     }}                                             
                                                 />
-                                            </VictoryChart>
+                                            </VictoryChart> */}
                                         </div>
                                         <div className="main_dashboard_bottom_left_box_bottom">
                                             <div className="main_dashboard_bottom_left_box_bottom_inner_box">

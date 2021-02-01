@@ -58,6 +58,8 @@ class PropertyPage extends React.Component {
 
     componentDidMount() {
 
+        console.log(this.state.property);
+
         /*** Set our GoogleMapsURL ***/
         let propertyGoogleMapsURL = this.state.property["address"] + "," + this.state.property["city"] + "," + this.state.property["state"];
         propertyGoogleMapsURL = propertyGoogleMapsURL.replace(" ", "+");
@@ -358,12 +360,18 @@ class PropertyPage extends React.Component {
             case analysisView:
                 return (
                     <div className="view_to_display_box">
-                        <div className="analysis_bar_chart">
+                        <div className="analysis_property_value_bar_chart">
+                            <p className="analysis_chart_title">
+                                Property Value
+                            </p>
                             <BarChart 
+                                // backgroundColor={"#f5f5fa"}
                                 height={"300"}
+                                width={"650"}
                                 xAxisColor={"grey"}
                                 barColor={"#296CF6"}
                                 capitalizeXAxis={true}
+                                displayTooltip={true}
                                 data={[
                                 {x: "JAN", y: 61}, 
                                 {x: "FEB", y: 25}, 
@@ -380,16 +388,20 @@ class PropertyPage extends React.Component {
                             ]}/>
                         </div>
                         <div className="analysis_circular_box">
+                            <p className="analysis_chart_title">
+                                Property Value
+                            </p>
                             <CircularProgressbar 
                                 value={10}
                                 text={`${this.state.totalProperties ? (this.state.totalProperties - this.state.vacantProperties) / this.state.totalProperties * 100 : 0}%`}
                                 background
-                                backgroundPadding={5}
+                                backgroundPadding={3}
+                                strokeWidth={7}
                                 styles={buildStyles({
-                                backgroundColor: "#fff",
-                                textColor: "#fff",
-                                pathColor: "#296CF6",
-                                trailColor: "#f5f5fa",
+                                    backgroundColor: "#fff",
+                                    textColor: "#fff",
+                                    pathColor: "#296CF6",
+                                    trailColor: "#f5f5fa",
                                 })}/>
                         </div>
                     </div>

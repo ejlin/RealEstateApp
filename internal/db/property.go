@@ -73,6 +73,17 @@ func (handle *Handle) AddPropertyByUser(userID string, property *Property) error
 	return handle.DB.FirstOrCreate(&property, property).Error
 }
 
+// GetProperties will find all of the properties in the table.
+// TODO: Shard properties.
+func (handle *Handle) GetProperties() ([]*Property, error) {
+
+	var properties []*Property
+	if err := handle.DB.Select("id, address, state, city, zip_code").Find(&properties).Error; err != nil {
+		return nil, err
+	}
+	return properties, nil
+}
+
 // GetPropertyByID will fetch the property by its unique ID.
 func (handle *Handle) GetPropertyByID(propertyID string) (*Property, error) {
 
@@ -127,6 +138,20 @@ func (handle *Handle) GetSpecificPropertiesByOwner(userID string, propertyIDs []
 	}
 	return properties, nil
 
+}
+
+func (handle *Handle) UpdateProperty(propertyID string, updates map[string]interface{}) error {
+
+	_, err := uuid.Parse(propertyID)
+	if err != nil {
+		return fmt.Errorf("invalid UUID: %w", err)
+	}
+
+	if err := handle.DB.Model(&Property{}).Where("id = ?", propertyID).Updates(updates).Error; err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // RemovePropertyByID will delete a property from our database.

@@ -73,7 +73,7 @@ class PropertyCard extends React.Component {
                 "property_card_box"}>
                 <div className="property_card_header_box">
                     <p className="property_card_box_title">
-                        ${numberWithCommas(this.state.property["estimate"])}
+                        ${this.state.property["estimate"] ? numberWithCommas(this.state.property["estimate"]) : numberWithCommas(this.state.property["price_bought"])}
                     </p>
                     {this.state.property["currently_rented"] ?
                     <FaCheckCircle className="rented_check_icon"></FaCheckCircle> :
