@@ -128,7 +128,6 @@ class ExpensesTable extends React.Component {
             setActiveExpandedExpenseCard: this.props.data.state.setActiveExpandedExpenseCard,
             host: window.location.protocol + "//" + window.location.host,
         };
-        this.addExpense = this.addExpense.bind(this);
         this.displayEditExpenseModal = this.displayEditExpenseModal.bind(this);
         this.closeCreateExpenseModal = this.closeCreateExpenseModal.bind(this);
         this.closeEditExpenseModal = this.closeEditExpenseModal.bind(this);
@@ -179,34 +178,6 @@ class ExpensesTable extends React.Component {
             object[key] = value;
         }
         return object;
-    }
-
-    addExpense(expenseFormData) {
-        axios({
-            method: 'post',
-            url: 'api/user/expenses/' + this.state.user["id"],
-            data: expenseFormData
-        }).then(response => {
-            let expense = response.data;
-
-            let expensesMap = this.state.expensesMap;
-            let expenses = this.state.expenses;
-
-            if (!expenses) {
-                expenses = [];
-            }
-
-            expensesMap.set(expense["id"], expense);
-            expenses.unshift(expense);
-
-            this.setState({
-                expensesMap: expensesMap,
-                expenses: expenses,
-                displayAddExpense: false
-            })
-        }).catch(error => {
-            console.log(error);
-        })
     }
 
     setActiveExpandedExpenseCard(expense) {

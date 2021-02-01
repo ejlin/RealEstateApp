@@ -283,14 +283,14 @@ func (s *Server) addPropertyByUser(w http.ResponseWriter, r *http.Request) {
 
 	property.ID = uuid.New().String()
 	property.CreatedAt = &createdAt
-	property.OwnerID = userID
+	property.UserID = userID
 
 	if err := s.DBHandle.AddPropertyByUser(userID, &property); err != nil {
 		ll.Error().Err(err).Msg("unable to add property by user")
 		http.Error(w, fmt.Sprintf("unable to add property by user: %w", err), http.StatusBadRequest)
 	}
 
-	w.Write([]byte(fmt.Sprintf("added property: %s by user: %s", property.ID, property.OwnerID)))
+	w.Write([]byte(fmt.Sprintf("added property: %s by user: %s", property.ID, property.UserID)))
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -320,15 +320,15 @@ func (s *Server) getUserSummary(w http.ResponseWriter, r *http.Request) {
 func (s *Server) getProperties(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
-	ownerID, ok := vars["id"]
+	userID, ok := vars["id"]
 	if ok {
 
-		ll := log.With().Str("owner_id", ownerID).Logger()
+		ll := log.With().Str("user_id", userID).Logger()
 
-		properties, err := s.DBHandle.GetPropertiesByOwner(ownerID)
+		properties, err := s.DBHandle.GetPropertiesByOwner(userID)
 		if err != nil {
-			ll.Error().Err(err).Msg("unable to get properties by owner id")
-			http.Error(w, fmt.Sprintf("unable to get properties by owner id: %s, %w", ownerID, err), http.StatusBadRequest)
+			ll.Error().Err(err).Msg("unable to get properties by user id")
+			http.Error(w, fmt.Sprintf("unable to get properties by user id: %s, %w", userID, err), http.StatusBadRequest)
 			return
 		}
 
@@ -336,8 +336,8 @@ func (s *Server) getProperties(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Warn().Msg("owner id required")
-	http.Error(w, "owner id required", http.StatusBadRequest)
+	log.Warn().Msg("user id required")
+	http.Error(w, "user id required", http.StatusBadRequest)
 	return
 }
 
@@ -377,14 +377,14 @@ func (s *Server) removePropertyByUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
-	ownerID, ok := vars["id"]
+	userID, ok := vars["id"]
 	if !ok {
-		log.Warn().Msg("owner id not set")
-		http.Error(w, "owner id not set", http.StatusBadRequest)
+		log.Warn().Msg("user id not set")
+		http.Error(w, "user id not set", http.StatusBadRequest)
 		return
 	}
 
-	ll := log.With().Str("owner_id", ownerID).Logger()
+	ll := log.With().Str("user_id", userID).Logger()
 
 	propertyID, ok := vars["property_id"]
 	if !ok {
@@ -395,7 +395,7 @@ func (s *Server) removePropertyByUser(w http.ResponseWriter, r *http.Request) {
 
 	ll = ll.With().Str("property_id", propertyID).Logger()
 
-	err := s.DBHandle.RemovePropertyByID(ownerID, propertyID)
+	err := s.DBHandle.RemovePropertyByID(userID, propertyID)
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to remove property by user")
 		http.Error(w, fmt.Sprintf("unable to remove property by user: %w", err), http.StatusBadRequest)
@@ -408,16 +408,16 @@ func (s *Server) removePropertyByUser(w http.ResponseWriter, r *http.Request) {
 func (s *Server) getPropertiesAnalysis(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
-	ownerID, ok := vars["id"]
+	userID, ok := vars["id"]
 	if !ok {
-		log.Warn().Msg("owner id not set")
-		http.Error(w, "owner id not set", http.StatusBadRequest)
+		log.Warn().Msg("user id not set")
+		http.Error(w, "user id not set", http.StatusBadRequest)
 		return
 	}
 
-	ll := log.With().Str("owner_id", ownerID).Logger()
+	ll := log.With().Str("user_id", userID).Logger()
 
-	propertySummary, err := s.calculatePropertiesAnalysis(ownerID, nil, nil)
+	propertySummary, err := s.calculatePropertiesAnalysis(userID, nil, nil)
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to calculate properties analysis")
 		http.Error(w, "unable to calculate properties analysis", http.StatusInternalServerError)

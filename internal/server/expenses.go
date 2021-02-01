@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"context"
 	"encoding/json"
 	"errors"

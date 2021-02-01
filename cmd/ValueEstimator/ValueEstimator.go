@@ -11,6 +11,7 @@ import (
 
 	"../../internal/db"
 
+	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
 )
 
@@ -58,7 +59,7 @@ type EstatedAPIData struct {
 }
 
 type EstatedAPIDataValuation struct {
-	Value int `json:"value,omitempty"`
+	Value float64 `json:"value,omitempty"`
 }
 
 /*****************************************************************************/
@@ -99,16 +100,33 @@ func (cmd *EstimateCmd) GetAndStoreEstimate(dbHandle *db.Handle, property *db.Pr
 		return err
 	}
 
-	fmt.Println(estatedResponse.Data.Valuation.Value)
-
 	estimatedPrice := estatedResponse.Data.Valuation.Value
 	if estimatedPrice != 0 {
 		updates := map[string]interface{}{
 			"estimate": estimatedPrice,
 		}
+		
 		// TODO: el (look into batching our property updates)
-		if err := dbHandle.UpdateProperty(property.ID, updates); err != nil {
-			return err
+		updatePropertyErr := dbHandle.UpdateProperty(property.ID, updates)
+
+		now := time.Now()
+
+		data := &db.PropertiesHistoricalData{
+			ID: uuid.New().String(),
+			UserID: property.UserID,
+			PropertyID: property.ID,
+			CreatedAt: &now,
+			Estimate: estimatedPrice,
+		}
+
+		addHistoricalDataErr := dbHandle.AddPropertiesHistoricalData(data)
+
+		if addHistoricalDataErr != nil {
+			return fmt.Errorf("unable to add historical data: %w", addHistoricalDataErr)
+		}
+
+		if updatePropertyErr != nil {
+			return fmt.Errorf("unable to update property: %w", updatePropertyErr)
 		}
 	}
 	

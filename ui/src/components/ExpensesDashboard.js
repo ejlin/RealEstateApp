@@ -255,12 +255,18 @@ class ExpensesDashboard extends React.Component {
             let expensesMap = this.state.expensesMap;
             let expenses = this.state.expenses;
 
+            if (!expensesMap) {
+                expensesMap = new Map();
+            }
+            console.log(expenses);
             if (!expenses) {
                 expenses = [];
+                expenses.push(expense);
+            } else {
+                expenses.unshift(expense);
             }
 
             expensesMap.set(expense["id"], expense);
-            expenses.unshift(expense);
 
             this.setState({
                 expensesMap: expensesMap,

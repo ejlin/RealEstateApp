@@ -1,7 +1,6 @@
 package db
 
 import (
-	"database/sql"
 	"errors"
 	"fmt"
 	"time"
@@ -42,7 +41,7 @@ type Property struct {
 
 	CurrentlyRented bool `json:"currently_rented,omitempty",sql:"type:BOOLEAN"`
 
-	OwnerID string `json:"owner_id,omitempty",sql:"type:uuid; foreign key"`
+	UserID string `json:"user_id,omitempty",sql:"type:uuid; foreign key"`
 }
 
 type PropertyType string
@@ -78,7 +77,7 @@ func (handle *Handle) AddPropertyByUser(userID string, property *Property) error
 func (handle *Handle) GetProperties() ([]*Property, error) {
 
 	var properties []*Property
-	if err := handle.DB.Select("id, address, state, city, zip_code").Find(&properties).Error; err != nil {
+	if err := handle.DB.Select("id, user_id, address, state, city, zip_code").Find(&properties).Error; err != nil {
 		return nil, err
 	}
 	return properties, nil
@@ -108,7 +107,7 @@ func (handle *Handle) GetPropertiesByOwner(userID string) ([]*Property, error) {
 	}
 
 	var properties []*Property
-	if err := handle.DB.Where("owner_id = ?", userID).Find(&properties).Error; err != nil {
+	if err := handle.DB.Where("user_id = ?", userID).Find(&properties).Error; err != nil {
 		return nil, err
 	}
 	return properties, nil
@@ -126,14 +125,14 @@ func (handle *Handle) GetSpecificPropertiesByOwner(userID string, propertyIDs []
 
 	// Find all properties.
 	if propertyIDs == nil && propertyTypes == nil {
-		if err := handle.DB.Where("owner_id = ?", userID).Find(&properties).Error; err != nil {
+		if err := handle.DB.Where("user_id = ?", userID).Find(&properties).Error; err != nil {
 			return nil, err
 		}
 		return properties, nil
 	}
 
 	// Find properties that are in the union of these two.
-	if err := handle.DB.Where("owner_id = ? AND id IN ? AND property_type IN ?", userID, propertyIDs, propertyTypes).Find(&properties).Error; err != nil {
+	if err := handle.DB.Where("user_id = ? AND id IN ? AND property_type IN ?", userID, propertyIDs, propertyTypes).Find(&properties).Error; err != nil {
 		return nil, err
 	}
 	return properties, nil
@@ -155,11 +154,11 @@ func (handle *Handle) UpdateProperty(propertyID string, updates map[string]inter
 }
 
 // RemovePropertyByID will delete a property from our database.
-func (handle *Handle) RemovePropertyByID(ownerID, propertyID string) error {
+func (handle *Handle) RemovePropertyByID(userID, propertyID string) error {
 
 	// TODO: eric.lin to explore gorm soft delete options. Provide users with undo method.
 
-	_, err := uuid.Parse(ownerID)
+	_, err := uuid.Parse(userID)
 	if err != nil {
 		return fmt.Errorf("invalid UUID: %w", err)
 	}
@@ -173,7 +172,7 @@ func (handle *Handle) RemovePropertyByID(ownerID, propertyID string) error {
 		ID: propertyID,
 	}
 
-	delete := handle.DB.Where("owner_id = ?", ownerID).Delete(&property)
+	delete := handle.DB.Where("user_id = ?", userID).Delete(&property)
 	if err := delete.Error; err != nil {
 		return err
 	}
@@ -182,13 +181,4 @@ func (handle *Handle) RemovePropertyByID(ownerID, propertyID string) error {
 		return fmt.Errorf("incorrect number of properties deleted: %d", delete.RowsAffected)
 	}
 	return nil
-}
-
-// PropertiesReferences is a mapping of properties expenses and files. One expense can map to multiple properties and
-// one property can map to multiple expenses. This is a separate table within our database.
-type PropertiesReferences struct {
-	UserID     string         `json:"user_id,omitempty",sql:"type:uuid; foreign key"`
-	PropertyID sql.NullString `json:"property_id,omitempty",sql:"type:uuid; foreign key"`
-	ExpenseID  sql.NullString `json:"expense_id,omitempty",sql:"type:uuid; foreign key"`
-	FileID     sql.NullString `json:"file_id,omitempty",sql:"type:uuid; foreign key"`
 }
