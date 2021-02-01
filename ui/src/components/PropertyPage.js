@@ -255,7 +255,11 @@ class PropertyPage extends React.Component {
                             <div className="view_to_display_info_right_box">
                                 <li className="view_to_display_info_box_bullet">
                                     <p className="view_to_display_info_box_subtitle">
-                                        Estimate:&nbsp;&nbsp;<b>${numberWithCommas(this.state.property["estimate"])}</b>
+                                        Estimate:&nbsp;&nbsp;<b>${
+                                            this.state.property["estimate"] ?
+                                            numberWithCommas(this.state.property["estimate"]) :
+                                            numberWithCommas(this.state.property["price_bought"])
+                                        }</b>
                                     </p>
                                 </li>
                                 <li className="view_to_display_info_box_bullet">

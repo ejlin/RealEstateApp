@@ -350,9 +350,9 @@ body {
 
 .main_dashboard_bottom_left_box_bottom_inner_box_text_box_icon {
     float: left;
-    height: 50px;
-    margin-top: 17.5px;
-    width: 50px;
+    height: 30px;
+    margin-top: 5px;
+    width: 30px;
 }
 
 .main_dashboard_bottom_left_box_bottom_inner_box_text_box_title {
@@ -362,8 +362,9 @@ body {
 }
 
 .main_dashboard_bottom_left_box_bottom_inner_box_text_box_title_two {
-    font-size: 2.0em;
+    font-size: 1.7em;
     font-weight: bold;
+    margin-top: 10px;
     text-align: center;
 }
 
@@ -372,11 +373,13 @@ body {
     float: left;
     font-weight: bold;
     margin-left: 10px;
-    margin-top: 15px;
-    width: calc((100% - 70px));
+    margin-top: 5px;
+    text-align: center;
+    width: calc((100% - 50px));
 }
 
 .main_dashboard_bottom_left_box_bottom_inner_box_text_box_subtitle_two {
+    margin-top: 5px;
     text-align: center;
     width: calc((100%));
 }

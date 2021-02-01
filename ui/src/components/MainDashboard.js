@@ -214,7 +214,7 @@ class MainDashboard extends React.Component {
                             className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_icon"
                         ></IoIosWarning>
                         <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_subtitle">
-                            You have mortgage(s)/loan(s) due today
+                            You have mortgage(s)/ loan(s) due today
                         </p>
                     </div> :
                     <div>
