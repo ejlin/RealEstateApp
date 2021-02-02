@@ -487,8 +487,10 @@ class PropertyPage extends React.Component {
                                 // backgroundColor={"#f5f5fa"}
                                 height={"300"}
                                 width={"650"}
+                                yAxisFontSize={"0.8em"}
                                 xAxisFontSize={"0.80em"}
                                 xAxisColor={"grey"}
+                                yAxisColor={"grey"}
                                 barColor={"#296CF6"}
                                 capitalizeXAxis={true}
                                 displayTooltip={true}

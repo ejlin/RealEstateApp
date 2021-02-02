@@ -14,8 +14,10 @@ class BarChart extends React.Component {
             height: this.props.height, // in px
             width: this.props.width, // in px
             xAxisFontSize: this.props.xAxisFontSize,
+            yAxisFontSize: this.props.yAxisFontSize,
             displayTooltip: this.props.displayTooltip,
             xAxisColor: this.props.xAxisColor,
+            yAxisColor: this.props.yAxisColor,
             marginTop: this.props.marginTop,
             backgroundColor: this.props.backgroundColor,
             capitalizeXAxis: this.props.capitalizeXAxis,
@@ -25,6 +27,7 @@ class BarChart extends React.Component {
         };
 
         this.renderXAxis = this.renderXAxis.bind(this);
+        this.renderYAxis = this.renderYAxis.bind(this);
         this.minYAxisValue = this.minYAxisValue.bind(this);
         this.maxYAxisValue = this.maxYAxisValue.bind(this);
     }
@@ -65,6 +68,66 @@ class BarChart extends React.Component {
         return parseInt(maxElement);
     }
 
+    renderYAxis() {
+        let data = this.state.data;
+        let height = parseInt(this.state.height) - 20;
+
+        console.log(height);
+
+        if (data.length === 0){
+            return (
+                <div></div>
+            );
+        }
+        let elements = [];
+
+        let minYAxisValue = this.minYAxisValue();
+        let maxYAxisValue = this.maxYAxisValue();
+
+        let diffMinMaxYAxis = maxYAxisValue - minYAxisValue;
+        let midpoint = minYAxisValue + (diffMinMaxYAxis / 2);
+
+        let useK = maxYAxisValue >= 1000;
+
+        elements.push(
+            <div>
+                <div style={{
+                    height: (height - 35) / 2,  // 35 because minBuffer is 10, maxBuffer is 10, and there is 15 padding-bottom.
+                    fontSize: this.state.yAxisFontSize,
+                    color: this.state.yAxisColor
+                }}>
+                    {   useK ?
+                        numberWithCommas(Math.trunc(maxYAxisValue/1000)) + "K" :
+                        maxYAxisValue
+                    }
+                </div>
+                <div style={{
+                    height: (height - 35)/ 2,
+                    fontSize: this.state.yAxisFontSize,
+                    color: this.state.yAxisColor
+                }}>
+                    { 
+                        useK ?
+                        numberWithCommas(Math.trunc(midpoint/1000)) + "K" :
+                        midpoint 
+                    }
+                </div>
+                <div style={{
+                    height: "20px",
+                    fontSize: this.state.yAxisFontSize,
+                    color: this.state.yAxisColor
+                }}>
+                    {
+                        useK ?
+                        numberWithCommas(Math.trunc(minYAxisValue/1000)) + "K" :
+                        minYAxisValue
+                    }
+                </div>
+            </div>
+        )
+        return elements;
+    }
+
     renderXAxis() {
         let data = this.state.data;
 
@@ -87,6 +150,10 @@ class BarChart extends React.Component {
 
         let heightPerUnit = diffMinMaxYAxis !== 0 ? barHeightWithBuffer / diffMinMaxYAxis : 0;
 
+        let yAxis = this.renderYAxis();
+
+        elements.push(yAxis);
+
         for (let i = 0; i < data.length; i++) {
             let dataPoint = data[i];
             let yValue = dataPoint["y"];
@@ -94,6 +161,7 @@ class BarChart extends React.Component {
             let height = strYValue - minYAxisValue;
             height = height * heightPerUnit;
             height = height + minBuffer + minYAxisValue; // Add our minBuffer back as the baseline.
+            console.log(height);
             elements.push(
                 <li 
                     className="bar_chart_x_axis_element">
