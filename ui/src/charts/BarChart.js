@@ -13,6 +13,7 @@ class BarChart extends React.Component {
         this.state = {
             height: this.props.height, // in px
             width: this.props.width, // in px
+            xAxisFontSize: this.props.xAxisFontSize,
             displayTooltip: this.props.displayTooltip,
             xAxisColor: this.props.xAxisColor,
             marginTop: this.props.marginTop,
@@ -66,6 +67,12 @@ class BarChart extends React.Component {
 
     renderXAxis() {
         let data = this.state.data;
+
+        if (data.length === 0){
+            return (
+                <div></div>
+            );
+        }
         let elements = [];
 
         let minYAxisValue = this.minYAxisValue();
@@ -78,7 +85,7 @@ class BarChart extends React.Component {
 
         let barHeightWithBuffer = barHeight - minBuffer - maxBuffer;
 
-        let heightPerUnit = barHeightWithBuffer / diffMinMaxYAxis;
+        let heightPerUnit = diffMinMaxYAxis !== 0 ? barHeightWithBuffer / diffMinMaxYAxis : 0;
 
         for (let i = 0; i < data.length; i++) {
             let dataPoint = data[i];
@@ -118,7 +125,10 @@ class BarChart extends React.Component {
 
                     </div>
                     <p 
-                        style={{color: this.state.xAxisColor}}
+                        style={{
+                            color: this.state.xAxisColor,
+                            fontSize: this.state.xAxisFontSize,
+                        }}
                         className="bar_chart_x_axis_element_text">
                         {this.state.capitalizeXAxis ? dataPoint["x"].toUpperCase() : dataPoint["x"]}
                     </p>

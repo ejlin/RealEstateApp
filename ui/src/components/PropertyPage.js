@@ -5,28 +5,29 @@ import './CSS/PropertyPage.css';
 
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
-import ExpenseCard from './ExpenseCard.js';
 import ExpensesTable from './ExpensesTable.js';
 import FileCard from './FileCard.js';
 import ExpandedExpenseCard from './ExpandedExpenseCard.js';
 import BarChart from '../charts/BarChart.js';
 
-import { numberWithCommas, openSignedURL, getDateSuffix } from '../utility/Util.js';
-import { renderNoExpenses } from './ExpensesDashboard.js';
+import { monthArr, 
+        numberWithCommas, 
+        openSignedURL, 
+        getDateSuffix, 
+        getTrailingTwelveMonths, 
+        getMonthAndYear } from '../utility/Util.js';
 import { renderNoFiles } from './FilesDashboard.js';
 
 import { Link, Redirect } from 'react-router-dom';
 
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 
-import { IoTrashSharp, IoCaretBackOutline } from 'react-icons/io5';
-import { BsFillHouseFill } from 'react-icons/bs';
+import { IoCaretBackOutline } from 'react-icons/io5';
 import { GoFileDirectory } from 'react-icons/go';
 import { SiGoogleanalytics } from 'react-icons/si';
 import { IoSettingsSharp } from 'react-icons/io5';
-import { FiChevronDown } from 'react-icons/fi';
 import { FaMoneyCheck, FaCheckCircle } from 'react-icons/fa';
-import { MdFeedback, MdDashboard } from 'react-icons/md';
+import { MdDashboard } from 'react-icons/md';
 
 let URLBuilder = require('url-join');
 
@@ -47,6 +48,7 @@ class PropertyPage extends React.Component {
             viewToDisplay: overviewView,
             isLoading: false,
             currActiveExpandedExpense: null,
+            host: window.location.protocol + "//" + window.location.host,
         };
 
         this.renderViewPage = this.renderViewPage.bind(this);
@@ -54,17 +56,18 @@ class PropertyPage extends React.Component {
         this.convertBoughDateToText = this.convertBoughDateToText.bind(this);
         this.renderFileElements = this.renderFileElements.bind(this);
         this.setActiveExpandedExpenseCard = this.setActiveExpandedExpenseCard.bind(this);
+        this.getHistoricalAnalysisData = this.getHistoricalAnalysisData.bind(this);
     }
 
     componentDidMount() {
 
-        console.log(this.state.property);
+        let host = this.state.host;
 
         /*** Set our GoogleMapsURL ***/
         let propertyGoogleMapsURL = this.state.property["address"] + "," + this.state.property["city"] + "," + this.state.property["state"];
         propertyGoogleMapsURL = propertyGoogleMapsURL.replace(" ", "+");
 
-        let googleMapsURL = 'https://maps.googleapis.com/maps/api/staticmap?center=' + propertyGoogleMapsURL + '&zoom=15&size=1000x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=AIzaSyCbudHvO__fMV1eolNO_g5qtE2r2UNcjcA';
+        let googleMapsURL = 'https://maps.googleapis.com/maps/api/staticmap?center=' + propertyGoogleMapsURL + '&zoom=15&size=1000x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&key=AIzaSyCbudHvO__fMV1eolNO_g5qtE2r2UNcjcA';
         this.setState({
             googleMapsURL: googleMapsURL
         })
@@ -73,14 +76,16 @@ class PropertyPage extends React.Component {
         let userID = this.state.user["id"];
         let propertyID = this.state.property["id"];
 
-        let getExpensesByPropertyListURL = URLBuilder('/api/user/expenses', userID, propertyID);
-        let getFilesByPropertyURL = URLBuilder('/api/user/files/property', userID, propertyID);
+        let getExpensesByPropertyListURL = URLBuilder(host, '/api/user/expenses', userID, propertyID);
+        let getFilesByPropertyURL = URLBuilder(host, '/api/user/files/property', userID, propertyID);
+        let getPropertiesAnalysisURL = URLBuilder(host, '/api/user/analysis', userID, propertyID);
 
         const getExpensesByPropertyRequest = axios.get(getExpensesByPropertyListURL);
         const getFilesByPropertyRequest = axios.get(getFilesByPropertyURL);
+        const getPropertiesAnalysisRequest = axios.get(getPropertiesAnalysisURL);
 
         axios.all(
-            [getExpensesByPropertyRequest, getFilesByPropertyRequest]
+            [getExpensesByPropertyRequest, getFilesByPropertyRequest, getPropertiesAnalysisRequest]
         ).then(axios.spread((...responses) => {
             const expensesRequestResponse = responses[0];
             /* Handle our expenses response */
@@ -119,11 +124,15 @@ class PropertyPage extends React.Component {
                 }
             }
 
+            /* Handle our analysis response */
+            const analysisRequestResponse = responses[2];
+            let historicalAnalysis = analysisRequestResponse.data;
             this.setState({
                 expenses: expenses,
                 expensesMap: expensesMap,
                 files: files,
                 filesMap: filesMap,
+                historicalAnalysis: historicalAnalysis,
                 isLoading: false
             });
         })).catch(errors => {
@@ -138,6 +147,110 @@ class PropertyPage extends React.Component {
             default:
                 return propertyType;
         }
+    }
+
+    getHistoricalAnalysisData() {
+
+        let data = [];
+
+        let trailingMonths = getTrailingTwelveMonths();
+
+        let historicalAnalysis = this.state.historicalAnalysis;
+        if (historicalAnalysis === null 
+                || historicalAnalysis === undefined 
+                || (Object.keys(historicalAnalysis).length === 0 && historicalAnalysis.constructor === Object)) {
+
+            let defaultData = [];
+            for (let i = 0; i < trailingMonths.length; i++) {
+                let trailingMonthObj = trailingMonths[i];
+                let month = trailingMonthObj[0];
+                let yearStr = trailingMonthObj[1].toString();
+                let trimmedMonth = month.substring(0,3);
+                let xVal;
+                if (i === 0 || trimmedMonth.toLowerCase() === 'jan') {
+                    xVal = trimmedMonth + " '" + yearStr.substring(2,4);
+                } else {
+                    xVal = trimmedMonth;
+                } 
+                let obj = {x: xVal, y: 0}
+                defaultData.push(obj);
+            }
+            return defaultData;
+        }
+        console.log(historicalAnalysis);
+
+        let properties = historicalAnalysis["properties"];
+
+        let monthYearToEstimatesArrayMap = new Map();
+
+        // Iterate through our properties. Because PropertyPage is the view of a single property,
+        // we can expect this to be a length of 0-1.
+        for (let i = 0; i < properties.length; i++) {
+            let property = properties[i];
+            let estimates = property["property_estimates"];
+            // Iterate through every single estimate we have associated with this property. This is capped
+            // server side to be within the past year.
+            for (let j = 0; j < estimates.length; j++) {
+                let estimate = estimates[j];
+                let createdAt = estimate["created_at"];
+                let estimateValue = parseFloat(estimate["estimate"]);
+
+                // getMonthAndYear will parse our created_at timestamp to return the month and year
+                // of the timestamp as a tuple: [month, year].
+                let monthAndYear = getMonthAndYear(createdAt);
+    
+                let month = monthAndYear[0];
+                let year = monthAndYear[1];
+                
+                // We cannot key by tuple, so do a stupid hack. Concat month and year string to serve as a key.
+                // https://stackoverflow.com/questions/43592760/typescript-javascript-using-tuple-as-key-of-map.
+                let key = monthArr[month - 1] + year;
+                let arr;
+                // Populate our map, which is a map of {key -> []estimates}. We associate every month/year combination
+                // with all the estimates from that month/year. That way we can average out the estimates to get
+                // an overall estimate. 
+                if (!monthYearToEstimatesArrayMap.has(key)) {
+                    arr = [];
+                } else {
+                    arr = monthYearToEstimatesArrayMap.get(key);
+                }
+                arr.push(estimateValue);
+                monthYearToEstimatesArrayMap.set(key, arr);
+            }
+        }
+        
+        // Iterate through the past 12 months. 
+        for (let i = 0; i < trailingMonths.length; i++) {
+            let trailingMonthsObj = trailingMonths[i];
+            let month = trailingMonthsObj[0];
+            let year = trailingMonthsObj[1];
+
+            let trimmedMonth = month.substring(0, 3)
+
+            let yearStr = year.toString();
+
+            let key = month.toString() + year.toString();
+            let obj;
+            let xVal;
+            if (i === 0 || trimmedMonth.toLowerCase() === 'jan') {
+                xVal = trimmedMonth + " '" + yearStr.substring(2,4);
+            } else {
+                xVal = trimmedMonth;
+            } 
+            if (monthYearToEstimatesArrayMap.has(key)) {
+                let estimatesArr = monthYearToEstimatesArrayMap.get(key);
+                let estimateTotal = 0;
+                for (let j = 0; j < estimatesArr.length; j++) {
+                    estimateTotal += estimatesArr[j];
+                }
+                let avgEstimate = estimateTotal / estimatesArr.length;
+                obj = {x: xVal, y: avgEstimate}
+            } else {
+                obj = {x: xVal, y: 0}
+            }
+            data.push(obj);
+        }
+        return data;
     }
 
     convertBoughDateToText(boughtDate) {
@@ -218,6 +331,8 @@ class PropertyPage extends React.Component {
     }
 
     renderViewPage() {
+        let barChartData = this.getHistoricalAnalysisData();
+
         switch (this.state.viewToDisplay) {
             case overviewView:
                 return (
@@ -372,24 +487,12 @@ class PropertyPage extends React.Component {
                                 // backgroundColor={"#f5f5fa"}
                                 height={"300"}
                                 width={"650"}
+                                xAxisFontSize={"0.80em"}
                                 xAxisColor={"grey"}
                                 barColor={"#296CF6"}
                                 capitalizeXAxis={true}
                                 displayTooltip={true}
-                                data={[
-                                {x: "JAN", y: 61}, 
-                                {x: "FEB", y: 25}, 
-                                {x: "MAR", y: 16}, 
-                                {x: "APR", y: 28}, 
-                                {x: "MAY", y: 11}, 
-                                {x: "JUN", y: 9}, 
-                                {x: "JUL", y: 10}, 
-                                {x: "AUG", y: 13}, 
-                                {x: "SEP", y: 17}, 
-                                {x: "OCT", y: 20}, 
-                                {x: "NOV", y: 18}, 
-                                {x: "DEC", y: 28}
-                            ]}/>
+                                data={barChartData}/>
                         </div>
                         <div className="analysis_circular_box">
                             <p className="analysis_chart_title">

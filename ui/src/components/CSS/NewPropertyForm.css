@@ -57,8 +57,8 @@
 }
 
 .new_property_dashboard_bottom_right_box {
+    /* background-color: white; */
     float: left;
-    height: 100px;
     width: calc(100% - 300px);
 }
 

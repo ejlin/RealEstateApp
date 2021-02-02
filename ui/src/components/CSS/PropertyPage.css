@@ -129,8 +129,8 @@
     border-radius: 10px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     float: left;
-    height: calc(100vh - 80px - 160px - 40px);
-    margin-top: 20px;
+    height: calc(100vh - 80px - 160px - 40px + 5px);
+    margin-top: 15px;
     overflow-y: scroll;
     width: 100%;
 }

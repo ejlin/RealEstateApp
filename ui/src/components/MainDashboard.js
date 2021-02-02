@@ -72,7 +72,6 @@ class MainDashboard extends React.Component {
         this.estimateLostRent = this.estimateLostRent.bind(this);
         this.ltvToText = this.ltvToText.bind(this);
         this.dtiToText = this.dtiToText.bind(this);
-        this.getTrailingTwelveMonths = this.getTrailingTwelveMonths.bind(this);
     }
 
     componentDidMount() {
@@ -82,6 +81,7 @@ class MainDashboard extends React.Component {
             url: url,
         }).then(response => {
             var userSummary = response.data;
+            console.log(userSummary);
             var propertiesSummary = userSummary["properties_summary"];
             var expensesSummary = userSummary["expenses_summary"];
             this.setState({
@@ -156,19 +156,7 @@ class MainDashboard extends React.Component {
         return "Great DTI";
     }        
     
-    getTrailingTwelveMonths() {
-        var monthArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        var today = new Date();
-        var mm = today.getMonth();
 
-        var numMonths = 12;
-
-        var firstBackwardsMonth = monthArr.slice(0, mm + 1);
-        var lastBackwardsMonth = monthArr.slice(mm + 1, numMonths);
-
-        var trailingMonths = lastBackwardsMonth.concat(firstBackwardsMonth);
-        return trailingMonths;
-    }
 
     renderRentCollected() {
         return (
@@ -356,27 +344,30 @@ class MainDashboard extends React.Component {
                                                 Portfolio Growth
                                             </p>
                                             <div className="clearfix"/>
-                                            <BarChart 
-                                                height={"270"}
-                                                xAxisColor={"grey"}
-                                                barColor={"#296CF6"}
-                                                capitalizeXAxis={true}
-                                                marginTop={"20"}
-                                                displayTooltip={true}
-                                                data={[
-                                                {x: "JAN", y: 61}, 
-                                                {x: "FEB", y: 25}, 
-                                                {x: "MAR", y: 16}, 
-                                                {x: "APR", y: 28}, 
-                                                {x: "MAY", y: 11}, 
-                                                {x: "JUN", y: 9}, 
-                                                {x: "JUL", y: 10}, 
-                                                {x: "AUG", y: 13}, 
-                                                {x: "SEP", y: 17}, 
-                                                {x: "OCT", y: 20}, 
-                                                {x: "NOV", y: 18}, 
-                                                {x: "DEC", y: 28}
-                                            ]}/>
+                                            <div className="main_dashboard_portfolio_growth_bar_chart_parent_box">
+                                                <BarChart 
+                                                    height={"285"}
+                                                    xAxisFontSize={"0.85em"}
+                                                    xAxisColor={"grey"}
+                                                    barColor={"#296CF6"}
+                                                    capitalizeXAxis={true}
+                                                    marginTop={"20"}
+                                                    displayTooltip={true}
+                                                    data={[
+                                                    {x: "JAN", y: 61}, 
+                                                    {x: "FEB", y: 25}, 
+                                                    {x: "MAR", y: 16}, 
+                                                    {x: "APR", y: 28}, 
+                                                    {x: "MAY", y: 11}, 
+                                                    {x: "JUN", y: 9}, 
+                                                    {x: "JUL", y: 10}, 
+                                                    {x: "AUG", y: 13}, 
+                                                    {x: "SEP", y: 17}, 
+                                                    {x: "OCT", y: 20}, 
+                                                    {x: "NOV", y: 18}, 
+                                                    {x: "DEC", y: 28}
+                                                ]}/>
+                                            </div>
                                             <div className="clearfix"/>
                                             {/* <VictoryChart
                                                 width={"700"}

@@ -41,6 +41,7 @@ func (s *Server) HandleRoutes() {
 	r.HandleFunc("/api/user/files/upload/{id}", s.uploadFileByUser).Methods("POST")
 
 	// Analysis Flow
+	r.HandleFunc("/api/user/analysis/{id}/{property_id}", s.getPropertiesAnalysisByProperty).Methods("GET")
 	r.HandleFunc("/api/user/analysis/{id}", s.getPropertiesAnalysis).Methods("GET")
 
 	// Expenses Flow
@@ -294,29 +295,6 @@ func (s *Server) addPropertyByUser(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (s *Server) getUserSummary(w http.ResponseWriter, r *http.Request) {
-
-	vars := mux.Vars(r)
-	userID, ok := vars["id"]
-	if !ok {
-		log.Warn().Str("func", "getPropertiesSummary").Msg("missing user id")
-		http.Error(w, "missing user id", http.StatusBadRequest)
-		return
-	}
-
-	ll := log.With().Str("user_id", userID).Logger()
-
-	userSummary, err := s.calculateUserSummary(userID)
-	if err != nil {
-		ll.Warn().Err(err).Msg("unable to calculate properties summary")
-		http.Error(w, "unable to calculate properties summary", http.StatusInternalServerError)
-		return
-	}
-
-	RespondToRequest(w, userSummary)
-	return
-}
-
 func (s *Server) getProperties(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -403,29 +381,6 @@ func (s *Server) removePropertyByUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Write([]byte("success"))
-}
-
-func (s *Server) getPropertiesAnalysis(w http.ResponseWriter, r *http.Request) {
-
-	vars := mux.Vars(r)
-	userID, ok := vars["id"]
-	if !ok {
-		log.Warn().Msg("user id not set")
-		http.Error(w, "user id not set", http.StatusBadRequest)
-		return
-	}
-
-	ll := log.With().Str("user_id", userID).Logger()
-
-	propertySummary, err := s.calculatePropertiesAnalysis(userID, nil, nil)
-	if err != nil {
-		ll.Warn().Err(err).Msg("unable to calculate properties analysis")
-		http.Error(w, "unable to calculate properties analysis", http.StatusInternalServerError)
-		return
-	}
-
-	RespondToRequest(w, propertySummary)
-	return
 }
 
 /****** Helper Functions ******/

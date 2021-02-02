@@ -10,6 +10,8 @@ import {
     AiFillFileZip,
     AiFillFileMarkdown } from 'react-icons/ai';
 
+export const monthArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
 // trimTrailingName will take a name, and trim off any part of it longer than maxLength and append
 // a trailing ellipses (...) to it.
 export function trimTrailingName(name, maxLength) {
@@ -66,12 +68,12 @@ export function getDateSuffix(date) {
     const small = "small";
     const medium = "medium";
 
-    var classNames;
+    let classNames;
     if (customClassName != null && customClassName != "") {
         classNames = customClassName;
     }
 
-    // var classNames;
+    // let classNames;
     // if (size === small) {
     //      classNames = "files_dashboard_upload_image_type_mini_icon";
     // } else if (size === medium) {
@@ -192,8 +194,50 @@ export function openSignedURL(signedURL) {
 
 /* Credit https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript */
 export function bytesToSize(bytes) {
-    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    let sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     if (bytes == 0) return '0 Byte';
-    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    let i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
     return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
  }
+
+ export function getTrailingTwelveMonths() {
+    let today = new Date();
+    let mm = today.getMonth();
+    let year = today.getFullYear();
+
+    let numMonths = 12;
+
+    let trailingMonths = [];
+
+    let firstBackwardsMonth = monthArr.slice(0, mm + 1);
+    for (let i = 0; i < firstBackwardsMonth.length; i++) {
+        let month = firstBackwardsMonth[i];
+        trailingMonths.push([month, year]);
+    }
+
+    let lastBackwardsMonth = monthArr.slice(mm + 1, numMonths);
+    for (let i = lastBackwardsMonth.length - 1; i >= 0; i--) {
+        let month = lastBackwardsMonth[i];
+        trailingMonths.unshift([month, year - 1]);
+    }
+
+    return trailingMonths;
+}
+
+export function getMonthAndYear(createdAt) {
+
+    // Format is 2020-01-01TXXX.XXXZ
+    if (createdAt === undefined || createdAt === null) {
+        return ["", ""];
+    }
+    let split = createdAt.split("T");
+
+    let fullDate = split[0];
+
+    let splitFullDate = fullDate.split("-");
+
+    let year = splitFullDate[0];
+    let month = splitFullDate[1];
+
+    return [month, year];
+}

@@ -156,7 +156,7 @@ func (handle *Handle) GetExpensesByProperty(userID, propertyID string) ([]*Expen
 	for _, propertiesReference := range propertiesReferences {
 		expenseIDs = append(expenseIDs, propertiesReference.ExpenseID.String)
 	}
-	
+
 	var expenses []*Expense
 	if err := handle.DB.Where("user_id = ? AND id IN (?)", userID, expenseIDs).Find(&expenses).Error; err != nil {
 		return nil, err

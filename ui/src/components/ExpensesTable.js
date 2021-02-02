@@ -129,8 +129,6 @@ class ExpensesTable extends React.Component {
             host: window.location.protocol + "//" + window.location.host,
         };
         this.displayEditExpenseModal = this.displayEditExpenseModal.bind(this);
-        this.closeCreateExpenseModal = this.closeCreateExpenseModal.bind(this);
-        this.closeEditExpenseModal = this.closeEditExpenseModal.bind(this);
         this.expenseFormDataToExpense = this.expenseFormDataToExpense.bind(this);
         this.deleteExpense = this.deleteExpense.bind(this);
         this.renderExpenseTableElements = this.renderExpenseTableElements.bind(this);
@@ -157,18 +155,6 @@ class ExpensesTable extends React.Component {
             activeSearchExpenses: this.state.expenses.filter(expense => {
                 return expense["title"].toLowerCase().replace(/\s/g, "").startsWith(searchValue);
             })
-        })
-    }
-
-    closeCreateExpenseModal()  {
-        this.setState({
-            displayAddExpense: false
-        })
-    }
-
-    closeEditExpenseModal()  {
-        this.setState({
-            expenseToEdit: null
         })
     }
 
