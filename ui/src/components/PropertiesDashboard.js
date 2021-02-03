@@ -562,22 +562,22 @@ class PropertiesDashboard extends React.Component {
                         }                       
                     }}/>
                 );
-                elements.push(
-                    <PropertyCard key={property["name"]}
-                        removePropertyFromState = {
-                            this.removePropertyFromState
-                        }
-                        setActiveProperty = {
-                            this.setActiveProperty
-                        }
-                        data={{
-                        state: {
-                            user: this.state.user,
-                            isFirstChild: isFirstChild,
-                            property_details: property
-                        }                       
-                    }}/>
-                );
+                // elements.push(
+                //     <PropertyCard key={property["name"]}
+                //         removePropertyFromState = {
+                //             this.removePropertyFromState
+                //         }
+                //         setActiveProperty = {
+                //             this.setActiveProperty
+                //         }
+                //         data={{
+                //         state: {
+                //             user: this.state.user,
+                //             isFirstChild: isFirstChild,
+                //             property_details: property
+                //         }                       
+                //     }}/>
+                // );
                 isFirstChild = false;
             }
         });

@@ -18,48 +18,89 @@
 }
 
 .new_property_dashboard_bottom_box {
-    height: 100px;
+    float: left;
     margin-top: 40px;
     width: 100%;
 }
 
 .new_property_dashboard_bottom_left_box_list {
-    border-radius: 4px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     cursor: pointer;
     height: 45px;
+    margin-bottom: 15px;
+    padding-bottom: 2.5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2.5px;
     transition: 0.5s;
     width: calc(80%);
 }
 
-.new_property_dashboard_bottom_left_box_list:hover, .new_property_dashboard_bottom_left_box_list_active{
+.new_property_dashboard_bottom_left_box_list:hover .new_property_dashboard_bottom_left_box_list_icon{
+    color: #296CF6;
     background-color: white;
-    color: black;
+}
+
+.new_property_dashboard_bottom_left_box_list:hover .new_property_dashboard_bottom_left_box_list_text {
+    color: #296CF6;
+    background-color: white;
+}
+
+.new_property_dashboard_bottom_left_box_list_icon_active, .new_property_dashboard_bottom_left_box_list_text_active {
+    color: #296CF6 !important;
+    font-weight: bold !important;
+}
+
+.new_property_dashboard_bottom_left_box_list_active {
+    color: #296CF6;
+    background-color: white;
 }
 
 .new_property_dashboard_bottom_left_box_list_icon {
+    color: #32384D;
     float: left;
     height: 20px;
-    margin-left: 20px;
+    margin-left: 12.5px;
     margin-top: 12.5px;
     width: 20px;
 }
 
-.new_property_dashboard_bottom_left_box_list_text {
+.new_property_form_info_inner_box {
     float: left;
-    font-size: 1.1em;
+    margin-left: 40px;
+    margin-top: 40px;
+    width: calc((100% - 80px));
+}
+
+.new_property_dashboard_bottom_left_box_list_text {
+    color: #32384D;
+    float: left;
+    font-size: 1.0em;
     line-height: 45px;
-    margin-left: 15px;
+    margin-left: 10px;
 }
 
 .new_property_dashboard_bottom_left_box {
     float: left;
-    width: 300px;
+    width: 250px;
+}
+
+.form_footer_box {
+    float: left;
+    height: 25px;
+    margin-bottom: 25px;
+    padding-bottom: 25px;
+    width: 100%;
 }
 
 .new_property_dashboard_bottom_right_box {
-    /* background-color: white; */
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     float: left;
-    width: calc(100% - 300px);
+    width: calc(100% - 250px - 250px);
 }
 
 .form_title {
@@ -114,6 +155,7 @@ input::placeholder {
 }
 
 .new_property_form_input {
+    background-color: #f5f5fa;
     border: none;
     border-radius: 4px;
     font-size: 1.1em;
@@ -127,10 +169,8 @@ input::placeholder {
     margin-top: 25px;
 }
 
-.form_footer_box {
-}
-
 .form_select_input {
+    background-color: #f5f5fa;
     border: none;
     border-radius: 4px;
     float: left;
@@ -142,6 +182,7 @@ input::placeholder {
 }
 
 .new_property_form_input_triple {
+    background-color: #f5f5fa;
     border: none;
     border-radius: 4px;
     float: left;
@@ -210,13 +251,14 @@ input::placeholder {
 #new_property_form_property_type_select {
     border: 1px solid #E0E2e4;
     border-radius: 4px;
+    float: left;
     font-size: 1.1em;
     margin-top: 5px;
     padding: 7.5px 15px 7.5px 15px;
     width: calc(100% - 30px);
 }
 
-.new_property_form_input:focus, .new_property_form_input_triple:focus {
+.new_property_form_input:focus, .new_property_form_input_triple:focus, .form_select_input:focus {
     border-radius: 4px;
     outline: none;
 }
@@ -237,7 +279,7 @@ input::placeholder {
     display: inline-block;
     margin-right: 40px;
     margin-top: 5px;
-    width: calc(100% -  2px - 30px);  /* 40px each margin, 15px each side of padding, 1px each border */
+    width: calc(100% - 2px - 30px);  /* 40px each margin, 15px each side of padding, 1px each border */
 }
 
 .new_property_form_triple_box {
@@ -288,7 +330,6 @@ input::placeholder {
     width: calc(50% - 20px);
 }
 
-
 .new_property_form_input_double {
     border: 1px solid #E0E2e4;
     border-radius: 4px;
@@ -310,5 +351,5 @@ input::placeholder {
 
 .form_box {
     margin-top: 25px;
-    width: calc(100% - 325px);
+    width: calc(100%);
 }

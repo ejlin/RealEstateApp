@@ -86,7 +86,7 @@ class NewPropertyForm extends React.Component {
         switch (this.state.toDisplay) {
             case generalInformation:
                 return (
-                    <div>
+                    <div className="new_property_form_info_inner_box">
                         <p className="form_title">
                             Property Information
                         </p>
@@ -95,18 +95,12 @@ class NewPropertyForm extends React.Component {
                             Please input your property's general information
                         </p>
                         <div className="form_box">
-                            {/* <label className="new_property_form_label">
-                                Address: 
-                            </label>
-                            <p className="new_property_form_required">*</p>
-                            <div className="clearfix"/> */}
                             <input 
                                 placeholder="Address Line 1" 
                                 className="new_property_form_input new_property_form_input_long" 
                                 type="text" 
                                 name="addressOne" 
                                 onChange={this.handleFieldChange}/>
-                            {/* <p className="new_property_form_required">*</p> */}
                             <input 
                                 placeholder="APT or Suite #" 
                                 className="new_property_form_input new_property_form_input_long" 
@@ -187,7 +181,7 @@ class NewPropertyForm extends React.Component {
                 );
             case purchaseInformation:
                 return (
-                    <div>
+                    <div className="new_property_form_info_inner_box">
                         <p className="form_title">
                             Purchase Information
                         </p>
@@ -296,7 +290,7 @@ class NewPropertyForm extends React.Component {
                 );
             case incomeInformation:
                 return(
-                    <div>
+                    <div className="new_property_form_info_inner_box">
                         <p className="form_title">
                             Income Information
                         </p>
@@ -350,39 +344,6 @@ class NewPropertyForm extends React.Component {
                                     </option>
                                 </select>
                             </div>
-                            {/* <input 
-                                placeholder="Address Line 1" 
-                                className="new_property_form_input new_property_form_input_long" 
-                                type="text" 
-                                name="addressOne" 
-                                onChange={this.handleFieldChange}/>
-                            <input 
-                                placeholder="Address Line 2" 
-                                className="new_property_form_input new_property_form_input_long" 
-                                type="text" 
-                                name="addressTwo" 
-                                onChange={this.handleFieldChange}/>
-                            <div className="clearfix"/>
-                            <div className="">
-                                <input 
-                                    placeholder="City" 
-                                    className="new_property_form_input_triple" 
-                                    type="text" 
-                                    name="city" 
-                                    onChange={this.handleFieldChange} />
-                                <input 
-                                    placeholder="State" 
-                                    className="new_property_form_input_triple" 
-                                    type="text" 
-                                    name="state" 
-                                    onChange={this.handleFieldChange} />
-                                <input 
-                                    placeholder="Zip Code" 
-                                    className="new_property_form_input_triple" 
-                                    type="text" 
-                                    name="zip_code" 
-                                    onChange={this.handleFieldChange} />
-                            </div> */}
                             <div className="clearfix"/>
                             <div className="form_footer_box">
                                 <div 
@@ -440,8 +401,16 @@ class NewPropertyForm extends React.Component {
                                     this.state.toDisplay === generalInformation ?
                                     "new_property_dashboard_bottom_left_box_list new_property_dashboard_bottom_left_box_list_active" :
                                     "new_property_dashboard_bottom_left_box_list"}>
-                                    <BsFillHouseFill className="new_property_dashboard_bottom_left_box_list_icon"></BsFillHouseFill>
-                                    <p className="new_property_dashboard_bottom_left_box_list_text">
+                                    <BsFillHouseFill className={
+                                        this.state.toDisplay === generalInformation ? 
+                                        "new_property_dashboard_bottom_left_box_list_icon new_property_dashboard_bottom_left_box_list_icon_active" : 
+                                        "new_property_dashboard_bottom_left_box_list_icon"
+                                    }></BsFillHouseFill>
+                                    <p className={
+                                        this.state.toDisplay === generalInformation ?
+                                        "new_property_dashboard_bottom_left_box_list_text new_property_dashboard_bottom_left_box_list_text_active" :
+                                        "new_property_dashboard_bottom_left_box_list_text"
+                                    }>
                                         Property
                                     </p>
                                 </li>
@@ -452,9 +421,17 @@ class NewPropertyForm extends React.Component {
                                     this.state.toDisplay === purchaseInformation ?
                                     "new_property_dashboard_bottom_left_box_list new_property_dashboard_bottom_left_box_list_active" :
                                     "new_property_dashboard_bottom_left_box_list"}>
-                                    <AiTwotonePushpin className="new_property_dashboard_bottom_left_box_list_icon"></AiTwotonePushpin>
-                                    <p className="new_property_dashboard_bottom_left_box_list_text">
-                                        Purchase Information
+                                    <AiTwotonePushpin className={
+                                        this.state.toDisplay === purchaseInformation ? 
+                                        "new_property_dashboard_bottom_left_box_list_icon new_property_dashboard_bottom_left_box_list_icon_active" : 
+                                        "new_property_dashboard_bottom_left_box_list_icon"
+                                    }></AiTwotonePushpin>
+                                    <p className={
+                                        this.state.toDisplay === purchaseInformation ?
+                                        "new_property_dashboard_bottom_left_box_list_text new_property_dashboard_bottom_left_box_list_text_active" :
+                                        "new_property_dashboard_bottom_left_box_list_text"
+                                    }>
+                                        Purchase Info
                                     </p>
                                 </li>
                                 <li onClick={() => this.setState({
@@ -464,9 +441,17 @@ class NewPropertyForm extends React.Component {
                                     this.state.toDisplay === incomeInformation ?
                                     "new_property_dashboard_bottom_left_box_list new_property_dashboard_bottom_left_box_list_active" :
                                     "new_property_dashboard_bottom_left_box_list"}>
-                                    <FaDollarSign className="new_property_dashboard_bottom_left_box_list_icon"></FaDollarSign>
-                                    <p className="new_property_dashboard_bottom_left_box_list_text">
-                                        Income Information
+                                    <FaDollarSign className={
+                                        this.state.toDisplay === incomeInformation ? 
+                                        "new_property_dashboard_bottom_left_box_list_icon new_property_dashboard_bottom_left_box_list_icon_active" : 
+                                        "new_property_dashboard_bottom_left_box_list_icon"
+                                    }></FaDollarSign>
+                                    <p className={
+                                        this.state.toDisplay === incomeInformation ?
+                                        "new_property_dashboard_bottom_left_box_list_text new_property_dashboard_bottom_left_box_list_text_active" :
+                                        "new_property_dashboard_bottom_left_box_list_text"
+                                    }>
+                                        Income Info
                                     </p>
                                 </li>
                             </div>

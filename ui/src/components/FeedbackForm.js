@@ -269,8 +269,16 @@ class FeedbackForm extends React.Component {
                                         this.state.toDisplay === general ? 
                                         "feedback_form_inner_lower_box_nav_bar_list feedback_form_inner_lower_box_nav_bar_list_active" : 
                                         "feedback_form_inner_lower_box_nav_bar_list"}>
-                                    <BsFillHouseFill className="feedback_form_inner_lower_box_nav_bar_list_icon"></BsFillHouseFill>
-                                    <p className="feedback_form_inner_lower_box_nav_bar_list_title">
+                                    <BsFillHouseFill className={
+                                        this.state.toDisplay === general ? 
+                                        "feedback_form_inner_lower_box_nav_bar_list_icon feedback_form_inner_lower_box_nav_bar_list_icon_active" :
+                                        "feedback_form_inner_lower_box_nav_bar_list_icon"
+                                    }></BsFillHouseFill>
+                                    <p className={
+                                        this.state.toDisplay === general ?
+                                        "feedback_form_inner_lower_box_nav_bar_list_title feedback_form_inner_lower_box_nav_bar_list_title_active" :
+                                        "feedback_form_inner_lower_box_nav_bar_list_title"
+                                    }>
                                         General
                                     </p>
                                 </li>
@@ -282,8 +290,16 @@ class FeedbackForm extends React.Component {
                                         this.state.toDisplay === featureRequest ? 
                                         "feedback_form_inner_lower_box_nav_bar_list feedback_form_inner_lower_box_nav_bar_list_active" : 
                                         "feedback_form_inner_lower_box_nav_bar_list"}>
-                                    <RiVipCrown2Fill className="feedback_form_inner_lower_box_nav_bar_list_icon"></RiVipCrown2Fill>
-                                    <p className="feedback_form_inner_lower_box_nav_bar_list_title">
+                                    <RiVipCrown2Fill className={
+                                        this.state.toDisplay === featureRequest ? 
+                                        "feedback_form_inner_lower_box_nav_bar_list_icon feedback_form_inner_lower_box_nav_bar_list_icon_active" :
+                                        "feedback_form_inner_lower_box_nav_bar_list_icon"
+                                    }></RiVipCrown2Fill>
+                                    <p className={
+                                        this.state.toDisplay === featureRequest ?
+                                        "feedback_form_inner_lower_box_nav_bar_list_title feedback_form_inner_lower_box_nav_bar_list_title_active" :
+                                        "feedback_form_inner_lower_box_nav_bar_list_title"
+                                    }>
                                         Feature Request
                                     </p>
                                 </li>
@@ -295,8 +311,16 @@ class FeedbackForm extends React.Component {
                                         this.state.toDisplay === bugReport ? 
                                         "feedback_form_inner_lower_box_nav_bar_list feedback_form_inner_lower_box_nav_bar_list_active" : 
                                         "feedback_form_inner_lower_box_nav_bar_list"}>
-                                    <RiFileWarningFill className="feedback_form_inner_lower_box_nav_bar_list_icon"></RiFileWarningFill>
-                                    <p className="feedback_form_inner_lower_box_nav_bar_list_title">
+                                    <RiFileWarningFill className={
+                                        this.state.toDisplay === bugReport ? 
+                                        "feedback_form_inner_lower_box_nav_bar_list_icon feedback_form_inner_lower_box_nav_bar_list_icon_active" :
+                                        "feedback_form_inner_lower_box_nav_bar_list_icon"
+                                    }></RiFileWarningFill>
+                                    <p className={
+                                        this.state.toDisplay === bugReport ?
+                                        "feedback_form_inner_lower_box_nav_bar_list_title feedback_form_inner_lower_box_nav_bar_list_title_active" :
+                                        "feedback_form_inner_lower_box_nav_bar_list_title"
+                                    }>
                                         Bug Report
                                     </p>
                                 </li>
@@ -308,8 +332,16 @@ class FeedbackForm extends React.Component {
                                         this.state.toDisplay === securityIssue ? 
                                         "feedback_form_inner_lower_box_nav_bar_list feedback_form_inner_lower_box_nav_bar_list_active" : 
                                         "feedback_form_inner_lower_box_nav_bar_list"}>
-                                    <AiTwotoneSecurityScan className="feedback_form_inner_lower_box_nav_bar_list_icon"></AiTwotoneSecurityScan>
-                                    <p className="feedback_form_inner_lower_box_nav_bar_list_title">
+                                    <AiTwotoneSecurityScan className={
+                                        this.state.toDisplay === securityIssue ? 
+                                        "feedback_form_inner_lower_box_nav_bar_list_icon feedback_form_inner_lower_box_nav_bar_list_icon_active" :
+                                        "feedback_form_inner_lower_box_nav_bar_list_icon"
+                                    }></AiTwotoneSecurityScan>
+                                    <p className={
+                                        this.state.toDisplay === securityIssue ?
+                                        "feedback_form_inner_lower_box_nav_bar_list_title feedback_form_inner_lower_box_nav_bar_list_title_active" :
+                                        "feedback_form_inner_lower_box_nav_bar_list_title"
+                                    }>
                                         Security Issue
                                     </p>
                                 </li>
@@ -321,8 +353,16 @@ class FeedbackForm extends React.Component {
                                         this.state.toDisplay === accountIssue ? 
                                         "feedback_form_inner_lower_box_nav_bar_list feedback_form_inner_lower_box_nav_bar_list_active" : 
                                         "feedback_form_inner_lower_box_nav_bar_list"}>
-                                    <MdAccountCircle className="feedback_form_inner_lower_box_nav_bar_list_icon"></MdAccountCircle>
-                                    <p className="feedback_form_inner_lower_box_nav_bar_list_title">
+                                    <MdAccountCircle className={
+                                        this.state.toDisplay === accountIssue ? 
+                                        "feedback_form_inner_lower_box_nav_bar_list_icon feedback_form_inner_lower_box_nav_bar_list_icon_active" :
+                                        "feedback_form_inner_lower_box_nav_bar_list_icon"
+                                    }></MdAccountCircle>
+                                    <p className={
+                                        this.state.toDisplay === accountIssue ?
+                                        "feedback_form_inner_lower_box_nav_bar_list_title feedback_form_inner_lower_box_nav_bar_list_title_active" :
+                                        "feedback_form_inner_lower_box_nav_bar_list_title"
+                                    }>
                                         Account Issue
                                     </p>
                                 </li>

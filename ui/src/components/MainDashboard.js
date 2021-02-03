@@ -348,7 +348,9 @@ class MainDashboard extends React.Component {
                                                 <BarChart 
                                                     height={"285"}
                                                     xAxisFontSize={"0.85em"}
+                                                    yAxisFontSize={"0.9em"}
                                                     xAxisColor={"grey"}
+                                                    yAxisColor={"grey"}
                                                     barColor={"#296CF6"}
                                                     capitalizeXAxis={true}
                                                     marginTop={"20"}
