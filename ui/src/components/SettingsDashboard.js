@@ -823,13 +823,6 @@ class SettingsDashboard extends React.Component {
                                     </p>
                                 </div>
                             </div>
-                            {/* <form id="settings_dashboard_user_information_form">
-                                <input placeholder={this.state.firstName ? this.capitalizeName(this.state.firstName) : "First Name"}  className="settings_dashboard_user_information_input" type="text" name="firstNameChange" onChange={this.handleFieldChange}/>
-                                <input placeholder={this.state.lastName ? this.capitalizeName(this.state.lastName) : "Last Name"}  className="settings_dashboard_user_information_input" type="text" name="lastNameChange" onChange={this.handleFieldChange}/>
-                                <input placeholder={this.state.email ? this.state.email : "Email"}  className="settings_dashboard_user_information_input" type="text" name="emailChange" onChange={this.handleFieldChange}/>
-                                <input placeholder="New Password"  id="settings_dashboard_user_information_input_password" className="settings_dashboard_user_information_input" type="text" name="passwordChange" onChange={this.handleFieldChange}/>
-                                <input id="settings_dashboard_user_information_form_submit_button" type="submit" value="Save"></input>
-                            </form> */}
                         </div>
                         <div id="settings_dashboard_right_box">
                             <div id="settings_dashboard_right_box_nav_bar">
@@ -845,8 +838,16 @@ class SettingsDashboard extends React.Component {
                                         this.state.toDisplay === general ? 
                                         "settings_dashboard_right_box_nav_bar_list settings_dashboard_right_box_nav_bar_active_list" : 
                                         "settings_dashboard_right_box_nav_bar_list"}>
-                                    <IoSettingsSharp className="settings_dashboard_right_box_nav_bar_list_icon"></IoSettingsSharp>
-                                    <p className="settings_dashboard_right_box_nav_bar_list_text">
+                                    <IoSettingsSharp className={
+                                        this.state.toDisplay === general ? 
+                                        "settings_dashboard_right_box_nav_bar_list_icon settings_dashboard_right_box_nav_bar_list_icon_active" :
+                                        "settings_dashboard_right_box_nav_bar_list_icon"
+                                    }></IoSettingsSharp>
+                                    <p className={
+                                        this.state.toDisplay === general ? 
+                                        "settings_dashboard_right_box_nav_bar_list_text settings_dashboard_right_box_nav_bar_list_text_active" :
+                                        "settings_dashboard_right_box_nav_bar_list_text"
+                                    }>
                                         General
                                     </p>
                                 </li>
@@ -864,8 +865,16 @@ class SettingsDashboard extends React.Component {
                                         this.state.toDisplay === email ? 
                                         "settings_dashboard_right_box_nav_bar_list settings_dashboard_right_box_nav_bar_active_list" : 
                                         "settings_dashboard_right_box_nav_bar_list"}>
-                                    <MdEmail className="settings_dashboard_right_box_nav_bar_list_icon"></MdEmail>
-                                    <p className="settings_dashboard_right_box_nav_bar_list_text">
+                                    <MdEmail className={
+                                        this.state.toDisplay === email ? 
+                                        "settings_dashboard_right_box_nav_bar_list_icon settings_dashboard_right_box_nav_bar_list_icon_active" :
+                                        "settings_dashboard_right_box_nav_bar_list_icon"
+                                    }></MdEmail>
+                                    <p className={
+                                        this.state.toDisplay === email ? 
+                                        "settings_dashboard_right_box_nav_bar_list_text settings_dashboard_right_box_nav_bar_list_text_active" :
+                                        "settings_dashboard_right_box_nav_bar_list_text"
+                                    }>
                                         Email
                                     </p>
                                 </li>
@@ -883,8 +892,16 @@ class SettingsDashboard extends React.Component {
                                         this.state.toDisplay === notifications ? 
                                         "settings_dashboard_right_box_nav_bar_list settings_dashboard_right_box_nav_bar_active_list" : 
                                         "settings_dashboard_right_box_nav_bar_list"}>
-                                    <IoMdNotifications className="settings_dashboard_right_box_nav_bar_list_icon"></IoMdNotifications>
-                                    <p className="settings_dashboard_right_box_nav_bar_list_text">
+                                    <IoMdNotifications className={
+                                        this.state.toDisplay === notifications ? 
+                                        "settings_dashboard_right_box_nav_bar_list_icon settings_dashboard_right_box_nav_bar_list_icon_active" :
+                                        "settings_dashboard_right_box_nav_bar_list_icon"
+                                    }></IoMdNotifications>
+                                    <p className={
+                                        this.state.toDisplay === notifications ? 
+                                        "settings_dashboard_right_box_nav_bar_list_text settings_dashboard_right_box_nav_bar_list_text_active" :
+                                        "settings_dashboard_right_box_nav_bar_list_text"
+                                    }>
                                         Notifications
                                     </p>
                                 </li>
@@ -902,8 +919,16 @@ class SettingsDashboard extends React.Component {
                                         this.state.toDisplay === properties ? 
                                         "settings_dashboard_right_box_nav_bar_list settings_dashboard_right_box_nav_bar_active_list" : 
                                         "settings_dashboard_right_box_nav_bar_list"}>
-                                    <BsFillHouseFill className="settings_dashboard_right_box_nav_bar_list_icon"></BsFillHouseFill>
-                                    <p className="settings_dashboard_right_box_nav_bar_list_text">
+                                    <BsFillHouseFill className={
+                                        this.state.toDisplay === properties ? 
+                                        "settings_dashboard_right_box_nav_bar_list_icon settings_dashboard_right_box_nav_bar_list_icon_active" :
+                                        "settings_dashboard_right_box_nav_bar_list_icon"
+                                    }></BsFillHouseFill>
+                                    <p className={
+                                        this.state.toDisplay === properties ? 
+                                        "settings_dashboard_right_box_nav_bar_list_text settings_dashboard_right_box_nav_bar_list_text_active" :
+                                        "settings_dashboard_right_box_nav_bar_list_text"
+                                    }>
                                         Properties
                                     </p>
                                 </li>
@@ -921,8 +946,16 @@ class SettingsDashboard extends React.Component {
                                         this.state.toDisplay === plan ? 
                                         "settings_dashboard_right_box_nav_bar_list settings_dashboard_right_box_nav_bar_active_list" : 
                                         "settings_dashboard_right_box_nav_bar_list"}>
-                                    <BsFillAwardFill className="settings_dashboard_right_box_nav_bar_list_icon"></BsFillAwardFill>
-                                    <p className="settings_dashboard_right_box_nav_bar_list_text">
+                                    <BsFillAwardFill className={
+                                        this.state.toDisplay === plan ? 
+                                        "settings_dashboard_right_box_nav_bar_list_icon settings_dashboard_right_box_nav_bar_list_icon_active" :
+                                        "settings_dashboard_right_box_nav_bar_list_icon"
+                                    }></BsFillAwardFill>
+                                    <p className={
+                                        this.state.toDisplay === plan ? 
+                                        "settings_dashboard_right_box_nav_bar_list_text settings_dashboard_right_box_nav_bar_list_text_active" :
+                                        "settings_dashboard_right_box_nav_bar_list_text"
+                                    }>
                                         Plan
                                     </p>
                                 </li>

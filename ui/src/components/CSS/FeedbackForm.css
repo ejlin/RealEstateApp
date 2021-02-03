@@ -41,8 +41,10 @@
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
+    color: #32384D;
     cursor: pointer;
     float: left;
+    font-weight: bold;
     height: 45px;
     margin-bottom: 15px;
     margin-right: 10%;
@@ -64,7 +66,7 @@
 }
 
 .feedback_form_inner_lower_box_nav_bar_list_icon {
-    color:  black;
+    color: #32384D;
     float: left;
     height: 20px;
     margin-left: 25px;
@@ -84,10 +86,10 @@
 .feedback_form_actual_form_box {
     border-radius: 4px;
     float: left;
-    margin-left: 25px;
-    margin-right: 25px;
+    margin-left: 40px;
+    margin-right: 40px;
     margin-top: 25px;
-    width: calc((100% - 50px));
+    width: calc((100% - 80px));
 }
 
 .feedback_form_actual_form_title_border_bottom {
