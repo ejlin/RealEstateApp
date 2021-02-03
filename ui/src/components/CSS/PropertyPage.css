@@ -211,10 +211,10 @@
     border-radius: 10px;
     float: right;
     height: 260px;
-    margin-left: calc((100% - 650px - 260px - 50px)/2);
-    margin-right: calc((100% - 650px - 260px - 50px)/2);
+    margin-left: calc(100% - 260px - 775px);    /* 775px is 650 graph, 50 margin left graph, 75 margin right circular */
+    margin-right: 75px;
     margin-top: 35px;
-    width: 260px;
+    width: 260px;   
 }
 
 .analysis_bar_chart {
@@ -226,10 +226,40 @@
     float: left;
     margin-left: 50px;
     margin-top: 35px;
+    width: 650px;
 }
 
 .analysis_chart_title {
     font-weight: bold;
     font-size: 1.2em;
     margin-bottom: 25px;
+}
+
+.analysis_chart_subtitle {
+    font-weight: bold;
+    font-size: 1.0em;
+    margin-bottom: 25px;
+}
+
+.view_to_display_box_analysis_top_box {
+    width: 100%;
+}
+
+.view_to_display_box_analysis_middle_box {
+    height: 100px;
+    padding-bottom: 25px;
+    margin-top: 40px;
+    width: 100%;
+}
+
+.view_to_display_box_analysis_middle_box_inner_box {
+    float: left;
+    width: 25%;
+}
+
+.view_to_display_box_analysis_middle_box_inner_box_circular_graph {
+    height: 190px;
+    margin-left: calc((100% - 190px)/2);
+    margin-right: calc((100% - 190px)/2);
+    width: 190px;
 }

@@ -479,39 +479,120 @@ class PropertyPage extends React.Component {
             case analysisView:
                 return (
                     <div className="view_to_display_box">
-                        <div className="analysis_property_value_bar_chart">
-                            <p className="analysis_chart_title">
-                                Property Value
-                            </p>
-                            <BarChart 
-                                // backgroundColor={"#f5f5fa"}
-                                height={"300"}
-                                width={"650"}
-                                yAxisFontSize={"0.8em"}
-                                xAxisFontSize={"0.80em"}
-                                xAxisColor={"grey"}
-                                yAxisColor={"grey"}
-                                barColor={"#296CF6"}
-                                capitalizeXAxis={true}
-                                displayTooltip={true}
-                                data={barChartData}/>
+                        <div className="view_to_display_box_analysis_top_box">
+                            <div className="analysis_property_value_bar_chart">
+                                <p className="analysis_chart_title">
+                                    Property Value
+                                </p>
+                                <BarChart 
+                                    // backgroundColor={"#f5f5fa"}
+                                    height={"300"}
+                                    width={"650"}
+                                    yAxisFontSize={"0.8em"}
+                                    xAxisFontSize={"0.80em"}
+                                    xAxisColor={"grey"}
+                                    yAxisColor={"grey"}
+                                    barColor={"#296CF6"}
+                                    capitalizeXAxis={true}
+                                    displayTooltip={true}
+                                    data={barChartData}/>
+                            </div>
+                            <div className="analysis_circular_box">
+                                <p className="analysis_chart_title">
+                                    Property Value
+                                </p>
+                                <CircularProgressbar 
+                                    value={10}
+                                    text={`${this.state.totalProperties ? (this.state.totalProperties - this.state.vacantProperties) / this.state.totalProperties * 100 : 0}%`}
+                                    background
+                                    backgroundPadding={3}
+                                    strokeWidth={7}
+                                    styles={buildStyles({
+                                        backgroundColor: "#fff",
+                                        textColor: "#fff",
+                                        pathColor: "#296CF6",
+                                        trailColor: "#f5f5fa",
+                                    })}/>
+                            </div>
                         </div>
-                        <div className="analysis_circular_box">
-                            <p className="analysis_chart_title">
-                                Property Value
-                            </p>
-                            <CircularProgressbar 
-                                value={10}
-                                text={`${this.state.totalProperties ? (this.state.totalProperties - this.state.vacantProperties) / this.state.totalProperties * 100 : 0}%`}
-                                background
-                                backgroundPadding={3}
-                                strokeWidth={7}
-                                styles={buildStyles({
-                                    backgroundColor: "#fff",
-                                    textColor: "#fff",
-                                    pathColor: "#296CF6",
-                                    trailColor: "#f5f5fa",
-                                })}/>
+                        <div className="clearfix"/>
+                        <div className="view_to_display_box_analysis_middle_box">
+                            <div className="view_to_display_box_analysis_middle_box_inner_box">
+                                <div className="view_to_display_box_analysis_middle_box_inner_box_circular_graph">
+                                    <p className="analysis_chart_subtitle">
+                                        Property Value
+                                    </p>
+                                    <CircularProgressbar 
+                                        value={10}
+                                        text={`${this.state.totalProperties ? (this.state.totalProperties - this.state.vacantProperties) / this.state.totalProperties * 100 : 0}%`}
+                                        background
+                                        backgroundPadding={3}
+                                        strokeWidth={7}
+                                        styles={buildStyles({
+                                            backgroundColor: "#fff",
+                                            textColor: "#fff",
+                                            pathColor: "#296CF6",
+                                            trailColor: "#f5f5fa",
+                                        })}/>
+                                </div>
+                            </div>
+                            <div className="view_to_display_box_analysis_middle_box_inner_box">
+                                <div className="view_to_display_box_analysis_middle_box_inner_box_circular_graph">
+                                    <p className="analysis_chart_subtitle">
+                                        Property Value
+                                    </p>
+                                    <CircularProgressbar 
+                                        value={10}
+                                        text={`${this.state.totalProperties ? (this.state.totalProperties - this.state.vacantProperties) / this.state.totalProperties * 100 : 0}%`}
+                                        background
+                                        backgroundPadding={3}
+                                        strokeWidth={7}
+                                        styles={buildStyles({
+                                            backgroundColor: "#fff",
+                                            textColor: "#fff",
+                                            pathColor: "#296CF6",
+                                            trailColor: "#f5f5fa",
+                                        })}/>
+                                </div>
+                            </div>
+                            <div className="view_to_display_box_analysis_middle_box_inner_box">
+                                <div className="view_to_display_box_analysis_middle_box_inner_box_circular_graph">
+                                    <p className="analysis_chart_subtitle">
+                                        Property Value
+                                    </p>
+                                    <CircularProgressbar 
+                                        value={10}
+                                        text={`${this.state.totalProperties ? (this.state.totalProperties - this.state.vacantProperties) / this.state.totalProperties * 100 : 0}%`}
+                                        background
+                                        backgroundPadding={3}
+                                        strokeWidth={7}
+                                        styles={buildStyles({
+                                            backgroundColor: "#fff",
+                                            textColor: "#fff",
+                                            pathColor: "#296CF6",
+                                            trailColor: "#f5f5fa",
+                                        })}/>
+                                </div>
+                            </div>
+                            <div className="view_to_display_box_analysis_middle_box_inner_box">
+                                <div className="view_to_display_box_analysis_middle_box_inner_box_circular_graph">
+                                    <p className="analysis_chart_subtitle">
+                                        Property Value
+                                    </p>
+                                    <CircularProgressbar 
+                                        value={10}
+                                        text={`${this.state.totalProperties ? (this.state.totalProperties - this.state.vacantProperties) / this.state.totalProperties * 100 : 0}%`}
+                                        background
+                                        backgroundPadding={3}
+                                        strokeWidth={7}
+                                        styles={buildStyles({
+                                            backgroundColor: "#fff",
+                                            textColor: "#fff",
+                                            pathColor: "#296CF6",
+                                            trailColor: "#f5f5fa",
+                                        })}/>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 );
