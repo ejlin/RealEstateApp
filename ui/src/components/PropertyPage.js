@@ -733,7 +733,6 @@ class PropertyPage extends React.Component {
                             </div> :
                             <div></div>}
                         <div className="property_page_inner_box">
-                            <div className="clearfix"/>
                             <div className="property_page_buttons_box">
                                 <Link to={{
                                     pathname: "/addproperty",
@@ -744,12 +743,11 @@ class PropertyPage extends React.Component {
                                         profilePicture: this.state.profilePicture
                                     }
                                 }}>
-                                    <div className="page_button">
+                                    <div className="page_button property_page_page_button">
                                         New Property
                                     </div>
                                 </Link>
                             </div>
-                            <div className="clearfix"/>
                             <div className="property_page_redirect_back_box">
                                 <div 
                                     onClick={() => {

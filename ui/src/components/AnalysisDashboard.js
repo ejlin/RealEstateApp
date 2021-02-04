@@ -80,7 +80,7 @@ class AnalysisDashboard extends React.Component {
 
         axios({
             method: 'get',
-            url: 'api/user/analysis/' + this.state.user["id"]
+            url: 'api/user/history/' + this.state.user["id"]
         }).then(response => {
             console.log(response.data);
             this.setState({
