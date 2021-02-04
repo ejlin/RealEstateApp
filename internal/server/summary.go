@@ -38,6 +38,39 @@ func (s *Server) getUserSummary(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func (s *Server) getUserSummaryByProperty(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	userID, ok := vars["id"]
+	if !ok {
+		log.Warn().Str("func", "getPropertiesSummary").Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	propertyID, ok := vars["property_id"]
+	if !ok {
+		log.Warn().Str("func", "getPropertiesSummary").Msg("missing property id")
+		http.Error(w, "missing property id", http.StatusBadRequest)
+		return
+	}
+
+	ll = ll.With().Str("property_id", userID).Logger()
+
+	userSummaryByProperty, err := s.calculatePropertiesAnalysis(userID, []string{propertyID}, nil)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to calculate user summary by property")
+		http.Error(w, "unable to calculate user summary by property", http.StatusInternalServerError)
+		return
+	}
+
+	RespondToRequest(w, userSummaryByProperty)
+	return
+}
+
+
 func (s *Server) calculateUserSummary(userID string) (*UserSummary, error) {
 
 	propertiesSummary, err := s.calculatePropertiesAnalysis(userID, nil, nil)
@@ -62,7 +95,7 @@ func (s *Server) calculateUserSummary(userID string) (*UserSummary, error) {
 	}, nil
 }
 
-func (s *Server) getPropertiesAnalysis(w http.ResponseWriter, r *http.Request) {
+func (s *Server) getPropertiesHistory(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	userID, ok := vars["id"]
@@ -85,7 +118,7 @@ func (s *Server) getPropertiesAnalysis(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func (s *Server) getPropertiesAnalysisByProperty(w http.ResponseWriter, r *http.Request) {
+func (s *Server) getPropertiesHistoryByProperty(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	userID, ok := vars["id"]

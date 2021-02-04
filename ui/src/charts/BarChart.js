@@ -72,8 +72,6 @@ class BarChart extends React.Component {
         let data = this.state.data;
         let height = parseInt(this.state.height) - 20;
 
-        console.log(height);
-
         if (data.length === 0){
             return (
                 <div></div>
@@ -161,7 +159,6 @@ class BarChart extends React.Component {
             let height = strYValue - minYAxisValue;
             height = height * heightPerUnit;
             height = height + minBuffer + minYAxisValue; // Add our minBuffer back as the baseline.
-            console.log(height);
             elements.push(
                 <li 
                     className="bar_chart_x_axis_element">

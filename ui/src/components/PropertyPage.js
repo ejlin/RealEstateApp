@@ -20,7 +20,7 @@ import { renderNoFiles } from './FilesDashboard.js';
 
 import { Link, Redirect } from 'react-router-dom';
 
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 
 import { IoCaretBackOutline } from 'react-icons/io5';
 import { GoFileDirectory } from 'react-icons/go';
@@ -45,6 +45,7 @@ class PropertyPage extends React.Component {
             user: this.props.location.state.user,
             property: this.props.location.state.property,
             profilePicture: this.props.location.state.profilePicture,
+            totalEstimateWorth: this.props.location.state.totalEstimateWorth,
             viewToDisplay: overviewView,
             isLoading: false,
             currActiveExpandedExpense: null,
@@ -78,14 +79,16 @@ class PropertyPage extends React.Component {
 
         let getExpensesByPropertyListURL = URLBuilder(host, '/api/user/expenses', userID, propertyID);
         let getFilesByPropertyURL = URLBuilder(host, '/api/user/files/property', userID, propertyID);
-        let getPropertiesAnalysisURL = URLBuilder(host, '/api/user/analysis', userID, propertyID);
+        let getPropertiesHistoryURL = URLBuilder(host, '/api/user/history', userID, propertyID);
+        let getPropertySummaryURL = URLBuilder(host, '/api/user/summary', userID, propertyID);
 
         const getExpensesByPropertyRequest = axios.get(getExpensesByPropertyListURL);
         const getFilesByPropertyRequest = axios.get(getFilesByPropertyURL);
-        const getPropertiesAnalysisRequest = axios.get(getPropertiesAnalysisURL);
+        const getPropertiesHistoricalRequest = axios.get(getPropertiesHistoryURL);
+        const getPropertySummaryRequest = axios.get(getPropertySummaryURL);
 
         axios.all(
-            [getExpensesByPropertyRequest, getFilesByPropertyRequest, getPropertiesAnalysisRequest]
+            [getExpensesByPropertyRequest, getFilesByPropertyRequest, getPropertiesHistoricalRequest, getPropertySummaryRequest]
         ).then(axios.spread((...responses) => {
             const expensesRequestResponse = responses[0];
             /* Handle our expenses response */
@@ -124,15 +127,33 @@ class PropertyPage extends React.Component {
                 }
             }
 
-            /* Handle our analysis response */
-            const analysisRequestResponse = responses[2];
-            let historicalAnalysis = analysisRequestResponse.data;
+            /* Handle our history response */
+            const historyRequestResponse = responses[2];
+            let historicalAnalysis = historyRequestResponse.data;
+
+            /* Handle our summary response */
+            const propertySummaryRequestResponse = responses[3];
+            let propertySummary = propertySummaryRequestResponse.data;
+            console.log(propertySummary);
+
+            /* Calculate our statistics */
+            let value;
+            if (this.state.property["estimate"]) {
+                value = parseFloat(this.state.property["estimate"]);
+            } else if (this.state.property["price_bought"]){
+                value = parseFloat(this.state.property["price_bought"]);
+            }
+
+            let percentPortfolio = value / this.state.totalEstimateWorth * 100.0;
+
             this.setState({
                 expenses: expenses,
                 expensesMap: expensesMap,
                 files: files,
                 filesMap: filesMap,
                 historicalAnalysis: historicalAnalysis,
+                percentPortfolio: percentPortfolio,
+                propertySummary: propertySummary,
                 isLoading: false
             });
         })).catch(errors => {
@@ -177,7 +198,6 @@ class PropertyPage extends React.Component {
             }
             return defaultData;
         }
-        console.log(historicalAnalysis);
 
         let properties = historicalAnalysis["properties"];
 
@@ -497,37 +517,139 @@ class PropertyPage extends React.Component {
                                     displayTooltip={true}
                                     data={barChartData}/>
                             </div>
+                            <div className="analysis_vertical_divider_large"></div>
                             <div className="analysis_circular_box">
                                 <p className="analysis_chart_title">
-                                    Property Value
+                                    Percent of Portfolio
                                 </p>
-                                <CircularProgressbar 
-                                    value={10}
-                                    text={`${this.state.totalProperties ? (this.state.totalProperties - this.state.vacantProperties) / this.state.totalProperties * 100 : 0}%`}
-                                    background
+                                <CircularProgressbarWithChildren
+                                    value={this.state.percentPortfolio}
                                     backgroundPadding={3}
-                                    strokeWidth={7}
+                                    strokeWidth={12}
                                     styles={buildStyles({
                                         backgroundColor: "#fff",
-                                        textColor: "#fff",
+                                        textColor: "#296CF6",
+                                        textSize: "10px",
                                         pathColor: "#296CF6",
                                         trailColor: "#f5f5fa",
-                                    })}/>
+                                    })}>
+                                    {
+                                        <div>
+                                            <p className="circular_progress_bar_inner_text_large">
+                                                {numberWithCommas(Number(this.state.percentPortfolio).toFixed(2))}%
+                                            </p>
+                                            <p className="circular_progress_bar_inner_text_large_subtitle">
+                                                of Portfolio
+                                            </p>
+                                        </div>
+                                    }  
+                                </CircularProgressbarWithChildren>
                             </div>
                         </div>
                         <div className="clearfix"/>
+                        <div className="view_to_display_box_analysis_divider"></div>
                         <div className="view_to_display_box_analysis_middle_box">
-                            <div className="view_to_display_box_analysis_middle_box_inner_box">
+                            <div className="view_to_display_box_analysis_middle_box_left_box">
+                                <div className="view_to_display_box_analysis_middle_box_inner_box">
+                                    <div className="view_to_display_box_analysis_middle_box_inner_box_circular_graph">
+                                        <p className="analysis_chart_subtitle">
+                                            Rate of Return
+                                        </p>
+                                        <CircularProgressbarWithChildren 
+                                            value={parseFloat(this.state.propertySummary["annual_rate_of_return"])}
+                                            background
+                                            backgroundPadding={3}
+                                            strokeWidth={10}
+                                            styles={buildStyles({
+                                                backgroundColor: "#fff",
+                                                textColor: "#fff",
+                                                pathColor: "#296CF6",
+                                                trailColor: "#f5f5fa",
+                                            })}>
+                                            {
+                                                <div>
+                                                    <p className="circular_progress_bar_inner_text_small">
+                                                        {numberWithCommas(Number(this.state.propertySummary["annual_rate_of_return"]).toFixed(2))}%
+                                                    </p>
+                                                    <p className="circular_progress_bar_inner_text_small_subtitle">
+                                                        ARR
+                                                    </p>
+                                                </div>
+                                            }  
+                                        </CircularProgressbarWithChildren>
+                                    </div>
+                                </div>
+                                <div className="view_to_display_box_analysis_middle_box_inner_box">
+                                    <div className="view_to_display_box_analysis_middle_box_inner_box_circular_graph">
+                                        <p className="analysis_chart_subtitle">
+                                            Loan to Value
+                                        </p>
+                                        <CircularProgressbarWithChildren 
+                                            value={parseFloat(this.state.propertySummary["average_ltv"])}
+                                            background
+                                            backgroundPadding={3}
+                                            strokeWidth={10}
+                                            styles={buildStyles({
+                                                backgroundColor: "#fff",
+                                                textColor: "#fff",
+                                                pathColor: "#296CF6",
+                                                trailColor: "#f5f5fa",
+                                            })}>
+                                            {
+                                                <div>
+                                                    <p className="circular_progress_bar_inner_text_small">
+                                                        {numberWithCommas(Number(this.state.propertySummary["average_ltv"]).toFixed(2))}%
+                                                    </p>
+                                                    <p className="circular_progress_bar_inner_text_small_subtitle">
+                                                        LTV
+                                                    </p>
+                                                </div>
+                                            }  
+                                            </CircularProgressbarWithChildren>
+                                    </div>
+                                </div>
+                                <div className="view_to_display_box_analysis_middle_box_inner_box">
+                                    <div className="view_to_display_box_analysis_middle_box_inner_box_circular_graph">
+                                        <p className="analysis_chart_subtitle">
+                                            Debt to Income
+                                        </p>
+                                        <CircularProgressbarWithChildren 
+                                            value={parseFloat(this.state.propertySummary["average_dti"])}
+                                            background
+                                            backgroundPadding={3}
+                                            strokeWidth={10}
+                                            styles={buildStyles({
+                                                backgroundColor: "#fff",
+                                                textColor: "#fff",
+                                                pathColor: "#296CF6",
+                                                trailColor: "#f5f5fa",
+                                            })}>
+                                            {
+                                                <div>
+                                                    <p className="circular_progress_bar_inner_text_small">
+                                                        {numberWithCommas(Number(this.state.propertySummary["average_dti"]).toFixed(2))}%
+                                                    </p>
+                                                    <p className="circular_progress_bar_inner_text_small_subtitle">
+                                                        DTI
+                                                    </p>
+                                                </div>
+                                            }  
+                                            </CircularProgressbarWithChildren>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="analysis_vertical_divider_small"></div>
+                            {/* <div className="view_to_display_box_analysis_middle_box_inner_box">
                                 <div className="view_to_display_box_analysis_middle_box_inner_box_circular_graph">
                                     <p className="analysis_chart_subtitle">
-                                        Property Value
+                                        Average Cash Flow
                                     </p>
-                                    <CircularProgressbar 
+                                    <CircularProgressbarWithChildren 
                                         value={10}
                                         text={`${this.state.totalProperties ? (this.state.totalProperties - this.state.vacantProperties) / this.state.totalProperties * 100 : 0}%`}
                                         background
                                         backgroundPadding={3}
-                                        strokeWidth={7}
+                                        strokeWidth={10}
                                         styles={buildStyles({
                                             backgroundColor: "#fff",
                                             textColor: "#fff",
@@ -535,64 +657,7 @@ class PropertyPage extends React.Component {
                                             trailColor: "#f5f5fa",
                                         })}/>
                                 </div>
-                            </div>
-                            <div className="view_to_display_box_analysis_middle_box_inner_box">
-                                <div className="view_to_display_box_analysis_middle_box_inner_box_circular_graph">
-                                    <p className="analysis_chart_subtitle">
-                                        Property Value
-                                    </p>
-                                    <CircularProgressbar 
-                                        value={10}
-                                        text={`${this.state.totalProperties ? (this.state.totalProperties - this.state.vacantProperties) / this.state.totalProperties * 100 : 0}%`}
-                                        background
-                                        backgroundPadding={3}
-                                        strokeWidth={7}
-                                        styles={buildStyles({
-                                            backgroundColor: "#fff",
-                                            textColor: "#fff",
-                                            pathColor: "#296CF6",
-                                            trailColor: "#f5f5fa",
-                                        })}/>
-                                </div>
-                            </div>
-                            <div className="view_to_display_box_analysis_middle_box_inner_box">
-                                <div className="view_to_display_box_analysis_middle_box_inner_box_circular_graph">
-                                    <p className="analysis_chart_subtitle">
-                                        Property Value
-                                    </p>
-                                    <CircularProgressbar 
-                                        value={10}
-                                        text={`${this.state.totalProperties ? (this.state.totalProperties - this.state.vacantProperties) / this.state.totalProperties * 100 : 0}%`}
-                                        background
-                                        backgroundPadding={3}
-                                        strokeWidth={7}
-                                        styles={buildStyles({
-                                            backgroundColor: "#fff",
-                                            textColor: "#fff",
-                                            pathColor: "#296CF6",
-                                            trailColor: "#f5f5fa",
-                                        })}/>
-                                </div>
-                            </div>
-                            <div className="view_to_display_box_analysis_middle_box_inner_box">
-                                <div className="view_to_display_box_analysis_middle_box_inner_box_circular_graph">
-                                    <p className="analysis_chart_subtitle">
-                                        Property Value
-                                    </p>
-                                    <CircularProgressbar 
-                                        value={10}
-                                        text={`${this.state.totalProperties ? (this.state.totalProperties - this.state.vacantProperties) / this.state.totalProperties * 100 : 0}%`}
-                                        background
-                                        backgroundPadding={3}
-                                        strokeWidth={7}
-                                        styles={buildStyles({
-                                            backgroundColor: "#fff",
-                                            textColor: "#fff",
-                                            pathColor: "#296CF6",
-                                            trailColor: "#f5f5fa",
-                                        })}/>
-                                </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 );

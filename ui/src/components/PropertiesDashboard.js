@@ -72,25 +72,25 @@ class PropertiesDashboard extends React.Component {
     }
 
     componentDidMount() {
-        var url = '/api/user/property/' + this.state.user["id"];
+        let url = '/api/user/property/' + this.state.user["id"];
         axios({
             method: 'get',
             url: url,
         }).then(response => {
-            var properties = response.data.sort();
-            var totalNetWorth = 0;
-            var totalRent = 0;
+            let properties = response.data.sort();
+            let totalNetWorth = 0;
+            let totalRent = 0;
 
-            var totalEstimateWorth = 0;
-            var missingEstimate = false;
+            let totalEstimateWorth = 0;
+            let missingEstimate = false;
 
-            var propMap = this.state.propertiesMap;
+            let propMap = this.state.propertiesMap;
             // initialize our map with empty arrays for every tag.
-            for (var j = 0; j < this.state.tags.length; j++) {
+            for (let j = 0; j < this.state.tags.length; j++) {
                 propMap[this.state.tags[j]] = [];
             }
-            for (var i = 0; i < properties.length; i++) {
-                var property = properties[i];
+            for (let i = 0; i < properties.length; i++) {
+                let property = properties[i];
                 totalNetWorth += property["price_bought"];
                 totalRent += property["price_rented"];
                 propMap[property["property_type"]].push(property);
@@ -103,15 +103,15 @@ class PropertiesDashboard extends React.Component {
                 }
             }
 
-            var propertiesMap = new Map();
-            for (var i = 0; i < properties.length; i++) {
+            let propertiesMap = new Map();
+            for (let i = 0; i < properties.length; i++) {
                 let property = properties[i];
                 let propertyType = property["property_type"];
 
                 if (!propertiesMap.has(propertyType)) {
                     propertiesMap.set(propertyType, []);
                 }
-                var propertiesTypeArr = propertiesMap.get(propertyType);
+                let propertiesTypeArr = propertiesMap.get(propertyType);
                 propertiesTypeArr.push(property);
                 propertiesMap.set(propertyType, propertiesTypeArr);
             }
@@ -121,7 +121,7 @@ class PropertiesDashboard extends React.Component {
                 totalNetWorth: this.numberWithCommas(totalNetWorth),
                 totalRent: this.numberWithCommas(totalRent),
                 totalProperties: properties.length,
-                totalEstimateWorth: this.numberWithCommas(totalEstimateWorth),
+                totalEstimateWorth: totalEstimateWorth,
                 missingEstimate: missingEstimate,
                 isLoading: false
             });
@@ -135,9 +135,9 @@ class PropertiesDashboard extends React.Component {
 
     removePropertyFromState(id, propertyType) {
 
-        var elementsMap;
+        let elementsMap;
 
-        // var tags = ['SFH', 'Manufactured', 'Condo/Ops', 'Multi-Family', 'Apartment', 'Lot/Land', 'Townhome', 'Commercial'];
+        // let tags = ['SFH', 'Manufactured', 'Condo/Ops', 'Multi-Family', 'Apartment', 'Lot/Land', 'Townhome', 'Commercial'];
 
         switch (propertyType) {
             case 'SFH':
@@ -168,7 +168,7 @@ class PropertiesDashboard extends React.Component {
                 elementsMap = null;
         }
         if (elementsMap !== null ) {
-            for (var i = 0; i < elementsMap.length; i++) {
+            for (let i = 0; i < elementsMap.length; i++) {
                 if (id === elementsMap[i].props.children.props.data.state.property_details["id"]){
                     delete elementsMap[i];
                     break;
@@ -223,7 +223,7 @@ class PropertiesDashboard extends React.Component {
 
     handleTagsListClick(e){
         // Not toggled, set toggle.
-        var toggledMap = this.state.tagsToToggledMap;
+        let toggledMap = this.state.tagsToToggledMap;
         if (!toggledMap[e.target.value]){
             e.target.style.color = "white";
             e.target.style.backgroundColor = "#296CF6";
@@ -240,7 +240,7 @@ class PropertiesDashboard extends React.Component {
     }
 
     setActiveFileAttributes(fileKey, file, toRemove) {
-        var currentActiveFiles = this.state.activeFiles;
+        let currentActiveFiles = this.state.activeFiles;
         if (currentActiveFiles === null || currentActiveFiles === undefined || currentActiveFiles.length === 0) {
             currentActiveFiles = new Map();
         }
@@ -279,18 +279,18 @@ class PropertiesDashboard extends React.Component {
     }
 
     getLTVRatio() {
-        var activeProperty = this.state.activeProperty;
+        let activeProperty = this.state.activeProperty;
         if (!activeProperty["price_bought"]  || !activeProperty["down_payment"] || !activeProperty["price_bought"]) {
             return 0.0;
         }
-        var apv = activeProperty["estimate"] ? activeProperty["estimate"] : activeProperty["price_bought"];
+        let apv = activeProperty["estimate"] ? activeProperty["estimate"] : activeProperty["price_bought"];
 
-        var loan = activeProperty["price_bought"] - activeProperty["down_payment"];
+        let loan = activeProperty["price_bought"] - activeProperty["down_payment"];
         return Number((loan / apv * 100.0).toFixed(2));
     }
 
     getDTIRatio() {
-        var activeProperty = this.state.activeProperty;
+        let activeProperty = this.state.activeProperty;
         if (!activeProperty["price_mortgage"]  || 
             !activeProperty["price_property_manager"] || 
             !activeProperty["currently_rented"] || 
@@ -298,19 +298,19 @@ class PropertiesDashboard extends React.Component {
             return 0.0;
         }
         
-        var debt = activeProperty["price_mortgage"];
+        let debt = activeProperty["price_mortgage"];
         debt += activeProperty["price_property_manager"] ? activeProperty["price_property_manager"] : 0.0;
 
-        var income = activeProperty["price_rented"];
+        let income = activeProperty["price_rented"];
 
-        var dti = debt / income * 100.0
+        let dti = debt / income * 100.0
         return Number(dti.toFixed(2));
     }
 
     renderActivePropertyFiles() {
-        var elements = [];
-        var files = this.state.activePropertyFiles;
-        for (var i = 0; i < files.length; i++) {
+        let elements = [];
+        let files = this.state.activePropertyFiles;
+        for (let i = 0; i < files.length; i++) {
             let file = files[i];
             elements.push(
                 <FileCard key={this.state.activePropertyID + "-" + file["name"]} data={{
@@ -329,8 +329,8 @@ class PropertiesDashboard extends React.Component {
     }
 
     renderActivePropertyExpenses() {
-        var elements = [];
-        var expenses = this.state.activePropertyExpenses;
+        let elements = [];
+        let expenses = this.state.activePropertyExpenses;
         if (expenses.length === 0) {
             return (
                 <div className="active_property_expenses_box">
@@ -539,12 +539,12 @@ class PropertiesDashboard extends React.Component {
     // }
 
     renderProperties() {
-        var elements = [];
-        var propertiesMap = this.state.propertiesMap;
-        var isFirstChild = true;
+        let elements = [];
+        let propertiesMap = this.state.propertiesMap;
+        let isFirstChild = true;
         propertiesMap.forEach((value, key, map) => {
             let propertyArr = value[1];
-            for (var i = 0; i < propertyArr.length; i++) {
+            for (let i = 0; i < propertyArr.length; i++) {
                 let property = propertyArr[i];
                 elements.push(
                     <PropertyCard key={property["name"]}
@@ -748,7 +748,8 @@ class PropertiesDashboard extends React.Component {
                 state: {
                     user: this.state.user,
                     property: this.state.activeProperty,
-                    profilePicture: this.state.profilePicture
+                    profilePicture: this.state.profilePicture,
+                    totalEstimateWorth: this.state.totalEstimateWorth,
                 }
             }} />
         }

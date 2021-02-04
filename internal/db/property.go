@@ -121,18 +121,18 @@ func (handle *Handle) GetSpecificPropertiesByOwner(userID string, propertyIDs []
 		return nil, fmt.Errorf("invalid UUID: %w", err)
 	}
 
-	var properties []*Property
-
-	// Find all properties.
-	if propertyIDs == nil && propertyTypes == nil {
-		if err := handle.DB.Where("user_id = ?", userID).Find(&properties).Error; err != nil {
-			return nil, err
-		}
-		return properties, nil
+	db := handle.DB.Where("user_id = ?", userID)
+	
+	if propertyIDs != nil {
+		db = db.Where("id IN (?)", propertyIDs)
 	}
 
-	// Find properties that are in the union of these two.
-	if err := handle.DB.Where("user_id = ? AND id IN ? AND property_type IN ?", userID, propertyIDs, propertyTypes).Find(&properties).Error; err != nil {
+	if propertyTypes != nil {
+		db = db.Where("property_type IN (?)", propertyTypes)
+	}
+
+	var properties []*Property
+	if err := db.Find(&properties).Error; err != nil {
 		return nil, err
 	}
 	return properties, nil

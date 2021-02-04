@@ -29,6 +29,7 @@ func (s *Server) HandleRoutes() {
 	r.HandleFunc("/api/user/property/{id}", s.addPropertyByUser).Methods("POST")
 
 	// Used to display our main dashboard page. Provides a summary for users.
+	r.HandleFunc("/api/user/summary/{id}/{property_id}", s.getUserSummaryByProperty).Methods("GET")
 	r.HandleFunc("/api/user/summary/{id}", s.getUserSummary).Methods("GET")
 
 	// Order matters. Routing is done sequentially, so the first one must be the one that doesn't satisfy the second one.
@@ -41,8 +42,8 @@ func (s *Server) HandleRoutes() {
 	r.HandleFunc("/api/user/files/upload/{id}", s.uploadFileByUser).Methods("POST")
 
 	// Analysis Flow
-	r.HandleFunc("/api/user/analysis/{id}/{property_id}", s.getPropertiesAnalysisByProperty).Methods("GET")
-	r.HandleFunc("/api/user/analysis/{id}", s.getPropertiesAnalysis).Methods("GET")
+	r.HandleFunc("/api/user/history/{id}/{property_id}", s.getPropertiesHistoryByProperty).Methods("GET")
+	r.HandleFunc("/api/user/history/{id}", s.getPropertiesHistory).Methods("GET")
 
 	// Expenses Flow
 	r.HandleFunc("/api/user/expenses/{id}/{property_id}", s.getExpensesByProperty).Methods("GET")

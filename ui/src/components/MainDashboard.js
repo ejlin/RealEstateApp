@@ -35,14 +35,14 @@ export const getDaysInMonth = (month, year) => {
 }
 
 export const getDaysUntil = (rentDay) => {
-    var today = new Date();
-    var date = today.getDate();
-    var year = today.getFullYear();
-    var month = today.getMonth();
+    let today = new Date();
+    let date = today.getDate();
+    let year = today.getFullYear();
+    let month = today.getMonth();
 
-    var numDaysInMonth = getDaysInMonth(month, year);
+    let numDaysInMonth = getDaysInMonth(month, year);
 
-    var daysUntilEndOfMonth = numDaysInMonth - date;
+    let daysUntilEndOfMonth = numDaysInMonth - date;
     return rentDay < date ? daysUntilEndOfMonth + rentDay : rentDay- date;
 }
 
@@ -75,15 +75,15 @@ class MainDashboard extends React.Component {
     }
 
     componentDidMount() {
-        var url = '/api/user/summary/' + this.state.user["id"];
+        let url = '/api/user/summary/' + this.state.user["id"];
         axios({
             method: 'get',
             url: url,
         }).then(response => {
-            var userSummary = response.data;
+            let userSummary = response.data;
             console.log(userSummary);
-            var propertiesSummary = userSummary["properties_summary"];
-            var expensesSummary = userSummary["expenses_summary"];
+            let propertiesSummary = userSummary["properties_summary"];
+            let expensesSummary = userSummary["expenses_summary"];
             this.setState({
                 // totalEstimateWorth: propertiesSummary["total_estimate_worth"] numberWithCommas(propertiesSummary["total_estimate_worth"]),
                 totalEstimateWorth: propertiesSummary["total_estimate_worth"],
@@ -108,7 +108,7 @@ class MainDashboard extends React.Component {
             method: 'get',
             url: '/api/user/settings/profile/picture/' + this.state.user["id"],
         }).then(response => {
-            var src = response.data;
+            let src = response.data;
             this.setState({
                 profilePicture: src
             })
@@ -118,11 +118,11 @@ class MainDashboard extends React.Component {
 
 
     getDate() {
-        var monthArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = today.getMonth();
-        var yyyy = today.getFullYear();
+        let monthArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = today.getMonth();
+        let yyyy = today.getFullYear();
 
         return monthArr[mm] + ' ' + dd + ', ' + yyyy;
     }
@@ -187,13 +187,12 @@ class MainDashboard extends React.Component {
     }
 
     renderMortgagePaymentDateMap(expandedView) {
-        var mortgagePaymentDateMap = this.state.mortgagePaymentDateMap;
-        var timeline = [];
+        let mortgagePaymentDateMap = this.state.mortgagePaymentDateMap;
+        let timeline = [];
 
         for (const [key, value] of Object.entries(mortgagePaymentDateMap)) {
-            var daysUntil;
-            var iKey = parseInt(key);
-            var daysUntil = getDaysUntil(iKey);
+            let iKey = parseInt(key);
+            let daysUntil = getDaysUntil(iKey);
             timeline.push(
                 <div className="main_dashboard_bottom_left_box_bottom_inner_box_text_box">
                     {daysUntil === 0 ? 
@@ -218,7 +217,7 @@ class MainDashboard extends React.Component {
             );
         }
 
-        var sortedTimeline = timeline.sort();
+        let sortedTimeline = timeline.sort();
 
         if (!expandedView) {
             return sortedTimeline.slice(0, 1);
@@ -227,13 +226,13 @@ class MainDashboard extends React.Component {
     }
 
     renderRentPaymentDateMap(expandedView) {
-        var rentPaymentDateMap = this.state.rentPaymentDateMap;
+        let rentPaymentDateMap = this.state.rentPaymentDateMap;
 
-        var timeline = [];
+        let timeline = [];
 
         for (const [key, value] of Object.entries(rentPaymentDateMap)) {
-            var iKey = parseInt(key);
-            var daysUntil = getDaysUntil(iKey)
+            let iKey = parseInt(key);
+            let daysUntil = getDaysUntil(iKey)
             timeline.push(
                 <div className="rent_schedule_bullet_point_box">
                     <div className="rent_schedule_bullet_point">
@@ -245,7 +244,7 @@ class MainDashboard extends React.Component {
             );
         }
 
-        var sortedTimeline = timeline.sort();
+        let sortedTimeline = timeline.sort();
         if (sortedTimeline.length < 3) {
             sortedTimeline.push(
                 <div className="rent_schedule_bullet_point_box">
