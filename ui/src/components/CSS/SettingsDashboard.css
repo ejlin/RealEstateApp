@@ -268,7 +268,7 @@
 
 .settings_dashboard_right_box_nav_bar_list {
     background-color: white;
-    border-radius: 10px;
+    border-radius: 50px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     cursor: pointer;
     float: left;
@@ -280,9 +280,12 @@
     width: 85%;
 }
 
-.settings_dashboard_right_box_nav_bar_list:hover, .settings_dashboard_right_box_nav_bar_active_list {
-    background-color: white;
-    color:black;
+.settings_dashboard_right_box_nav_bar_list:hover {
+    background-color: #296CF6;
+}
+
+.settings_dashboard_right_box_nav_bar_active_list {
+    background-color: #296CF6;
 }
 
 .settings_dashboard_right_box_nav_bar_list_icon {
@@ -294,8 +297,17 @@
     width: 20px;
 }
 
-.settings_dashboard_right_box_nav_bar_list_icon_active, .settings_dashboard_right_box_nav_bar_list_text_active {
-    color: #296CF6 !important;
+.settings_dashboard_right_box_nav_bar_list:hover .settings_dashboard_right_box_nav_bar_list_icon{
+    color: white !important;
+}
+
+.settings_dashboard_right_box_nav_bar_list:hover .settings_dashboard_right_box_nav_bar_list_text{
+    color: white !important;
+}
+
+.settings_dashboard_right_box_nav_bar_list_icon_active, 
+.settings_dashboard_right_box_nav_bar_list_text_active {
+    color: white !important;
 }
 
 .settings_dashboard_right_box_nav_bar_list_text {

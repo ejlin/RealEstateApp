@@ -129,7 +129,7 @@ class BarChart extends React.Component {
     renderXAxis() {
         let data = this.state.data;
 
-        if (data.length === 0){
+        if (!data || data === null || data === undefined || data.length === 0){
             return (
                 <div></div>
             );

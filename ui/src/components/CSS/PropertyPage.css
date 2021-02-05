@@ -125,7 +125,7 @@
 
 .property_page_view_box_active_tab {
     background-color: white;
-    border-radius: 10px;
+    border-radius: 50px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
 }
 
@@ -326,4 +326,12 @@
     font-size: 0.9em;
     font-weight: bold;
     text-align: center;
+}
+
+.analysis_cash_flow_quadrant_box {
+    height: 260px;
+    float: left;
+    margin-left: 40px; 
+    margin-right: 40px;
+    width: calc(260px - 1px);
 }

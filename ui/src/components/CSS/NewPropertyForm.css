@@ -25,7 +25,7 @@
 
 .new_property_dashboard_bottom_left_box_list {
     background-color: white;
-    border-radius: 10px;
+    border-radius: 50px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     cursor: pointer;
     height: 45px;
@@ -36,24 +36,18 @@
     width: calc(80%);
 }
 
-.new_property_dashboard_bottom_left_box_list:hover .new_property_dashboard_bottom_left_box_list_icon{
-    color: #296CF6;
-    background-color: white;
-}
-
-.new_property_dashboard_bottom_left_box_list:hover .new_property_dashboard_bottom_left_box_list_text {
-    color: #296CF6;
-    background-color: white;
+.new_property_dashboard_bottom_left_box_list:hover {
+    opacity: 0.7;
 }
 
 .new_property_dashboard_bottom_left_box_list_icon_active, .new_property_dashboard_bottom_left_box_list_text_active {
-    color: #296CF6 !important;
+    color: white !important;
     font-weight: bold !important;
 }
 
 .new_property_dashboard_bottom_left_box_list_active {
-    color: #296CF6;
-    background-color: white;
+    background-color: #296CF6;
+    color: white !important;
 }
 
 .new_property_dashboard_bottom_left_box_list_icon {
@@ -194,10 +188,11 @@ input::placeholder {
 
 .form_continue_button {
     background-color: #296CF6;
-    border-radius: 8px;
+    border-radius: 50px;
     color: white;
     cursor: pointer;
     float: right;
+    font-weight: bold;
     margin-left: 25px;
     margin-top: 5px;
     padding: 10px 15px 10px 15px;

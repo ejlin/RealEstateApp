@@ -9,6 +9,7 @@ import ExpensesTable from './ExpensesTable.js';
 import FileCard from './FileCard.js';
 import ExpandedExpenseCard from './ExpandedExpenseCard.js';
 import BarChart from '../charts/BarChart.js';
+import SideBarChart from '../charts/SideBarChart.js';
 
 import { monthArr, 
         numberWithCommas, 
@@ -58,6 +59,7 @@ class PropertyPage extends React.Component {
         this.renderFileElements = this.renderFileElements.bind(this);
         this.setActiveExpandedExpenseCard = this.setActiveExpandedExpenseCard.bind(this);
         this.getHistoricalAnalysisData = this.getHistoricalAnalysisData.bind(this);
+        this.getCashFlowData = this.getCashFlowData.bind(this);
     }
 
     componentDidMount() {
@@ -264,12 +266,57 @@ class PropertyPage extends React.Component {
                     estimateTotal += estimatesArr[j];
                 }
                 let avgEstimate = estimateTotal / estimatesArr.length;
-                obj = {x: xVal, y: avgEstimate}
+                obj = {x: xVal, y: avgEstimate};
             } else {
-                obj = {x: xVal, y: 0}
+                obj = {x: xVal, y: 0};
             }
             data.push(obj);
         }
+        return data;
+    }
+
+    getCashFlowData() {
+
+        let propertySummary = this.state.propertySummary;
+        let expenses = this.state.expenses;
+        let data = [];
+        if (!propertySummary) {
+            return;
+        }
+        let income = propertySummary["total_rent"];
+        let incomeBar = [];
+        incomeBar.push(
+            {value: income, color: "#296CF6", label: "Income"}
+        );
+        let incomeObj = {bar: incomeBar}
+        data.push(incomeObj);
+
+        let expensesBar = [];
+
+        let totalMortgagePayment = propertySummary["total_mortgage_payment"];
+        let numExpenses = 0;
+
+        expensesBar.push(
+            {value: parseFloat(Number(totalMortgagePayment).toFixed(2)), color: "", label: "Loan/Mortgage"}
+        );
+
+        let totalPropertyManager = propertySummary["total_property_manager_fee"];
+        expensesBar.push(
+            {value: parseFloat(Number(totalPropertyManager).toFixed(2)), color: "", label: "Property Maanager"}
+        );
+
+        for (let i = 0; i < expenses.length; i++) {
+            let expense = expenses[i];
+            let title = expense["title"];
+            let amount = expense["amount"];
+            expensesBar.push(
+                {value: amount, color: "", label: title}
+            );
+        }
+
+        let expensesObj = {bar: expensesBar};
+        data.push(expensesObj);
+        console.log(data);
         return data;
     }
 
@@ -352,6 +399,7 @@ class PropertyPage extends React.Component {
 
     renderViewPage() {
         let barChartData = this.getHistoricalAnalysisData();
+        let cashFlowData = this.getCashFlowData();
 
         switch (this.state.viewToDisplay) {
             case overviewView:
@@ -505,7 +553,6 @@ class PropertyPage extends React.Component {
                                     Property Value
                                 </p>
                                 <BarChart 
-                                    // backgroundColor={"#f5f5fa"}
                                     height={"300"}
                                     width={"650"}
                                     yAxisFontSize={"0.8em"}
@@ -639,6 +686,17 @@ class PropertyPage extends React.Component {
                                 </div>
                             </div>
                             <div className="analysis_vertical_divider_small"></div>
+                            <div className="analysis_cash_flow_quadrant_box">
+                                <p className="analysis_chart_subtitle">
+                                    Cash Flow
+                                </p>
+                                <SideBarChart
+                                    height={"175"}
+                                    width={"300"}
+                                    barHeight={"25px"}
+                                    data={cashFlowData}
+                                />
+                            </div>
                             {/* <div className="view_to_display_box_analysis_middle_box_inner_box">
                                 <div className="view_to_display_box_analysis_middle_box_inner_box_circular_graph">
                                     <p className="analysis_chart_subtitle">
@@ -703,6 +761,11 @@ class PropertyPage extends React.Component {
                     profilePicture: this.state.profilePicture
                 }
             }} />
+        }
+        if (this.state.isLoading) {
+            return (
+                <div></div>
+            );
         }
         return (
             <div>

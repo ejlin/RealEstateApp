@@ -6,6 +6,8 @@ import MouseTooltip from 'react-sticky-mouse-tooltip';
 
 import { numberWithCommas } from '../utility/Util.js';
 
+const expenseBarColors = ["#dbdbed", "#cecee6", "#c1c1e0", "#b4b4d9", "#a7a7d3", "#9999cc", "#8c8cc6", "#7f7fbf", "#7272b9", "#6565b2", "#5858ac", "#4e4e9d", "#45458c", "#3d3d7b"];
+
 class SideBarChart extends React.Component {
     constructor(props) {
         super(props);
@@ -13,216 +15,159 @@ class SideBarChart extends React.Component {
         this.state = {
             height: this.props.height, // in px
             width: this.props.width, // in px
-            xAxisFontSize: this.props.xAxisFontSize,
-            yAxisFontSize: this.props.yAxisFontSize,
-            displayTooltip: this.props.displayTooltip,
-            xAxisColor: this.props.xAxisColor,
-            yAxisColor: this.props.yAxisColor,
-            marginTop: this.props.marginTop,
+            barHeight: this.props.barHeight,
             backgroundColor: this.props.backgroundColor,
-            capitalizeXAxis: this.props.capitalizeXAxis,
-            barColor: this.props.barColor,
             data: this.props.data,
             mouseActiveTooltip: null,
         };
 
-        this.renderXAxis = this.renderXAxis.bind(this);
-        this.renderYAxis = this.renderYAxis.bind(this);
-        this.minYAxisValue = this.minYAxisValue.bind(this);
-        this.maxYAxisValue = this.maxYAxisValue.bind(this);
+        this.renderGraph = this.renderGraph.bind(this);
     }
 
     componentDidMount() {
-        let height = this.state.height;
-        let strHeight = parseInt(height);
-
-        let barHeight = strHeight - 40;
-        this.setState({
-            barHeight: barHeight,
-        })
     }
 
-    minYAxisValue() {
+    renderGraph() {
+
+        // data is in the format of
+        // [
+        //      {
+        //          bar: {
+        //              [
+        //              value: <value>,
+        //              color: <color>,
+        //              label: <label>
+        //              ]
+        //          }
+        //      }, 
+        //      {
+        //          bar: {
+        //              [
+        //              value: <value>,
+        //              color: <color>,
+        //              label: <label>
+        //              ]
+        //          }
+        //      },       
+        // ]
         let data = this.state.data;
-        let minElement = data[0]["y"];
-
-        for (let i = 0; i < data.length; i++) {
-            let dataPoint = data[i];
-            if (dataPoint["y"] < minElement) {
-                minElement = dataPoint["y"];
-            }
-        }
-        return parseInt(minElement);
-    }
-
-    maxYAxisValue() {
-        let data = this.state.data;
-        let maxElement = data[0]["y"];
-
-        for (let i = 0; i < data.length; i++) {
-            let dataPoint = data[i];
-            if (dataPoint["y"] > maxElement) {
-                maxElement = dataPoint["y"];
-            }
-        }
-        return parseInt(maxElement);
-    }
-
-    renderYAxis() {
-        let data = this.state.data;
-        let height = parseInt(this.state.height) - 20;
-
-        if (data.length === 0){
+        if (!data || data === null || data === undefined || data.length === 0){
             return (
                 <div></div>
             );
         }
+
+        let width = this.state.width;
         let elements = [];
+        let maxValue = 0;
+        
+        for (let i = 0; i < data.length; i++) {
+            let dataPoint = data[i];
+            let bar = dataPoint["bar"];
+            let totalValue = 0;
+            for (let j = 0; j < bar.length; j++) {
+                totalValue += bar[j]["value"];
+            }
+            if (totalValue > maxValue) {
+                maxValue = totalValue;
+            }
+        }
+        let widthBuffer = 10;
+        let sizePerUnit = (width - widthBuffer) / maxValue;
 
-        let minYAxisValue = this.minYAxisValue();
-        let maxYAxisValue = this.maxYAxisValue();
+        for (let i = 0; i < data.length; i++) {
+            let dataPoint = data[i];
+            let bars = dataPoint["bar"];
 
-        let diffMinMaxYAxis = maxYAxisValue - minYAxisValue;
-        let midpoint = minYAxisValue + (diffMinMaxYAxis / 2);
+            bars = bars.sort((a, b) => {
+                if (a["value"] > b["value"]) {
+                    return -1;
+                } else if (a["value"] < b["value"]) {
+                    return 1;
+                }
+                return 0;
+            })
+            elements.push(
+                <div className="clearfix"/>
+            );
 
-        let useK = maxYAxisValue >= 1000;
+            for (let j = 0; j < bars.length; j++) {
+                
+                let bar = bars[j];
+    
+                let label = bar["label"];
+                let color = bar["color"];
+                if (color === "") {
+                    color = expenseBarColors[j];
+                }
+                let value = bar["value"];
+                let labelVal = label.length >= data.length ? label : "";
+                let width = value * sizePerUnit;
+                if (j === 0) {
+                    width += widthBuffer;
+                }
+                let borderRadius;
+                if (j === 0 && j === bars.length - 1) {
+                    borderRadius = "4px";
+                } else if (j === 0) {
+                    borderRadius = "4px 0px 0px 4px";
+                } else if (j === bars.length - 1) {
+                    borderRadius = "0px 4px 4px 0px";
+                } else {
+                    borderRadius = "0px";
+                }
+
+                let numValue = numberWithCommas(value)
+                elements.push(
+                    <div 
+                    onMouseEnter={() => {
+                        this.setState({
+                            mouseActiveTooltip: labelVal ? labelVal + ": $" + numValue : "$" + numValue,
+                        });
+                    }}
+                    onMouseLeave={() => {
+                        this.setState({
+                            mouseActiveTooltip: null,
+                        });
+                    }}
+                    style={{
+                        float: "left",
+                        backgroundColor: color,
+                        borderRadius: borderRadius,
+                        height: this.state.barHeight,
+                        marginBottom: this.state.marginBottom ? this.state.marginBottom : "10px",
+                        width: width,
+                    }}>
+                    </div>
+                )
+            }   
+        }
 
         elements.push(
-            <div>
-                <div style={{
-                    height: (height - 35) / 2,  // 35 because minBuffer is 10, maxBuffer is 10, and there is 15 padding-bottom.
-                    fontSize: this.state.yAxisFontSize,
-                    color: this.state.yAxisColor
-                }}>
-                    {   useK ?
-                        numberWithCommas(Math.trunc(maxYAxisValue/1000)) + "K" :
-                        maxYAxisValue
-                    }
-                </div>
-                <div style={{
-                    height: (height - 35)/ 2,
-                    fontSize: this.state.yAxisFontSize,
-                    color: this.state.yAxisColor
-                }}>
-                    { 
-                        useK ?
-                        numberWithCommas(Math.trunc(midpoint/1000)) + "K" :
-                        midpoint 
-                    }
-                </div>
-                <div style={{
-                    height: "20px",
-                    fontSize: this.state.yAxisFontSize,
-                    color: this.state.yAxisColor
-                }}>
-                    {
-                        useK ?
-                        numberWithCommas(Math.trunc(minYAxisValue/1000)) + "K" :
-                        minYAxisValue
-                    }
-                </div>
-            </div>
-        )
-        return elements;
-    }
+            <MouseTooltip
+                visible={this.state.mouseActiveTooltip !== null}
+                offsetX={15}
+                offsetY={10}
+                style={{
+                    backgroundColor: "#f5f5fa",
+                    borderRadius: "10px",
+                    fontSize: "0.85em",
+                    fontWeight: "bold",
+                    paddingBottom: "5px",
+                    paddingLeft: "10px",
+                    paddingRight: "10px",
+                    paddingTop: "5px",
+                    marginLeft:"-20px",
+                    zIndex: "25",
+                    position: "absolute",
+                }}
+            >
+                <span>{this.state.mouseActiveTooltip}</span>
+            </MouseTooltip>
+        );
 
-    renderXAxis() {
-        let data = this.state.data;
-
-        if (data.length === 0){
-            return (
-                <div></div>
-            );
-        }
-        let elements = [];
-
-        let minYAxisValue = this.minYAxisValue();
-        let maxYAxisValue = this.maxYAxisValue();
-
-        let diffMinMaxYAxis = maxYAxisValue - minYAxisValue;
-        let barHeight = this.state.barHeight;
-        let minBuffer = 10;
-        let maxBuffer = 10;
-
-        let barHeightWithBuffer = barHeight - minBuffer - maxBuffer;
-
-        let heightPerUnit = diffMinMaxYAxis !== 0 ? barHeightWithBuffer / diffMinMaxYAxis : 0;
-
-        let yAxis = this.renderYAxis();
-
-        elements.push(yAxis);
-
-        for (let i = 0; i < data.length; i++) {
-            let dataPoint = data[i];
-            let yValue = dataPoint["y"];
-            let strYValue = parseInt(yValue);
-            let height = strYValue - minYAxisValue;
-            height = height * heightPerUnit;
-            height = height + minBuffer + minYAxisValue; // Add our minBuffer back as the baseline.
-            elements.push(
-                <li 
-                    className="bar_chart_x_axis_element">
-                    <div
-                        style={{
-                            backgroundColor: "transparent",
-                            height: barHeight - height,
-                            width: "20px"
-                        }}
-                    >
-                    </div>
-                    <div 
-                        onMouseEnter={() => {
-                            this.setState({
-                                mouseActiveTooltip: "$" + numberWithCommas(strYValue),
-                            });
-                        }}
-                        onMouseLeave={() => {
-                            this.setState({
-                                mouseActiveTooltip: null,
-                            });
-                        }}
-                        value={yValue}
-                        style={{
-                            backgroundColor: this.state.barColor,
-                            height: height,
-                        }}
-                        className="bar_chart_x_axis_graph">
-
-                    </div>
-                    <p 
-                        style={{
-                            color: this.state.xAxisColor,
-                            fontSize: this.state.xAxisFontSize,
-                        }}
-                        className="bar_chart_x_axis_element_text">
-                        {this.state.capitalizeXAxis ? dataPoint["x"].toUpperCase() : dataPoint["x"]}
-                    </p>
-                </li>
-            );
-            if (this.state.displayTooltip) {
-                elements.push(
-                    <MouseTooltip
-                        visible={this.state.mouseActiveTooltip !== null}
-                        offsetX={15}
-                        offsetY={10}
-                        style={{
-                            backgroundColor: "#f5f5fa",
-                            borderRadius: "10px",
-                            fontSize: "0.85em",
-                            fontWeight: "bold",
-                            paddingBottom: "5px",
-                            paddingLeft: "10px",
-                            paddingRight: "10px",
-                            paddingTop: "5px",
-                        }}
-                    >
-                        <span>{this.state.mouseActiveTooltip}</span>
-                    </MouseTooltip>
-                );
-            }
-        }
         return (
-            <div className="bar_chart_x_axis">  
+            <div className="side_bar_box">  
                 {elements}
             </div>
         );
@@ -234,9 +179,10 @@ class SideBarChart extends React.Component {
                 backgroundColor: this.state.backgroundColor,
                 borderRadius: "10px",
                 marginTop: this.state.marginTop + "px",
+                height: this.state.height + "px",
                 width: this.state.width + "px",
             }}>
-                {this.renderXAxis()}
+                {this.renderGraph()}
             </div>
         );
     }

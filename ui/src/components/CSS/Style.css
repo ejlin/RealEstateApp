@@ -21,7 +21,7 @@ body {
 
 .search_bar {
     border: none;
-    border-radius: 8px;
+    border-radius: 50px;
     box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     float: right;
     font-size: 1.1em;
@@ -40,7 +40,7 @@ body {
 .page_button {
     background-color: #296CF6;
     border: 2px solid #296CF6;
-    border-radius: 10px;
+    border-radius: 50px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.10), 0 6px 10px 0 rgba(0, 0, 0, 0.09);
     color: white;
     cursor: pointer;
