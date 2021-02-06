@@ -292,7 +292,7 @@ class MainDashboard extends React.Component {
                                 </div>
                                 <div id="main_dashboard_summary_cards_box">
                                     <div className="main_dashboard_summary_cards">
-                                        <BsFillHouseFill id="main_dashboard_summary_cards_icon_properties" className="main_dashboard_summary_cards_icon"></BsFillHouseFill>
+                                        <BsFillHouseFill className="main_dashboard_summary_cards_icon"></BsFillHouseFill>
                                         <div className="main_dashboard_summary_cards_text_box">
                                             <p className="main_dashboard_summary_cards_title">
                                                 {this.state.totalProperties ? this.state.totalProperties : 0} total
@@ -303,7 +303,7 @@ class MainDashboard extends React.Component {
                                         </div>
                                     </div>
                                     <div className="main_dashboard_summary_cards">
-                                        <FaDollarSign id="main_dashboard_summary_cards_icon_monthly_income" className="main_dashboard_summary_cards_icon"></FaDollarSign>
+                                        <FaDollarSign className="main_dashboard_summary_cards_icon"></FaDollarSign>
                                         <div className="main_dashboard_summary_cards_text_box">
                                             <p className="main_dashboard_summary_cards_title">
                                                 ${this.state.totalRent ? this.state.totalRent : 0}
@@ -314,7 +314,7 @@ class MainDashboard extends React.Component {
                                         </div>
                                     </div>
                                     <div className="main_dashboard_summary_cards">
-                                        <RiPercentFill id="main_dashboard_summary_cards_icon_monthly_arr" className="main_dashboard_summary_cards_icon"></RiPercentFill>
+                                        <RiPercentFill className="main_dashboard_summary_cards_icon"></RiPercentFill>
                                         <div className="main_dashboard_summary_cards_text_box">
                                             <p className="main_dashboard_summary_cards_title">
                                                 {this.state.annualRateOfReturn ? this.state.annualRateOfReturn : 0.00}%
@@ -325,7 +325,7 @@ class MainDashboard extends React.Component {
                                         </div>
                                     </div>
                                     <div className="main_dashboard_summary_cards">
-                                        <AiTwotonePushpin id="main_dashboard_summary_cards_icon_monthly_total_cost" className="main_dashboard_summary_cards_icon"></AiTwotonePushpin>
+                                        <AiTwotonePushpin className="main_dashboard_summary_cards_icon"></AiTwotonePushpin>
                                         <div className="main_dashboard_summary_cards_text_box">
                                             <p className="main_dashboard_summary_cards_title">
                                             ${this.state.totalCost ? this.state.totalCost : 0.00}

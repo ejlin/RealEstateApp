@@ -109,7 +109,7 @@ class PropertyCard extends React.Component {
                 {/* </div> */}
                 <div className="clearfix"/>
                 <p className="property_card_box_address_title">
-                    {this.state.property["address"]}
+                    {this.state.property["address_one"]} {this.state.property["address_two"]} 
                 </p>
                 <p className="property_card_box_address_subtitle">
                     {this.state.property["state"]}, {this.state.property["zip_code"]}

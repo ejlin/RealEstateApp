@@ -109,10 +109,12 @@ body {
     /* background-color: #296CF6; */
     border-radius: 10px;;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
+    float: left;
     /* border: 1px solid #d3d3d3; */
     /* box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09); */
-    height: 125px;
+    margin-bottom: 25px;
     margin-top: 25px;
+    min-width: calc(250px + 35px);
     width: calc(100%);
 }
 
@@ -121,11 +123,15 @@ body {
     height: 100px;
     margin-left: 35px;
     margin-top: 25px;
+    min-width: 250px;
     width: calc((100% - 175px) / 4);
 }
 
 .main_dashboard_summary_cards_icon {
+    background-color: white;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     border-radius: 50px;
+    color: #296CF6; 
     float: left;
     height: 30px;
     margin-top: 8.5px;
@@ -153,37 +159,6 @@ body {
     font-size: 0.85em;
     margin-top: 0px;
     padding-top: 0;
-}
-
-#main_dashboard_summary_cards_icon_properties {
-    background-color: white;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
-    /* background-color: #FBE9E1;  */
-    /* color: #EE9E77; */
-    color: #296CF6; 
-}
-
-#main_dashboard_summary_cards_icon_monthly_income {
-    background-color: white;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
-    /* background-color: #dbebd2;  */
-    /* color: #85bb65; */
-    color: #296CF6; 
-}
-
-#main_dashboard_summary_cards_icon_monthly_arr {
-    background-color: white;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
-    /* background-color:#eaf5fb; */
-    color: #296CF6; 
-}
-
-#main_dashboard_summary_cards_icon_monthly_total_cost {
-    background-color: white;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
-    /* background-color: #ffe9f1; */
-    /* color:#e13f71; */
-    color: #296CF6; 
 }
 
 #main_dashboard_bottom_box {

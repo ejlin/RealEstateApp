@@ -117,12 +117,13 @@ class SideBarChart extends React.Component {
                     borderRadius = "0px";
                 }
 
-                let numValue = numberWithCommas(value)
+                let numValue = numberWithCommas(value);
+                let elementLabel = labelVal ? labelVal + ": $" + numValue : "$" + numValue;
                 elements.push(
-                    <div 
+                    <div key={elementLabel}
                     onMouseEnter={() => {
                         this.setState({
-                            mouseActiveTooltip: labelVal ? labelVal + ": $" + numValue : "$" + numValue,
+                            mouseActiveTooltip: elementLabel,
                         });
                     }}
                     onMouseLeave={() => {
@@ -144,7 +145,8 @@ class SideBarChart extends React.Component {
         }
 
         elements.push(
-            <MouseTooltip
+            <MouseTooltip 
+                key={"sidebar_mouse_tooltip"}
                 visible={this.state.mouseActiveTooltip !== null}
                 offsetX={15}
                 offsetY={10}

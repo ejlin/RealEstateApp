@@ -13,7 +13,8 @@ type Property struct {
 	ID        string     `json:"id,omitempty",sql:"type:uuid; primary key"`
 	CreatedAt *time.Time `json:"created_at,omitempty",sql:"type:timestamp"`
 
-	Address string `json:"address,omitempty",sql:"type:VARCHAR(75)"`
+	AddressOne string `json:"address_one,omitempty",sql:"type:VARCHAR(75)"`
+	AddressTwo string `json:"address_two,omitempty",sql:"type:VARCHAR(75)"`
 	State   string `json:"state,omitempty",sql:"type:VARCHAR(2)"`
 	City    string `json:"city,omitempty",sql:"type:VARCHAR(50)"`
 	ZipCode string `json:"zip_code,omitempty",sql:"type:VARCHAR(10)"`
@@ -77,7 +78,7 @@ func (handle *Handle) AddPropertyByUser(userID string, property *Property) error
 func (handle *Handle) GetProperties() ([]*Property, error) {
 
 	var properties []*Property
-	if err := handle.DB.Select("id, user_id, address, state, city, zip_code").Find(&properties).Error; err != nil {
+	if err := handle.DB.Select("id, user_id, address_one, address_two, state, city, zip_code").Find(&properties).Error; err != nil {
 		return nil, err
 	}
 	return properties, nil

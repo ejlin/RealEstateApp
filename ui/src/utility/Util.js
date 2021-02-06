@@ -15,6 +15,10 @@ export const monthArr = ['January', 'February', 'March', 'April', 'May', 'June',
 // trimTrailingName will take a name, and trim off any part of it longer than maxLength and append
 // a trailing ellipses (...) to it.
 export function trimTrailingName(name, maxLength) {
+    if (name === null || name === undefined) {
+        return "";
+    }
+    name = name.trim();
     if (maxLength <= 0 || name.length <= maxLength) {
         return name;
     }

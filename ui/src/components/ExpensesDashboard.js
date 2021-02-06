@@ -183,7 +183,8 @@ class ExpensesDashboard extends React.Component {
             for (let i = 0; i < propertiesList.length; i++) {
                 let property = propertiesList[i];
                 let propertyID = property["id"];
-                let propertyAddress = property["address"];
+                let propertyAddress = property["address_one"];
+                propertyAddress += property["address_two"] ? " " + property["address_two"] : "";
                 propertiesMap.set(propertyID, propertyAddress);
             }
             /* Set 'None' and 'All' to handle cases where expenses are not mapped to any/are mapped to all properties */

@@ -24,6 +24,8 @@ func (s *Server) HandleRoutes() {
 	r.HandleFunc("/api/user/{id}", s.getUser).Methods("GET")
 	r.HandleFunc("/api/propertyfinder", s.propertiesHandler).Methods("GET")
 
+	r.HandleFunc("/api/user/validate/property/{id}", s.validateProperty).Methods("POST")
+
 	r.HandleFunc("/api/user/property/{id}", s.getProperties).Methods("GET")
 	r.HandleFunc("/api/user/property/{id}", s.removePropertyByUser).Queries("property_id", "{property_id}").Methods("DELETE")
 	r.HandleFunc("/api/user/property/{id}", s.addPropertyByUser).Methods("POST")
@@ -250,52 +252,6 @@ func (s *Server) getPropertyFileslistByUser(w http.ResponseWriter, r *http.Reque
 	return
 }
 
-// addPropertyByUser will add a property to the database associated with a user.
-func (s *Server) addPropertyByUser(w http.ResponseWriter, r *http.Request) {
-
-	vars := mux.Vars(r)
-
-	userID, ok := vars["id"]
-	if !ok {
-		log.Info().Msg("missing user id")
-		http.Error(w, "missing user id", http.StatusBadRequest)
-		return
-	}
-
-	ll := log.With().Str("user_id", userID).Logger()
-
-	decoder := json.NewDecoder(r.Body)
-	var property db.Property
-	if err := decoder.Decode(&property); err != nil {
-		ll.Error().Err(err).Msg("unable to decode new property by user addition")
-		http.Error(w, fmt.Sprintf("unable to decode new property by user addition: %w", err), http.StatusBadRequest)
-		return
-	}
-
-	if err := validateNewProperty(&property); err != nil {
-		ll.Error().Err(err).Msg("invalid property while adding property by user")
-		http.Error(w, fmt.Sprintf("invalid property while adding property by user: %w", err), http.StatusBadRequest)
-		return
-	}
-
-	sanitizeNewProperty(&property)
-
-	// Fill in required information.
-	createdAt := time.Now().UTC()
-
-	property.ID = uuid.New().String()
-	property.CreatedAt = &createdAt
-	property.UserID = userID
-
-	if err := s.DBHandle.AddPropertyByUser(userID, &property); err != nil {
-		ll.Error().Err(err).Msg("unable to add property by user")
-		http.Error(w, fmt.Sprintf("unable to add property by user: %w", err), http.StatusBadRequest)
-	}
-
-	w.Write([]byte(fmt.Sprintf("added property: %s by user: %s", property.ID, property.UserID)))
-	w.WriteHeader(http.StatusOK)
-}
-
 func (s *Server) getProperties(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -421,8 +377,8 @@ func validateNewProperty(property *db.Property) error {
 		return errors.New("property created at is already set")
 	}
 
-	if property.Address == "" || property.State == "" || property.City == "" || property.ZipCode == "" || property.BoughtDate == "" || property.PriceBought == 0.0 {
-		log.Info().Str("address", property.Address).Str("state", property.State).Str("zip_code", property.ZipCode).Str("bought_date", property.BoughtDate).Float64("price_bought", property.PriceBought).Msg("missing fields")
+	if property.AddressOne == "" || property.State == "" || property.City == "" || property.ZipCode == "" || property.BoughtDate == "" || property.PriceBought == 0.0 {
+		log.Info().Str("address", property.AddressOne).Str("state", property.State).Str("zip_code", property.ZipCode).Str("bought_date", property.BoughtDate).Float64("price_bought", property.PriceBought).Msg("missing fields")
 		return errors.New("missing required information at property creation")
 	}
 

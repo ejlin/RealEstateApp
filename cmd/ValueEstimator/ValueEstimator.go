@@ -78,10 +78,9 @@ type EstatedAPIWarning struct {
 func (cmd *EstimateCmd) GetAndStoreEstimate(dbHandle *db.Handle, property *db.Property, requestURL string) error {
 
 	// address := strings.Trim(property.Address, ".")
-	address := strings.Replace(property.Address, " ", "+", -1)
-	propertyRequestURL := fmt.Sprintf("%s&street_address=%s&city=%s&state=%s&zip_code=%s", requestURL, address, property.City, property.State, property.ZipCode)
+	propertyRequestURL := fmt.Sprintf("%s&street_address=%s&city=%s&state=%s&zip_code=%s", requestURL, property.Address, property.City, property.State, property.ZipCode)
+	propertyRequestURL = strings.Replace(propertyRequestURL, " ", "+", -1)
 
-	fmt.Println(propertyRequestURL)
 	resp, err := http.Get(propertyRequestURL)
 	if err != nil {
 		return err

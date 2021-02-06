@@ -20,4 +20,6 @@ type Server struct {
 
 	GoogleAccessID   string
 	GooglePrivateKey string
+
+	LobAPIKey string
 }

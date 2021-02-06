@@ -14,6 +14,8 @@ const generalInformation = "general_information";
 const purchaseInformation = "purchase_information";
 const incomeInformation = "income_information";
     
+let URLBuilder = require('url-join');
+
 class NewPropertyForm extends React.Component {
     constructor(props) {
         super(props);
@@ -42,13 +44,14 @@ class NewPropertyForm extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
 
-        var axiosAddPropertyURL = '/api/user/property/' + this.state.userID;
+        var axiosAddPropertyURL = URLBuilder('/api/user/property/', this.state.userID);
         axios({
             method: 'post',
             url: axiosAddPropertyURL,
             timeout: 5000,  // 5 seconds timeout
             data: {
-                address: this.state.address,
+                addressOne: this.state.addressOne,
+                addressTwo: this.state.addressTwo,
                 city: this.state.city,
                 state: this.state.state,
                 zip_code: this.state.zip_code,
@@ -57,7 +60,6 @@ class NewPropertyForm extends React.Component {
                 price_rented: parseFloat(this.state.price_rented),
                 price_mortgage: parseFloat(this.state.price_mortgage),
                 price_down_payment: parseFloat(this.state.price_down_payment),
-                price_property_manager: parseFloat(this.state.price_property_manager),
                 mortgage_company: this.state.mortgage_company,
                 mortgage_interest_rate: parseFloat(this.state.mortgage_interest_rate),
                 property_type: this.state.property_type
@@ -200,13 +202,13 @@ class NewPropertyForm extends React.Component {
                                     placeholder="$ Purchase Price" 
                                     className="new_property_form_input_triple" 
                                     type="number" 
-                                    name="city" 
+                                    name="purchase_price" 
                                     onChange={this.handleFieldChange} />
                                 <input 
                                     placeholder="Purchase Date: MM / YY" 
                                     className="new_property_form_input_triple" 
                                     type="text" 
-                                    name="state" 
+                                    name="purchase_date" 
                                     onChange={this.handleFieldChange} />
                                 <select id="form_select_input_purchase_type" className="form_select_input" onChange={this.purchaseTypeOnChange}>
                                     <option name="mortgage" value="mortgage">
@@ -235,39 +237,6 @@ class NewPropertyForm extends React.Component {
                                     </option>
                                 </select>
                             </div>
-                            {/* <input 
-                                placeholder="Address Line 1" 
-                                className="new_property_form_input new_property_form_input_long" 
-                                type="text" 
-                                name="addressOne" 
-                                onChange={this.handleFieldChange}/>
-                            <input 
-                                placeholder="Address Line 2" 
-                                className="new_property_form_input new_property_form_input_long" 
-                                type="text" 
-                                name="addressTwo" 
-                                onChange={this.handleFieldChange}/>
-                            <div className="clearfix"/>
-                            <div className="">
-                                <input 
-                                    placeholder="City" 
-                                    className="new_property_form_input_triple" 
-                                    type="text" 
-                                    name="city" 
-                                    onChange={this.handleFieldChange} />
-                                <input 
-                                    placeholder="State" 
-                                    className="new_property_form_input_triple" 
-                                    type="text" 
-                                    name="state" 
-                                    onChange={this.handleFieldChange} />
-                                <input 
-                                    placeholder="Zip Code" 
-                                    className="new_property_form_input_triple" 
-                                    type="text" 
-                                    name="zip_code" 
-                                    onChange={this.handleFieldChange} />
-                            </div> */}
                             <div className="clearfix"/>
                             <div className="form_footer_box">
                                 <div 
@@ -296,20 +265,15 @@ class NewPropertyForm extends React.Component {
                         </p>
                         <div className="clearfix"/>
                         <p className="form_inner_box_subtitle">
-                            Please input information on your property's cashflow.
+                            Please input information on your property's cash flow.
                         </p>
                         <div className="form_box">
-                            {/* <label className="new_property_form_label">
-                                Address: 
-                            </label>
-                            <p className="new_property_form_required">*</p>
-                            <div className="clearfix"/> */}
                             <div className="">
                                 <input 
-                                    placeholder="$ Purchase Price" 
+                                    placeholder="$ Monthly Rent" 
                                     className="new_property_form_input_triple" 
                                     type="number" 
-                                    name="city" 
+                                    name="monthly_rent" 
                                     onChange={this.handleFieldChange} />
                                 <input 
                                     placeholder="Purchase Date: MM / YY" 
@@ -460,169 +424,6 @@ class NewPropertyForm extends React.Component {
                             </div>
                         </div>
                     </div>
-                    
-                        {/* <form onSubmit={this.handleSubmit} id="new_property_form">
-                            <p className="new_property_form_subtitle">
-                                Property Information
-                            </p>
-                            <div className="clearfix"/>
-                            <div className="new_property_form_long_box">
-                                <label className="new_property_form_label">
-                                Address: 
-                                </label>
-                                <p className="new_property_form_required">*</p>
-                                <div className="clearfix"/>
-                                <input placeholder="1 Smith Ln" className="new_property_form_input new_property_form_input_long" type="text" name="address" onChange={this.handleFieldChange}/>
-                            </div>
-                            <br></br>
-                            <div className="clearfix"/>
-                            <div className="new_property_form_triple_box">
-                                <div className="new_property_form_input_triple new_property_form_input_triple_first_child">
-                                    <label className="new_property_form_label">
-                                    City:
-                                    </label>
-                                    <p className="new_property_form_required">*</p>
-                                    <div className="clearfix"/>
-                                    <input placeholder="San Diego" className="new_property_form_input" type="text" name="city" onChange={this.handleFieldChange} />
-                                </div>
-                                <div className="new_property_form_input_triple">
-                                    <label className="new_property_form_label">
-                                    State:
-                                    </label>
-                                    <p className="new_property_form_required">*</p>
-                                    <div className="clearfix"/>
-                                    <input placeholder="CA" className="new_property_form_input" type="text" name="state" onChange={this.handleFieldChange} />
-                                </div>
-                                <div className="new_property_form_input_triple">
-                                    <label className="new_property_form_label">
-                                    Zip Code:
-                                    </label>
-                                    <p className="new_property_form_required">*</p>
-                                    <div className="clearfix"/>
-                                    <input placeholder="00000" className="new_property_form_input" type="text" name="zip_code" onChange={this.handleFieldChange} />
-                                </div>
-                            </div>
-                            <br></br>
-                            <div className="clearfix"/>
-                            <div className="new_property_form_double_box">
-                                <div className="new_property_form_input_double_box">
-                                    <label className="new_property_form_label">
-                                    Purchase Price:
-                                    </label>
-                                    <p className="new_property_form_required">*</p>
-                                    <div className="clearfix"/>
-                                    <input placeholder="100000" className="new_property_form_input_double" type="text" name="price_bought" onChange={this.handleFieldChange} />
-                                </div>
-                                <div className="new_property_form_input_double_box new_property_form_input_double_box_second_child">
-                                    <label className="new_property_form_label">
-                                    Purchase Date:
-                                    </label>
-                                    <p className="new_property_form_required">*</p>
-                                    <div className="clearfix"/>
-                                    <input placeholder="MM/YYYY" className="new_property_form_input_double" type="text" name="bought_date" onChange={this.handleFieldChange} />
-                                </div>
-                            </div>
-                            <div className="clearfix"/>
-                            <div className="new_property_form_double_box">
-                                <div className="new_property_form_input_double_box">
-                                    <label className="new_property_form_label">
-                                    Property Type:
-                                    </label>
-                                    <p className="new_property_form_required">*</p>
-                                    <div className="clearfix"/>
-                                    <select id="new_property_form_property_type_select" name="property_type" value={this.state.value} onChange={this.handleFieldChange}>
-                                        <option value="default">Select Property Type</option>
-                                        <option value="SFH">SFH</option>
-                                        <option value="Manufactured">Manufactured</option>
-                                        <option value="Condo/Op">Condo/Op</option>
-                                        <option value="Multi-family">Multi-Family</option>
-                                        <option value="Apartment">Apartment</option>
-                                        <option value="Lot/Land">Lot/Land</option>
-                                        <option value="Townhome">Townhome</option>
-                                        <option value="Commercial">Commercial</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="clearfix"/>
-                            <p className="new_property_form_subtitle">
-                                Income Information
-                            </p>
-                            <div className="clearfix"/>
-                            <div className="new_property_form_input_triple">
-                                <label className="new_property_form_label">
-                                Monthly Rent:
-                                </label>
-                                <p className="new_property_form_required">*</p>
-                                <div className="clearfix"/>
-                                <input placeholder="$ / month" className="new_property_form_input" type="number" name="price_rented" onChange={this.handleFieldChange} />
-                            </div>
-                            <div className="clearfix"/>
-                            <p className="new_property_form_subtitle">
-                                Mortgage Information
-                            </p>
-                            <div className="clearfix"/>
-                            <div className="new_property_form_long_box">
-                                <label className="new_property_form_label">
-                                Mortgage Company: 
-                                </label>
-                                <div className="clearfix"/>
-                                <input placeholder="Smith Mortgage" className="new_property_form_input new_property_form_input_long" type="text" name="mortgage_company" onChange={this.handleFieldChange}/>
-                            </div>
-                            <br></br>
-                            <div className="clearfix"/>
-                            <div className="new_property_form_triple_box">
-                                <div className="new_property_form_input_triple new_property_form_input_triple_first_child">
-                                    <label className="new_property_form_label">
-                                    Down Payment:
-                                    </label>
-                                    <p className="new_property_form_required">*</p>
-                                    <div className="clearfix"/>
-                                    <input placeholder="10000" className="new_property_form_input" type="text" name="price_down_payment" onChange={this.handleFieldChange} />
-                                </div>
-                                <div className="new_property_form_input_triple">
-                                    <label className="new_property_form_label">
-                                    Monthly Payment:
-                                    </label>
-                                    <p className="new_property_form_required">*</p>
-                                    <div className="clearfix"/>
-                                    <input placeholder="$ / month" className="new_property_form_input" type="text" name="price_mortgage" onChange={this.handleFieldChange} />
-                                </div>
-                                <div className="new_property_form_input_triple">
-                                    <label className="new_property_form_label">
-                                    Interest Rate:
-                                    </label>
-                                    <p className="new_property_form_required">*</p>
-                                    <div className="clearfix"/>
-                                    <input placeholder="3.50%" className="new_property_form_input" type="text" name="mortgage_interest_rate" onChange={this.handleFieldChange} />
-                                </div>
-                            </div>
-                            <div className="clearfix"/>
-                            <p className="new_property_form_subtitle">
-                                Property Management
-                            </p>
-                            <div className="clearfix"/>
-                            <div className="new_property_form_long_box">
-                                <input type="checkbox" id="new_property_form_property_manager_checkbox"></input>
-                                <label className="new_property_form_label">
-                                    This property is managed by a property manager
-                                </label>
-                                <p className="new_property_form_required">*</p>
-                                <div className="clearfix"/>
-                            </div> 
-                            <br></br>
-                            <div className="new_property_form_triple_box">
-                                <div className="new_property_form_input_triple new_property_form_input_triple_first_child">
-                                    <label className="new_property_form_label">
-                                    Management Rate:
-                                    </label>
-                                    <p className="new_property_form_required">*</p>
-                                    <div className="clearfix"/>
-                                    <input placeholder="6% / month" className="new_property_form_input" type="text" name="price_property_manager" onChange={this.handleFieldChange} />
-                                </div>
-                            </div>
-                            <div className="clearfix"/>
-                            <input id="new_property_submit_button" type="submit" value="Add Property"></input>
-                        </form> */}
                 </div>
             </div>
         )

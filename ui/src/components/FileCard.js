@@ -86,7 +86,7 @@ class FileCard extends React.Component {
                         "file_card_individual_file_footer_title_small file_card_individual_file_footer_title_active":
                         "file_card_individual_file_footer_title_small"}
                         title={this.state.file["name"] ? this.state.file["name"] : "Unknown File"}>
-                        {this.state.file["name"] ? trimTrailingName(this.state.file["name"], 13) : "Unknown File"}
+                        {this.state.file["name"] ? trimTrailingName(this.state.file["name"], 15) : "Unknown File"}
                     </p>
                     <div className="clearfix"/>
                     <div className=

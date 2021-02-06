@@ -55,6 +55,7 @@ class PropertyPage extends React.Component {
             currActiveExpandedExpense: null,
             host: window.location.protocol + "//" + window.location.host,
             percentPortfolioSelected: "Estimate",
+            cashFlowSelected: "Current Month",
         };
 
         this.renderViewPage = this.renderViewPage.bind(this);
@@ -67,13 +68,16 @@ class PropertyPage extends React.Component {
 
         this.portfolioPercentageCallback = this.portfolioPercentageCallback.bind(this);
         this.getPercentPortfolioValue = this.getPercentPortfolioValue.bind(this);
+
+        this.cashFlowCallback = this.cashFlowCallback.bind(this);
+        this.getCashFlowValue = this.getCashFlowValue.bind(this);
     }
 
     componentDidMount() {
         let host = this.state.host;
 
         /*** Set our GoogleMapsURL ***/
-        let propertyGoogleMapsURL = this.state.property["address"] + "," + this.state.property["city"] + "," + this.state.property["state"];
+        let propertyGoogleMapsURL = (this.state.property["address_one"] + (this.state.property["address_two"] ? " " + this.state.property["address_two"] : "")) + "," + this.state.property["city"] + "," + this.state.property["state"];
         propertyGoogleMapsURL = propertyGoogleMapsURL.replace(" ", "+");
 
         let googleMapsURL = 'https://maps.googleapis.com/maps/api/staticmap?center=' + propertyGoogleMapsURL + '&zoom=15&size=1000x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&key=AIzaSyCbudHvO__fMV1eolNO_g5qtE2r2UNcjcA';
@@ -295,6 +299,8 @@ class PropertyPage extends React.Component {
 
         let expensesBar = [];
 
+        console.log(propertySummary)
+
         let totalMortgagePayment = propertySummary["total_mortgage_payment"];
         let totalExpenses = 0;
 
@@ -312,6 +318,7 @@ class PropertyPage extends React.Component {
 
         for (let i = 0; i < expenses.length; i++) {
             let expense = expenses[i];
+            console.log(expense);
             let title = expense["title"];
             let amount = expense["amount"];
             expensesBar.push(
@@ -383,6 +390,21 @@ class PropertyPage extends React.Component {
                 return Number(parseFloat(this.state.property["square_footage"]) / this.state.totalSquareFeet * 100.0).toFixed(2);
         }
     }
+    
+    cashFlowCallback(selectable) {
+        this.setState({
+            cashFlowSelected: selectable,
+        })
+    }
+
+    getCashFlowValue() {
+        switch(this.state.cashFlowSelected) {
+            case "Current Month":
+            case "Monthly Average":
+            case "Past Year":
+            case "Year to Date":
+        }
+    }
 
     renderFileElements() {
         let filesMap = this.state.filesMap;
@@ -448,7 +470,7 @@ class PropertyPage extends React.Component {
                                 </li>
                                 <li className="view_to_display_info_box_bullet">
                                     <p className="view_to_display_info_box_subtitle">
-                                        <b>{this.state.property["address"]}</b>,&nbsp;&nbsp;{this.state.property["city"]}, {this.state.property["state"]} {this.state.property["zip_code"]}
+                                        <b>{this.state.property["address_one"]} {this.state.property["address_two"]}</b>,&nbsp;&nbsp;{this.state.property["city"]}, {this.state.property["state"]} {this.state.property["zip_code"]}
                                     </p>
                                 </li>
                                 <li className="view_to_display_info_box_bullet">
@@ -744,20 +766,44 @@ class PropertyPage extends React.Component {
                             </div>
                             <div className="analysis_vertical_divider_small"></div>
                             <div className="analysis_cash_flow_quadrant_box">
-                                <p className="analysis_chart_subtitle">
+                                <p style={{
+                                    float: "left",
+                                }}
+                                className="analysis_chart_subtitle">
                                     Cash Flow
                                 </p>
-                                <SideBarChart
-                                    height={"100"}
-                                    width={"300"}
-                                    barHeight={"25px"}
-                                    data={cashFlowData}
-                                />
+                                <div style={{
+                                    float: "right",
+                                    zIndex: "30",
+                                }}>
+                                    <Dropdown
+                                        backgroundColor={"#296CF6"}
+                                        borderRadius={"50px"}
+                                        height={"30"}
+                                        width={"110"}
+                                        defaultValue={this.state.cashFlowSelected}
+                                        color={"white"}
+                                        fontWeight={"bold"}
+                                        fontSize={"0.75em"}
+                                        selectables={["Current Month", "Monthly Average", "Past Year", "Year to Date"]}
+                                        callback={this.cashFlowCallback}
+                                    ></Dropdown>
+                                </div>
+                                <div className="clearfix"/>
                                 <div className="analysis_cash_flow_label_box">
                                     <p className="analysis_cash_flow_label_title">${Number(this.state.totalIncome - this.state.totalExpenses).toFixed(2)} / mo.</p>
                                 </div>
-
-                            </div>
+                                <div style={{
+                                    marginTop: "15px",
+                                }}>
+                                    <SideBarChart
+                                        height={"100"}
+                                        width={"300"}
+                                        barHeight={"25px"}
+                                        data={cashFlowData}
+                                    />
+                                </div>
+                             </div>
                         </div>
                     </div>
                 );
@@ -771,7 +817,7 @@ class PropertyPage extends React.Component {
                                 expensesMap: this.state.expensesMap,
                                 propertiesMap: null,
                                 isSpecificProperty: true,
-                                specificPropertyAddress: this.state.property["address"],
+                                specificPropertyAddress: this.state.property["address_one"] + (this.state.property["address_two"] ? " " + this.state.property["address_two"] : ""),
                                 setActiveExpandedExpenseCard: this.setActiveExpandedExpenseCard,
                         }}}/>
                     </div>
@@ -864,7 +910,7 @@ class PropertyPage extends React.Component {
                                     <IoCaretBackOutline className="property_page_back_to_folders_button_icon"></IoCaretBackOutline>
                                     <p className="property_page_back_to_folders_button_text">Properties</p>
                                 </div>
-                                <p className="property_page_folder_name_title">{this.state.property["address"]}</p>
+                                <p className="property_page_folder_name_title">{this.state.property["address_one"] + (this.state.property["address_two"] ? " " + this.state.property["address_two"] : "")}</p>
                                 <p className="property_page_folder_name_subtitle">{this.state.property["state"]},&nbsp;{this.state.property["zip_code"]}</p>
                             </div>
                             <div className="clearfix"/>

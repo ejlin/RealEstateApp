@@ -1,7 +1,16 @@
 package server
 
 import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"time"
+
 	"../db"
+
+	"github.com/google/uuid"
+	"github.com/gorilla/mux"
+	"github.com/rs/zerolog/log"
 )
 
 // RentPaymentAtDateSummary contains information about how many properties are paying rent
@@ -143,4 +152,73 @@ func (s *Server) calculatePropertiesAnalysis(userID string, propertyIDs []string
 
 	return calculatePropertiesSummary(properties), nil
 
+}
+
+func (s *Server) validateProperty(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Info().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	decoder := json.NewDecoder(r.Body)
+	var property db.Property
+	if err := decoder.Decode(&property); err != nil {
+		ll.Error().Err(err).Msg("unable to decode new property by user addition")
+		http.Error(w, fmt.Sprintf("unable to decode new property by user addition: %w", err), http.StatusBadRequest)
+		return
+	}
+
+}
+
+// addPropertyByUser will add a property to the database associated with a user.
+func (s *Server) addPropertyByUser(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Info().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	decoder := json.NewDecoder(r.Body)
+	var property db.Property
+	if err := decoder.Decode(&property); err != nil {
+		ll.Error().Err(err).Msg("unable to decode new property by user addition")
+		http.Error(w, fmt.Sprintf("unable to decode new property by user addition: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	if err := validateNewProperty(&property); err != nil {
+		ll.Error().Err(err).Msg("invalid property while adding property by user")
+		http.Error(w, fmt.Sprintf("invalid property while adding property by user: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	sanitizeNewProperty(&property)
+
+	// Fill in required information.
+	createdAt := time.Now().UTC()
+
+	property.ID = uuid.New().String()
+	property.CreatedAt = &createdAt
+	property.UserID = userID
+
+	if err := s.DBHandle.AddPropertyByUser(userID, &property); err != nil {
+		ll.Error().Err(err).Msg("unable to add property by user")
+		http.Error(w, fmt.Sprintf("unable to add property by user: %w", err), http.StatusBadRequest)
+	}
+
+	w.Write([]byte(fmt.Sprintf("added property: %s by user: %s", property.ID, property.UserID)))
+	w.WriteHeader(http.StatusOK)
 }
