@@ -71,7 +71,7 @@ class Dropdown extends React.Component {
                 borderRadius: "10px",
                 cursor: "pointer",
                 position: "absolute",
-                width: "100px",
+                width: this.state.boxWidth + "px",
                 zIndex: "30",
             }}>
                 {elements}
@@ -83,8 +83,10 @@ class Dropdown extends React.Component {
         return (
             <div 
             onMouseDown={() => {
+                let boxWidth = document.getElementById("dropdown_box").offsetWidth;
                 this.setState({
                     showDropdown: !this.state.showDropdown,
+                    boxWidth: boxWidth,
                 });
             }}
             style={{
@@ -93,7 +95,7 @@ class Dropdown extends React.Component {
             }}
             >
                 <div 
-                
+                id="dropdown_box"
                 style={{
                     backgroundColor: this.state.backgroundColor,
                     borderRadius: this.state.borderRadius,
