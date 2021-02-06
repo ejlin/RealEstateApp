@@ -1,0 +1,15 @@
+.dropdown_selectable_list {
+    transition: 0.5s;
+}
+
+.dropdown_selectable_list:hover {
+    background-color: #d3d3d3;
+}
+
+.dropdown_selectable_list:first-child:hover {
+    border-radius: 10px 10px 0px 0px;
+}
+
+.dropdown_selectable_list:last-child:hover {
+    border-radius: 0px 0px 10px 10px;
+}

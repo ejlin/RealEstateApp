@@ -57,7 +57,9 @@ class Dropdown extends React.Component {
                         lineHeight: "35px",
                         textAlign: "center",
                         zIndex: "30",
-                    }}>
+                    }}
+                    className="dropdown_selectable_list"
+                    >
                     {selectable}
                 </div>
             );
