@@ -216,10 +216,19 @@
     border-radius: 10px;
     float: right;
     height: 260px;
-    margin-left: calc(100% - 260px - 775px - 50px);    /* 775px is 650 graph, 50 margin left graph, 75 margin right circular */
-    margin-right: 75px;
+    margin-left: calc(100% - 325px - 750px - 50px);    /* 775px is 650 graph, 50 margin left graph, 75 margin right circular */
+    margin-right: 40px;
     margin-top: 35px;
-    width: calc(260px - 1px);   
+    width: calc(325px - 1px);   
+}
+
+.percent_portfolio_circle_graph {
+    float: left;
+    height: 250px;
+    margin-left: calc((100% - 75%)/2);
+    margin-right: calc((100% - 75%)/2);
+    margin-top: 25px;
+    width: 75%;
 }
 
 .analysis_bar_chart {
@@ -237,7 +246,7 @@
 
 .analysis_chart_title {
     font-weight: bold;
-    font-size: 1.2em;
+    font-size: 1.15em;
     margin-bottom: 25px;
 }
 
@@ -333,5 +342,22 @@
     float: left;
     margin-left: 40px; 
     margin-right: 40px;
-    width: calc(260px - 1px);
+    width: calc(300px - 1px);
+}
+
+.analysis_cash_flow_label_box {
+    background-color: #296CF6;
+    border-radius: 10px;
+    height: 40px;
+    margin-left: 20%;
+    margin-right: 20%;
+    width: 60%;
+}
+
+.analysis_cash_flow_label_title {
+    color: white;
+    font-weight: bold;
+    font-size: 1.0em;
+    line-height: 40px;
+    text-align: center;
 }

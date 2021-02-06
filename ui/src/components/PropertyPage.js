@@ -10,6 +10,7 @@ import FileCard from './FileCard.js';
 import ExpandedExpenseCard from './ExpandedExpenseCard.js';
 import BarChart from '../charts/BarChart.js';
 import SideBarChart from '../charts/SideBarChart.js';
+import Dropdown from './Dropdown.js';
 
 import { monthArr, 
         numberWithCommas, 
@@ -47,10 +48,13 @@ class PropertyPage extends React.Component {
             property: this.props.location.state.property,
             profilePicture: this.props.location.state.profilePicture,
             totalEstimateWorth: this.props.location.state.totalEstimateWorth,
+            totalPurchasePrice: this.props.location.state.totalPurchasePrice,
+            totalSquareFeet: this.props.location.state.totalSquareFeet,
             viewToDisplay: overviewView,
             isLoading: false,
             currActiveExpandedExpense: null,
             host: window.location.protocol + "//" + window.location.host,
+            percentPortfolioSelected: "Estimate",
         };
 
         this.renderViewPage = this.renderViewPage.bind(this);
@@ -60,10 +64,12 @@ class PropertyPage extends React.Component {
         this.setActiveExpandedExpenseCard = this.setActiveExpandedExpenseCard.bind(this);
         this.getHistoricalAnalysisData = this.getHistoricalAnalysisData.bind(this);
         this.getCashFlowData = this.getCashFlowData.bind(this);
+
+        this.portfolioPercentageCallback = this.portfolioPercentageCallback.bind(this);
+        this.getPercentPortfolioValue = this.getPercentPortfolioValue.bind(this);
     }
 
     componentDidMount() {
-
         let host = this.state.host;
 
         /*** Set our GoogleMapsURL ***/
@@ -136,17 +142,11 @@ class PropertyPage extends React.Component {
             /* Handle our summary response */
             const propertySummaryRequestResponse = responses[3];
             let propertySummary = propertySummaryRequestResponse.data;
-            console.log(propertySummary);
 
-            /* Calculate our statistics */
-            let value;
-            if (this.state.property["estimate"]) {
-                value = parseFloat(this.state.property["estimate"]);
-            } else if (this.state.property["price_bought"]){
-                value = parseFloat(this.state.property["price_bought"]);
-            }
-
-            let percentPortfolio = value / this.state.totalEstimateWorth * 100.0;
+            let cashFlowObj = this.getCashFlowData(propertySummary, expenses);
+            let cashFlowData = cashFlowObj[0];
+            let totalIncome = cashFlowObj[1];
+            let totalExpenses = cashFlowObj[2];
 
             this.setState({
                 expenses: expenses,
@@ -154,13 +154,16 @@ class PropertyPage extends React.Component {
                 files: files,
                 filesMap: filesMap,
                 historicalAnalysis: historicalAnalysis,
-                percentPortfolio: percentPortfolio,
                 propertySummary: propertySummary,
+                cashFlowData: cashFlowData,
+                totalIncome: totalIncome,
+                totalExpenses: totalExpenses,
                 isLoading: false
             });
         })).catch(errors => {
             console.log(errors);
         });
+
     }
 
     convertPropertyTypeToText(propertyType){
@@ -275,15 +278,14 @@ class PropertyPage extends React.Component {
         return data;
     }
 
-    getCashFlowData() {
+    getCashFlowData(propertySummary, expenses) {
 
-        let propertySummary = this.state.propertySummary;
-        let expenses = this.state.expenses;
         let data = [];
         if (!propertySummary) {
             return;
         }
         let income = propertySummary["total_rent"];
+        let totalIncome = parseFloat(income);
         let incomeBar = [];
         incomeBar.push(
             {value: income, color: "#296CF6", label: "Income"}
@@ -294,16 +296,19 @@ class PropertyPage extends React.Component {
         let expensesBar = [];
 
         let totalMortgagePayment = propertySummary["total_mortgage_payment"];
-        let numExpenses = 0;
+        let totalExpenses = 0;
 
         expensesBar.push(
             {value: parseFloat(Number(totalMortgagePayment).toFixed(2)), color: "", label: "Loan/Mortgage"}
         );
+        totalExpenses += parseFloat(Number(totalMortgagePayment).toFixed(2));
 
         let totalPropertyManager = propertySummary["total_property_manager_fee"];
         expensesBar.push(
-            {value: parseFloat(Number(totalPropertyManager).toFixed(2)), color: "", label: "Property Maanager"}
+            {value: parseFloat(Number(totalPropertyManager).toFixed(2)), color: "", label: "Property Manager"}
         );
+
+        totalExpenses += parseFloat(Number(totalPropertyManager).toFixed(2));
 
         for (let i = 0; i < expenses.length; i++) {
             let expense = expenses[i];
@@ -312,12 +317,12 @@ class PropertyPage extends React.Component {
             expensesBar.push(
                 {value: amount, color: "", label: title}
             );
+            totalExpenses += parseFloat(amount);
         }
 
         let expensesObj = {bar: expensesBar};
         data.push(expensesObj);
-        console.log(data);
-        return data;
+        return [data, totalIncome, totalExpenses];
     }
 
     convertBoughDateToText(boughtDate) {
@@ -362,6 +367,23 @@ class PropertyPage extends React.Component {
         })
     }
 
+    portfolioPercentageCallback(selectable) {
+        this.setState({
+            percentPortfolioSelected: selectable,
+        })
+    }
+
+    getPercentPortfolioValue() {
+        switch(this.state.percentPortfolioSelected) {
+            case "Estimate":
+                return Number(parseFloat(this.state.property["estimate"]) / this.state.totalEstimateWorth * 100.0).toFixed(2);
+            case "Price Bought":
+                return Number(parseFloat(this.state.property["price_bought"]) / this.state.totalPurchasePrice * 100.0).toFixed(2);
+            case "Square Ft":
+                return Number(parseFloat(this.state.property["square_footage"]) / this.state.totalSquareFeet * 100.0).toFixed(2);
+        }
+    }
+
     renderFileElements() {
         let filesMap = this.state.filesMap;
         let filesIterator = filesMap.entries();
@@ -399,7 +421,7 @@ class PropertyPage extends React.Component {
 
     renderViewPage() {
         let barChartData = this.getHistoricalAnalysisData();
-        let cashFlowData = this.getCashFlowData();
+        let cashFlowData = this.state.cashFlowData;
 
         switch (this.state.viewToDisplay) {
             case overviewView:
@@ -566,31 +588,66 @@ class PropertyPage extends React.Component {
                             </div>
                             <div className="analysis_vertical_divider_large"></div>
                             <div className="analysis_circular_box">
-                                <p className="analysis_chart_title">
-                                    Percent of Portfolio
+                                <p style={{
+                                    float: "left",
+                                }}
+                                className="analysis_chart_title">
+                                    Portfolio Percentage
                                 </p>
-                                <CircularProgressbarWithChildren
-                                    value={this.state.percentPortfolio}
-                                    backgroundPadding={3}
-                                    strokeWidth={12}
-                                    styles={buildStyles({
-                                        backgroundColor: "#fff",
-                                        textColor: "#296CF6",
-                                        textSize: "10px",
-                                        pathColor: "#296CF6",
-                                        trailColor: "#f5f5fa",
-                                    })}>
-                                    {
-                                        <div>
-                                            <p className="circular_progress_bar_inner_text_large">
-                                                {numberWithCommas(Number(this.state.percentPortfolio).toFixed(2))}%
-                                            </p>
-                                            <p className="circular_progress_bar_inner_text_large_subtitle">
-                                                of Portfolio
-                                            </p>
-                                        </div>
-                                    }  
-                                </CircularProgressbarWithChildren>
+                                <div style={{
+                                    float: "right",
+                                    zIndex: "30",
+                                }}>
+                                    <Dropdown
+                                        backgroundColor={"#296CF6"}
+                                        borderRadius={"50px"}
+                                        height={"30"}
+                                        width={"110"}
+                                        defaultValue={this.state.percentPortfolioSelected}
+                                        color={"white"}
+                                        fontWeight={"bold"}
+                                        fontSize={"0.85em"}
+                                        selectables={["Estimate", "Price Bought", "Square Ft"]}
+                                        callback={this.portfolioPercentageCallback}
+                                    ></Dropdown>
+                                </div>
+                                <div className="clearfix"></div>
+                                <div style={{
+                                    position: "relative",
+                                    zIndex: "10",
+                                }}
+                                className="percent_portfolio_circle_graph">
+                                    <CircularProgressbarWithChildren
+                                        value={this.getPercentPortfolioValue()}
+                                        backgroundPadding={3}
+                                        strokeWidth={12}
+                                        styles={buildStyles({
+                                            backgroundColor: "#fff",
+                                            textColor: "#296CF6",
+                                            textSize: "10px",
+                                            pathColor: "#296CF6",
+                                            trailColor: "#f5f5fa",
+                                        })}>
+                                        {
+                                            <div>
+                                                <p 
+                                                    style={{
+                                                        userSelect: "none",
+                                                    }}
+                                                    className="circular_progress_bar_inner_text_large">
+                                                    {numberWithCommas(Number(this.getPercentPortfolioValue()).toFixed(2))}%
+                                                </p>
+                                                <p 
+                                                    style={{
+                                                        userSelect: "none",
+                                                    }}
+                                                    className="circular_progress_bar_inner_text_large_subtitle">
+                                                    of Portfolio
+                                                </p>
+                                            </div>
+                                        }  
+                                    </CircularProgressbarWithChildren>
+                                </div>
                             </div>
                         </div>
                         <div className="clearfix"/>
@@ -691,31 +748,16 @@ class PropertyPage extends React.Component {
                                     Cash Flow
                                 </p>
                                 <SideBarChart
-                                    height={"175"}
+                                    height={"100"}
                                     width={"300"}
                                     barHeight={"25px"}
                                     data={cashFlowData}
                                 />
-                            </div>
-                            {/* <div className="view_to_display_box_analysis_middle_box_inner_box">
-                                <div className="view_to_display_box_analysis_middle_box_inner_box_circular_graph">
-                                    <p className="analysis_chart_subtitle">
-                                        Average Cash Flow
-                                    </p>
-                                    <CircularProgressbarWithChildren 
-                                        value={10}
-                                        text={`${this.state.totalProperties ? (this.state.totalProperties - this.state.vacantProperties) / this.state.totalProperties * 100 : 0}%`}
-                                        background
-                                        backgroundPadding={3}
-                                        strokeWidth={10}
-                                        styles={buildStyles({
-                                            backgroundColor: "#fff",
-                                            textColor: "#fff",
-                                            pathColor: "#296CF6",
-                                            trailColor: "#f5f5fa",
-                                        })}/>
+                                <div className="analysis_cash_flow_label_box">
+                                    <p className="analysis_cash_flow_label_title">${Number(this.state.totalIncome - this.state.totalExpenses).toFixed(2)} / mo.</p>
                                 </div>
-                            </div> */}
+
+                            </div>
                         </div>
                     </div>
                 );

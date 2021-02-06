@@ -157,7 +157,6 @@ class SideBarChart extends React.Component {
                     paddingLeft: "10px",
                     paddingRight: "10px",
                     paddingTop: "5px",
-                    marginLeft:"-20px",
                     zIndex: "25",
                     position: "absolute",
                 }}

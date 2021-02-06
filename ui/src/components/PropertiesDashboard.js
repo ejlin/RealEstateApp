@@ -82,6 +82,8 @@ class PropertiesDashboard extends React.Component {
             let totalRent = 0;
 
             let totalEstimateWorth = 0;
+            let totalPurchasePrice = 0;
+            let totalSquareFeet = 0;
             let missingEstimate = false;
 
             let propMap = this.state.propertiesMap;
@@ -101,6 +103,9 @@ class PropertiesDashboard extends React.Component {
                     totalEstimateWorth += property["price_bought"];
                     missingEstimate = true;
                 }
+
+                totalPurchasePrice += property["price_bought"] ? property["price_bought"] : 0.0;
+                totalSquareFeet += property["square_footage"] ? property["square_footage"] : 0.0;
             }
 
             let propertiesMap = new Map();
@@ -122,6 +127,8 @@ class PropertiesDashboard extends React.Component {
                 totalRent: this.numberWithCommas(totalRent),
                 totalProperties: properties.length,
                 totalEstimateWorth: totalEstimateWorth,
+                totalPurchasePrice: totalPurchasePrice,
+                totalSquareFeet: totalSquareFeet,
                 missingEstimate: missingEstimate,
                 isLoading: false
             });
@@ -750,6 +757,8 @@ class PropertiesDashboard extends React.Component {
                     property: this.state.activeProperty,
                     profilePicture: this.state.profilePicture,
                     totalEstimateWorth: this.state.totalEstimateWorth,
+                    totalPurchasePrice: this.state.totalPurchasePrice,
+                    totalSquareFeet: this.state.totalSquareFeet,
                 }
             }} />
         }
