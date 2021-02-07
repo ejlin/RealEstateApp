@@ -8,7 +8,9 @@ import './CSS/Style.css';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-import { capitalizeName } from '../utility/Util.js';
+import { capitalizeName, 
+        numberWithCommas, 
+        getHistoricalAnalysisData } from '../utility/Util.js';
 
 import PropertyCard from './PropertyCard.js';
 import DashboardSidebar from './DashboardSidebar.js';
@@ -21,7 +23,6 @@ import { RiPercentFill } from 'react-icons/ri';
 import { BsFillHouseFill } from 'react-icons/bs';
 import { ImArrowUp2, ImArrowDown2 } from 'react-icons/im';
 import { IoIosWarning } from 'react-icons/io';
-
 // import { AiFillQuestionCircle } from 'react-icons/io';
 
 import { LineChart, PieChart } from 'react-chartkick'
@@ -46,9 +47,7 @@ export const getDaysUntil = (rentDay) => {
     return rentDay < date ? daysUntilEndOfMonth + rentDay : rentDay- date;
 }
 
-export const numberWithCommas = (x) => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+let URLBuilder = require('url-join');
 
 class MainDashboard extends React.Component {
     constructor(props) {
@@ -65,6 +64,7 @@ class MainDashboard extends React.Component {
             properties: [],
             isLoading: true,
             profilePicture: this.props.location.state.profilePicture,
+            host: window.location.protocol + "//" + window.location.host,
             yoyGrowthToggleIsYear: true
         };
 
@@ -75,17 +75,39 @@ class MainDashboard extends React.Component {
     }
 
     componentDidMount() {
-        let url = '/api/user/summary/' + this.state.user["id"];
-        axios({
-            method: 'get',
-            url: url,
-        }).then(response => {
-            let userSummary = response.data;
-            console.log(userSummary);
-            let propertiesSummary = userSummary["properties_summary"];
-            let expensesSummary = userSummary["expenses_summary"];
+
+        let userID = this.state.user["id"];
+        let host = this.state.host;
+
+        let getSummaryURL = URLBuilder(host, '/api/user/summary', userID);
+        let getProfilePictureURL = URLBuilder(host, '/api/user/settings/profile/picture', userID);
+
+        const getSummaryRequest = axios.get(getSummaryURL);
+        const getProfilePictureRequest = axios.get(getProfilePictureURL);
+
+        axios.all(
+            [getSummaryRequest, getProfilePictureRequest]
+        ).then(axios.spread((...responses) => {
+            const summaryRequestResponse = responses[0];
+            const summary = summaryRequestResponse.data;
+
+            // summary is an object containing three fields. 
+            // 1. properties_summary
+            // 2. historical_summary
+            // 3. expenses_summary
+            let propertiesSummary = summary["properties_summary"];
+            let expensesSummary = summary["expenses_summary"];
+            let historicalAnalysis = summary["historical_summary"];
+
+            /* Handle our profile picture response */
+            let profilePictureRequestResponse = responses[1];
+            let profilePicture = profilePictureRequestResponse.data;
+
             this.setState({
-                // totalEstimateWorth: propertiesSummary["total_estimate_worth"] numberWithCommas(propertiesSummary["total_estimate_worth"]),
+                propertiesSummary: propertiesSummary,
+                expensesSummary: expensesSummary,
+                historicalAnalysis: historicalAnalysis,
+                profilePicture: profilePicture,
                 totalEstimateWorth: propertiesSummary["total_estimate_worth"],
                 totalNetWorth: numberWithCommas(propertiesSummary["total_net_worth"]),
                 totalRent: numberWithCommas(propertiesSummary["total_rent"]),
@@ -100,19 +122,10 @@ class MainDashboard extends React.Component {
                 mortgagePaymentDateMap: propertiesSummary["mortgage_payment_date_map"],
                 totalExpenses: expensesSummary["total_expenses"],
                 isLoading: false
-            });
-
-        }).catch(error => console.log(error));
-
-        axios({
-            method: 'get',
-            url: '/api/user/settings/profile/picture/' + this.state.user["id"],
-        }).then(response => {
-            let src = response.data;
-            this.setState({
-                profilePicture: src
-            })
-        }).catch(error => console.log(error))
+            }, () => {console.log(this.state.historicalAnalysis)});
+        })).catch(errors => {
+            console.log(errors);
+        });
     }
 
 
@@ -248,7 +261,15 @@ class MainDashboard extends React.Component {
         if (sortedTimeline.length < 3) {
             sortedTimeline.push(
                 <div className="rent_schedule_bullet_point_box">
-                    <p className="rent_schedule_bullet_point_no_more_text">
+                    <p style={{
+                        color: "grey",
+                        fontSize: "1.0em",
+                        fontWeight: "bold",
+                        marginLeft: "20px",
+                        paddingTop: "10px",
+                        textAlign: "center",
+                        width: "calc((100% - 40px))",
+                    }}>
                         None other to Display
                     </p>
                 </div>
@@ -266,6 +287,7 @@ class MainDashboard extends React.Component {
                 pathname: this.state.redirect
             }} />
         }
+        let barChartData = getHistoricalAnalysisData(this.state.historicalAnalysis);
         return (
             <div>
                 <div>
@@ -354,20 +376,7 @@ class MainDashboard extends React.Component {
                                                     capitalizeXAxis={true}
                                                     marginTop={"20"}
                                                     displayTooltip={true}
-                                                    data={[
-                                                    {x: "JAN", y: 61}, 
-                                                    {x: "FEB", y: 25}, 
-                                                    {x: "MAR", y: 16}, 
-                                                    {x: "APR", y: 28}, 
-                                                    {x: "MAY", y: 11}, 
-                                                    {x: "JUN", y: 9}, 
-                                                    {x: "JUL", y: 10}, 
-                                                    {x: "AUG", y: 13}, 
-                                                    {x: "SEP", y: 17}, 
-                                                    {x: "OCT", y: 20}, 
-                                                    {x: "NOV", y: 18}, 
-                                                    {x: "DEC", y: 28}
-                                                ]}/>
+                                                    data={barChartData}/>
                                             </div>
                                             <div className="clearfix"/>
                                             {/* <VictoryChart

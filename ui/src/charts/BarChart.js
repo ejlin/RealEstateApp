@@ -93,11 +93,14 @@ class BarChart extends React.Component {
                     fontSize: this.state.yAxisFontSize,
                     color: this.state.yAxisColor
                 }}>
-                    {   maxYAxisValue >= 1000000 ? 
+                    {   maxYAxisValue >= 1000000000 ? 
+                        numberWithCommas(Math.trunc(maxYAxisValue/1000000000)) + "B" :
+                        (
+                        maxYAxisValue >= 1000000 ? 
                         numberWithCommas(Math.trunc(maxYAxisValue/1000000)) + "M" :
                         (maxYAxisValue >= 1000 ?
                         numberWithCommas(Math.trunc(maxYAxisValue/1000)) + "K" :
-                        maxYAxisValue)
+                        maxYAxisValue))
                     }
                 </div>
                 <div style={{
@@ -106,11 +109,14 @@ class BarChart extends React.Component {
                     color: this.state.yAxisColor
                 }}>
                     { 
+                        midpoint >= 1000000000 ?
+                        numberWithCommas(Math.trunc(midpoint/1000000000)) + "B" :
+                        (
                         midpoint >= 1000000 ? 
                         numberWithCommas(Math.trunc(midpoint/1000000)) + "M" :
                         (midpoint >= 1000 ?
                         numberWithCommas(Math.trunc(midpoint/1000)) + "K" :
-                        midpoint)
+                        midpoint))
                     }
                 </div>
                 <div style={{
@@ -119,11 +125,13 @@ class BarChart extends React.Component {
                     color: this.state.yAxisColor
                 }}>
                     {
-                        minYAxisValue >= 1000000 ? 
+                        minYAxisValue >= 1000000000 ?
+                        numberWithCommas(Math.trunc(minYAxisValue/1000000000)) + "B" :
+                        (minYAxisValue >= 1000000 ? 
                         numberWithCommas(Math.trunc(minYAxisValue/1000000)) + "M" :
-                        (minYAxisValue >= 1000 ?
+                        (minYAxisValue >= 100 ?
                         numberWithCommas(Math.trunc(minYAxisValue/1000)) + "K" :
-                        minYAxisValue)
+                        minYAxisValue))
                     }
                 </div>
             </div>

@@ -4,9 +4,8 @@ import axios from 'axios';
 import './CSS/ExpandedExpenseCard.css';
 import './CSS/Style.css';
 
-import { capitalizeName } from '../utility/Util.js'; 
+import { numberWithCommas, capitalizeName } from '../utility/Util.js'; 
 
-import { numberWithCommas } from './MainDashboard.js';
 import { convertDate } from './ExpensesDashboard.js';
 
 import DropdownSelect from './DropdownSelect.js';

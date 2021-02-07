@@ -5,10 +5,9 @@ import './CSS/Style.css';
 
 import Loader from './Loader.js';
 
-import { numberWithCommas } from './MainDashboard.js';
 import { convertDate } from './ExpensesDashboard.js';
 
-import { capitalizeName } from '../utility/Util.js'; 
+import { numberWithCommas, capitalizeName } from '../utility/Util.js'; 
 
 import { MdEdit } from 'react-icons/md';
 import { IoTrashSharp, IoReturnDownForwardSharp, IoAttachSharp } from 'react-icons/io5';

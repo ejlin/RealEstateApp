@@ -52,24 +52,17 @@ class AnalysisDashboard extends React.Component {
             host: window.location.protocol + "//" + window.location.host,
             isLoading: true
         };
-        this.renderPropertiesInSelector = this.renderPropertiesInSelector.bind(this);
+        // this.renderPropertiesInSelector = this.renderPropertiesInSelector.bind(this);
     }
 
     componentDidMount() {
 
-        let propertyAddressMap = this.state.propertyAddressMap;
         let userID = this.state.user["id"];
         let host = this.state.host;
 
         let getSummaryURL = URLBuilder(host, '/api/user/summary', userID);
 
         const getSummaryRequest = axios.get(getSummaryURL);
-
-        // let getPropertiesURL = URLBuilder(host, '/api/user/property', userID)
-        // let getPropertiesHistoryURL = URLBuilder(host, '/api/user/history', userID);
-
-        // const getPropertiesRequest = axios.get(getPropertiesURL);
-        // const getPropertiesHistoricalRequest = axios.get(getPropertiesHistoryURL);
 
         axios.all(
             [getSummaryRequest]
@@ -84,23 +77,7 @@ class AnalysisDashboard extends React.Component {
             let propertiesSummary = summary["properties_summary"];
             let historicalAnalysis = summary["historical_summary"];
 
-            // const propertiesRequestResponse = responses[0];
-            // let propertiesList = propertiesRequestResponse.data;
-
-            // let propertiesMap = new Map();
-            // for (let i = 0; i < propertiesList.length; i++) {
-            //     let propertyID = propertiesList[i]["id"];
-            //     let propertyAddress = propertiesList[i]["address"];
-            //     propertiesMap.set(propertyID, propertyAddress);
-            //     propertyAddressMap.set(propertyAddress, true);
-            // }
-
-            // const historyRequestResponse = responses[1];
-            // let historicalAnalysis = historyRequestResponse.data;
-
             this.setState({
-                // properties: [...propertiesMap],
-                // propertyAddressMap: propertyAddressMap,
                 propertiesSummary: propertiesSummary,
                 historicalAnalysis: historicalAnalysis,
                 isLoading: false
@@ -110,157 +87,157 @@ class AnalysisDashboard extends React.Component {
         });
     }
 
-    renderPropertyTypesInSelector() {
+    // renderPropertyTypesInSelector() {
 
-        let propertyTypes = [
-            'Single Family Homes', 
-            'Manufactured', 
-            'Condo/Ops', 
-            'Multi-Family', 
-            'Apartments',
-            'Lots/Land',
-            'Townhomes',
-            'Commercial']
+    //     let propertyTypes = [
+    //         'Single Family Homes', 
+    //         'Manufactured', 
+    //         'Condo/Ops', 
+    //         'Multi-Family', 
+    //         'Apartments',
+    //         'Lots/Land',
+    //         'Townhomes',
+    //         'Commercial']
 
-        let elements = [];
-        elements.push(
-            <li key={"property_type_all"}
-                className="analysis_dashboard_property_selector_property_list">
-                <div  
-                    onMouseDown={() => {
-                        let propertyTypeMap = this.state.propertyTypeSelectedElements;
-                        let allSelected = propertyTypeMap.get("All");
-                        propertyTypeMap.set("All", !allSelected)
-                        if (!allSelected) {
-                            propertyTypeMap.forEach((key, value, map) => {
-                                propertyTypeMap.set(value, true);
-                            })
-                        } else {
-                            propertyTypeMap.forEach((key, value, map) => {
-                                propertyTypeMap.set(value, false);
-                            })
-                        }
-                        this.setState({
-                            propertyTypeSelectedElements: propertyTypeMap,
-                        })
-                    }}
-                    className={
-                        this.state.propertyTypeSelectedElements.get("All") ?
-                        "analysis_dashboard_property_selector_property_list_checkbox analysis_dashboard_property_selector_property_list_checkbox_active" :
-                        "analysis_dashboard_property_selector_property_list_checkbox"}>
+    //     let elements = [];
+    //     elements.push(
+    //         <li key={"property_type_all"}
+    //             className="analysis_dashboard_property_selector_property_list">
+    //             <div  
+    //                 onMouseDown={() => {
+    //                     let propertyTypeMap = this.state.propertyTypeSelectedElements;
+    //                     let allSelected = propertyTypeMap.get("All");
+    //                     propertyTypeMap.set("All", !allSelected)
+    //                     if (!allSelected) {
+    //                         propertyTypeMap.forEach((key, value, map) => {
+    //                             propertyTypeMap.set(value, true);
+    //                         })
+    //                     } else {
+    //                         propertyTypeMap.forEach((key, value, map) => {
+    //                             propertyTypeMap.set(value, false);
+    //                         })
+    //                     }
+    //                     this.setState({
+    //                         propertyTypeSelectedElements: propertyTypeMap,
+    //                     })
+    //                 }}
+    //                 className={
+    //                     this.state.propertyTypeSelectedElements.get("All") ?
+    //                     "analysis_dashboard_property_selector_property_list_checkbox analysis_dashboard_property_selector_property_list_checkbox_active" :
+    //                     "analysis_dashboard_property_selector_property_list_checkbox"}>
 
-                </div>
-                <p className="analysis_dashboard_property_selector_property_list_text">
-                    All
-                </p>
-            </li>
-        )
+    //             </div>
+    //             <p className="analysis_dashboard_property_selector_property_list_text">
+    //                 All
+    //             </p>
+    //         </li>
+    //     )
 
-        for (let i = 0; i < propertyTypes.length; i++) {
-            let propertyType = propertyTypes[i];
-            elements.push(
-                <li key={propertyType}
-                    className="analysis_dashboard_property_selector_property_list">
-                    <div 
-                        onMouseDown={() => {
-                            let propertyTypeMap = this.state.propertyTypeSelectedElements;
-                            propertyTypeMap.set(propertyType, !propertyTypeMap.get(propertyType))
-                            this.setState({
-                                propertyTypeSelectedElements: propertyTypeMap,
-                            })
-                        }}
-                        className={
-                            this.state.propertyTypeSelectedElements.get(propertyType) ?
-                            "analysis_dashboard_property_selector_property_list_checkbox analysis_dashboard_property_selector_property_list_checkbox_active" :
-                            "analysis_dashboard_property_selector_property_list_checkbox"}>
+    //     for (let i = 0; i < propertyTypes.length; i++) {
+    //         let propertyType = propertyTypes[i];
+    //         elements.push(
+    //             <li key={propertyType}
+    //                 className="analysis_dashboard_property_selector_property_list">
+    //                 <div 
+    //                     onMouseDown={() => {
+    //                         let propertyTypeMap = this.state.propertyTypeSelectedElements;
+    //                         propertyTypeMap.set(propertyType, !propertyTypeMap.get(propertyType))
+    //                         this.setState({
+    //                             propertyTypeSelectedElements: propertyTypeMap,
+    //                         })
+    //                     }}
+    //                     className={
+    //                         this.state.propertyTypeSelectedElements.get(propertyType) ?
+    //                         "analysis_dashboard_property_selector_property_list_checkbox analysis_dashboard_property_selector_property_list_checkbox_active" :
+    //                         "analysis_dashboard_property_selector_property_list_checkbox"}>
 
-                    </div>
-                    <p className="analysis_dashboard_property_selector_property_list_text">
-                        {propertyType}
-                    </p>
-                </li>
-            )
-        }
-        return elements;
-    }
+    //                 </div>
+    //                 <p className="analysis_dashboard_property_selector_property_list_text">
+    //                     {propertyType}
+    //                 </p>
+    //             </li>
+    //         )
+    //     }
+    //     return elements;
+    // }
 
-    renderPropertiesInSelector(properties) {
+    // renderPropertiesInSelector(properties) {
         
-        let elements = [];
-        elements.push(
-            <div key={"property_address_all"}>
-                <div  
-                    onMouseDown={() => {
-                        let propertyAddressMap = this.state.propertyAddressMap;
-                        let allSelected = propertyAddressMap.get("All");
-                        propertyAddressMap.set("All", !allSelected)
-                        if (!allSelected) {
-                            propertyAddressMap.forEach((key, value, map) => {
-                                propertyAddressMap.set(value, true);
-                            })
-                        } else {
-                            propertyAddressMap.forEach((key, value, map) => {
-                                propertyAddressMap.set(value, false);
-                            })
-                        }
-                        this.setState({
-                            propertyAddressMap: propertyAddressMap,
-                        })
-                    }}
-                    className={
-                        this.state.propertyAddressMap.get("All") ?
-                        "analysis_dashboard_property_selector_property_list_checkbox analysis_dashboard_property_selector_property_list_checkbox_active" :
-                        "analysis_dashboard_property_selector_property_list_checkbox"}>
+    //     let elements = [];
+    //     elements.push(
+    //         <div key={"property_address_all"}>
+    //             <div  
+    //                 onMouseDown={() => {
+    //                     let propertyAddressMap = this.state.propertyAddressMap;
+    //                     let allSelected = propertyAddressMap.get("All");
+    //                     propertyAddressMap.set("All", !allSelected)
+    //                     if (!allSelected) {
+    //                         propertyAddressMap.forEach((key, value, map) => {
+    //                             propertyAddressMap.set(value, true);
+    //                         })
+    //                     } else {
+    //                         propertyAddressMap.forEach((key, value, map) => {
+    //                             propertyAddressMap.set(value, false);
+    //                         })
+    //                     }
+    //                     this.setState({
+    //                         propertyAddressMap: propertyAddressMap,
+    //                     })
+    //                 }}
+    //                 className={
+    //                     this.state.propertyAddressMap.get("All") ?
+    //                     "analysis_dashboard_property_selector_property_list_checkbox analysis_dashboard_property_selector_property_list_checkbox_active" :
+    //                     "analysis_dashboard_property_selector_property_list_checkbox"}>
 
-                </div>
-                <p className="analysis_dashboard_property_selector_property_list_text">
-                    All
-                </p>
-                <div className="clearfix"/>
-            </div>  
-        );
+    //             </div>
+    //             <p className="analysis_dashboard_property_selector_property_list_text">
+    //                 All
+    //             </p>
+    //             <div className="clearfix"/>
+    //         </div>  
+    //     );
 
-        properties.forEach((value, keyValue, map) => {
-            let address = value[1];
-            elements.push(
-                <div key={address}>
-                    <div
-                        onMouseDown={() => {
-                            let propertyAddressMapElems = this.state.propertyAddressMap;
-                            propertyAddressMapElems.set(address, !propertyAddressMapElems.get(address));
-                            this.setState({
-                                propertyAddressMap: propertyAddressMapElems,
-                            })
-                        }}
-                        className={
-                            this.state.propertyAddressMap.get(address) ?
-                            "analysis_dashboard_property_selector_property_list_checkbox analysis_dashboard_property_selector_property_list_checkbox_active" :
-                            "analysis_dashboard_property_selector_property_list_checkbox"}>
+    //     properties.forEach((value, keyValue, map) => {
+    //         let address = value[1];
+    //         elements.push(
+    //             <div key={address}>
+    //                 <div
+    //                     onMouseDown={() => {
+    //                         let propertyAddressMapElems = this.state.propertyAddressMap;
+    //                         propertyAddressMapElems.set(address, !propertyAddressMapElems.get(address));
+    //                         this.setState({
+    //                             propertyAddressMap: propertyAddressMapElems,
+    //                         })
+    //                     }}
+    //                     className={
+    //                         this.state.propertyAddressMap.get(address) ?
+    //                         "analysis_dashboard_property_selector_property_list_checkbox analysis_dashboard_property_selector_property_list_checkbox_active" :
+    //                         "analysis_dashboard_property_selector_property_list_checkbox"}>
 
-                    </div>
-                    <p className="analysis_dashboard_property_selector_property_list_text">
-                        {address}
-                    </p>
-                    <div className="clearfix"/>
-                </div>  
-            )
-        });
+    //                 </div>
+    //                 <p className="analysis_dashboard_property_selector_property_list_text">
+    //                     {address}
+    //                 </p>
+    //                 <div className="clearfix"/>
+    //             </div>  
+    //         )
+    //     });
         
-        let firstHalf = elements.slice(0, elements.length/2 + 1);
-        let secondHalf = elements.slice(elements.length/2 + 1, elements.length);
+    //     let firstHalf = elements.slice(0, elements.length/2 + 1);
+    //     let secondHalf = elements.slice(elements.length/2 + 1, elements.length);
 
-        // Split the properties and display them side by side.
-        return (
-            <div>
-                <div className="property_selector_left_box">
-                    {firstHalf}
-                </div>
-                <div className="property_selector_right_box">
-                    {secondHalf}
-                </div>
-            </div>
-        );
-    }
+    //     // Split the properties and display them side by side.
+    //     return (
+    //         <div>
+    //             <div className="property_selector_left_box">
+    //                 {firstHalf}
+    //             </div>
+    //             <div className="property_selector_right_box">
+    //                 {secondHalf}
+    //             </div>
+    //         </div>
+    //     );
+    // }
 
     renderViewBox() {
         let barChartData = getHistoricalAnalysisData(this.state.historicalAnalysis);
@@ -485,7 +462,7 @@ class AnalysisDashboard extends React.Component {
                         {this.state.isLoading ? <div></div> : 
                         <div>
                             <div className="clearfix"/>
-                            <div 
+                            {/* <div 
                                 onMouseDown={() => this.setState({
                                     displayPropertySelector: !this.state.displayPropertySelector,
                                 })}
@@ -499,7 +476,7 @@ class AnalysisDashboard extends React.Component {
                                     this.state.displayPropertySelector ? 
                                     "analysis_dashboard_inner_box_property_selector_icon analysis_dashboard_inner_box_property_selector_icon_active" :
                                     "analysis_dashboard_inner_box_property_selector_icon"}></FaCaretDown>
-                            </div>
+                            </div> */}
                             <div className="analysis_dashboard_view_selection_box">
                                 <div
                                     onClick={() => this.setState({

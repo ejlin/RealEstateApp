@@ -526,13 +526,3 @@ body {
     margin-right: 20px;
     width: calc((100% - 10px - 20px - 15px - 20px));
 }
-
-.rent_schedule_bullet_point_no_more_text {
-    color: grey;
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-left: 20px;
-    padding-top: 10px;
-    text-align: center;
-    width: calc((100% - 40px));
-}
