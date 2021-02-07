@@ -333,17 +333,22 @@ class AnalysisDashboard extends React.Component {
                             width: "calc((3 * (100% - 75px) / 4) + 50px)",
                             zIndex: "20",
                         }}>
-                            <p className="analysis_chart_title">
+                            <p style={{
+                                marginLeft: "30px",
+                                marginTop: "25px",
+                            }}
+                            className="analysis_chart_title">
                                 Property Values
                             </p>
                             <BarChart 
-                                height={"375"}
-                                width={"calc(100% - 50px)"}
+                                height={"350"}
+                                width={"calc(100% - 70px)"}
                                 yAxisFontSize={"0.8em"}
                                 xAxisFontSize={"0.8em"}
                                 xAxisColor={"grey"}
                                 yAxisColor={"grey"}
                                 barColor={"#296CF6"}
+                                marginLeft={"30px"}
                                 capitalizeXAxis={true}
                                 displayTooltip={true}
                                 data={barChartData}/>

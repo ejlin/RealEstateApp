@@ -18,6 +18,7 @@ class BarChart extends React.Component {
             displayTooltip: this.props.displayTooltip,
             xAxisColor: this.props.xAxisColor,
             yAxisColor: this.props.yAxisColor,
+            marginLeft: this.props.marginLeft,
             marginTop: this.props.marginTop,
             backgroundColor: this.props.backgroundColor,
             capitalizeXAxis: this.props.capitalizeXAxis,
@@ -85,8 +86,6 @@ class BarChart extends React.Component {
         let diffMinMaxYAxis = maxYAxisValue - minYAxisValue;
         let midpoint = minYAxisValue + (diffMinMaxYAxis / 2);
 
-        let useK = maxYAxisValue >= 1000;
-
         elements.push(
             <div>
                 <div style={{
@@ -94,9 +93,11 @@ class BarChart extends React.Component {
                     fontSize: this.state.yAxisFontSize,
                     color: this.state.yAxisColor
                 }}>
-                    {   useK ?
+                    {   maxYAxisValue >= 1000000 ? 
+                        numberWithCommas(Math.trunc(maxYAxisValue/1000000)) + "M" :
+                        (maxYAxisValue >= 1000 ?
                         numberWithCommas(Math.trunc(maxYAxisValue/1000)) + "K" :
-                        maxYAxisValue
+                        maxYAxisValue)
                     }
                 </div>
                 <div style={{
@@ -105,9 +106,11 @@ class BarChart extends React.Component {
                     color: this.state.yAxisColor
                 }}>
                     { 
-                        useK ?
+                        midpoint >= 1000000 ? 
+                        numberWithCommas(Math.trunc(midpoint/1000000)) + "M" :
+                        (midpoint >= 1000 ?
                         numberWithCommas(Math.trunc(midpoint/1000)) + "K" :
-                        midpoint 
+                        midpoint)
                     }
                 </div>
                 <div style={{
@@ -116,9 +119,11 @@ class BarChart extends React.Component {
                     color: this.state.yAxisColor
                 }}>
                     {
-                        useK ?
+                        minYAxisValue >= 1000000 ? 
+                        numberWithCommas(Math.trunc(minYAxisValue/1000000)) + "M" :
+                        (minYAxisValue >= 1000 ?
                         numberWithCommas(Math.trunc(minYAxisValue/1000)) + "K" :
-                        minYAxisValue
+                        minYAxisValue)
                     }
                 </div>
             </div>
@@ -233,8 +238,9 @@ class BarChart extends React.Component {
             <div style={{
                 backgroundColor: this.state.backgroundColor,
                 borderRadius: "10px",
+                marginLeft: this.state.marginLeft,
                 marginTop: this.state.marginTop + "px",
-                width: this.state.width + "px",
+                width: this.state.width,
             }}>
                 {this.renderXAxis()}
             </div>
