@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"../db"
+	"../../external"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -156,25 +157,23 @@ func (s *Server) calculatePropertiesAnalysis(userID string, propertyIDs []string
 
 func (s *Server) validateProperty(w http.ResponseWriter, r *http.Request) {
 
-	vars := mux.Vars(r)
-
-	userID, ok := vars["id"]
-	if !ok {
-		log.Info().Msg("missing user id")
-		http.Error(w, "missing user id", http.StatusBadRequest)
-		return
-	}
-
-	ll := log.With().Str("user_id", userID).Logger()
-
 	decoder := json.NewDecoder(r.Body)
 	var property db.Property
 	if err := decoder.Decode(&property); err != nil {
-		ll.Error().Err(err).Msg("unable to decode new property by user addition")
+		log.Error().Err(err).Msg("unable to decode new property by user addition")
 		http.Error(w, fmt.Sprintf("unable to decode new property by user addition: %w", err), http.StatusBadRequest)
 		return
 	}
 
+	lobAddress, err := external.ValidateAddress(property, s.LobAPIKey)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to validate new property by Lob")
+		http.Error(w, fmt.Sprintf("unable to validate new property by Lob: %w", err), http.StatusInternalServerError)
+		return
+	}
+
+	RespondToRequest(w, lobAddress)
+	return
 }
 
 // addPropertyByUser will add a property to the database associated with a user.

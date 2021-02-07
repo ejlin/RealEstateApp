@@ -38,6 +38,9 @@ export function getByValue(map, searchValue){
 }
 
 export function numberWithCommas(x) {
+    if (!x || x === null || x === undefined) {
+        return x;
+    }
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
@@ -244,4 +247,159 @@ export function getMonthAndYear(createdAt) {
     let month = splitFullDate[1];
 
     return [month, year];
+}
+
+export function getCashFlowData(propertySummary, expenses) {
+
+    let data = [];
+    if (!propertySummary) {
+        return;
+    }
+    let income = propertySummary["total_rent"];
+    let totalIncome = parseFloat(income);
+    let incomeBar = [];
+    incomeBar.push(
+        {value: income, color: "#296CF6", label: "Income"}
+    );
+    let incomeObj = {bar: incomeBar}
+    data.push(incomeObj);
+
+    let expensesBar = [];
+
+    let totalMortgagePayment = propertySummary["total_mortgage_payment"];
+    let totalExpenses = 0;
+
+    expensesBar.push(
+        {value: parseFloat(Number(totalMortgagePayment).toFixed(2)), color: "", label: "Loan/Mortgage"}
+    );
+    totalExpenses += parseFloat(Number(totalMortgagePayment).toFixed(2));
+
+    let totalPropertyManager = propertySummary["total_property_manager_fee"];
+    expensesBar.push(
+        {value: parseFloat(Number(totalPropertyManager).toFixed(2)), color: "", label: "Property Manager"}
+    );
+
+    totalExpenses += parseFloat(Number(totalPropertyManager).toFixed(2));
+
+    for (let i = 0; i < expenses.length; i++) {
+        let expense = expenses[i];
+        console.log(expense);
+        let title = expense["title"];
+        let amount = expense["amount"];
+        expensesBar.push(
+            {value: amount, color: "", label: title}
+        );
+        totalExpenses += parseFloat(amount);
+    }
+
+    let expensesObj = {bar: expensesBar};
+    data.push(expensesObj);
+    return [data, totalIncome, totalExpenses];
+}
+
+export function getHistoricalAnalysisData(historicalAnalysis) {
+
+    console.log(historicalAnalysis);
+    let data = [];
+
+    let trailingMonths = getTrailingTwelveMonths();
+
+    if (historicalAnalysis === null 
+            || historicalAnalysis === undefined 
+            || (Object.keys(historicalAnalysis).length === 0 && historicalAnalysis.constructor === Object)) {
+
+        let defaultData = [];
+        for (let i = 0; i < trailingMonths.length; i++) {
+            let trailingMonthObj = trailingMonths[i];
+            let month = trailingMonthObj[0];
+            let yearStr = trailingMonthObj[1].toString();
+            let trimmedMonth = month.substring(0,3);
+            let xVal;
+            if (i === 0 || trimmedMonth.toLowerCase() === 'jan') {
+                xVal = trimmedMonth + " '" + yearStr.substring(2,4);
+            } else {
+                xVal = trimmedMonth;
+            } 
+            let obj = {x: xVal, y: 0}
+            defaultData.push(obj);
+        }
+        return defaultData;
+    }
+
+    let properties = historicalAnalysis["properties"];
+
+    if (!properties || properties === null || properties === undefined) {
+        return [];
+    }
+
+    let monthYearToEstimatesArrayMap = new Map();
+
+    // Iterate through our properties. Because PropertyPage is the view of a single property,
+    // we can expect this to be a length of 0-1.
+    for (let i = 0; i < properties.length; i++) {
+        let property = properties[i];
+        let estimates = property["property_estimates"];
+        // Iterate through every single estimate we have associated with this property. This is capped
+        // server side to be within the past year.
+        let totalEstimate = 0;
+
+        for (let j = 0; j < estimates.length; j++) {
+            let estimate = estimates[j];
+            let estimateValue = parseFloat(estimate["estimate"]);
+
+            totalEstimate += estimateValue;
+
+            let month = estimate["month"];
+            let year = estimate["year"];
+            
+            // We cannot key by tuple, so do a stupid hack. Concat month and year string to serve as a key.
+            // https://stackoverflow.com/questions/43592760/typescript-javascript-using-tuple-as-key-of-map.
+            let key = monthArr[month - 1] + year;
+            let arr;
+            // Populate our map, which is a map of {key -> []estimates}. We associate every month/year combination
+            // with all the estimates from that month/year. That way we can average out the estimates to get
+            // an overall estimate. 
+            if (!monthYearToEstimatesArrayMap.has(key)) {
+                arr = [];
+            } else {
+                arr = monthYearToEstimatesArrayMap.get(key);
+            }
+            arr.push(estimateValue);
+            monthYearToEstimatesArrayMap.set(key, arr);
+        }
+    }
+
+    console.log(monthYearToEstimatesArrayMap);
+    
+    // Iterate through the past 12 months. 
+    for (let i = 0; i < trailingMonths.length; i++) {
+        let trailingMonthsObj = trailingMonths[i];
+        let month = trailingMonthsObj[0];
+        let year = trailingMonthsObj[1];
+
+        let trimmedMonth = month.substring(0, 3)
+
+        let yearStr = year.toString();
+
+        let key = month.toString() + year.toString();
+        let obj;
+        let xVal;
+        if (i === 0 || trimmedMonth.toLowerCase() === 'jan') {
+            xVal = trimmedMonth + " '" + yearStr.substring(2,4);
+        } else {
+            xVal = trimmedMonth;
+        } 
+        if (monthYearToEstimatesArrayMap.has(key)) {
+            let estimatesArr = monthYearToEstimatesArrayMap.get(key);
+            let estimateTotal = 0;
+            for (let j = 0; j < estimatesArr.length; j++) {
+                estimateTotal += estimatesArr[j];
+            }
+            obj = {x: xVal, y: estimateTotal};
+        } else {
+            obj = {x: xVal, y: 0};
+        }
+        data.push(obj);
+    }
+    return data;
 }

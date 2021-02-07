@@ -15,14 +15,14 @@ import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 import BarChart from '../charts/BarChart.js';
 
-import { AiTwotonePushpin } from 'react-icons/ai';
+import { AiTwotonePushpin, AiFillQuestionCircle } from 'react-icons/ai';
 import { FaDollarSign } from 'react-icons/fa';
 import { RiPercentFill } from 'react-icons/ri';
 import { BsFillHouseFill } from 'react-icons/bs';
 import { ImArrowUp2, ImArrowDown2 } from 'react-icons/im';
 import { IoIosWarning } from 'react-icons/io';
 
-import { IoMdAddCircle } from 'react-icons/io';
+// import { AiFillQuestionCircle } from 'react-icons/io';
 
 import { LineChart, PieChart } from 'react-chartkick'
 import 'chart.js'
@@ -434,7 +434,7 @@ class MainDashboard extends React.Component {
                                                 <p className="main_dashboard_box_title">
                                                     Mortgages/Loans
                                                 </p>
-                                                <IoMdAddCircle className="main_dashboard_box_icon"></IoMdAddCircle>
+                                                <AiFillQuestionCircle className="main_dashboard_box_icon"></AiFillQuestionCircle>
                                                 <div className="clearfix"/>
                                                 {this.renderMortgagePaymentDateMap()}
                                             </div>
@@ -442,7 +442,7 @@ class MainDashboard extends React.Component {
                                                 <p className="main_dashboard_box_title">
                                                     Rent Collected
                                                 </p>
-                                                <IoMdAddCircle className="main_dashboard_box_icon"></IoMdAddCircle>
+                                                <AiFillQuestionCircle className="main_dashboard_box_icon"></AiFillQuestionCircle>
                                                 <div className="clearfix"/>
                                                 {this.renderRentCollected()}                                                
                                             </div>
@@ -450,7 +450,7 @@ class MainDashboard extends React.Component {
                                                 <p className="main_dashboard_box_title">
                                                     Expenses
                                                 </p>
-                                                <IoMdAddCircle className="main_dashboard_box_icon"></IoMdAddCircle>
+                                                <AiFillQuestionCircle className="main_dashboard_box_icon"></AiFillQuestionCircle>
                                                 <div className="clearfix"/>
                                                 {this.renderAdditionalExpensesCollected()}      
                                             </div>
@@ -462,7 +462,7 @@ class MainDashboard extends React.Component {
                                                 <p className="main_dashboard_box_title">
                                                     Rent Schedule
                                                 </p>
-                                                <IoMdAddCircle className="main_dashboard_box_icon"></IoMdAddCircle>
+                                                <AiFillQuestionCircle className="main_dashboard_box_icon"></AiFillQuestionCircle>
                                             </div>
                                             <div className="clearfix"/>
                                             {this.renderRentPaymentDateMap(false)}

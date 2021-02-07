@@ -17,7 +17,9 @@ import { monthArr,
         openSignedURL, 
         getDateSuffix, 
         getTrailingTwelveMonths, 
-        getMonthAndYear } from '../utility/Util.js';
+        getMonthAndYear,
+        getCashFlowData,
+        getHistoricalAnalysisData } from '../utility/Util.js';
 import { renderNoFiles } from './FilesDashboard.js';
 
 import { Link, Redirect } from 'react-router-dom';
@@ -63,8 +65,6 @@ class PropertyPage extends React.Component {
         this.convertBoughDateToText = this.convertBoughDateToText.bind(this);
         this.renderFileElements = this.renderFileElements.bind(this);
         this.setActiveExpandedExpenseCard = this.setActiveExpandedExpenseCard.bind(this);
-        this.getHistoricalAnalysisData = this.getHistoricalAnalysisData.bind(this);
-        this.getCashFlowData = this.getCashFlowData.bind(this);
 
         this.portfolioPercentageCallback = this.portfolioPercentageCallback.bind(this);
         this.getPercentPortfolioValue = this.getPercentPortfolioValue.bind(this);
@@ -147,7 +147,7 @@ class PropertyPage extends React.Component {
             const propertySummaryRequestResponse = responses[3];
             let propertySummary = propertySummaryRequestResponse.data;
 
-            let cashFlowObj = this.getCashFlowData(propertySummary, expenses);
+            let cashFlowObj = getCashFlowData(propertySummary, expenses);
             let cashFlowData = cashFlowObj[0];
             let totalIncome = cashFlowObj[1];
             let totalExpenses = cashFlowObj[2];
@@ -177,159 +177,6 @@ class PropertyPage extends React.Component {
             default:
                 return propertyType;
         }
-    }
-
-    getHistoricalAnalysisData() {
-
-        let data = [];
-
-        let trailingMonths = getTrailingTwelveMonths();
-
-        let historicalAnalysis = this.state.historicalAnalysis;
-        if (historicalAnalysis === null 
-                || historicalAnalysis === undefined 
-                || (Object.keys(historicalAnalysis).length === 0 && historicalAnalysis.constructor === Object)) {
-
-            let defaultData = [];
-            for (let i = 0; i < trailingMonths.length; i++) {
-                let trailingMonthObj = trailingMonths[i];
-                let month = trailingMonthObj[0];
-                let yearStr = trailingMonthObj[1].toString();
-                let trimmedMonth = month.substring(0,3);
-                let xVal;
-                if (i === 0 || trimmedMonth.toLowerCase() === 'jan') {
-                    xVal = trimmedMonth + " '" + yearStr.substring(2,4);
-                } else {
-                    xVal = trimmedMonth;
-                } 
-                let obj = {x: xVal, y: 0}
-                defaultData.push(obj);
-            }
-            return defaultData;
-        }
-
-        let properties = historicalAnalysis["properties"];
-
-        let monthYearToEstimatesArrayMap = new Map();
-
-        // Iterate through our properties. Because PropertyPage is the view of a single property,
-        // we can expect this to be a length of 0-1.
-        for (let i = 0; i < properties.length; i++) {
-            let property = properties[i];
-            let estimates = property["property_estimates"];
-            // Iterate through every single estimate we have associated with this property. This is capped
-            // server side to be within the past year.
-            for (let j = 0; j < estimates.length; j++) {
-                let estimate = estimates[j];
-                let createdAt = estimate["created_at"];
-                let estimateValue = parseFloat(estimate["estimate"]);
-
-                // getMonthAndYear will parse our created_at timestamp to return the month and year
-                // of the timestamp as a tuple: [month, year].
-                let monthAndYear = getMonthAndYear(createdAt);
-    
-                let month = monthAndYear[0];
-                let year = monthAndYear[1];
-                
-                // We cannot key by tuple, so do a stupid hack. Concat month and year string to serve as a key.
-                // https://stackoverflow.com/questions/43592760/typescript-javascript-using-tuple-as-key-of-map.
-                let key = monthArr[month - 1] + year;
-                let arr;
-                // Populate our map, which is a map of {key -> []estimates}. We associate every month/year combination
-                // with all the estimates from that month/year. That way we can average out the estimates to get
-                // an overall estimate. 
-                if (!monthYearToEstimatesArrayMap.has(key)) {
-                    arr = [];
-                } else {
-                    arr = monthYearToEstimatesArrayMap.get(key);
-                }
-                arr.push(estimateValue);
-                monthYearToEstimatesArrayMap.set(key, arr);
-            }
-        }
-        
-        // Iterate through the past 12 months. 
-        for (let i = 0; i < trailingMonths.length; i++) {
-            let trailingMonthsObj = trailingMonths[i];
-            let month = trailingMonthsObj[0];
-            let year = trailingMonthsObj[1];
-
-            let trimmedMonth = month.substring(0, 3)
-
-            let yearStr = year.toString();
-
-            let key = month.toString() + year.toString();
-            let obj;
-            let xVal;
-            if (i === 0 || trimmedMonth.toLowerCase() === 'jan') {
-                xVal = trimmedMonth + " '" + yearStr.substring(2,4);
-            } else {
-                xVal = trimmedMonth;
-            } 
-            if (monthYearToEstimatesArrayMap.has(key)) {
-                let estimatesArr = monthYearToEstimatesArrayMap.get(key);
-                let estimateTotal = 0;
-                for (let j = 0; j < estimatesArr.length; j++) {
-                    estimateTotal += estimatesArr[j];
-                }
-                let avgEstimate = estimateTotal / estimatesArr.length;
-                obj = {x: xVal, y: avgEstimate};
-            } else {
-                obj = {x: xVal, y: 0};
-            }
-            data.push(obj);
-        }
-        return data;
-    }
-
-    getCashFlowData(propertySummary, expenses) {
-
-        let data = [];
-        if (!propertySummary) {
-            return;
-        }
-        let income = propertySummary["total_rent"];
-        let totalIncome = parseFloat(income);
-        let incomeBar = [];
-        incomeBar.push(
-            {value: income, color: "#296CF6", label: "Income"}
-        );
-        let incomeObj = {bar: incomeBar}
-        data.push(incomeObj);
-
-        let expensesBar = [];
-
-        console.log(propertySummary)
-
-        let totalMortgagePayment = propertySummary["total_mortgage_payment"];
-        let totalExpenses = 0;
-
-        expensesBar.push(
-            {value: parseFloat(Number(totalMortgagePayment).toFixed(2)), color: "", label: "Loan/Mortgage"}
-        );
-        totalExpenses += parseFloat(Number(totalMortgagePayment).toFixed(2));
-
-        let totalPropertyManager = propertySummary["total_property_manager_fee"];
-        expensesBar.push(
-            {value: parseFloat(Number(totalPropertyManager).toFixed(2)), color: "", label: "Property Manager"}
-        );
-
-        totalExpenses += parseFloat(Number(totalPropertyManager).toFixed(2));
-
-        for (let i = 0; i < expenses.length; i++) {
-            let expense = expenses[i];
-            console.log(expense);
-            let title = expense["title"];
-            let amount = expense["amount"];
-            expensesBar.push(
-                {value: amount, color: "", label: title}
-            );
-            totalExpenses += parseFloat(amount);
-        }
-
-        let expensesObj = {bar: expensesBar};
-        data.push(expensesObj);
-        return [data, totalIncome, totalExpenses];
     }
 
     convertBoughDateToText(boughtDate) {
@@ -442,7 +289,7 @@ class PropertyPage extends React.Component {
     }
 
     renderViewPage() {
-        let barChartData = this.getHistoricalAnalysisData();
+        let barChartData = getHistoricalAnalysisData(this.state.historicalAnalysis);
         let cashFlowData = this.state.cashFlowData;
 
         switch (this.state.viewToDisplay) {

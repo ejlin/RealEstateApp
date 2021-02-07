@@ -62,7 +62,7 @@ class FolderCard extends React.Component {
     render() {
         let lengthToTrim = 18;
         // If our name is close, then just allow the last character in. Otherwise trim it at 18.
-        if (this.state.folderName.length - lengthToTrim === 1) {
+        if (this.state.folderName && this.state.folderName.length - lengthToTrim === 1) {
             lengthToTrim = 19;
         }
         return (

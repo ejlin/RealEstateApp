@@ -58,3 +58,15 @@ body {
 .page_button:hover {
     opacity: 0.7;
 }
+
+.full-background-tint {
+    /* background-color: black; */
+    background-color: rgba(245,245,250, 0.90);
+    border-radius: 4px;
+    content: '';
+    height: 100vh;
+    margin-bottom: 25px;
+    position: absolute;
+    width: calc(100% - 220px);
+    z-index: 5;
+}

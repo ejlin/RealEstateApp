@@ -13,6 +13,9 @@ import { FaDollarSign } from 'react-icons/fa';
 const generalInformation = "general_information";
 const purchaseInformation = "purchase_information";
 const incomeInformation = "income_information";
+
+const Lob = "Lob";
+const Custom = "Custom";
     
 let URLBuilder = require('url-join');
 
@@ -29,12 +32,16 @@ class NewPropertyForm extends React.Component {
             toDisplay: generalInformation,
             propertyType: "SFH",
             purchaseType: "mortgage",
-            properties: []
+            properties: [],
+            addressToUse: Lob,
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleFieldChange = this.handleFieldChange.bind(this);
         this.propertyTypeOnChange = this.propertyTypeOnChange.bind(this);
         this.purchaseTypeOnChange = this.purchaseTypeOnChange.bind(this);
+
+        this.isEqualAddress = this.isEqualAddress.bind(this);
+        this.validatePropertyWithLob = this.validatePropertyWithLob.bind(this);
     }
 
     handleFieldChange(e) {
@@ -44,7 +51,7 @@ class NewPropertyForm extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
 
-        var axiosAddPropertyURL = URLBuilder('/api/user/property/', this.state.userID);
+        let axiosAddPropertyURL = URLBuilder('/api/user/property/', this.state.userID);
         axios({
             method: 'post',
             url: axiosAddPropertyURL,
@@ -82,6 +89,56 @@ class NewPropertyForm extends React.Component {
         this.setState({
             purchaseType: e.target.value
         })
+    }
+
+    validatePropertyWithLob() {
+
+        let validatePropertyURL = URLBuilder('/api/validate/property');
+
+        axios({
+            method: 'post',
+            url: validatePropertyURL,
+            timeout: 15000,  // 15 seconds timeout
+            data: {
+                address_one: this.state.addressOne,
+                address_two: this.state.addressTwo,
+                city: this.state.city,
+                state: this.state.state,
+                zip_code: this.state.zip_code,
+            }
+        }).then(response => {
+            let lobVerifiedAddress = response.data;
+            if (this.isEqualAddress(lobVerifiedAddress)) {
+                // Send a create request
+            } else {
+                // Send a popup to the user asking them to verify address.
+                this.setState({
+                    lobVerfiedAddress: lobVerifiedAddress,
+                    displayAddressVerificationBox: true,
+                });
+            }
+        }).catch(error => console.error('timeout exceeded'));
+    }
+
+    // isEqualAddress will compare the Lob verified address we received and compare it
+    // with the one the user sent us. If it's different, we return false; otherwise true.
+    isEqualAddress(lobAddress) {
+        if (lobAddress["address_line1"].toLowerCase() !== this.state.addressOne.toLowerCase()) {
+            return false;
+        }
+        if (lobAddress["address_line2"].toLowerCase() !== this.state.addressTwo.toLowerCase()) {
+            return false;
+        }
+        if (lobAddress["address_city"].toLowerCase() !== this.state.city.toLowerCase()) {
+            return false;
+        }
+        if (lobAddress["address_state"].toLowerCase() !== this.state.state.toLowerCase()) {
+            return false;
+        }
+        if (lobAddress["address_zip"].toLowerCase() !== this.state.zip_code.toLowerCase()) {
+            return false;
+        }   
+        return true;
     }
 
     renderFormParts() {
@@ -192,11 +249,6 @@ class NewPropertyForm extends React.Component {
                             Please input information on how you purchased this property.
                         </p>
                         <div className="form_box">
-                            {/* <label className="new_property_form_label">
-                                Address: 
-                            </label>
-                            <p className="new_property_form_required">*</p>
-                            <div className="clearfix"/> */}
                             <div className="">
                                 <input 
                                     placeholder="$ Purchase Price" 
@@ -311,9 +363,9 @@ class NewPropertyForm extends React.Component {
                             <div className="clearfix"/>
                             <div className="form_footer_box">
                                 <div 
-                                    onClick={() => this.setState({
-                                        toDisplay: incomeInformation
-                                    })}
+                                    onClick={() => {
+                                        this.validatePropertyWithLob()
+                                    }}
                                     className="form_continue_button">
                                     Add Property
                                 </div>
@@ -351,6 +403,135 @@ class NewPropertyForm extends React.Component {
                     }
                 }}/>
                 <div id="new_property_form_box">
+                    { this.state.displayAddressVerificationBox ? 
+                    <div
+                        className="full-background-tint"
+                    >
+                        <div style={{
+                            backgroundColor: "white",
+                            borderRadius: "10px",
+                            boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                            marginLeft: "calc((100% - 500px)/2 - 25px)",
+                            marginRight: "calc((100% - 500px)/2 + 25px)",
+                            marginTop: "200px",
+                            position: "absolute",
+                            width: "500px",
+                        }}>
+                            <div style={{
+                                marginBottom: "25px",
+                                marginLeft: "7.5%",
+                                marginTop: "25px",
+                                width: "85%",
+                            }}>
+                                <p style={{
+                                    fontWeight: "bold",
+                                    fontSize: "1.1em",
+                                }}>
+                                    Your Address
+                                </p>
+                                <div 
+                                    onMouseDown={() => {
+                                        this.setState({
+                                            addressToUse: Custom,
+                                        })
+                                    }}
+                                    style={{
+                                        backgroundColor: "#f5f5fa",
+                                        border: this.state.addressToUse === Custom ? "2px solid #296CF6" : "2px solid #f5f5fa",
+                                        borderRadius: "8px",
+                                        marginTop: "15px",
+                                        paddingBottom: "15px",
+                                        paddingLeft: "25px",
+                                        paddingRight: "25px",
+                                        paddingTop: "15px",
+                                    }}>
+                                    {/* {this.state.addressOne} */}
+                                    <p style={{
+                                        fontSize: "1.1em",
+                                    }}>{this.state.addressOne}</p>
+                                    <p style={{
+                                        fontSize: "1.1em",
+                                    }}>{this.state.addressTwo}</p>
+                                    <p style={{
+                                        fontSize: "1.1em",
+                                    }}>
+                                    {this.state.city}, {this.state.state} {this.state.zip_code}
+                                    </p>
+                                </div>
+                            </div>
+                            <div style={{
+                                backgroundColor: "grey",
+                                float: "left",
+                                height: "1px",
+                                marginBottom: "7.5px",
+                                marginLeft: "5%",
+                                marginRight: "5%",
+                                marginTop: "7.5px",
+                                width: "90%"
+                            }}>
+                            </div>
+                            <div style={{
+                                float: "left",
+                                marginBottom: "24px",
+                                marginLeft: "7.5%",
+                                marginTop: "15px",
+                                width: "85%",
+                            }}>
+                                <p style={{
+                                    fontWeight: "bold",
+                                    fontSize: "1.1em",
+                                }}>
+                                    Suggested Address
+                                </p>
+                                <div 
+                                    onMouseDown={() => {
+                                        this.setState({
+                                            addressToUse: Lob,
+                                        })
+                                    }}
+                                    style={{
+                                        backgroundColor: "#f5f5fa",
+                                        border: this.state.addressToUse === Lob ? "2px solid #296CF6" : "2px solid #f5f5fa",
+                                        borderRadius: "8px",
+                                        marginTop: "15px",
+                                        paddingBottom: "15px",
+                                        paddingLeft: "25px",
+                                        paddingRight: "25px",
+                                        paddingTop: "15px",
+                                    }}>
+                                    {/* {this.state.addressOne} */}
+                                    <p style={{
+                                        fontSize: "1.1em",
+                                    }}>{this.state.lobVerfiedAddress["address_line1"]}</p>
+                                    <p style={{
+                                        fontSize: "1.1em",
+                                    }}>{this.state.lobVerfiedAddress["address_line2"]}</p>
+                                    <p style={{
+                                        fontSize: "1.1em",
+                                    }}>
+                                    {this.state.lobVerfiedAddress["address_city"]}, {this.state.lobVerfiedAddress["address_state"]} {this.state.lobVerfiedAddress["address_zip"]}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="clearfix"/>
+                            <div style={{
+                                backgroundColor: "#296CF6",
+                                borderRadius: "8px",
+                                color: "white",
+                                cursor: "pointer",
+                                float: "right",
+                                fontWeight: "bold",
+                                marginBottom: "25px",
+                                marginRight: "7.5%",
+                                padding: "10px 15px 10px 15px",
+                                textAlign: "center",
+                                userSelect: "none",
+                            }}>
+                                Continue
+                            </div>
+                        </div>
+                    </div> :
+                    <div></div>}
                     <div className="new_property_form_inner_box">
                         <p className="new_property_dashboard_title_box_title">
                             New Property

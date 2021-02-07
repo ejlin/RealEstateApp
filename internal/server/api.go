@@ -24,7 +24,7 @@ func (s *Server) HandleRoutes() {
 	r.HandleFunc("/api/user/{id}", s.getUser).Methods("GET")
 	r.HandleFunc("/api/propertyfinder", s.propertiesHandler).Methods("GET")
 
-	r.HandleFunc("/api/user/validate/property/{id}", s.validateProperty).Methods("POST")
+	r.HandleFunc("/api/validate/property", s.validateProperty).Methods("POST")
 
 	r.HandleFunc("/api/user/property/{id}", s.getProperties).Methods("GET")
 	r.HandleFunc("/api/user/property/{id}", s.removePropertyByUser).Queries("property_id", "{property_id}").Methods("DELETE")

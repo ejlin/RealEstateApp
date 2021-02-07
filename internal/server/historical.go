@@ -1,6 +1,8 @@
 package server
 
 import (
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -18,7 +20,8 @@ type HistoricalPropertySummary struct {
 }
 
 type PropertyEstimate struct {
-	CreatedAt *time.Time `json:"created_at,omitempty"`
+	Month int `json:"month,omitempty"`
+	Year int `json:"year,omitempty"`
 	Estimate  float64    `json:"estimate,omitempty"`
 }
 
@@ -37,32 +40,79 @@ func (s *Server) calculateHistoricalAnalysis(userID string, timeBack *time.Durat
 		return nil, err
 	}
 
-	propertyToEstimatesSlice := make(map[string][]*PropertyEstimate)
+	propertyToEstimatesSliceMap := make(map[string][]*PropertyEstimate)
 	for _, propertyHistoricalData := range propertiesHistoricalData {
 		propertyID := propertyHistoricalData.PropertyID
 
+		createdAt := propertyHistoricalData.CreatedAt
+
 		propertyEstimate := &PropertyEstimate{
-			CreatedAt: propertyHistoricalData.CreatedAt,
+			Month: int(createdAt.Month()),
+			Year: int(createdAt.Year()),
 			Estimate:  propertyHistoricalData.Estimate,
 		}
 
-		if estimateSlice, ok := propertyToEstimatesSlice[propertyID]; !ok {
-			propertyToEstimatesSlice[propertyID] = []*PropertyEstimate{
+		if estimateSlice, ok := propertyToEstimatesSliceMap[propertyID]; !ok {
+			propertyToEstimatesSliceMap[propertyID] = []*PropertyEstimate{
 				propertyEstimate,
 			}
 		} else {
-			propertyToEstimatesSlice[propertyID] = append(estimateSlice, propertyEstimate)
+			propertyToEstimatesSliceMap[propertyID] = append(estimateSlice, propertyEstimate)
 		}
 	}
 
 	var properties []*HistoricalPropertySummary
 
-	for propertyID, estimates := range propertyToEstimatesSlice {
-		propertyID := propertyID
-		properties = append(properties, &HistoricalPropertySummary{
-			PropertyID: propertyID,
-			Estimates:  estimates,
-		})
+	// Find the averages per month per property.
+	for propertyID, propertyToEstimatesSlice := range propertyToEstimatesSliceMap {
+
+		m := make(map[string][]*PropertyEstimate)
+		// First, bucket by month+year -> all the estimates we have for that key.
+		for _, estimate := range propertyToEstimatesSlice {
+			key := strconv.Itoa(estimate.Month) + "-" + strconv.Itoa(estimate.Year)
+			if slice, ok := m[key]; ok {
+				slice = append(slice, estimate)
+			} else {
+				m[key] = []*PropertyEstimate{estimate}
+			}
+		}
+
+		var estimates []*PropertyEstimate
+
+		// average out all the values we have. 
+		for key, estimateSlice := range m {
+			if (len(estimateSlice) > 0){
+				splitKey := strings.Split(key, "-")
+				if (len(splitKey) != 2) {
+					continue
+				}
+				month, err := strconv.Atoi(splitKey[0])
+				if err != nil {
+					continue
+				}
+				year, err := strconv.Atoi(splitKey[1])
+				if err != nil {
+					continue
+				}
+
+				totalEstimate := 0.0
+				for _, estimate := range estimateSlice {
+					totalEstimate += estimate.Estimate
+				}
+				averageEstimate := totalEstimate / float64(len(estimateSlice))
+				estimates = append(estimates, &PropertyEstimate {
+					Month: month,
+					Year: year,
+					Estimate: averageEstimate,
+				})
+			}
+		}
+		properties = append(properties,
+			&HistoricalPropertySummary {
+				PropertyID: propertyID,
+				Estimates: estimates,
+			},
+		)
 	}
 
 	return &HistoricalSummary{

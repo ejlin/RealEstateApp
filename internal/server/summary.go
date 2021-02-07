@@ -107,14 +107,14 @@ func (s *Server) getPropertiesHistory(w http.ResponseWriter, r *http.Request) {
 
 	ll := log.With().Str("user_id", userID).Logger()
 
-	propertySummary, err := s.calculatePropertiesAnalysis(userID, nil, nil)
+	historicalSummary, err := s.calculateHistoricalAnalysis(userID, nil, nil)
 	if err != nil {
-		ll.Warn().Err(err).Msg("unable to calculate properties analysis")
-		http.Error(w, "unable to calculate properties analysis", http.StatusInternalServerError)
+		ll.Warn().Err(err).Msg("unable to calculate historical analysis")
+		http.Error(w, "unable to calculate historical analysis", http.StatusInternalServerError)
 		return
 	}
 
-	RespondToRequest(w, propertySummary)
+	RespondToRequest(w, historicalSummary)
 	return
 }
 

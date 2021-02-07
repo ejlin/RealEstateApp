@@ -1,7 +1,13 @@
 package external
 
 import (
-	"../db"
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+
+	"../internal/db"
 )
 
 const (
@@ -22,7 +28,7 @@ type LobAddress struct {
 type LobResponse struct {
 	PrimaryLine string `json:"primary_line,omitempty"`
 	SecondaryLine string `json:"secondary_line,omitempty"`
-	Components *LobResponseComponents `json:"componenets,omitempty"`
+	Components *LobResponseComponents `json:"components,omitempty"`
 }
 
 // LobResponseComponents represents the "components" field of the LobAPI Response.
@@ -30,52 +36,76 @@ type LobResponseComponents struct {
 	City string `json:"city,omitempty"`
 	State string `json:"state,omitempty"`
 	ZipCode string `json:"zip_code,omitempty"`
-	ZipCodePluseFour string `json:"zip_code_plus_four,omitempty"`
+	ZipCodePlusFour string `json:"zip_code_plus_four,omitempty"`
 }
 
 // ValidateAddress will return the USPS CASS standardized address.
-func ValidateAddress(property db.Property) (*LobAddress, error) {
+func ValidateAddress(property db.Property, apiKey string) (*LobAddress, error) {
 
-	addressRequestURL := fmt.Sprintf("%s/v1/us_verifications/", lobEndpoint)
-
-	resp, err := http.Post(propertyRequestURL)
+	fmt.Println(property)
+	addressRequestURL := fmt.Sprintf("%sv1/us_verifications/", lobEndpoint)
+	fmt.Println(addressRequestURL)
+	requestBody, err := json.Marshal(map[string]string{
+		"primary_line": property.AddressOne,
+		"city": property.City,
+		"state": property.State,
+		"zip_code": property.ZipCode,
+	})
 	if err != nil {
-		return err
+		return nil, err
 	}
+
+	req, err := http.NewRequest("POST", addressRequestURL, bytes.NewBuffer(requestBody))
+	if err != nil {
+		return nil, err
+	}
+
+	req.SetBasicAuth(apiKey, "")
+
+	client := &http.Client{}
+    resp, err := client.Do(req)
 
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	var lobResponse LobResponse 
 	err = json.Unmarshal(body, &lobResponse)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	var addressOne, addressTwo, city, state, zip string
 	if lobResponse.PrimaryLine != "" {
 		addressOne = lobResponse.PrimaryLine
 	} else {
-		addressOne = property.
+		addressOne = property.AddressOne
 	}
 
 	if lobResponse.SecondaryLine != "" {
 		addressTwo = lobResponse.SecondaryLine
+	} else {
+		addressTwo = property.AddressTwo
 	}
 
 	if lobResponse.Components != nil {
 		if lobResponse.Components.City != "" {
 			city = lobResponse.Components.City
+		} else {
+			city = property.City
 		}
 		if lobResponse.Components.State != "" {
 			state = lobResponse.Components.State
+		} else {
+			state = property.State
 		}
-		if lobResponse.Componenets.ZipCode != "" && lobResponse.Components.ZipCodePlusFour != "" {
+		if lobResponse.Components.ZipCode != "" && lobResponse.Components.ZipCodePlusFour != "" {
 			zip = lobResponse.Components.ZipCode + " " + lobResponse.Components.ZipCodePlusFour
+		} else {
+			zip = property.ZipCode
 		}
 	}
 

@@ -106,8 +106,9 @@ class FilesDashboard extends React.Component {
             // sort them according to last_modified_at.
             let propertiesMap = new Map();
             for (let i = 0; i < propertiesList.length; i++) {
-                let propertyID = propertiesList[i]["id"];
-                let propertyAddress = propertiesList[i]["address"];
+                let property = propertiesList[i];
+                let propertyID = property["id"];
+                let propertyAddress = property["address_one"] + (property["address_two"] ? " " + property["address_two"] : "");
                 propertiesMap.set(propertyID, propertyAddress);
             }
             this.setState({

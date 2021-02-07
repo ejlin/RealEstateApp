@@ -7,6 +7,11 @@ import './CSS/Style.css';
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 
+import BarChart from '../charts/BarChart.js';
+
+import { numberWithCommas, 
+        getHistoricalAnalysisData } from '../utility/Util.js';
+
 import { BsFillHouseFill } from 'react-icons/bs';
 import { FaCaretDown, FaMapMarkerAlt } from 'react-icons/fa';
 import { RiBuildingFill } from 'react-icons/ri';
@@ -15,6 +20,8 @@ import { IoBedSharp } from 'react-icons/io5';
 
 const general = "general";
 const advanced = "advanced";
+
+let URLBuilder = require('url-join');
 
 class AnalysisDashboard extends React.Component {
     
@@ -39,69 +46,73 @@ class AnalysisDashboard extends React.Component {
                 ["Commercial", true],
             ]),
             propertyAddressMap: new Map([["All", true]]),
-            propertiesSummary: null,
+            historicalAnalysis: null,
             displayPropertySelector: false,
             viewToDisplay: general,
-            isPropertiesLoading: true
+            host: window.location.protocol + "//" + window.location.host,
+            isLoading: true
         };
-        this.numberWithCommas = this.numberWithCommas.bind(this);
         this.renderPropertiesInSelector = this.renderPropertiesInSelector.bind(this);
     }
 
     componentDidMount() {
 
-        var propertyAddressMap = this.state.propertyAddressMap;
+        let propertyAddressMap = this.state.propertyAddressMap;
+        let userID = this.state.user["id"];
+        let host = this.state.host;
 
-        // Load our properties list.
-        axios({
-            method: 'get',
-            url:  'api/user/property/' + this.state.user["id"],
-        }).then(response => {
-            var propertiesList = response.data;
+        let getSummaryURL = URLBuilder(host, '/api/user/summary', userID);
 
-            var propertiesMap = new Map();
-            for (var i = 0; i < propertiesList.length; i++) {
-                var propertyID = propertiesList[i]["id"];
-                var propertyAddress = propertiesList[i]["address"];
-                propertiesMap.set(propertyID, propertyAddress);
-                propertyAddressMap.set(propertyAddress, true);
-            }
+        const getSummaryRequest = axios.get(getSummaryURL);
+
+        // let getPropertiesURL = URLBuilder(host, '/api/user/property', userID)
+        // let getPropertiesHistoryURL = URLBuilder(host, '/api/user/history', userID);
+
+        // const getPropertiesRequest = axios.get(getPropertiesURL);
+        // const getPropertiesHistoricalRequest = axios.get(getPropertiesHistoryURL);
+
+        axios.all(
+            [getSummaryRequest]
+        ).then(axios.spread((...responses) => {
+            const summaryRequestResponse = responses[0];
+            const summary = summaryRequestResponse.data;
+
+            // summary is an object containing three fields. 
+            // 1. properties_summary
+            // 2. historical_summary
+            // 3. expenses_summary
+            let propertiesSummary = summary["properties_summary"];
+            let historicalAnalysis = summary["historical_summary"];
+
+            // const propertiesRequestResponse = responses[0];
+            // let propertiesList = propertiesRequestResponse.data;
+
+            // let propertiesMap = new Map();
+            // for (let i = 0; i < propertiesList.length; i++) {
+            //     let propertyID = propertiesList[i]["id"];
+            //     let propertyAddress = propertiesList[i]["address"];
+            //     propertiesMap.set(propertyID, propertyAddress);
+            //     propertyAddressMap.set(propertyAddress, true);
+            // }
+
+            // const historyRequestResponse = responses[1];
+            // let historicalAnalysis = historyRequestResponse.data;
 
             this.setState({
-                properties: [...propertiesMap],
-                propertyAddressMap: propertyAddressMap,
-            });
-        }).catch(error => {
-            console.log(error);
-            this.setState({
-                isPropertiesLoading: false
-            })
+                // properties: [...propertiesMap],
+                // propertyAddressMap: propertyAddressMap,
+                propertiesSummary: propertiesSummary,
+                historicalAnalysis: historicalAnalysis,
+                isLoading: false
+            }, () => {console.log(this.state.historicalAnalysis)});
+        })).catch(errors => {
+            console.log(errors);
         });
-
-        axios({
-            method: 'get',
-            url: 'api/user/history/' + this.state.user["id"]
-        }).then(response => {
-            console.log(response.data);
-            this.setState({
-                propertiesSummary: response.data,
-                isPropertiesLoading: false
-            })
-        }).catch(error => {
-            console.log(error);
-            this.setState({
-                isPropertiesLoading: false
-            })
-        })
-    }
-
-    numberWithCommas(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     renderPropertyTypesInSelector() {
 
-        var propertyTypes = [
+        let propertyTypes = [
             'Single Family Homes', 
             'Manufactured', 
             'Condo/Ops', 
@@ -111,14 +122,14 @@ class AnalysisDashboard extends React.Component {
             'Townhomes',
             'Commercial']
 
-        var elements = [];
+        let elements = [];
         elements.push(
             <li key={"property_type_all"}
                 className="analysis_dashboard_property_selector_property_list">
                 <div  
                     onMouseDown={() => {
-                        var propertyTypeMap = this.state.propertyTypeSelectedElements;
-                        var allSelected = propertyTypeMap.get("All");
+                        let propertyTypeMap = this.state.propertyTypeSelectedElements;
+                        let allSelected = propertyTypeMap.get("All");
                         propertyTypeMap.set("All", !allSelected)
                         if (!allSelected) {
                             propertyTypeMap.forEach((key, value, map) => {
@@ -145,14 +156,14 @@ class AnalysisDashboard extends React.Component {
             </li>
         )
 
-        for (var i = 0; i < propertyTypes.length; i++) {
+        for (let i = 0; i < propertyTypes.length; i++) {
             let propertyType = propertyTypes[i];
             elements.push(
                 <li key={propertyType}
                     className="analysis_dashboard_property_selector_property_list">
                     <div 
                         onMouseDown={() => {
-                            var propertyTypeMap = this.state.propertyTypeSelectedElements;
+                            let propertyTypeMap = this.state.propertyTypeSelectedElements;
                             propertyTypeMap.set(propertyType, !propertyTypeMap.get(propertyType))
                             this.setState({
                                 propertyTypeSelectedElements: propertyTypeMap,
@@ -175,13 +186,13 @@ class AnalysisDashboard extends React.Component {
 
     renderPropertiesInSelector(properties) {
         
-        var elements = [];
+        let elements = [];
         elements.push(
             <div key={"property_address_all"}>
                 <div  
                     onMouseDown={() => {
-                        var propertyAddressMap = this.state.propertyAddressMap;
-                        var allSelected = propertyAddressMap.get("All");
+                        let propertyAddressMap = this.state.propertyAddressMap;
+                        let allSelected = propertyAddressMap.get("All");
                         propertyAddressMap.set("All", !allSelected)
                         if (!allSelected) {
                             propertyAddressMap.forEach((key, value, map) => {
@@ -215,7 +226,7 @@ class AnalysisDashboard extends React.Component {
                 <div key={address}>
                     <div
                         onMouseDown={() => {
-                            var propertyAddressMapElems = this.state.propertyAddressMap;
+                            let propertyAddressMapElems = this.state.propertyAddressMap;
                             propertyAddressMapElems.set(address, !propertyAddressMapElems.get(address));
                             this.setState({
                                 propertyAddressMap: propertyAddressMapElems,
@@ -235,8 +246,8 @@ class AnalysisDashboard extends React.Component {
             )
         });
         
-        var firstHalf = elements.slice(0, elements.length/2 + 1);
-        var secondHalf = elements.slice(elements.length/2 + 1, elements.length);
+        let firstHalf = elements.slice(0, elements.length/2 + 1);
+        let secondHalf = elements.slice(elements.length/2 + 1, elements.length);
 
         // Split the properties and display them side by side.
         return (
@@ -252,6 +263,8 @@ class AnalysisDashboard extends React.Component {
     }
 
     renderViewBox() {
+        let barChartData = getHistoricalAnalysisData(this.state.historicalAnalysis);
+
         switch(this.state.viewToDisplay) {
         case general:
             return (
@@ -288,7 +301,7 @@ class AnalysisDashboard extends React.Component {
                             <IoMdAddCircle className="analysis_dashboard_inner_box_top_cards_box_element_add_icon"/>
                             <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
                                 <p className="analysis_dashboard_inner_box_top_cards_box_element_text">
-                                    {this.numberWithCommas(this.state.propertiesSummary["total_square_footage"])} total
+                                    {numberWithCommas(this.state.propertiesSummary["total_square_footage"])} total
                                 </p>
                                 <div className="clearfix"/>
                                 <p className="analysis_dashboard_inner_box_top_cards_box_element_subtitle">
@@ -301,7 +314,7 @@ class AnalysisDashboard extends React.Component {
                             <IoMdAddCircle className="analysis_dashboard_inner_box_top_cards_box_element_add_icon"/>
                             <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
                                 <p className="analysis_dashboard_inner_box_top_cards_box_element_text">
-                                    {this.numberWithCommas(this.state.propertiesSummary["total_bedrooms"])} total beds
+                                    {numberWithCommas(this.state.propertiesSummary["total_bedrooms"])} total beds
                                 </p>
                                 <div className="clearfix"/>
                                 <p className="analysis_dashboard_inner_box_top_cards_box_element_subtitle">
@@ -311,7 +324,29 @@ class AnalysisDashboard extends React.Component {
                         </div>
                     </div>
                     <div className="analysis_dashboard_inner_box_middle_cards_box">
-                        <div className="analysis_dashboard_inner_box_middle_cards_left">
+                        <div style={{
+                            backgroundColor: "white",
+                            borderRadius: "10px",
+                            boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                            float: "left",
+                            height: "435px",
+                            width: "calc((3 * (100% - 75px) / 4) + 50px)",
+                            zIndex: "20",
+                        }}>
+                            <p className="analysis_chart_title">
+                                Property Values
+                            </p>
+                            <BarChart 
+                                height={"375"}
+                                width={"calc(100% - 50px)"}
+                                yAxisFontSize={"0.8em"}
+                                xAxisFontSize={"0.8em"}
+                                xAxisColor={"grey"}
+                                yAxisColor={"grey"}
+                                barColor={"#296CF6"}
+                                capitalizeXAxis={true}
+                                displayTooltip={true}
+                                data={barChartData}/>
                         </div>
                         <div className="analysis_dashboard_inner_box_middle_cards_right">
                             <div className="analysis_dashboard_inner_box_middle_cards_right_element_box">
@@ -321,7 +356,7 @@ class AnalysisDashboard extends React.Component {
                                 <IoMdAddCircle className="analysis_dashboard_inner_box_middle_box_element_add_icon"/>
                                 <div className="clearfix"/>
                                 <p className="analysis_dashboard_inner_box_middle_cards_right_element_box_title">
-                                    ${this.numberWithCommas(this.state.propertiesSummary["total_rent"])}
+                                    ${numberWithCommas(this.state.propertiesSummary["total_rent"])}
                                 </p>
                                 <p className="analysis_dashboard_inner_box_middle_cards_right_element_box_subtitle">
                                     total rent / month
@@ -334,7 +369,7 @@ class AnalysisDashboard extends React.Component {
                                 <IoMdAddCircle className="analysis_dashboard_inner_box_middle_box_element_add_icon"/>
                                 <div className="clearfix"/>
                                 <p className="analysis_dashboard_inner_box_middle_cards_right_element_box_title">
-                                    ${this.numberWithCommas(this.state.propertiesSummary["total_property_manager_fee"])}
+                                    ${numberWithCommas(this.state.propertiesSummary["total_property_manager_fee"])}
                                 </p>
                                 <p className="analysis_dashboard_inner_box_middle_cards_right_element_box_subtitle">
                                     in expenses this month
@@ -347,7 +382,7 @@ class AnalysisDashboard extends React.Component {
                                 <IoMdAddCircle className="analysis_dashboard_inner_box_middle_box_element_add_icon"/>
                                 <div className="clearfix"/>
                                 <p className="analysis_dashboard_inner_box_middle_cards_right_element_box_title">
-                                    ${this.numberWithCommas(this.state.propertiesSummary["total_mortgage_payment"])}
+                                    ${numberWithCommas(this.state.propertiesSummary["total_mortgage_payment"])}
                                 </p>
                                 <p className="analysis_dashboard_inner_box_middle_cards_right_element_box_subtitle">
                                     due this month
@@ -366,7 +401,7 @@ class AnalysisDashboard extends React.Component {
                             <IoMdAddCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
                             <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
                                 <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
-                                    ${this.numberWithCommas(this.state.propertiesSummary["total_estimate_worth"])}
+                                    ${numberWithCommas(this.state.propertiesSummary["total_estimate_worth"])}
                                 </p>
                                 <div className="clearfix"/>
                                 <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_subtitle">
@@ -402,7 +437,7 @@ class AnalysisDashboard extends React.Component {
                             <IoMdAddCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
                             <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
                                 <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
-                                    {this.numberWithCommas(this.state.propertiesSummary["total_bedrooms"])} total beds
+                                    {numberWithCommas(this.state.propertiesSummary["total_bedrooms"])} total beds
                                 </p>
                                 <div className="clearfix"/>
                                 <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_subtitle">
@@ -442,7 +477,7 @@ class AnalysisDashboard extends React.Component {
                                 Analysis
                             </p>
                         </div>
-                        {this.state.isPropertiesLoading ? <div></div> : 
+                        {this.state.isLoading ? <div></div> : 
                         <div>
                             <div className="clearfix"/>
                             <div 
