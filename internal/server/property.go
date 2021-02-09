@@ -40,7 +40,6 @@ type PropertiesSummary struct {
 	MortgagePaymentDateMap map[int]int                       `json:"mortgage_payment_date_map,omitempty"`
 
 	TotalMortgagePayment    float64 `json:"total_mortgage_payment,omitempty"`
-	TotalPropertyManagerFee float64 `json:"total_property_manager_fee,omitempty"`
 
 	TotalSquareFootage int `json:"total_square_footage,omitempty"`
 	TotalBedrooms      int `json:"total_bedrooms,omitempty"`
@@ -60,7 +59,6 @@ func calculatePropertiesSummary(properties []*db.Property) *PropertiesSummary {
 	var totalDownPayment float64
 	var totalLoan float64
 	var totalMortgagePayment float64
-	var totalPropertyManagerFee float64
 	var missingEstimate bool
 	var totalSquareFootage int
 	var totalBedrooms int
@@ -76,8 +74,8 @@ func calculatePropertiesSummary(properties []*db.Property) *PropertiesSummary {
 			totalCurrentlyRented++
 		}
 		totalRent += property.PriceRented
-		// totalCost is the mortgage and also the property manager fee.
-		totalCost += property.PriceMortgage + (property.PricePropertyManager * property.PriceRented / 100.0)
+		// totalCost is the mortgage.
+		totalCost += property.PriceMortgage
 		totalNetWorth += property.PriceBought
 		totalLoan += property.PriceBought - property.DownPayment
 
@@ -109,7 +107,6 @@ func calculatePropertiesSummary(properties []*db.Property) *PropertiesSummary {
 		totalBathrooms += property.NumBaths
 
 		totalMortgagePayment += property.PriceMortgage
-		totalPropertyManagerFee += (property.PricePropertyManager * property.PriceRented) / 100.0
 	}
 
 	averageLTV := totalLoan / totalEstimateWorth * 100.0
@@ -133,7 +130,6 @@ func calculatePropertiesSummary(properties []*db.Property) *PropertiesSummary {
 		RentPaymentDateMap:      rentPaymentDateMap,
 		MortgagePaymentDateMap:  mortgagePaymentDateMap,
 		TotalMortgagePayment:    totalMortgagePayment,
-		TotalPropertyManagerFee: totalPropertyManagerFee,
 		TotalSquareFootage:      totalSquareFootage,
 		TotalBedrooms:           totalBedrooms,
 		TotalBathrooms:          totalBathrooms,

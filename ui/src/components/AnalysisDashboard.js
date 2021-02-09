@@ -12,10 +12,10 @@ import BarChart from '../charts/BarChart.js';
 import { numberWithCommas, 
         getHistoricalAnalysisData } from '../utility/Util.js';
 
+import { AiFillQuestionCircle } from 'react-icons/ai';
 import { BsFillHouseFill } from 'react-icons/bs';
 import { FaCaretDown, FaMapMarkerAlt } from 'react-icons/fa';
 import { RiBuildingFill } from 'react-icons/ri';
-import { IoMdAddCircle } from 'react-icons/io';
 import { IoBedSharp } from 'react-icons/io5';
 
 const general = "general";
@@ -76,9 +76,11 @@ class AnalysisDashboard extends React.Component {
             // 3. expenses_summary
             let propertiesSummary = summary["properties_summary"];
             let historicalAnalysis = summary["historical_summary"];
+            let expensesSummary = summary["expenses_summary"];
 
             this.setState({
                 propertiesSummary: propertiesSummary,
+                expensesSummary: expensesSummary,
                 historicalAnalysis: historicalAnalysis,
                 isLoading: false
             }, () => {console.log(this.state.historicalAnalysis)});
@@ -249,7 +251,7 @@ class AnalysisDashboard extends React.Component {
                     <div className="analysis_dashboard_inner_box_top_cards_box">
                         <div className="analysis_dashboard_inner_box_top_cards_box_element">
                             <BsFillHouseFill className="analysis_dashboard_inner_box_top_cards_box_element_icon"/>
-                            <IoMdAddCircle className="analysis_dashboard_inner_box_top_cards_box_element_add_icon"/>
+                            <AiFillQuestionCircle className="analysis_dashboard_inner_box_top_cards_box_element_add_icon"/>
                             <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
                                 <p className="analysis_dashboard_inner_box_top_cards_box_element_text">
                                     {this.state.propertiesSummary["total_properties"]} total
@@ -262,7 +264,7 @@ class AnalysisDashboard extends React.Component {
                         </div>
                         <div className="analysis_dashboard_inner_box_top_cards_box_element">
                             <RiBuildingFill className="analysis_dashboard_inner_box_top_cards_box_element_icon"/>
-                            <IoMdAddCircle className="analysis_dashboard_inner_box_top_cards_box_element_add_icon"/>
+                            <AiFillQuestionCircle className="analysis_dashboard_inner_box_top_cards_box_element_add_icon"/>
                             <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
                                 <p className="analysis_dashboard_inner_box_top_cards_box_element_text">
                                     {this.state.propertiesSummary["total_properties"]} total
@@ -275,7 +277,7 @@ class AnalysisDashboard extends React.Component {
                         </div>
                         <div className="analysis_dashboard_inner_box_top_cards_box_element">
                             <FaMapMarkerAlt className="analysis_dashboard_inner_box_top_cards_box_element_icon"/>
-                            <IoMdAddCircle className="analysis_dashboard_inner_box_top_cards_box_element_add_icon"/>
+                            <AiFillQuestionCircle className="analysis_dashboard_inner_box_top_cards_box_element_add_icon"/>
                             <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
                                 <p className="analysis_dashboard_inner_box_top_cards_box_element_text">
                                     {numberWithCommas(this.state.propertiesSummary["total_square_footage"])} total
@@ -288,7 +290,7 @@ class AnalysisDashboard extends React.Component {
                         </div>
                         <div className="analysis_dashboard_inner_box_top_cards_box_element">
                             <IoBedSharp className="analysis_dashboard_inner_box_top_cards_box_element_icon"/>
-                            <IoMdAddCircle className="analysis_dashboard_inner_box_top_cards_box_element_add_icon"/>
+                            <AiFillQuestionCircle className="analysis_dashboard_inner_box_top_cards_box_element_add_icon"/>
                             <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
                                 <p className="analysis_dashboard_inner_box_top_cards_box_element_text">
                                     {numberWithCommas(this.state.propertiesSummary["total_bedrooms"])} total beds
@@ -335,7 +337,7 @@ class AnalysisDashboard extends React.Component {
                                 <p className="analysis_dashboard_inner_box_middle_cards_right_element_box_header_title">
                                     Rental Income
                                 </p>
-                                <IoMdAddCircle className="analysis_dashboard_inner_box_middle_box_element_add_icon"/>
+                                <AiFillQuestionCircle className="analysis_dashboard_inner_box_middle_box_element_add_icon"/>
                                 <div className="clearfix"/>
                                 <p className="analysis_dashboard_inner_box_middle_cards_right_element_box_title">
                                     ${numberWithCommas(this.state.propertiesSummary["total_rent"])}
@@ -348,7 +350,7 @@ class AnalysisDashboard extends React.Component {
                                 <p className="analysis_dashboard_inner_box_middle_cards_right_element_box_header_title">
                                     Expenses
                                 </p>
-                                <IoMdAddCircle className="analysis_dashboard_inner_box_middle_box_element_add_icon"/>
+                                <AiFillQuestionCircle className="analysis_dashboard_inner_box_middle_box_element_add_icon"/>
                                 <div className="clearfix"/>
                                 <p className="analysis_dashboard_inner_box_middle_cards_right_element_box_title">
                                     ${numberWithCommas(this.state.propertiesSummary["total_property_manager_fee"])}
@@ -361,7 +363,7 @@ class AnalysisDashboard extends React.Component {
                                 <p className="analysis_dashboard_inner_box_middle_cards_right_element_box_header_title">
                                     Loan Payback
                                 </p>
-                                <IoMdAddCircle className="analysis_dashboard_inner_box_middle_box_element_add_icon"/>
+                                <AiFillQuestionCircle className="analysis_dashboard_inner_box_middle_box_element_add_icon"/>
                                 <div className="clearfix"/>
                                 <p className="analysis_dashboard_inner_box_middle_cards_right_element_box_title">
                                     ${numberWithCommas(this.state.propertiesSummary["total_mortgage_payment"])}
@@ -380,7 +382,7 @@ class AnalysisDashboard extends React.Component {
 
                     <div className="analysis_dashboard_advanced_inner_box_top_cards_box">
                         <div className="analysis_dashboard_advanced_inner_box_top_cards_box_element">
-                            <IoMdAddCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
+                            <AiFillQuestionCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
                             <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
                                 <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
                                     ${numberWithCommas(this.state.propertiesSummary["total_estimate_worth"])}
@@ -392,7 +394,7 @@ class AnalysisDashboard extends React.Component {
                             </div>
                         </div>
                         <div className="analysis_dashboard_advanced_inner_box_top_cards_box_element">
-                            <IoMdAddCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
+                            <AiFillQuestionCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
                             <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
                                 <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
                                     {Number(this.state.propertiesSummary["average_ltv"].toFixed(2))} %
@@ -404,7 +406,7 @@ class AnalysisDashboard extends React.Component {
                             </div>
                         </div>
                         <div className="analysis_dashboard_advanced_inner_box_top_cards_box_element">
-                            <IoMdAddCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
+                            <AiFillQuestionCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
                             <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
                                 <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
                                     {Number(this.state.propertiesSummary["average_dti"].toFixed(2))} %
@@ -416,7 +418,7 @@ class AnalysisDashboard extends React.Component {
                             </div>
                         </div>
                         <div className="analysis_dashboard_advanced_inner_box_top_cards_box_element">
-                            <IoMdAddCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
+                            <AiFillQuestionCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
                             <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
                                 <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
                                     {numberWithCommas(this.state.propertiesSummary["total_bedrooms"])} total beds

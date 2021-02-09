@@ -72,49 +72,39 @@ class PropertyCard extends React.Component {
                 "property_card_box property_card_box_first_child" :
                 "property_card_box"}>
                 <div className="property_card_header_box">
-                    <p className="property_card_box_title">
-                        ${this.state.property["estimate"] ? numberWithCommas(this.state.property["estimate"]) : numberWithCommas(this.state.property["price_bought"])}
+                    <p className="property_card_box_address_title">
+                        {this.state.property["address_one"]} {this.state.property["address_two"]} 
                     </p>
                     {this.state.property["currently_rented"] ?
-                    <FaCheckCircle className="rented_check_icon"></FaCheckCircle> :
+                    <FaCheckCircle style={{
+                        color: "#85bb65",
+                        float: "left",
+                        height: "15px",
+                        marginLeft: "10px",
+                        marginTop: "6px",
+                        width: "15px",
+                    }} /> :
                     <div></div>}
                     <IoMdAddCircle 
                         onClick={() => {
                             this.setActiveProperty(this.state.property["id"])
                         }}
                         className="property_card_box_title_expand_icon">
-                    </IoMdAddCircle>                
+                    </IoMdAddCircle> 
+                    <div className="clearfix"/>
+                    <p className="property_card_box_address_subtitle">
+                        {this.state.property["state"]}, {this.state.property["zip_code"]}
+                    </p>              
                 </div>
-                {/* <div className="property_box_title_box"> */}
-                    {/* <p className="property_card_box_title">
-                        ${this.numberWithCommas(this.state.property["estimate"])}
-                    </p>
-                    <IoOpenOutline 
-                        onClick={() => {
-                            this.setActiveProperty(this.state.property["id"])
-                        }}
-                        className="property_card_box_title_expand_icon">
-                    </IoOpenOutline>
-                    {this.state.property["currently_rented"] ? 
-                    <div className="property_card_rented_box">
-                        <FaCheckCircle className="rented_check_icon"></FaCheckCircle>
-                        <p className="property_rented_text">
-                            Rented
-                        </p>
-                    </div> : <div></div>} */}
-                    
-                    {/* <div className="property_card_box_title_expand_button">
-                        Expand
-                    </div> */}
-                {/* </div> */}
+                <p className="property_card_box_title">
+                    ${this.state.property["estimate"] ? numberWithCommas(this.state.property["estimate"]) : numberWithCommas(this.state.property["price_bought"])}
+                </p>
+                
                 <div className="clearfix"/>
-                <p className="property_card_box_address_title">
-                    {this.state.property["address_one"]} {this.state.property["address_two"]} 
-                </p>
-                <p className="property_card_box_address_subtitle">
-                    {this.state.property["state"]}, {this.state.property["zip_code"]}
-                </p>
-                <div className="property_card_box_info_box">
+                <div style={{
+                    margin: "10px 20px 0px 20px",
+                    width: "calc(100% - 40px)",
+                }}>
                     <div className="property_card_box_info_box_first_row">
                         <div className="property_card_box_info_box_first_row_first_element">
                             <IoBedSharp className="property_card_box_info_box_icon"></IoBedSharp>

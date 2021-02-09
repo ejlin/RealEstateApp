@@ -357,7 +357,7 @@ class PropertyPage extends React.Component {
                             <div className="view_to_display_info_left_box">
                                 <li className="view_to_display_info_box_bullet">
                                     <p className="view_to_display_info_box_subtitle">
-                                        Bought on <b>{this.convertBoughDateToText(this.state.property["bought_date"])}</b>
+                                        Bought on: <b>{this.convertBoughDateToText(this.state.property["bought_date"])}</b>
                                     </p>
                                 </li>
                                 <li className="view_to_display_info_box_bullet">
@@ -397,7 +397,7 @@ class PropertyPage extends React.Component {
                             <div className="view_to_display_info_left_box">
                                 <li className="view_to_display_info_box_bullet">
                                     <p className="view_to_display_info_box_subtitle">
-                                        Loan/Mortgage Company <b>{this.state.property["mortgage_company"]}</b>
+                                        Loan/Mortgage Company: <b>{this.state.property["mortgage_company"]}</b>
                                     </p>
                                 </li>
                                 <li className="view_to_display_info_box_bullet">
@@ -638,7 +638,7 @@ class PropertyPage extends React.Component {
                                 </div>
                                 <div className="clearfix"/>
                                 <div className="analysis_cash_flow_label_box">
-                                    <p className="analysis_cash_flow_label_title">${Number(this.state.totalIncome - this.state.totalExpenses).toFixed(2)} / mo.</p>
+                                    <p className="analysis_cash_flow_label_title">${numberWithCommas(Number(this.state.totalIncome - this.state.totalExpenses).toFixed(2))} / mo.</p>
                                 </div>
                                 <div style={{
                                     marginTop: "15px",

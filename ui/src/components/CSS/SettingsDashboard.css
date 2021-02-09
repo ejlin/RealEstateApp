@@ -268,7 +268,7 @@
 
 .settings_dashboard_right_box_nav_bar_list {
     background-color: white;
-    border-radius: 50px;
+    border-radius: 50px 10px 10px 50px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     cursor: pointer;
     float: left;

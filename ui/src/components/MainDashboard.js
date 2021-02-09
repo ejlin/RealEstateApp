@@ -8,6 +8,8 @@ import './CSS/Style.css';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
+import MouseTooltip from 'react-sticky-mouse-tooltip';
+
 import { capitalizeName, 
         numberWithCommas, 
         getHistoricalAnalysisData } from '../utility/Util.js';
@@ -65,7 +67,8 @@ class MainDashboard extends React.Component {
             isLoading: true,
             profilePicture: this.props.location.state.profilePicture,
             host: window.location.protocol + "//" + window.location.host,
-            yoyGrowthToggleIsYear: true
+            yoyGrowthToggleIsYear: true,
+            mouseActiveTooltipText: null
         };
 
         this.getDate = this.getDate.bind(this);
@@ -290,6 +293,24 @@ class MainDashboard extends React.Component {
         let barChartData = getHistoricalAnalysisData(this.state.historicalAnalysis);
         return (
             <div>
+                <MouseTooltip
+                        visible={this.state.mouseActiveTooltipText !== null}
+                        offsetX={15}
+                        offsetY={10}
+                        style={{
+                            backgroundColor: "#f5f5fa",
+                            borderRadius: "10px",
+                            fontSize: "0.85em",
+                            fontWeight: "bold",
+                            paddingBottom: "5px",
+                            paddingLeft: "10px",
+                            paddingRight: "10px",
+                            paddingTop: "5px",
+                            zIndex: "40",
+                        }}
+                    >
+                        <span>{this.state.mouseActiveTooltipText}</span>
+                    </MouseTooltip>
                 <div>
                     <DashboardSidebar data={{
                         state: {
@@ -360,14 +381,23 @@ class MainDashboard extends React.Component {
                                 </div>
                                 <div id="main_dashboard_bottom_box">
                                     <div id="main_dashboard_bottom_left_box">
-                                        <div className="main_dashboard_bottom_left_box_top">
+                                        <div style={{
+                                            backgroundColor: "white",
+                                            border: "1px solid #f1f1f1",
+                                            borderRadius: "10px",
+                                            boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                                            height: "385px",
+                                            paddingLeft: "20px",
+                                            paddingRight: "20px",
+                                            width: "calc(100% - 40px - 2px",
+                                        }}>
                                             <p className="main_dashboard_box_title">
                                                 Portfolio Growth
                                             </p>
                                             <div className="clearfix"/>
                                             <div className="main_dashboard_portfolio_growth_bar_chart_parent_box">
                                                 <BarChart 
-                                                    height={"285"}
+                                                    height={"310"}
                                                     xAxisFontSize={"0.85em"}
                                                     yAxisFontSize={"0.9em"}
                                                     xAxisColor={"grey"}
@@ -378,72 +408,31 @@ class MainDashboard extends React.Component {
                                                     displayTooltip={true}
                                                     data={barChartData}/>
                                             </div>
-                                            <div className="clearfix"/>
-                                            {/* <VictoryChart
-                                                width={"700"}
-                                                height={"250"}
-                                                padding={{
-                                                    left: 50,
-                                                    right: 50,
-                                                    top: 0,
-                                                    bottom: 60
-                                                }}>
-                                            <VictoryLine 
-                                                interpolation="natural"
-                                                style={{
-                                                    data: {
-                                                        stroke: "#296CF6",
-                                                        strokeWidth: "3",
-                                                    }
-                                                }}
-                                                minDomain={{ 
-                                                    x: 0,
-                                                    y: 0
-                                                }}
-                                                // labels= {({ datum }) => datum.y}
-                                                width={"700"}
-                                                
-                                                data={[
-                                                    {x: "Jan", y: 61}, 
-                                                    {x: "Feb", y: 25}, 
-                                                    {x: "Mar", y: 16}, 
-                                                    {x: "Apr", y: 28}, 
-                                                    {x: "May", y: 11}, 
-                                                    {x: "Jun", y: 9}, 
-                                                    {x: "Jul", y: 10}, 
-                                                    {x: "Aug", y: 13}, 
-                                                    {x: "Sep", y: 17}, 
-                                                    {x: "Oct", y: 20}, 
-                                                    {x: "Nov", y: 18}, 
-                                                    {x: "Dec", y: 28}
-                                                ]} /> */}
-                                                {/* <VictoryAxis
-                                                    dependentAxis
-                                                    tickFormat={(y) => {
-                                                            // const dateObj = new Date(x);
-                                                            // const year = dateObj.getFullYear().toString().substr(-2);
-                                                            // const month = dateObj.toLocaleString('en-us', { month: 'short' });           
-                                                            // return `${month}/${year}`;       
-                                                            return y;                                            
-                                                    }}                                             
-                                                /> */}
-                                                {/* <VictoryAxis
-                                                    tickFormat={(x) => {
-                                                            // const dateObj = new Date(x);
-                                                            // const year = dateObj.getFullYear().toString().substr(-2);
-                                                            // const month = dateObj.toLocaleString('en-us', { month: 'short' });           
-                                                            // return `${month}/${year}`;       
-                                                            return x;                                            
-                                                    }}                                             
-                                                />
-                                            </VictoryChart> */}
                                         </div>
                                         <div className="main_dashboard_bottom_left_box_bottom">
                                             <div className="main_dashboard_bottom_left_box_bottom_inner_box">
                                                 <p className="main_dashboard_box_title">
                                                     Mortgages/Loans
                                                 </p>
-                                                <AiFillQuestionCircle className="main_dashboard_box_icon"></AiFillQuestionCircle>
+                                                <AiFillQuestionCircle 
+                                                    onMouseEnter={() => {
+                                                        let mouseToolTip = (
+                                                            <div>
+                                                                <p>
+                                                                    How many days until your next Payment.
+                                                                </p>
+                                                            </div>
+                                                        );
+                                                        this.setState({
+                                                            mouseActiveTooltipText: mouseToolTip,
+                                                        })
+                                                    }}
+                                                    onMouseLeave={() => {
+                                                        this.setState({
+                                                            mouseActiveTooltipText: null,
+                                                        })
+                                                    }}
+                                                    className="main_dashboard_box_icon"></AiFillQuestionCircle>
                                                 <div className="clearfix"/>
                                                 {this.renderMortgagePaymentDateMap()}
                                             </div>
@@ -451,7 +440,25 @@ class MainDashboard extends React.Component {
                                                 <p className="main_dashboard_box_title">
                                                     Rent Collected
                                                 </p>
-                                                <AiFillQuestionCircle className="main_dashboard_box_icon"></AiFillQuestionCircle>
+                                                <AiFillQuestionCircle 
+                                                    onMouseEnter={() => {
+                                                        let mouseToolTip = (
+                                                            <div>
+                                                                <p>
+                                                                    All the rent/income you will/have collect this month.
+                                                                </p>
+                                                            </div>
+                                                        );
+                                                        this.setState({
+                                                            mouseActiveTooltipText: mouseToolTip,
+                                                        })
+                                                    }}
+                                                    onMouseLeave={() => {
+                                                        this.setState({
+                                                            mouseActiveTooltipText: null,
+                                                        })
+                                                    }}
+                                                    className="main_dashboard_box_icon"></AiFillQuestionCircle>
                                                 <div className="clearfix"/>
                                                 {this.renderRentCollected()}                                                
                                             </div>
@@ -459,19 +466,63 @@ class MainDashboard extends React.Component {
                                                 <p className="main_dashboard_box_title">
                                                     Expenses
                                                 </p>
-                                                <AiFillQuestionCircle className="main_dashboard_box_icon"></AiFillQuestionCircle>
+                                                <AiFillQuestionCircle 
+                                                    onMouseEnter={() => {
+                                                        let mouseToolTip = (
+                                                            <div>
+                                                                <p>
+                                                                    Total expenses this month.
+                                                                </p>
+                                                            </div>
+                                                        );
+                                                        this.setState({
+                                                            mouseActiveTooltipText: mouseToolTip,
+                                                        })
+                                                    }}
+                                                    onMouseLeave={() => {
+                                                        this.setState({
+                                                            mouseActiveTooltipText: null,
+                                                        })
+                                                    }}
+                                                    className="main_dashboard_box_icon"></AiFillQuestionCircle>
                                                 <div className="clearfix"/>
                                                 {this.renderAdditionalExpensesCollected()}      
                                             </div>
                                         </div>
                                     </div>
                                     <div id="main_dashboard_bottom_right_box">
-                                        <div className="main_dashboard_key_insights_box">
+                                        <div style={{
+                                            backgroundColor: "white",
+                                            border: "1px solid #f1f1f1", 
+                                            borderRadius: "10px",
+                                            boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                                            height: "287px",
+                                            overflow: "hidden",
+                                            width: "calc(100% - 2px)",
+                                        }}>
                                             <div>
                                                 <p className="main_dashboard_box_title">
                                                     Rent Schedule
                                                 </p>
-                                                <AiFillQuestionCircle className="main_dashboard_box_icon"></AiFillQuestionCircle>
+                                                <AiFillQuestionCircle 
+                                                    onMouseEnter={() => {
+                                                        let mouseToolTip = (
+                                                            <div>
+                                                                <p>
+                                                                    Timeline of when you can expect your rent.
+                                                                </p>
+                                                            </div>
+                                                        );
+                                                        this.setState({
+                                                            mouseActiveTooltipText: mouseToolTip,
+                                                        })
+                                                    }}
+                                                    onMouseLeave={() => {
+                                                        this.setState({
+                                                            mouseActiveTooltipText: null,
+                                                        })
+                                                    }}
+                                                    className="main_dashboard_box_icon"></AiFillQuestionCircle>
                                             </div>
                                             <div className="clearfix"/>
                                             {this.renderRentPaymentDateMap(false)}
@@ -492,16 +543,6 @@ class MainDashboard extends React.Component {
                                             <div className="main_dashboard_yoy_growth_toggle_box">
                                                 <div 
                                                     onClick={() => this.setState({
-                                                        yoyGrowthToggleIsYear: false
-                                                    })}
-                                                    className={
-                                                        !this.state.yoyGrowthToggleIsYear ?
-                                                        "main_dashboard_yoy_growth_toggle_element main_dashboard_yoy_growth_toggle_element_active" :
-                                                        "main_dashboard_yoy_growth_toggle_element"}>
-                                                    Month
-                                                </div>
-                                                <div 
-                                                    onClick={() => this.setState({
                                                         yoyGrowthToggleIsYear: true
                                                     })}
                                                     className={
@@ -509,6 +550,16 @@ class MainDashboard extends React.Component {
                                                         "main_dashboard_yoy_growth_toggle_element main_dashboard_yoy_growth_toggle_element_active" :
                                                         "main_dashboard_yoy_growth_toggle_element"}>
                                                     Year
+                                                </div>
+                                                <div 
+                                                    onClick={() => this.setState({
+                                                        yoyGrowthToggleIsYear: false
+                                                    })}
+                                                    className={
+                                                        !this.state.yoyGrowthToggleIsYear ?
+                                                        "main_dashboard_yoy_growth_toggle_element main_dashboard_yoy_growth_toggle_element_active" :
+                                                        "main_dashboard_yoy_growth_toggle_element"}>
+                                                    Month
                                                 </div>
                                             </div>
                                             {this.state.totalEstimateWorth >= this.state.yearAgoTotalEstimateWorth ?

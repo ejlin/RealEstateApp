@@ -213,22 +213,23 @@
 }
 
 .analysis_circular_box {
+    /* background-color: black; */
     border-radius: 10px;
     float: right;
     height: 260px;
-    margin-left: calc(100% - 325px - 750px - 50px);    /* 775px is 650 graph, 50 margin left graph, 75 margin right circular */
+    margin-left: 40px;    /* 775px is 650 graph, 50 margin left graph, 75 margin right circular */
     margin-right: 40px;
     margin-top: 35px;
-    width: calc(325px - 1px);   
+    width: calc(100% - 750px - 1px - 80px);   
 }
 
 .percent_portfolio_circle_graph {
     float: left;
     height: 250px;
-    margin-left: calc((100% - 75%)/2);
-    margin-right: calc((100% - 75%)/2);
+    margin-left: calc((100% - 250px)/2);
+    margin-right: calc((100% - 250px)/2);
     margin-top: 25px;
-    width: 75%;
+    width: calc(250px);
 }
 
 .analysis_bar_chart {
@@ -342,7 +343,7 @@
     float: left;
     margin-left: 40px; 
     margin-right: 40px;
-    width: calc(300px - 1px);
+    width: calc(100% - 750px - 1px - 80px);
 }
 
 .analysis_cash_flow_label_box {

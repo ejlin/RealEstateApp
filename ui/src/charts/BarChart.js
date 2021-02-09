@@ -94,10 +94,10 @@ class BarChart extends React.Component {
                     color: this.state.yAxisColor
                 }}>
                     {   maxYAxisValue >= 1000000000 ? 
-                        numberWithCommas(Math.trunc(maxYAxisValue/1000000000)) + "B" :
+                        numberWithCommas(Math.trunc(maxYAxisValue/100000000)/10.0) + "B" :
                         (
                         maxYAxisValue >= 1000000 ? 
-                        numberWithCommas(Math.trunc(maxYAxisValue/1000000)) + "M" :
+                        numberWithCommas(Math.trunc(maxYAxisValue/100000)/10.0) + "M" :
                         (maxYAxisValue >= 1000 ?
                         numberWithCommas(Math.trunc(maxYAxisValue/1000)) + "K" :
                         maxYAxisValue))
@@ -110,10 +110,10 @@ class BarChart extends React.Component {
                 }}>
                     { 
                         midpoint >= 1000000000 ?
-                        numberWithCommas(Math.trunc(midpoint/1000000000)) + "B" :
+                        numberWithCommas(Math.trunc(midpoint/100000000)/10.0) + "B" :
                         (
                         midpoint >= 1000000 ? 
-                        numberWithCommas(Math.trunc(midpoint/1000000)) + "M" :
+                        numberWithCommas(Math.trunc(midpoint/100000)/10.0) + "M" :
                         (midpoint >= 1000 ?
                         numberWithCommas(Math.trunc(midpoint/1000)) + "K" :
                         midpoint))
@@ -126,9 +126,9 @@ class BarChart extends React.Component {
                 }}>
                     {
                         minYAxisValue >= 1000000000 ?
-                        numberWithCommas(Math.trunc(minYAxisValue/1000000000)) + "B" :
+                        numberWithCommas(Math.trunc(minYAxisValue/100000000)/10.0) + "B" :
                         (minYAxisValue >= 1000000 ? 
-                        numberWithCommas(Math.trunc(minYAxisValue/1000000)) + "M" :
+                        numberWithCommas(Math.trunc(minYAxisValue/100000)/10.0) + "M" :
                         (minYAxisValue >= 100 ?
                         numberWithCommas(Math.trunc(minYAxisValue/1000)) + "K" :
                         minYAxisValue))
@@ -227,6 +227,7 @@ class BarChart extends React.Component {
                             paddingLeft: "10px",
                             paddingRight: "10px",
                             paddingTop: "5px",
+                            zIndex: "40",
                         }}
                     >
                         <span>{this.state.mouseActiveTooltip}</span>

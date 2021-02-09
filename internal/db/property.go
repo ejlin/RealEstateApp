@@ -25,7 +25,6 @@ type Property struct {
 	Estimate             float64 `json:"estimate,omitempty",sql:"type:NUMERIC(16,2)"`
 	PriceMortgage        float64 `json:"price_mortgage,omitempty",sql:"type:NUMERIC(12,2)"`
 	DownPayment          float64 `json:"down_payment,omitempty",sql:"type:NUMERIC(12,2)"`
-	PricePropertyManager float64 `json:"price_property_manager,omitempty",sql:"type:NUMERIC(12,2)"`
 
 	MortgageCompany      string       `json:"mortgage_company,omitempty",sql:"type:VARCHAR(64)"`
 	MortgageInterestRate float64      `json:"mortgage_interest_rate,omitempty",sql:"type:NUMERIC(5,1)"`

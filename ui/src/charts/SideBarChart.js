@@ -58,6 +58,7 @@ class SideBarChart extends React.Component {
         }
 
         let width = this.state.width;
+        // let width = document.getElementById("sidebar_parent").offsetWidth;
         let elements = [];
         let maxValue = 0;
         
@@ -94,6 +95,8 @@ class SideBarChart extends React.Component {
             for (let j = 0; j < bars.length; j++) {
                 
                 let bar = bars[j];
+
+                console.log(bar);
     
                 let label = bar["label"];
                 let color = bar["color"];
@@ -176,13 +179,15 @@ class SideBarChart extends React.Component {
 
     render() {
         return (
-            <div style={{
-                backgroundColor: this.state.backgroundColor,
-                borderRadius: "10px",
-                marginTop: this.state.marginTop + "px",
-                height: this.state.height + "px",
-                width: this.state.width + "px",
-            }}>
+            <div
+                id="sidebar_parent" 
+                style={{
+                    backgroundColor: this.state.backgroundColor,
+                    borderRadius: "10px",
+                    marginTop: this.state.marginTop + "px",
+                    height: this.state.height + "px",
+                    width: "100%",
+                }}>
                 {this.renderGraph()}
             </div>
         );

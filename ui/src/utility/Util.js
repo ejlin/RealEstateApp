@@ -269,21 +269,15 @@ export function getCashFlowData(propertySummary, expenses) {
     let totalMortgagePayment = propertySummary["total_mortgage_payment"];
     let totalExpenses = 0;
 
-    expensesBar.push(
-        {value: parseFloat(Number(totalMortgagePayment).toFixed(2)), color: "", label: "Loan/Mortgage"}
-    );
-    totalExpenses += parseFloat(Number(totalMortgagePayment).toFixed(2));
-
-    let totalPropertyManager = propertySummary["total_property_manager_fee"];
-    expensesBar.push(
-        {value: parseFloat(Number(totalPropertyManager).toFixed(2)), color: "", label: "Property Manager"}
-    );
-
-    totalExpenses += parseFloat(Number(totalPropertyManager).toFixed(2));
+    if (totalMortgagePayment && totalMortgagePayment !== 0.00){
+        expensesBar.push(
+            {value: parseFloat(Number(totalMortgagePayment).toFixed(2)), color: "", label: "Loan/Mortgage"}
+        );
+        totalExpenses += parseFloat(Number(totalMortgagePayment).toFixed(2));
+    }
 
     for (let i = 0; i < expenses.length; i++) {
         let expense = expenses[i];
-        console.log(expense);
         let title = expense["title"];
         let amount = expense["amount"];
         expensesBar.push(
@@ -299,7 +293,6 @@ export function getCashFlowData(propertySummary, expenses) {
 
 export function getHistoricalAnalysisData(historicalAnalysis) {
 
-    console.log(historicalAnalysis);
     let data = [];
 
     let trailingMonths = getTrailingTwelveMonths();
@@ -368,8 +361,6 @@ export function getHistoricalAnalysisData(historicalAnalysis) {
             monthYearToEstimatesArrayMap.set(key, arr);
         }
     }
-
-    console.log(monthYearToEstimatesArrayMap);
     
     // Iterate through the past 12 months. 
     for (let i = 0; i < trailingMonths.length; i++) {

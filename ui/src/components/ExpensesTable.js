@@ -441,7 +441,7 @@ class ExpensesTable extends React.Component {
                 <div className="expenses_table_title_row_divider">
                 </div>
                 <div className="expenses_table_body">
-                    {
+                    { (this.state.expenses === null || this.state.expenses === undefined || this.state.expenses.length === 0) ? this.renderNoExpenses() :
                         (this.state.activeSearchExpenses && (this.state.activeSearchExpenses.length > 0 || document.getElementById("expenses_dashboard_search_bar").value !== "")) ? 
                         this.renderActiveSearchExpenses() :
                         (this.state.expenses ?
