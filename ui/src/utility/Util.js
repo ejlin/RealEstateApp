@@ -26,6 +26,9 @@ export function trimTrailingName(name, maxLength) {
 }
 
 export function capitalizeName(x) {
+    if (x === null || x === undefined || x.length === 0) {
+        return x;
+    }
     return x.charAt(0).toUpperCase() + x.slice(1);
 }
 

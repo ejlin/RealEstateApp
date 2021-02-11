@@ -41,10 +41,13 @@ class SignUp extends React.Component {
         })
         .then(response => {
             if (response != null) {
+
+                let user = response.data;
+                localStorage.setItem('user', JSON.stringify(user));
                 this.setState({
-                    currUser: response.data,
-                    redirect: "/selectpricingplan"
-                }, () => this.state.currUser);
+                    user: user,
+                    redirect: "/selectpricingplan",
+                });
             }
         }).catch(error => console.error('timeout exceeded'));
     }
@@ -54,7 +57,7 @@ class SignUp extends React.Component {
             return <Redirect to={{
                 pathname: this.state.redirect,
                 state: {
-                    user: this.state.currUser,
+                    user: this.state.user,
                     form: this.state.form,
                 }
             }} />

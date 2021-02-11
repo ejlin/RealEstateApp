@@ -23,8 +23,18 @@ class DashboardSidebar extends React.Component {
     
     constructor(props) {
         super(props);
+
+        let user;
+
+        const loggedInUser = localStorage.getItem("user");
+        if (loggedInUser) {
+            user = JSON.parse(loggedInUser);
+        } else {
+            user = null;
+        }
+
         this.state = {
-            user: this.props.data.state.user,
+            user: user,
             totalEstimateWorth: this.props.data.state.totalEstimateWorth,
             missingEstimate: this.props.data.state.missingEstimate,
             currentPage: this.props.data.state.currentPage,
@@ -87,9 +97,14 @@ class DashboardSidebar extends React.Component {
                         {this.state.displayAccountTooltip ? 
                         <div id="dashboard_sidebar_profile_tooltip">
                             <li 
-                                onClick={() => this.setState({
-                                    redirect: "/"
-                                })}
+                                onClick={() => 
+                                    {
+                                        localStorage.clear();
+                                        this.setState({
+                                            redirect: "/"
+                                        });
+                                    }
+                                }
                                 className="dashboard_sidebar_profile_tooltip_list">
                                 Sign Out
                             </li>

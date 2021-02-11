@@ -46,8 +46,20 @@ class PropertiesDashboard extends React.Component {
     constructor(props) {
         super(props);
 
+        let user;
+        let redirect;
+
+        const loggedInUser = localStorage.getItem("user");
+        if (loggedInUser) {
+            user = JSON.parse(loggedInUser);
+            redirect = null;
+        } else {
+            user = null;
+            redirect = "/";
+        }
+
         this.state = {
-            user: this.props.location.state.user,
+            user: user,
             profilePicture: this.props.location.state.profilePicture,
             tags: ['SFH', 'Manufactured', 'Condo/Op', 'Multi-Family', 'Apartment', 'Lot/Land', 'Townhome', 'Commercial'],
             propertiesMap: new Map(),
@@ -55,7 +67,8 @@ class PropertiesDashboard extends React.Component {
             activeProperty: null,
             activePropertyView: overview,
             activeFiles: [],
-            isLoading: true
+            isLoading: true,
+            redirect: redirect,
         };
         this.setActiveFileAttributes = this.setActiveFileAttributes.bind(this);
         this.numberWithCommas = this.numberWithCommas.bind(this);
@@ -749,6 +762,11 @@ class PropertiesDashboard extends React.Component {
     // }
 
     render() {
+        if (this.state.redirect) {
+            return <Redirect to={{
+                pathname: this.state.redirect
+            }} />
+        }
         if (this.state.redirectToPropertyPage) {
             return <Redirect to={{
                 pathname: this.state.redirectToPropertyPage,

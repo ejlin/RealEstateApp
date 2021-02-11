@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import { Redirect } from "react-router-dom";
 
 import './CSS/MainDashboard.css';
 import './CSS/Style.css';
 
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
 import MouseTooltip from 'react-sticky-mouse-tooltip';
@@ -14,7 +13,6 @@ import { capitalizeName,
         numberWithCommas, 
         getHistoricalAnalysisData } from '../utility/Util.js';
 
-import PropertyCard from './PropertyCard.js';
 import DashboardSidebar from './DashboardSidebar.js';
 import NotificationSidebar from './NotificationSidebar.js';
 import BarChart from '../charts/BarChart.js';
@@ -25,13 +23,8 @@ import { RiPercentFill } from 'react-icons/ri';
 import { BsFillHouseFill } from 'react-icons/bs';
 import { ImArrowUp2, ImArrowDown2 } from 'react-icons/im';
 import { IoIosWarning } from 'react-icons/io';
-// import { AiFillQuestionCircle } from 'react-icons/io';
 
-import { LineChart, PieChart } from 'react-chartkick'
 import 'chart.js'
-import { VictoryLine, VictoryAxis, VictoryChart } from 'victory';
-
-import { XAxis, Bar } from 'recharts';
 
 export const getDaysInMonth = (month, year) => {
     return new Date(year, month+1, 0).getDate();
@@ -54,21 +47,30 @@ let URLBuilder = require('url-join');
 class MainDashboard extends React.Component {
     constructor(props) {
         super(props);
-        if (this.props == null) {
-            this.setState({                   
-                redirect: "/dashboard"
-            });
+        
+        let user;
+        let redirect;
+
+        const loggedInUser = localStorage.getItem("user");
+        if (loggedInUser) {
+            user = JSON.parse(loggedInUser);
+            redirect = null;
+        } else {
+            user = null;
+            redirect = "/";
         }
+
         this.state = {
-            user: this.props.location.state.user,
+            user: user,
             vacantProperties: 0,
             yearAgoTotalEstimateWorth: 0.0,
             properties: [],
-            isLoading: true,
             profilePicture: this.props.location.state.profilePicture,
             host: window.location.protocol + "//" + window.location.host,
             yoyGrowthToggleIsYear: true,
-            mouseActiveTooltipText: null
+            mouseActiveTooltipText: null,
+            redirect: redirect,
+            isLoading: true,
         };
 
         this.getDate = this.getDate.bind(this);
@@ -131,7 +133,13 @@ class MainDashboard extends React.Component {
         });
     }
 
-
+    // useEffect(() => {
+    //     const loggedInUser = localStorage.getItem("user");
+    //     if (loggedInUser) {
+    //       const foundUser = JSON.parse(loggedInUser);
+    //       setUser(foundUser);
+    //     }
+    //   }, []);
 
     getDate() {
         let monthArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

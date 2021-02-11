@@ -14,13 +14,20 @@
 }
 
 .analysis_dashboard_inner_box {
-    margin-top: 25px;
     width: 100%;
 }
 
 .analysis_dashboard_inner_box_top_cards_box {
-    margin-top: 25px;
+    margin-top: 15px;
     width: 100%;
+}
+
+.property_search_bar_element {
+    transition: 0.5s;
+}
+
+.property_search_bar_element:hover {
+    background-color: #f5f5fa;
 }
 
 .analysis_dashboard_inner_box_top_cards_box_element {
@@ -262,7 +269,7 @@
 .analysis_dashboard_inner_box_middle_cards_right_element_box_subtitle {
     font-size: 1em;
     margin-left: 10%;
-    margin-top: 0px;
+    margin-top: 5px;
     text-align: center;
     width: 80%;
 }
@@ -287,7 +294,6 @@
     border-radius: 8px;
     float: right;
     height: 30px;
-    margin-top: calc(25px - 1px);
     width: 175px;
 }
 

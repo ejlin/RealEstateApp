@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Redirect } from "react-router-dom";
 
 import './CSS/PropertyCard.css';
 
@@ -26,8 +27,17 @@ class PropertyCard extends React.Component {
     constructor(props) {
         super(props);
 
+        let user;
+
+        const loggedInUser = localStorage.getItem("user");
+        if (loggedInUser) {
+            user = JSON.parse(loggedInUser);
+        } else {
+            user = null;
+        }
+
         this.state = {
-            user: this.props.data.state.user,
+            user: user,
             isFirstChild: this.props.data.state.isFirstChild,
             property: this.props.data.state.property_details,
             isLoading: false
@@ -102,24 +112,50 @@ class PropertyCard extends React.Component {
                 
                 <div className="clearfix"/>
                 <div style={{
-                    margin: "10px 20px 0px 20px",
+                    margin: "0px 20px 0px 20px",
                     width: "calc(100% - 40px)",
                 }}>
                     <div className="property_card_box_info_box_first_row">
                         <div className="property_card_box_info_box_first_row_first_element">
-                            <IoBedSharp className="property_card_box_info_box_icon"></IoBedSharp>
-                            <p className="property_card_box_info_box_text">
-                                {this.state.property["num_beds"]} {this.state.property["num_beds"] > 1 ? "beds" : "bed"}
-                            </p>
+                            <div className="property_card_box_element">
+                                <IoBedSharp className="property_card_box_info_box_icon"></IoBedSharp>
+                                <p className="property_card_box_info_box_text">
+                                    {this.state.property["num_beds"]} {this.state.property["num_beds"] > 1 ? "beds" : "bed"}
+                                </p>
+                            </div>
+                            <div className="property_card_box_element">
+                                <IoWaterSharp className="property_card_box_info_box_icon"></IoWaterSharp>
+                                <p className="property_card_box_info_box_text">
+                                    {this.state.property["num_baths"]} {this.state.property["num_baths"] > 1 ? "baths" : "bath"}
+                                </p>
+                            </div>
+                            <div className="property_card_box_element">
+                                <IoTrailSignSharp className="property_card_box_info_box_icon"></IoTrailSignSharp>
+                                <p className="property_card_box_info_box_text">
+                                    {this.state.property["num_units"]} {this.state.property["num_units"] > 1 ? "units" : "unit"}
+                                </p>
+                            </div>
+                            <div className="property_card_box_element">
+                                <IoBookmarkSharp className="property_card_box_info_box_icon"></IoBookmarkSharp>
+                                <p className="property_card_box_info_box_text">
+                                    {numberWithCommas(this.state.property["square_footage"])} sq ft
+                                </p>
+                            </div>
                         </div>
-                        <div className="property_card_box_info_box_first_row_second_element">
+                        {/* <div className="property_card_box_info_box_first_row_second_element">
                             <IoWaterSharp className="property_card_box_info_box_icon"></IoWaterSharp>
                             <p className="property_card_box_info_box_text">
                                 {this.state.property["num_baths"]} {this.state.property["num_baths"] > 1 ? "baths" : "bath"}
                             </p>
                         </div>
+                        <div className="property_card_box_info_box_first_row_second_element">
+                            <IoBookmarkSharp className="property_card_box_info_box_icon"></IoBookmarkSharp>
+                            <p className="property_card_box_info_box_text">
+                                {numberWithCommas(this.state.property["square_footage"])} sq ft
+                            </p>
+                        </div> */}
                     </div>
-                    <div className="property_card_box_info_box_second_row">
+                    {/* <div className="property_card_box_info_box_second_row">
                         <div className="property_card_box_info_box_first_row_first_element">
                             <IoTrailSignSharp className="property_card_box_info_box_icon"></IoTrailSignSharp>
                             <p className="property_card_box_info_box_text">
@@ -132,7 +168,7 @@ class PropertyCard extends React.Component {
                                 {numberWithCommas(this.state.property["square_footage"])} sq ft
                             </p>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         )

@@ -4,11 +4,12 @@
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     border-radius: 10px;
     float: left;
-    height: 250px;
+    height: 275px;
     margin-bottom: 30px;
-    margin-right: 25px;    /* 100% - 4 cards at 250px width each, 3 spacings in between them) */
+    margin-right: 20px;    /* 100% - 4 cards at 250px width each, 3 spacings in between them) */
+    min-width: 300px;
     /* min-width: 276px;   4px for border */
-    width: calc((100% - 50px ) / 3);
+    width: calc((100% - 60px ) / 3);
 }
 
 .property_card_box:nth-child(4){
@@ -35,7 +36,7 @@
 .property_card_box_title {
     color: black;
     float: left;
-    font-size: 1.3em;
+    font-size: 1.25em;
     line-height: 55px;
     margin-left: 20px;
     user-select: none;
@@ -58,13 +59,13 @@
 
 .property_card_box_address_title {
     float: left;
-    font-size: 1.3em;
+    font-size: 1.25em;
     font-weight: bold;
     margin-left: 20px;
 }
 
 .property_card_box_address_subtitle {
-    font-size: 1.1em;
+    font-size: 1.05em;
     font-weight: bold;
     margin-left: 20px;
     margin-top: 5px;
@@ -72,13 +73,16 @@
 }
 
 .property_card_box_info_box_first_row {
-    height: 25px;
     width: 100%;
 }
 
 .property_card_box_info_box_first_row_first_element {
     float: left;
-    width: 50%;
+    width: 100%;
+}
+
+.property_card_box_element {
+    margin-top: 7.5px;
 }
 
 .property_card_box_info_box_first_row_second_element {

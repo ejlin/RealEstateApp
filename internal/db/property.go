@@ -98,6 +98,21 @@ func (handle *Handle) GetPropertyByID(propertyID string) (*Property, error) {
 	return &property, nil
 }
 
+// GetPropertiesAddressesByOwner will fetch all properties associated with a user.
+func (handle *Handle) GetPropertiesAddressesByOwner(userID string) ([]*Property, error) {
+
+	_, err := uuid.Parse(userID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid UUID: %w", err)
+	}
+
+	var properties []*Property
+	if err := handle.DB.Select("id, address_one, address_two").Where("user_id = ?", userID).Find(&properties).Error; err != nil {
+		return nil, err
+	}
+	return properties, nil
+}
+
 // GetPropertiesByOwner will fetch all properties associated with a user.
 func (handle *Handle) GetPropertiesByOwner(userID string) ([]*Property, error) {
 

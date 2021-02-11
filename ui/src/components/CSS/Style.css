@@ -29,7 +29,7 @@ body {
     width: 500px;
 }
 
-.search_bar:focus {
+.search_bar:focus, .generic_search_bar:focus {
     outline: none;
 }
 

@@ -46,18 +46,19 @@ class Login extends React.Component {
         }).then(response => {
             if (response != null) {
 
-                var user = response.data;
-                var redirect;
+                let user = response.data;
+                let redirect;
                 
                 if (user["plan"] === "inactivated") {
                     redirect = "/selectpricingplan"
                 } else {
                     redirect = "/dashboard"
                 }
+                localStorage.setItem('user', JSON.stringify(user));
                 this.setState({
                     user: user,
                     redirect: redirect
-                }, () => console.log(this.state.user));
+                });
             }
             
         }).catch(error => console.error('timeout exceeded'));

@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Redirect } from "react-router-dom";
 
 import './CSS/AnalysisDashboard.css';
 import './CSS/Style.css';
@@ -28,8 +29,20 @@ class AnalysisDashboard extends React.Component {
     constructor(props) {
         super(props);
 
+        let user;
+        let redirect;
+
+        const loggedInUser = localStorage.getItem("user");
+        if (loggedInUser) {
+            user = JSON.parse(loggedInUser);
+            redirect = null;
+        } else {
+            user = null;
+            redirect = "/";
+        }
+
         this.state = {
-            user: this.props.location.state.user,
+            user: user,
             profilePicture: this.props.location.state.profilePicture,
             totalEstimateWorth: this.props.location.state.totalEstimateWorth,
             missingEstimate: this.props.location.state.missingEstimate,
@@ -50,22 +63,41 @@ class AnalysisDashboard extends React.Component {
             displayPropertySelector: false,
             viewToDisplay: general,
             host: window.location.protocol + "//" + window.location.host,
+            activePropertySearchBar: false,
+            redirect: redirect,
             isLoading: true
         };
         // this.renderPropertiesInSelector = this.renderPropertiesInSelector.bind(this);
+        this.handleClickOutside = this.handleClickOutside.bind(this);
+
+        this.renderPropertiesList = this.renderPropertiesList.bind(this);
+        this.handleSelectPropertyBar = this.handleSelectPropertyBar.bind(this);
+        this.renderPropertySearchBarElements = this.renderPropertySearchBarElements.bind(this);
+
+        document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+
+    handleClickOutside(event) {
+        this.setState({
+            activePropertySearchBar: false,
+        })
     }
 
     componentDidMount() {
+
+        document.addEventListener('mousedown', this.handleClickOutside);
 
         let userID = this.state.user["id"];
         let host = this.state.host;
 
         let getSummaryURL = URLBuilder(host, '/api/user/summary', userID);
+        let getPropertiesAddressesURL = URLBuilder(host, '/api/user/property', userID, '?addresses=true');
 
         const getSummaryRequest = axios.get(getSummaryURL);
+        const getPropertiesAddressesRequest = axios.get(getPropertiesAddressesURL)
 
         axios.all(
-            [getSummaryRequest]
+            [getSummaryRequest, getPropertiesAddressesRequest]
         ).then(axios.spread((...responses) => {
             const summaryRequestResponse = responses[0];
             const summary = summaryRequestResponse.data;
@@ -78,15 +110,63 @@ class AnalysisDashboard extends React.Component {
             let historicalAnalysis = summary["historical_summary"];
             let expensesSummary = summary["expenses_summary"];
 
+            /* Handle our properties */
+            const propertiesAddressesRequestResponse = responses[1];
+            const propertiesAddresses = propertiesAddressesRequestResponse.data;
+            console.log(propertiesAddresses);
+            let propertiesMap = new Map();
+            for (let i = 0; i < propertiesAddresses.length; i++) {
+                let property = propertiesAddresses[i];
+                propertiesMap.set(property["address_one"], property["id"]);
+            }
+
             this.setState({
                 propertiesSummary: propertiesSummary,
                 expensesSummary: expensesSummary,
                 historicalAnalysis: historicalAnalysis,
+                propertiesMap: propertiesMap,
                 isLoading: false
             }, () => {console.log(this.state.historicalAnalysis)});
         })).catch(errors => {
             console.log(errors);
         });
+    }
+
+    renderPropertiesList() {
+        this.setState({
+            activePropertySearchBar: true,
+            propertySearchBarProperties: this.state.propertiesMap,
+        })
+    }
+
+    handleSelectPropertyBar(e) {
+        let searchValue = e.target.value.toLowerCase(); //.replace(/\s/g, "");
+    }
+
+    renderPropertySearchBarElements() {
+        let propertySearchBarProperties = this.state.propertySearchBarProperties;
+        let elements = [];
+        propertySearchBarProperties.forEach((value, key, map) => {
+            elements.push(
+                <div 
+                    className="property_search_bar_element"
+                    style={{
+                        cursor: "pointer",
+                        height: "40px",
+                        lineHeight: "40px",
+                        width: "100%",
+                    }}>
+                    <p style={{
+                        fontSize: "1.0em",
+                        marginLeft: "20px",
+                    }}>
+                        {key}
+                    </p>
+                </div>
+            );
+        });
+        console.log(elements);
+        return elements;
     }
 
     // renderPropertyTypesInSelector() {
@@ -443,6 +523,11 @@ class AnalysisDashboard extends React.Component {
     }
 
     render() {
+        if (this.state.redirect) {
+            return <Redirect to={{
+                pathname: this.state.redirect
+            }} />
+        }
         return (
             <div>
                 <DashboardSidebar data={{
@@ -479,26 +564,61 @@ class AnalysisDashboard extends React.Component {
                                     "analysis_dashboard_inner_box_property_selector_icon analysis_dashboard_inner_box_property_selector_icon_active" :
                                     "analysis_dashboard_inner_box_property_selector_icon"}></FaCaretDown>
                             </div> */}
-                            <div className="analysis_dashboard_view_selection_box">
-                                <div
-                                    onClick={() => this.setState({
-                                        viewToDisplay: general
-                                    })}
-                                    className={
-                                        this.state.viewToDisplay === general ? 
-                                        "analysis_dashboard_view_selection_box_element analysis_dashboard_view_selection_box_element_active" :
-                                        "analysis_dashboard_view_selection_box_element"}>
-                                    General
-                                </div>
-                                <div
-                                    onClick={() => this.setState({
-                                        viewToDisplay: advanced
-                                    })} 
-                                    className={
-                                        this.state.viewToDisplay === advanced ? 
-                                        "analysis_dashboard_view_selection_box_element analysis_dashboard_view_selection_box_element_active" :
-                                        "analysis_dashboard_view_selection_box_element"}>
-                                    Advanced
+                            <div style={{
+                                marginTop: "25px",
+                            }}>
+                                <input 
+                                    onMouseDown={this.renderPropertiesList}
+                                    onChange={this.handleSelectPropertyBar}
+                                    placeholder="Select Property..."
+                                    className="generic_search_bar"
+                                    style={{
+                                        border: "0px",
+                                        borderRadius: this.state.activePropertySearchBar ? "20px 20px 0px 0px" : "50px",
+                                        boxShadow: "2px 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                                        height: "20px",
+                                        fontSize: "1.1em",
+                                        padding: "10px 15px 10px 20px",
+                                        width: "350px",
+                                        float: "left",
+                                    }}></input>
+                                {this.state.activePropertySearchBar ? 
+                                <div style={{
+                                    backgroundColor: "white",
+                                    borderRadius: "0px 0px 20px 20px",
+                                    borderTop: "1px solid #d3d3d3",
+                                    boxShadow: "2px 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                                    marginTop: "40px",
+                                    paddingBottom: "15px",
+                                    paddingTop: "7.5px",
+                                    position: "absolute",
+                                    width: "385px",
+                                    zIndex: "25",
+                                }}>
+                                    {this.renderPropertySearchBarElements()}
+                                </div>:
+                                <div></div>}
+                                <div className="analysis_dashboard_view_selection_box">
+                                    <div
+                                        onClick={() => this.setState({
+                                            viewToDisplay: general
+                                        })}
+                                        className={
+                                            this.state.viewToDisplay === general ? 
+                                            "analysis_dashboard_view_selection_box_element analysis_dashboard_view_selection_box_element_active" :
+                                            "analysis_dashboard_view_selection_box_element"}>
+                                        General
+                                    </div>
+                                    <div
+                                        onClick={() => this.setState({
+                                            viewToDisplay: advanced
+                                        })} 
+                                        className={
+                                            this.state.viewToDisplay === advanced ? 
+                                            "analysis_dashboard_view_selection_box_element analysis_dashboard_view_selection_box_element_active" :
+                                            "analysis_dashboard_view_selection_box_element"}>
+                                        Advanced
+                                    </div>
                                 </div>
                             </div>
                             <div className="clearfix"/>

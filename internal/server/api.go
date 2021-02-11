@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -26,6 +27,7 @@ func (s *Server) HandleRoutes() {
 
 	r.HandleFunc("/api/validate/property", s.validateProperty).Methods("POST")
 
+	r.HandleFunc("/api/user/property/{id}", s.getPropertiesAddresses).Queries("addresses", "{addresses}").Methods("GET")
 	r.HandleFunc("/api/user/property/{id}", s.getProperties).Methods("GET")
 	r.HandleFunc("/api/user/property/{id}", s.removePropertyByUser).Queries("property_id", "{property_id}").Methods("DELETE")
 	r.HandleFunc("/api/user/property/{id}", s.addPropertyByUser).Methods("POST")
@@ -249,6 +251,54 @@ func (s *Server) getPropertyFileslistByUser(w http.ResponseWriter, r *http.Reque
 	}
 
 	RespondToRequest(w, files)
+	return
+}
+
+func (s *Server) getPropertiesAddresses(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	userID, ok := vars["id"]
+	if !ok {
+		log.Warn().Msg("user id required")
+		http.Error(w, "user id required", http.StatusBadRequest)
+		return 
+	}
+
+	ll := log.With().Str("userID", userID).Logger()
+
+	var fetchEntireProperties bool
+
+	addresses, ok := vars["addresses"]
+	if !ok {
+		fetchEntireProperties = true
+	}
+
+	addressesBool, err := strconv.ParseBool(addresses)
+	if err != nil || !addressesBool {
+		fetchEntireProperties = true
+	}
+
+	if fetchEntireProperties {
+		// fetch the full properties.
+		properties, err := s.DBHandle.GetPropertiesByOwner(userID)
+		if err != nil {
+			ll.Error().Err(err).Msg("unable to get properties by user id")
+			http.Error(w, fmt.Sprintf("unable to get properties by user id: %s, %w", userID, err), http.StatusInternalServerError)
+			return
+		}
+
+		RespondToRequest(w, properties)
+		return
+	}
+
+	propertiesAddresses, err := s.DBHandle.GetPropertiesAddressesByOwner(userID)
+	if err != nil {
+		ll.Error().Err(err).Msg("unable to get properties by user id")
+		http.Error(w, fmt.Sprintf("unable to get properties by user id: %s, %w", userID, err), http.StatusInternalServerError)
+		return
+	}
+
+	RespondToRequest(w, propertiesAddresses)
 	return
 }
 
