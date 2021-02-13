@@ -17,7 +17,7 @@ import { AiFillQuestionCircle } from 'react-icons/ai';
 import { BsFillHouseFill } from 'react-icons/bs';
 import { FaCaretDown, FaMapMarkerAlt } from 'react-icons/fa';
 import { RiBuildingFill } from 'react-icons/ri';
-import { IoBedSharp } from 'react-icons/io5';
+import { IoBedSharp, IoClose } from 'react-icons/io5';
 
 const general = "general";
 const advanced = "advanced";
@@ -46,24 +46,13 @@ class AnalysisDashboard extends React.Component {
             profilePicture: this.props.location.state.profilePicture,
             totalEstimateWorth: this.props.location.state.totalEstimateWorth,
             missingEstimate: this.props.location.state.missingEstimate,
-            propertySelectorElements: [],
-            propertyTypeSelectedElements: new Map([
-                ["All", true],
-                ["Single Family Homes", true],
-                ["Manufactured", true],
-                ["Condo/Ops", true],
-                ["Multi-Family", true],
-                ["Apartments", true],
-                ["Lots/Land", true],
-                ["Townhomes", true],
-                ["Commercial", true],
-            ]),
             propertyAddressMap: new Map([["All", true]]),
             historicalAnalysis: null,
             displayPropertySelector: false,
             viewToDisplay: general,
             host: window.location.protocol + "//" + window.location.host,
             activePropertySearchBar: false,
+            activeSelectProperties: new Map(),
             redirect: redirect,
             isLoading: true
         };
@@ -71,16 +60,22 @@ class AnalysisDashboard extends React.Component {
         this.handleClickOutside = this.handleClickOutside.bind(this);
 
         this.renderPropertiesList = this.renderPropertiesList.bind(this);
+        this.addSelectProperty = this.addSelectProperty.bind(this);
         this.handleSelectPropertyBar = this.handleSelectPropertyBar.bind(this);
         this.renderPropertySearchBarElements = this.renderPropertySearchBarElements.bind(this);
+        this.renderSelectedProperties = this.renderSelectedProperties.bind(this);
+        this.removeSelectedProperty = this.removeSelectedProperty.bind(this);
 
         document.removeEventListener('mousedown', this.handleClickOutside);
     }
 
     handleClickOutside(event) {
-        this.setState({
-            activePropertySearchBar: false,
-        })
+        console.log(event.target.name);
+        if (event.target.name !== "select_property_search_bar" && event.target.className !== "property_search_bar_element_text") {
+            this.setState({
+                activePropertySearchBar: false,
+            });
+        }
     }
 
     componentDidMount() {
@@ -113,7 +108,6 @@ class AnalysisDashboard extends React.Component {
             /* Handle our properties */
             const propertiesAddressesRequestResponse = responses[1];
             const propertiesAddresses = propertiesAddressesRequestResponse.data;
-            console.log(propertiesAddresses);
             let propertiesMap = new Map();
             for (let i = 0; i < propertiesAddresses.length; i++) {
                 let property = propertiesAddresses[i];
@@ -125,6 +119,7 @@ class AnalysisDashboard extends React.Component {
                 expensesSummary: expensesSummary,
                 historicalAnalysis: historicalAnalysis,
                 propertiesMap: propertiesMap,
+                propertySearchBarProperties: propertiesMap,
                 isLoading: false
             }, () => {console.log(this.state.historicalAnalysis)});
         })).catch(errors => {
@@ -133,14 +128,116 @@ class AnalysisDashboard extends React.Component {
     }
 
     renderPropertiesList() {
-        this.setState({
-            activePropertySearchBar: true,
-            propertySearchBarProperties: this.state.propertiesMap,
+        let propertySearchBarProperties = this.state.propertySearchBarProperties;
+        let activeSelectProperties = this.state.activeSelectProperties;
+        let newPropertySearchBarProperties = new Map();
+        propertySearchBarProperties.forEach((value, key, map) => {
+            if (!activeSelectProperties.has(key)) {
+                newPropertySearchBarProperties.set(key, value);
+            }
         })
+        this.setState({
+            propertySearchBarProperties: newPropertySearchBarProperties,
+        });
+        if  (newPropertySearchBarProperties.size > 0) {
+            this.setState({
+                activePropertySearchBar: true,
+            })
+        }
     }
 
     handleSelectPropertyBar(e) {
         let searchValue = e.target.value.toLowerCase(); //.replace(/\s/g, "");
+        if (searchValue === "") {
+            this.setState({
+                propertySearchBarProperties: this.state.propertiesMap,
+            });
+            return;
+        }
+        let propertySearchBarProperties = this.state.propertySearchBarProperties;
+
+        let newPropertySearchBarProperties = new Map();
+        // Our key is our address, and value is property id
+        propertySearchBarProperties.forEach((value, key, map) => {
+            if (key.toLowerCase().startsWith(searchValue)) {
+                newPropertySearchBarProperties.set(key, value);
+            }
+        });
+        this.setState({
+            propertySearchBarProperties: newPropertySearchBarProperties,
+        });
+    }
+
+    // addSelectProperty is responsible for adding a property to the active selected properties,
+    // which will display the property as a card, which can be closed out. It will also make a call
+    // to re-render our analysis dash with the new addition.
+    addSelectProperty(key, value) {
+        let activeSelectProperties = this.state.activeSelectProperties;
+        activeSelectProperties.set(key, value);
+        this.setState({
+            activeSelectProperties: activeSelectProperties,
+            activePropertySearchBar: false,
+        });
+    }
+
+    // removeSelectedProperty is responsible for "closing"/"removing" a selected property from the list.
+    // It will also make a call to re-render our analysis dash with our property removed.
+    removeSelectedProperty(key) {
+        let activeSelectProperties = this.state.activeSelectProperties;
+        activeSelectProperties.delete(key);
+        this.setState({
+            activeSelectProperties: activeSelectProperties,
+        });
+    }
+
+    renderSelectedProperties() {
+        let activeSelectProperties = this.state.activeSelectProperties;
+        let elements = [];
+        activeSelectProperties.forEach((value, key, map) => {
+            elements.push(
+                <div style={{
+                    backgroundColor: "#32384D",
+                    borderRadius: "10px",
+                    boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                    float: "left",
+                    marginRight: "15px",
+                    paddingBottom: "10px",
+                    paddingLeft: "15px",
+                    paddingRight: "15px",
+                    paddingTop: "10px",
+                }}>
+                    <p style={{
+                        color: "white",
+                        float: "left",
+                        fontWeight: "bold",
+                    }}>
+                        {key}
+                    </p>
+                    <IoClose 
+                        onMouseDown={() => {
+                            this.removeSelectedProperty(key)
+                        }}
+                        style={{
+                            color: "white",
+                            cursor: "pointer",
+                            float: "right",
+                            height: "20px",
+                            marginLeft: "15px",
+                            width: "20px",
+                        }}/>
+                </div>
+            );
+        })
+        return (
+            <div style={{
+                float: "left",
+                marginBottom: "10px",
+                marginTop: "10px",
+                width: "100%",
+            }}>
+                {elements}
+            </div>
+        );
     }
 
     renderPropertySearchBarElements() {
@@ -150,16 +247,21 @@ class AnalysisDashboard extends React.Component {
             elements.push(
                 <div 
                     className="property_search_bar_element"
+                    onClick={() => this.addSelectProperty(key, value)}
                     style={{
                         cursor: "pointer",
                         height: "40px",
                         lineHeight: "40px",
                         width: "100%",
                     }}>
-                    <p style={{
-                        fontSize: "1.0em",
-                        marginLeft: "20px",
-                    }}>
+                    <p 
+                        className="property_search_bar_element_text"
+                        style={{
+                            name:"a",
+                            fontSize: "1.0em",
+                            paddingLeft: "20px",
+                            width: "100%",
+                        }}>
                         {key}
                     </p>
                 </div>
@@ -168,158 +270,6 @@ class AnalysisDashboard extends React.Component {
         console.log(elements);
         return elements;
     }
-
-    // renderPropertyTypesInSelector() {
-
-    //     let propertyTypes = [
-    //         'Single Family Homes', 
-    //         'Manufactured', 
-    //         'Condo/Ops', 
-    //         'Multi-Family', 
-    //         'Apartments',
-    //         'Lots/Land',
-    //         'Townhomes',
-    //         'Commercial']
-
-    //     let elements = [];
-    //     elements.push(
-    //         <li key={"property_type_all"}
-    //             className="analysis_dashboard_property_selector_property_list">
-    //             <div  
-    //                 onMouseDown={() => {
-    //                     let propertyTypeMap = this.state.propertyTypeSelectedElements;
-    //                     let allSelected = propertyTypeMap.get("All");
-    //                     propertyTypeMap.set("All", !allSelected)
-    //                     if (!allSelected) {
-    //                         propertyTypeMap.forEach((key, value, map) => {
-    //                             propertyTypeMap.set(value, true);
-    //                         })
-    //                     } else {
-    //                         propertyTypeMap.forEach((key, value, map) => {
-    //                             propertyTypeMap.set(value, false);
-    //                         })
-    //                     }
-    //                     this.setState({
-    //                         propertyTypeSelectedElements: propertyTypeMap,
-    //                     })
-    //                 }}
-    //                 className={
-    //                     this.state.propertyTypeSelectedElements.get("All") ?
-    //                     "analysis_dashboard_property_selector_property_list_checkbox analysis_dashboard_property_selector_property_list_checkbox_active" :
-    //                     "analysis_dashboard_property_selector_property_list_checkbox"}>
-
-    //             </div>
-    //             <p className="analysis_dashboard_property_selector_property_list_text">
-    //                 All
-    //             </p>
-    //         </li>
-    //     )
-
-    //     for (let i = 0; i < propertyTypes.length; i++) {
-    //         let propertyType = propertyTypes[i];
-    //         elements.push(
-    //             <li key={propertyType}
-    //                 className="analysis_dashboard_property_selector_property_list">
-    //                 <div 
-    //                     onMouseDown={() => {
-    //                         let propertyTypeMap = this.state.propertyTypeSelectedElements;
-    //                         propertyTypeMap.set(propertyType, !propertyTypeMap.get(propertyType))
-    //                         this.setState({
-    //                             propertyTypeSelectedElements: propertyTypeMap,
-    //                         })
-    //                     }}
-    //                     className={
-    //                         this.state.propertyTypeSelectedElements.get(propertyType) ?
-    //                         "analysis_dashboard_property_selector_property_list_checkbox analysis_dashboard_property_selector_property_list_checkbox_active" :
-    //                         "analysis_dashboard_property_selector_property_list_checkbox"}>
-
-    //                 </div>
-    //                 <p className="analysis_dashboard_property_selector_property_list_text">
-    //                     {propertyType}
-    //                 </p>
-    //             </li>
-    //         )
-    //     }
-    //     return elements;
-    // }
-
-    // renderPropertiesInSelector(properties) {
-        
-    //     let elements = [];
-    //     elements.push(
-    //         <div key={"property_address_all"}>
-    //             <div  
-    //                 onMouseDown={() => {
-    //                     let propertyAddressMap = this.state.propertyAddressMap;
-    //                     let allSelected = propertyAddressMap.get("All");
-    //                     propertyAddressMap.set("All", !allSelected)
-    //                     if (!allSelected) {
-    //                         propertyAddressMap.forEach((key, value, map) => {
-    //                             propertyAddressMap.set(value, true);
-    //                         })
-    //                     } else {
-    //                         propertyAddressMap.forEach((key, value, map) => {
-    //                             propertyAddressMap.set(value, false);
-    //                         })
-    //                     }
-    //                     this.setState({
-    //                         propertyAddressMap: propertyAddressMap,
-    //                     })
-    //                 }}
-    //                 className={
-    //                     this.state.propertyAddressMap.get("All") ?
-    //                     "analysis_dashboard_property_selector_property_list_checkbox analysis_dashboard_property_selector_property_list_checkbox_active" :
-    //                     "analysis_dashboard_property_selector_property_list_checkbox"}>
-
-    //             </div>
-    //             <p className="analysis_dashboard_property_selector_property_list_text">
-    //                 All
-    //             </p>
-    //             <div className="clearfix"/>
-    //         </div>  
-    //     );
-
-    //     properties.forEach((value, keyValue, map) => {
-    //         let address = value[1];
-    //         elements.push(
-    //             <div key={address}>
-    //                 <div
-    //                     onMouseDown={() => {
-    //                         let propertyAddressMapElems = this.state.propertyAddressMap;
-    //                         propertyAddressMapElems.set(address, !propertyAddressMapElems.get(address));
-    //                         this.setState({
-    //                             propertyAddressMap: propertyAddressMapElems,
-    //                         })
-    //                     }}
-    //                     className={
-    //                         this.state.propertyAddressMap.get(address) ?
-    //                         "analysis_dashboard_property_selector_property_list_checkbox analysis_dashboard_property_selector_property_list_checkbox_active" :
-    //                         "analysis_dashboard_property_selector_property_list_checkbox"}>
-
-    //                 </div>
-    //                 <p className="analysis_dashboard_property_selector_property_list_text">
-    //                     {address}
-    //                 </p>
-    //                 <div className="clearfix"/>
-    //             </div>  
-    //         )
-    //     });
-        
-    //     let firstHalf = elements.slice(0, elements.length/2 + 1);
-    //     let secondHalf = elements.slice(elements.length/2 + 1, elements.length);
-
-    //     // Split the properties and display them side by side.
-    //     return (
-    //         <div>
-    //             <div className="property_selector_left_box">
-    //                 {firstHalf}
-    //             </div>
-    //             <div className="property_selector_right_box">
-    //                 {secondHalf}
-    //             </div>
-    //         </div>
-    //     );
-    // }
 
     renderViewBox() {
         let barChartData = getHistoricalAnalysisData(this.state.historicalAnalysis);
@@ -549,25 +499,11 @@ class AnalysisDashboard extends React.Component {
                         {this.state.isLoading ? <div></div> : 
                         <div>
                             <div className="clearfix"/>
-                            {/* <div 
-                                onMouseDown={() => this.setState({
-                                    displayPropertySelector: !this.state.displayPropertySelector,
-                                })}
-                                className={this.state.displayPropertySelector ? 
-                                    "analysis_dashboard_inner_box_property_selector_box analysis_dashboard_inner_box_property_selector_box_active":
-                                    "analysis_dashboard_inner_box_property_selector_box"}>
-                                <p className="analysis_dashboard_inner_box_property_selector_title">
-                                    Property Selector
-                                </p>
-                                <FaCaretDown className={
-                                    this.state.displayPropertySelector ? 
-                                    "analysis_dashboard_inner_box_property_selector_icon analysis_dashboard_inner_box_property_selector_icon_active" :
-                                    "analysis_dashboard_inner_box_property_selector_icon"}></FaCaretDown>
-                            </div> */}
                             <div style={{
                                 marginTop: "25px",
                             }}>
                                 <input 
+                                    name="select_property_search_bar"
                                     onMouseDown={this.renderPropertiesList}
                                     onChange={this.handleSelectPropertyBar}
                                     placeholder="Select Property..."
@@ -595,7 +531,9 @@ class AnalysisDashboard extends React.Component {
                                     width: "385px",
                                     zIndex: "25",
                                 }}>
-                                    {this.renderPropertySearchBarElements()}
+                                    <div>
+                                        {this.renderPropertySearchBarElements()}
+                                    </div>
                                 </div>:
                                 <div></div>}
                                 <div className="analysis_dashboard_view_selection_box">
@@ -622,28 +560,9 @@ class AnalysisDashboard extends React.Component {
                                 </div>
                             </div>
                             <div className="clearfix"/>
-                            {this.state.displayPropertySelector ? 
-                                <div className="analysis_dashboard_property_selector_display_box">
-                                    <div className="analysis_dashboard_property_selector_display_left_box">
-                                        <p className="analysis_dashboard_property_selector_display_left_box_title">
-                                            Filter by Property Types
-                                        </p>
-                                        <div className="clearfix"/>
-                                        {this.renderPropertyTypesInSelector()}
-                                    </div>
-                                    <div className="analysis_dashboard_property_selector_display_right_box">
-                                        <p className="analysis_dashboard_property_selector_display_left_box_title">
-                                            Filter by Individual Property
-                                        </p>
-                                        <div className="property_selector_apply_button">
-                                            Apply
-                                        </div>
-                                        <div className="clearfix"/>
-                                        {this.renderPropertiesInSelector(this.state.properties)}
-                                    </div>
-                                </div> :
-                                <div></div>
-                            }
+                            <div>
+                                {this.renderSelectedProperties()}
+                            </div>
                             <div className="clearfix"/>
                             <div className="analysis_dashboard_inner_box">
                                 {this.renderViewBox()}
