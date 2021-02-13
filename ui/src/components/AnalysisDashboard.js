@@ -65,6 +65,7 @@ class AnalysisDashboard extends React.Component {
         this.renderPropertySearchBarElements = this.renderPropertySearchBarElements.bind(this);
         this.renderSelectedProperties = this.renderSelectedProperties.bind(this);
         this.removeSelectedProperty = this.removeSelectedProperty.bind(this);
+        this.getSummary = this.getSummary.bind(this);
 
         document.removeEventListener('mousedown', this.handleClickOutside);
     }
@@ -121,7 +122,7 @@ class AnalysisDashboard extends React.Component {
                 propertiesMap: propertiesMap,
                 propertySearchBarProperties: propertiesMap,
                 isLoading: false
-            }, () => {console.log(this.state.historicalAnalysis)});
+            });
         })).catch(errors => {
             console.log(errors);
         });
@@ -146,8 +147,11 @@ class AnalysisDashboard extends React.Component {
         }
     }
 
+    // handleSelectPropertyBar is called when there is onChange for the search bar. It will update
+    // which properties to display according to the search.
     handleSelectPropertyBar(e) {
-        let searchValue = e.target.value.toLowerCase(); //.replace(/\s/g, "");
+        // replace will strip out empty spaces
+        let searchValue = e.target.value.toLowerCase().replace(/\s/g, "");
         if (searchValue === "") {
             this.setState({
                 propertySearchBarProperties: this.state.propertiesMap,
@@ -174,6 +178,8 @@ class AnalysisDashboard extends React.Component {
     addSelectProperty(key, value) {
         let activeSelectProperties = this.state.activeSelectProperties;
         activeSelectProperties.set(key, value);
+        // Update our analysis
+        this.getSummary(activeSelectProperties);
         this.setState({
             activeSelectProperties: activeSelectProperties,
             activePropertySearchBar: false,
@@ -185,9 +191,62 @@ class AnalysisDashboard extends React.Component {
     removeSelectedProperty(key) {
         let activeSelectProperties = this.state.activeSelectProperties;
         activeSelectProperties.delete(key);
+        // Update our analysis
+        this.getSummary(activeSelectProperties);
         this.setState({
             activeSelectProperties: activeSelectProperties,
         });
+    }
+
+    getSummary(activeSelectProperties) {
+
+        let userID = this.state.user["id"];
+        let host = this.state.host;
+
+        let summaryURL = URLBuilder(host, '/api/user/summary', userID);
+        
+        let data = new FormData();
+        
+        let propertyIDs = [];
+
+        activeSelectProperties.forEach((value, key, map) => {
+            propertyIDs.push(value);    
+        })
+
+        let summaryRequest;
+        // If we have propertyIDs, use a post, otherwise just the normal get.
+        if (propertyIDs.length > 0){
+            // We use this to allow users to select which properties to compare against. Because there may potentially be many properties,
+	        // we use a post. GET requests have limits on how large they can be, so we need to use POST's body.
+            data.append('properties', propertyIDs);
+            summaryRequest = axios.post(summaryURL, data);
+        } else {
+            summaryRequest = axios.get(summaryURL);
+        }
+        
+        axios.all(
+            [summaryRequest]
+        ).then(axios.spread((...responses) => {
+            const summaryRequestResponse = responses[0];
+            const summary = summaryRequestResponse.data;
+
+            // summary is an object containing three fields. 
+            // 1. properties_summary
+            // 2. historical_summary
+            // 3. expenses_summary
+            let propertiesSummary = summary["properties_summary"];
+            let historicalAnalysis = summary["historical_summary"];
+            let expensesSummary = summary["expenses_summary"];
+
+            this.setState({
+                propertiesSummary: propertiesSummary,
+                expensesSummary: expensesSummary,
+                historicalAnalysis: historicalAnalysis,
+            });
+        })).catch(errors => {
+            console.log(errors);
+        });
+
     }
 
     renderSelectedProperties() {
@@ -243,7 +302,11 @@ class AnalysisDashboard extends React.Component {
     renderPropertySearchBarElements() {
         let propertySearchBarProperties = this.state.propertySearchBarProperties;
         let elements = [];
+        let counter = 0;
         propertySearchBarProperties.forEach((value, key, map) => {
+            if (counter++ >= 5){
+                return elements;
+            }
             elements.push(
                 <div 
                     className="property_search_bar_element"
@@ -267,7 +330,6 @@ class AnalysisDashboard extends React.Component {
                 </div>
             );
         });
-        console.log(elements);
         return elements;
     }
 

@@ -27,7 +27,7 @@ type PropertyEstimate struct {
 
 
 // timeBack is how far back to gather historical default. Default is 1 year.
-func (s *Server) calculateHistoricalAnalysis(userID string, timeBack *time.Duration, propertyIDs []string) (*HistoricalSummary, error) {
+func (s *Server) calculateHistoricalAnalysis(userID string, propertyIDs []string, timeBack *time.Duration) (*HistoricalSummary, error) {
 
 	if timeBack == nil {
 		// 1 year.

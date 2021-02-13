@@ -35,6 +35,9 @@ func (s *Server) HandleRoutes() {
 	// Used to display our main dashboard page. Provides a summary for users.
 	r.HandleFunc("/api/user/summary/{id}/{property_id}", s.getUserSummaryByProperty).Methods("GET")
 	r.HandleFunc("/api/user/summary/{id}", s.getUserSummary).Methods("GET")
+	// We use this to allow users to select which properties to compare against. Because there may potentially be many properties,
+	// we use a post. GET requests have limits on how large they can be, so we need to use POST's body.
+	r.HandleFunc("/api/user/summary/{id}", s.getUserSummaryByProperties).Methods("POST")
 
 	// Order matters. Routing is done sequentially, so the first one must be the one that doesn't satisfy the second one.
 	r.HandleFunc("/api/user/files/property/{id}/{property_id}/{file_name}", s.getFile).Queries("request", "{request}").Methods("GET")

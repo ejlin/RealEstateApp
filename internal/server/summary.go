@@ -1,7 +1,9 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
@@ -27,7 +29,35 @@ func (s *Server) getUserSummary(w http.ResponseWriter, r *http.Request) {
 
 	ll := log.With().Str("user_id", userID).Logger()
 
-	userSummary, err := s.calculateUserSummary(userID)
+	userSummary, err := s.calculateUserSummary(userID, nil)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to calculate properties summary")
+		http.Error(w, "unable to calculate properties summary", http.StatusInternalServerError)
+		return
+	}
+
+	RespondToRequest(w, userSummary)
+	return
+}
+
+func (s *Server) getUserSummaryByProperties(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	userID, ok := vars["id"]
+	if !ok {
+		log.Warn().Str("func", "getPropertiesSummary").Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	properties := r.FormValue("properties")
+	propertyIDs := strings.Split(properties, ",")
+
+	fmt.Println(propertyIDs)
+
+	userSummary, err := s.calculateUserSummary(userID, propertyIDs)
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to calculate properties summary")
 		http.Error(w, "unable to calculate properties summary", http.StatusInternalServerError)
@@ -71,9 +101,9 @@ func (s *Server) getUserSummaryByProperty(w http.ResponseWriter, r *http.Request
 }
 
 
-func (s *Server) calculateUserSummary(userID string) (*UserSummary, error) {
+func (s *Server) calculateUserSummary(userID string, propertyIDs []string) (*UserSummary, error) {
 
-	propertiesSummary, err := s.calculatePropertiesAnalysis(userID, nil, nil)
+	propertiesSummary, err := s.calculatePropertiesAnalysis(userID, propertyIDs, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +113,7 @@ func (s *Server) calculateUserSummary(userID string) (*UserSummary, error) {
 		return nil, err
 	}
 
-	historicalSummary, err := s.calculateHistoricalAnalysis(userID, nil, nil)
+	historicalSummary, err := s.calculateHistoricalAnalysis(userID, propertyIDs, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -139,7 +169,7 @@ func (s *Server) getPropertiesHistoryByProperty(w http.ResponseWriter, r *http.R
 
 	ll = log.With().Str("property_id", propertyID).Logger()
 
-	historicalSummary, err := s.calculateHistoricalAnalysis(userID, nil, []string {propertyID}) 
+	historicalSummary, err := s.calculateHistoricalAnalysis(userID, []string{propertyID}, nil) 
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to calculate historical analysis by property")
 		http.Error(w, "unable to calculate historical analysis by property", http.StatusInternalServerError)

@@ -138,11 +138,11 @@ func (handle *Handle) GetSpecificPropertiesByOwner(userID string, propertyIDs []
 
 	db := handle.DB.Where("user_id = ?", userID)
 	
-	if propertyIDs != nil {
+	if propertyIDs != nil && len(propertyIDs) > 0 {
 		db = db.Where("id IN (?)", propertyIDs)
 	}
 
-	if propertyTypes != nil {
+	if propertyTypes != nil && len(propertyIDs) > 0 {
 		db = db.Where("property_type IN (?)", propertyTypes)
 	}
 
