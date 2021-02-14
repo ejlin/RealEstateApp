@@ -2,36 +2,7 @@
     text-decoration: none !important;
 }
 
-#dashboard_sidebar_parent {
-    background-color: #32384D; 
-    /* background-color: #F9FAFB; */
-    display: block;
-    float: left;
-    height: 100vh;
-    position: fixed;
-    width: 220px;
-}
-
-#dashboard_new_property_button {
-    background-color: #296CF6;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    cursor: pointer;
-    float: left;
-    font-weight: bold;
-    height: 45px;
-    line-height: 45px;
-    margin-left: 40px;
-    margin-top: 25px;
-    padding-bottom: 0px;
-    text-align: center;
-    text-decoration: none;
-    user-select: none;
-    width: calc((100% - 80px));
-}
-
-#dashboard_new_property_button:hover {
+.dashboard_new_property_button:hover {
     opacity: 0.8;
 }
 
@@ -86,93 +57,11 @@ button:focus {
     user-select: none;
 }
 
-#dashboard_last {
-    margin-top: 75px;
-}
-
-#dashboard_sidebar_version {
-    background-color:  #32384D;
-    bottom: 0;
-    height: 50px;
-    position: absolute;
-    width: 100%;
-}
-
-#dashboard_sidebar_version_text {
-    color: white;
-    line-height: 50px;
-    text-align: center;
-    user-select: none;
-}
-
-.dashboard_sidebar_profile_pic {
-    border-radius: 50px;
-    height: 100px;
-    margin-left: calc((100% - 100px)/2);
-    margin-top: 80px;
-    user-select: none;
-    width: 100px;
-}
-
-.dashboard_sidebar_profile_pic_image_icon {
-    border: 3px solid white;
-    border-radius: 50px;
-    color: white;
-    height: calc(100px - 6px);
-    margin-left: calc((100% - 100px)/2);
-    margin-top: 80px;
-    width: calc(100px - 6px);
-}
-
-.dashboard_sidebar_profile_pic_title {
-    color: white;
-    font-weight: bold;
-    text-align: center;
-}
-
-.dashboard_sidebar_profile_pic_icon {
-    color: white !important;
-    cursor: pointer;
-    margin-left: 5px;
-    margin-top: 3px;
-    position: absolute;
-}
-
-#dashboard_sidebar_profile_pic_text_box {
-    margin-top: 15px;
-}
-
-#dashboard_sidebar_profile_tooltip {
-    background-color: white;
-    border-radius: 4px;
-    margin-left: calc((100% - 120px)/2);
-    margin-top: 5px;
-    position: absolute;
-    width: 120px;
-    z-index: 5;
-}
-
-.dashboard_sidebar_profile_tooltip_list {
-    cursor: pointer;
-    padding: 7.5px 15px 7.5px 15px;
-    text-align: center;
-    transition: 0.5s;
-}
-
-.dashboard_sidebar_profile_tooltip_list:hover {
+.dashboard_sidebar_tooltip:hover {
     background-color: #d3d3d3;
     opacity: 0.7;
 }
 
 .color_white {
     color: white;
-}
-
-.dashboard_sidebar_locked_parent {
-    background-color: white;
-    height: 100vh;
-    opacity: 0.5;
-    position: fixed;
-    width: 220px;
-    z-index: 5;
 }

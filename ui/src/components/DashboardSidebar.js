@@ -72,17 +72,58 @@ class DashboardSidebar extends React.Component {
         return (
             <div>
                 {this.state.inactivatedAccount ? 
-                <div className="dashboard_sidebar_locked_parent">
-
-                </div> : <div></div>}
-                <div id="dashboard_sidebar_parent">
-                    {this.state.profilePicture !== null && this.state.profilePicture !== undefined && this.state.profilePicture !== "" ? 
-                    <img className="dashboard_sidebar_profile_pic" src={this.state.profilePicture}>
-                    </img>:
-                    <TiUser className="dashboard_sidebar_profile_pic_image_icon"></TiUser>}
+                    <div style={{
+                        backgroundColor: "white",
+                        height: "100vh",
+                        opacity: "0.5",
+                        position: "fixed",
+                        width: "220px",
+                        zIndex: "5",
+                    }}>
+                    </div> : 
+                    <div></div>
+                }
+                <div style={{
+                    backgroundColor: "#32384D", 
+                    display: "block",
+                    float: "left",
+                    height: "calc(100vh - 50px)",
+                    position: "fixed",
+                    overflow: "scroll",
+                    width: "220px",
+                }}>
+                    {
+                        this.state.profilePicture !== null && this.state.profilePicture !== undefined && this.state.profilePicture !== "" ? 
+                        <img 
+                            src={this.state.profilePicture}
+                            style={{
+                                borderRadius: "50px",
+                                height: "100px",
+                                marginLeft: "calc((100% - 100px)/2)",
+                                marginTop: "80px",
+                                userSelect: "none",
+                                width: "100px",
+                            }}/>:
+                        <TiUser style={{
+                            border: "3px solid white",
+                            borderRadius: "50px",
+                            color: "white",
+                            height: "calc(100px - 6px)",
+                            marginLeft: "calc((100% - 100px)/2)",
+                            marginTop: "80px",
+                            width: "calc(100px - 6px)",
+                        }}></TiUser>
+                    }
                     <div className="clearfix"/>
-                    <div id="dashboard_sidebar_profile_pic_text_box">
-                        <p className="dashboard_sidebar_profile_pic_title">
+                    <div
+                        style={{
+                            marginTop: "15px",
+                        }}>
+                        <p style={{
+                            color: "white",
+                            fontWeight: "bold",
+                            textAlign: "center",
+                        }}>
                             {capitalizeName(this.state.user["first_name"])} {capitalizeName(this.state.user["last_name"])}
                             <FiChevronDown
                                 onMouseDown={() => {
@@ -92,36 +133,78 @@ class DashboardSidebar extends React.Component {
                                         })
                                     }
                                 }}
-                                className="dashboard_sidebar_profile_pic_icon"></FiChevronDown>
+                                style={{
+                                    color: "white !important",
+                                    cursor: "pointer",
+                                    marginLeft: "5px",
+                                    marginTop: "3px",
+                                    position: "absolute",
+                                }}/>
                         </p>
-                        {this.state.displayAccountTooltip ? 
-                        <div id="dashboard_sidebar_profile_tooltip">
-                            <li 
-                                onClick={() => 
-                                    {
-                                        localStorage.clear();
-                                        this.setState({
-                                            redirect: "/"
-                                        });
+                        {
+                            this.state.displayAccountTooltip ? 
+                            <div style={{
+                                backgroundColor: "white",
+                                borderRadius: "4px",
+                                marginLeft: "calc((100% - 120px)/2)",
+                                marginTop: "5px",
+                                position: "absolute",
+                                width: "120px",
+                                zIndex: "5",
+                            }}>
+                                <li 
+                                    onClick={() => 
+                                        {
+                                            localStorage.clear();
+                                            this.setState({
+                                                redirect: "/"
+                                            });
+                                        }
                                     }
-                                }
-                                className="dashboard_sidebar_profile_tooltip_list">
-                                Sign Out
-                            </li>
-                        </div> :
-                        <div></div>}
+                                    className="dashboard_sidebar_tooltip"
+                                    style={{
+                                        cursor: "pointer",
+                                        padding: "7.5px 15px 7.5px 15px",
+                                        textAlign: "center",
+                                        transition: "0.5s",
+                                    }}>
+                                    Sign Out
+                                </li>
+                            </div> :
+                            <div></div>
+                        }
                     </div>
                     
-                    <Link id="dashboard_new_property_button" to={{
-                        pathname: "/addproperty",
-                        state: {
-                            user: this.state.user,
-                            totalEstimateWorth: this.state.totalEstimateWorth,
-                            missingEstimate: this.state.missingEstimate,
-                            profilePicture: this.state.profilePicture
-                        }
-                    }}>
-                        <div id="BsFillPlusSquareFill">New Property</div>
+                    <Link 
+                        className="dashboard_new_property_button"
+                        style={{
+                            backgroundColor: "#296CF6",
+                            border: "none",
+                            borderRadius: "4px",
+                            color: "white",
+                            cursor: "pointer",
+                            float: "left",
+                            fontWeight: "bold",
+                            height: "45px",
+                            lineHeight: "45px",
+                            marginLeft: "40px",
+                            marginTop: "25px",
+                            paddingBottom: "0px",
+                            textAlign: "center",
+                            textDecoration: "none",
+                            userSelect: "none",
+                            width: "calc((100% - 80px))",
+                        }}
+                        to={{
+                            pathname: "/addproperty",
+                            state: {
+                                user: this.state.user,
+                                totalEstimateWorth: this.state.totalEstimateWorth,
+                                missingEstimate: this.state.missingEstimate,
+                                profilePicture: this.state.profilePicture
+                            }
+                        }}>
+                        <p>New Property</p>
                     </Link> 
                     <div className="clearfix"/>
                     <div className="dashboard_sidebar_link">
@@ -134,8 +217,16 @@ class DashboardSidebar extends React.Component {
                                 profilePicture: this.state.profilePicture
                             }
                         }}>
-                            <MdDashboard className={this.state.currentPage === "overview" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
-                            <p className={this.state.currentPage === "overview" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
+                            <MdDashboard 
+                                className={
+                                    this.state.currentPage === "overview" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : 
+                                    "dashboard_sidebar_link_icon"
+                            }/>
+                            <p 
+                                className={
+                                    this.state.currentPage === "overview" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : 
+                                    "dashboard_sidebar_link_text"
+                            }>
                                 Overview
                             </p>
                         </Link>
@@ -207,25 +298,6 @@ class DashboardSidebar extends React.Component {
                             </p>
                         </Link>
                     </div>
-                    {/* <div className="clearfix"/>
-                    <div className="dashboard_sidebar_link">
-                        <Link className="dashboard_sidebar_inner_link" to={{
-                            pathname: "/explore",
-                            state: {
-                                id: this.state.id,
-                                firstName: this.state.firstName,
-                                lastName: this.state.lastName,
-                                email: this.state.email,
-                                totalEstimateWorth: this.state.totalEstimateWorth,
-                                missingEstimate: this.state.missingEstimate,
-                            }
-                        }}>
-                            <MdExplore className="dashboard_sidebar_link_icon" />
-                            <p className="dashboard_sidebar_link_text">
-                                Explore
-                            </p>
-                        </Link>
-                    </div> */}
                     <div className="clearfix"/>
                     <div className="dashboard_sidebar_link">
                         <Link className="dashboard_sidebar_inner_link" to={{
@@ -244,7 +316,10 @@ class DashboardSidebar extends React.Component {
                         </Link>
                     </div>
                     <div className="clearfix"/>
-                    <div className="dashboard_sidebar_link" id="dashboard_last">
+                    <div className="dashboard_sidebar_link"
+                        style={{
+                            marginTop: "75px",
+                        }}>
                         <Link className="dashboard_sidebar_inner_link" to={{
                             pathname: "/feedback",
                             state: {
@@ -261,8 +336,19 @@ class DashboardSidebar extends React.Component {
                         </Link>
                     </div>
                     <div className="clearfix"/>
-                    <div id="dashboard_sidebar_version">
-                        <p id="dashboard_sidebar_version_text">
+                    <div style={{
+                        backgroundColor: "#32384D",
+                        bottom: "0",
+                        height: "50px",
+                        position: "fixed",
+                        width: "220px",
+                    }}>
+                        <p style={{
+                            color: "white",
+                            lineHeight: "50px",
+                            textAlign: "center",
+                            userSelect: "none",
+                        }}>
                             Beta
                         </p>
                     </div>

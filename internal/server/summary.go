@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -54,8 +53,6 @@ func (s *Server) getUserSummaryByProperties(w http.ResponseWriter, r *http.Reque
 
 	properties := r.FormValue("properties")
 	propertyIDs := strings.Split(properties, ",")
-
-	fmt.Println(propertyIDs)
 
 	userSummary, err := s.calculateUserSummary(userID, propertyIDs)
 	if err != nil {
