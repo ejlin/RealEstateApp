@@ -11,6 +11,8 @@ import (
 // Property represents a property in our database.
 type Property struct {
 	ID        string     `json:"id,omitempty",sql:"type:uuid; primary key"`
+	UserID string `json:"user_id,omitempty",sql:"type:uuid; foreign key"`
+	
 	CreatedAt *time.Time `json:"created_at,omitempty",sql:"type:timestamp"`
 
 	AddressOne string `json:"address_one,omitempty",sql:"type:VARCHAR(75)"`
@@ -40,8 +42,6 @@ type Property struct {
 	MortgagePaymentDate int `json:"mortgage_payment_date,omitempty",sql:"type:INT"`
 
 	CurrentlyRented bool `json:"currently_rented,omitempty",sql:"type:BOOLEAN"`
-
-	UserID string `json:"user_id,omitempty",sql:"type:uuid; foreign key"`
 }
 
 type PropertyType string
