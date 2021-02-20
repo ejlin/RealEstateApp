@@ -67,7 +67,7 @@ class PropertyCard extends React.Component {
     }
 
     componentDidMount() {
-  
+        console.log(this.state.property);
     }
 
     render() {
@@ -81,20 +81,14 @@ class PropertyCard extends React.Component {
                 this.state.isFirstChild ? 
                 "property_card_box property_card_box_first_child" :
                 "property_card_box"}>
-                <div className="property_card_header_box">
+                <div style={{
+                    borderRadius: "6px 6px 0px 0px",
+                    marginTop: "15px",
+                    width: "100%",
+                }}>
                     <p className="property_card_box_address_title">
                         {this.state.property["address_one"]} {this.state.property["address_two"]} 
                     </p>
-                    {this.state.property["currently_rented"] ?
-                    <FaCheckCircle style={{
-                        color: "#85bb65",
-                        float: "left",
-                        height: "15px",
-                        marginLeft: "10px",
-                        marginTop: "6px",
-                        width: "15px",
-                    }} /> :
-                    <div></div>}
                     <IoMdAddCircle 
                         onClick={() => {
                             this.setActiveProperty(this.state.property["id"])
@@ -103,10 +97,52 @@ class PropertyCard extends React.Component {
                     </IoMdAddCircle> 
                     <div className="clearfix"/>
                     <p className="property_card_box_address_subtitle">
-                        {this.state.property["state"]}, {this.state.property["zip_code"]}
+                        {this.state.property["city"]}, {this.state.property["state"]} &nbsp; {this.state.property["zip_code"]}
                     </p>              
                 </div>
-                <p className="property_card_box_title">
+                {
+                    this.state.property["currently_rented"] ?
+                    <div style={{
+                        backgroundColor: "#85bb65",
+                        borderRadius: "50px",
+                        float: "left",
+                        marginLeft: "20px",
+                        marginTop: "15px",
+                        padding: "5px 10px 5px 10px",
+                    }}>
+                        <p style={{
+                            color: "white",
+                            fontSize: "0.8em",
+                        }}>
+                            RENTED
+                        </p>
+                    </div> :
+                    <div style={{
+                        backgroundColor: "grey",
+                        borderRadius: "50px",
+                        float: "left",
+                        marginLeft: "20px",
+                        marginTop: "15px",
+                        padding: "5px 10px 5px 10px",
+                    }}>
+                        <p style={{
+                            color: "white",
+                            fontSize: "0.8em",
+                        }}>
+                            NOT RENTED
+                        </p>
+                    </div>
+                }
+                <div className="clearfix"/>
+                <p style={{
+                    color: "grey",
+                    float: "left",
+                    fontSize: "1.2em",
+                    fontWeight: "bold",
+                    lineHeight: "55px",
+                    marginLeft: "20px",
+                    userSelect: "none",
+                }}>
                     ${this.state.property["estimate"] ? numberWithCommas(this.state.property["estimate"]) : numberWithCommas(this.state.property["price_bought"])}
                 </p>
                 
@@ -115,8 +151,10 @@ class PropertyCard extends React.Component {
                     margin: "0px 20px 0px 20px",
                     width: "calc(100% - 40px)",
                 }}>
-                    <div className="property_card_box_info_box_first_row">
-                        <div className="property_card_box_info_box_first_row_first_element">
+                    <div style={{
+                        width: "100%",
+                    }}>
+                        {/* <div className="property_card_box_info_box_first_row_first_element">
                             <div className="property_card_box_element">
                                 <IoBedSharp className="property_card_box_info_box_icon"></IoBedSharp>
                                 <p className="property_card_box_info_box_text">
@@ -141,34 +179,8 @@ class PropertyCard extends React.Component {
                                     {numberWithCommas(this.state.property["square_footage"])} sq ft
                                 </p>
                             </div>
-                        </div>
-                        {/* <div className="property_card_box_info_box_first_row_second_element">
-                            <IoWaterSharp className="property_card_box_info_box_icon"></IoWaterSharp>
-                            <p className="property_card_box_info_box_text">
-                                {this.state.property["num_baths"]} {this.state.property["num_baths"] > 1 ? "baths" : "bath"}
-                            </p>
-                        </div>
-                        <div className="property_card_box_info_box_first_row_second_element">
-                            <IoBookmarkSharp className="property_card_box_info_box_icon"></IoBookmarkSharp>
-                            <p className="property_card_box_info_box_text">
-                                {numberWithCommas(this.state.property["square_footage"])} sq ft
-                            </p>
                         </div> */}
                     </div>
-                    {/* <div className="property_card_box_info_box_second_row">
-                        <div className="property_card_box_info_box_first_row_first_element">
-                            <IoTrailSignSharp className="property_card_box_info_box_icon"></IoTrailSignSharp>
-                            <p className="property_card_box_info_box_text">
-                                {this.state.property["num_units"]} {this.state.property["num_units"] > 1 ? "units" : "unit"}
-                            </p>
-                        </div>
-                        <div className="property_card_box_info_box_first_row_second_element">
-                            <IoBookmarkSharp className="property_card_box_info_box_icon"></IoBookmarkSharp>
-                            <p className="property_card_box_info_box_text">
-                                {numberWithCommas(this.state.property["square_footage"])} sq ft
-                            </p>
-                        </div>
-                    </div> */}
                 </div>
             </div>
         )

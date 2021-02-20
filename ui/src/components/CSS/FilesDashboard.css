@@ -25,20 +25,6 @@
     float: left;
 }
 
-.files_dashboard_category_and_sort {
-    background-color: #296CF6;
-    border: 2px solid #296CF6;
-    border-radius: 8px;
-    color: white;
-    cursor: pointer;
-    height: 20px;
-    line-height: 20px;
-    margin-right: 20px;
-    padding: 7.5px 15px 7.5px 15px;
-    transition: 0.2s;
-    user-select: none;
-}
-
 #files_dashboard_sort:hover {
     background-color: #296CF6;
     color: white;
@@ -104,15 +90,16 @@
 }
 
 .files_dashboard_icons {
+    background-color: white;
     color: rgb(41, 108, 246);
-    border: 1px solid #296CF6;
-    border-radius: 4px;
+    border-radius: 50px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     cursor: pointer;
     float: right;
-    height: 27px;
+    height: 25px;
     margin-left: 10px;
-    padding: 5px;
-    width: 27px;
+    padding: 7.5px;
+    width: 25px;
     transition: 0.5s;
 }
 

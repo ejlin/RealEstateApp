@@ -1,0 +1,15 @@
+.add_new_tenant_modal_input {
+    background-color: #f5f5fa;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.0em;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-top: 7.5px;
+    padding: 10px 15px 10px 15px;
+    width: calc(100% - 90px);
+}
+
+.add_new_tenant_modal_input:focus {
+    outline: none;
+}

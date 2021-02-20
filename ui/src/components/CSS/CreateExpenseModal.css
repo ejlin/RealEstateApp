@@ -5,7 +5,7 @@
     float: left;
     min-height: 450px;
     margin-left: max(15%, calc((100% - 650px)/2));
-    margin-right: 10%;
+    margin-right: max(15%, calc((100% - 650px)/2));
     margin-top: 75px;
     max-width: 650px;
     padding-bottom: 30px;
@@ -261,23 +261,6 @@
     height: 20px;
     margin: calc((40px - 20px)/2);
     width: 20px;
-}
-
-.create_expense_modal_button {
-    background-color: #296CF6;
-    border-radius: 4px;
-    color: white;
-    cursor: pointer;
-    float: right;
-    font-weight: bold;
-    height: 40px;
-    line-height: 40px;
-    margin-top: 10px;
-    padding-left: 15px;
-    padding-right: 15px;
-    text-align: center;
-    transition: 0.5s;
-    width: 90px;
 }
 
 .create_expense_modal_button:hover {

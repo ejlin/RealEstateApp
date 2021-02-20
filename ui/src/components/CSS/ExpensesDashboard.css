@@ -1,10 +1,4 @@
-#expenses_dashboard_parent_box {
-    background-color: #F5F5FA;
-    float: left;
-    height: 100vh;
-    margin-left: 220px;
-    width: calc(100% - 220px - 350px);
-}
+
 
 .expenses_dashboard_parent_inner_box {
     float: left;

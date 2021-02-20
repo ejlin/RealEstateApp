@@ -264,15 +264,33 @@ class CreateExpenseModal extends React.Component {
                 />
                 <div
                     onClick={() => this.verifyAndAddExpense()}
-                    className={this.state.loadAddExpense ? "create_expense_modal_button loading_button" :
-                        "create_expense_modal_button"}>
+                    className={ this.state.loadAddExpense ? "loading_button" : ""}
+                    style={{
+                        backgroundColor: "#296CF6",
+                        borderRadius: "50px",
+                        color: "white",
+                        cursor: "pointer",
+                        float: "right",
+                        fontSize: "1.0em",
+                        fontWeight: "bold",
+                        height: "40px",
+                        lineHeight: "40px",
+                        marginTop: "10px",
+                        paddingLeft: "15px",
+                        paddingRight: "15px",
+                        textAlign: "center",
+                        transition: "0.5s",
+                        userSelect: "none",
+                        width: "90px",
+                    }}
+                    >
                     {this.state.loadAddExpense ? 
                     <Loader data={{
                         state: {
                             class: "",
                         }
                     }}/> :
-                    "Add Expense"}
+                    "Add"}
                 </div>
             </div>
         );

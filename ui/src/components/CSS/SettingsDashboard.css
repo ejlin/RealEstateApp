@@ -410,6 +410,7 @@
     border: 1px solid #d3d3d3;
     border-radius: 4px;
     font-size: 1.0em;
+    margin: 0;
     padding: 7.5px 15px 7.5px 15px;
     width: 200px;
 }

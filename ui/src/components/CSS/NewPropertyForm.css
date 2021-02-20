@@ -92,7 +92,6 @@
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
-    height: 500px;
     float: left;
     width: calc(100% - 250px - 250px);
 }

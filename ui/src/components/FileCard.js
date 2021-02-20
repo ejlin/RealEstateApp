@@ -78,6 +78,9 @@ class FileCard extends React.Component {
         if (this.state.isSmall) {
             return (
                 <div className={className} 
+                    style={{
+                        textOverflow: "ellipsis",
+                    }}
                     onMouseDown={() => this.clickCard()}
                     >
                     {mapFileTypeToIcon(fileType, this.state.isClicked, "file_card_file_type_icon_small")}
@@ -86,7 +89,7 @@ class FileCard extends React.Component {
                         "file_card_individual_file_footer_title_small file_card_individual_file_footer_title_active":
                         "file_card_individual_file_footer_title_small"}
                         title={this.state.file["name"] ? this.state.file["name"] : "Unknown File"}>
-                        {this.state.file["name"] ? trimTrailingName(this.state.file["name"], 15) : "Unknown File"}
+                        {this.state.file["name"] ? this.state.file["name"] : "Unknown File"}
                     </p>
                     <div className="clearfix"/>
                     <div className=

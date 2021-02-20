@@ -17,7 +17,6 @@ import { MdFeedback, MdDashboard } from 'react-icons/md';
 import { FiChevronDown } from 'react-icons/fi';
 import { FaMoneyCheck } from 'react-icons/fa';
 import { TiUser } from 'react-icons/ti';
-import { ImUser } from 'react-icons/im';
 
 class DashboardSidebar extends React.Component {
     
@@ -180,7 +179,7 @@ class DashboardSidebar extends React.Component {
                         style={{
                             backgroundColor: "#296CF6",
                             border: "none",
-                            borderRadius: "4px",
+                            borderRadius: "8px",
                             color: "white",
                             cursor: "pointer",
                             float: "left",
@@ -189,11 +188,10 @@ class DashboardSidebar extends React.Component {
                             lineHeight: "45px",
                             marginLeft: "40px",
                             marginTop: "25px",
-                            paddingBottom: "0px",
                             textAlign: "center",
                             textDecoration: "none",
                             userSelect: "none",
-                            width: "calc((100% - 80px))",
+                            width: "calc(100% - 80px)",
                         }}
                         to={{
                             pathname: "/addproperty",

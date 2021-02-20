@@ -15,7 +15,10 @@ body {
     /* font-family: 'Poppins', sans-serif; */
     /* font-family: 'Nanum Gothic', sans-serif; */
     /* font-family: 'Noto Sans HK', sans-serif; */
-    font-family: 'Lato', sans-serif;
+    /* font-family: 'Lato', sans-serif; */
+    /* font-family: 'Nunito Sans', sans-serif; */
+    /* font-family: 'Mukta', sans-serif; */
+    font-family: 'Roboto', sans-serif;
     /* font-family: 'Arimo', sans-serif; */
 }
 
@@ -26,7 +29,7 @@ body {
     float: right;
     font-size: 1.1em;
     padding: 10px 15px 10px 15px;
-    width: 500px;
+    width: 40%;
 }
 
 .search_bar:focus, .generic_search_bar:focus {
@@ -66,7 +69,20 @@ body {
     content: '';
     height: 100vh;
     margin-bottom: 25px;
+    margin-left: 220px;
     position: absolute;
-    width: calc(100% - 220px);
+    width: calc(100% - 220px - 330px);
     z-index: 5;
+}
+
+.opacity {
+    transition: 0.5s;
+}
+
+.opacity:hover {
+    opacity: 0.8;
+}
+
+.no-outline-focus:focus {
+    outline: none;
 }

@@ -11,6 +11,9 @@ import ExpandedExpenseCard from './ExpandedExpenseCard.js';
 import BarChart from '../charts/BarChart.js';
 import SideBarChart from '../charts/SideBarChart.js';
 import Dropdown from './Dropdown.js';
+import AddNewTenantModal from './AddNewTenantModal.js';
+import AddNewPropertyManagerModal from './AddNewPropertyManagerModal.js';
+import WarningModal from '../utility/WarningModal.js';
 
 import { monthArr, 
         numberWithCommas, 
@@ -26,12 +29,12 @@ import { Link, Redirect } from 'react-router-dom';
 
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 
-import { IoCaretBackOutline } from 'react-icons/io5';
 import { GoFileDirectory } from 'react-icons/go';
 import { SiGoogleanalytics } from 'react-icons/si';
-import { IoSettingsSharp } from 'react-icons/io5';
 import { FaMoneyCheck, FaCheckCircle } from 'react-icons/fa';
-import { MdDashboard } from 'react-icons/md';
+import { MdDashboard, MdEdit } from 'react-icons/md';
+import { IoTrashSharp, IoCaretBackOutline, IoSettingsSharp } from 'react-icons/io5';
+import { TiUser } from 'react-icons/ti';
 
 let URLBuilder = require('url-join');
 
@@ -40,6 +43,8 @@ const analysisView = "analysis_view";
 const expensesView = "expenses_view";
 const filesView = "files_view";
 const settingsView = "settings_view";
+const peopleView = "people_view";
+const editView = "edit_view";
 
 class PropertyPage extends React.Component {
     constructor(props) {
@@ -71,6 +76,10 @@ class PropertyPage extends React.Component {
 
         this.cashFlowCallback = this.cashFlowCallback.bind(this);
         this.getCashFlowValue = this.getCashFlowValue.bind(this);
+
+        this.closeModal = this.closeModal.bind(this);
+        this.closeNewTenantModal = this.closeNewTenantModal.bind(this);
+        this.closeNewPropertyManagerModal = this.closeNewPropertyManagerModal.bind(this);
     }
 
     componentDidMount() {
@@ -286,6 +295,24 @@ class PropertyPage extends React.Component {
             );
         }
         return fileElements;
+    }
+
+    closeModal() {
+        this.setState({
+            displayDeletePropertyModal: false,
+        })
+    }
+
+    closeNewTenantModal() {
+        this.setState({
+            displayNewTenant: false,
+        })
+    }
+
+    closeNewPropertyManagerModal() {
+        this.setState({
+            displayNewPropertyManager: false,
+        })
     }
 
     renderViewPage() {
@@ -683,6 +710,316 @@ class PropertyPage extends React.Component {
                         
                     </div>
                 );
+            case peopleView:
+                return (
+                    <div className="view_to_display_box">
+                        <div className="view_to_display_info_box">
+                            <p className="view_to_display_info_box_title">
+                                Tenant
+                            </p>
+                        </div>
+                        <div className="clearfix"/>
+                        <div>
+                            {
+                                this.state.tenantsSummary ?
+                                <div></div> :
+                                <div style={{
+                                    width: "100%",
+                                }}>
+                                    <p style={{
+                                        fontWeight: "bold",
+                                        marginTop: "50px",
+                                        textAlign: "center",
+                                    }}>
+                                        No tenants yet.
+                                    </p>
+                                    <div 
+                                        onMouseDown={() => {
+                                            this.setState({
+                                                displayNewTenant: true,
+                                            })
+                                        }}
+                                        className="opacity"
+                                        style={{
+                                            backgroundColor: "#296CF6",
+                                            borderRadius: "10px",
+                                            boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                                            cursor: "pointer",
+                                            marginBottom: "50px",
+                                            marginLeft: "calc((100% - 170px)/2)",
+                                            marginRight: "calc((100% - 170px)/2)",
+                                            marginTop: "25px",
+                                            padding: "10px",
+                                            width: "150px",
+                                    }}>
+                                        <p style={{
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            textAlign: "center",
+                                            userSelect: "none",
+                                        }}>
+                                            Add Tenant
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div className="view_to_display_info_box">
+                            <p className="view_to_display_info_box_title">
+                                Property Manager
+                            </p>
+                        </div>
+                        <div className="clearfix"/>
+                        <div>
+                            {
+                                this.state.tenantsSummary ?
+                                <div></div> :
+                                <div style={{
+                                    width: "100%",
+                                }}>
+                                    <p style={{
+                                        fontWeight: "bold",
+                                        marginTop: "50px",
+                                        textAlign: "center",
+                                    }}>
+                                        No property manager yet.
+                                    </p>
+                                    <div 
+                                        onMouseDown={() => {
+                                            this.setState({
+                                                displayNewPropertyManager: true,
+                                            })
+                                        }}
+                                        className="opacity"
+                                        style={{
+                                            backgroundColor: "#296CF6",
+                                            borderRadius: "10px",
+                                            boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                                            cursor: "pointer",
+                                            marginBottom: "50px",
+                                            marginLeft: "calc((100% - 220px)/2)",
+                                            marginRight: "calc((100% - 220px)/2)",
+                                            marginTop: "25px",
+                                            padding: "10px",
+                                            width: "200px",
+                                    }}>
+                                        <p style={{
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            textAlign: "center",
+                                            userSelect: "none",
+                                        }}>
+                                            Add Property Manager
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                );
+            case editView:
+                return (
+                    <div className="view_to_display_box">
+                        <div className="view_to_display_info_box">
+                            <p className="view_to_display_info_box_title">
+                                Edit Property
+                            </p>
+                            <p 
+                                onMouseDown={() => {
+                                    this.setState({
+                                        editItems: true,
+                                    })
+                                }}
+                                style={{
+                                    color: "#296CF6",
+                                    cursor: "pointer",
+                                    float: "right",
+                                    fontWeight: "bold",
+                                    marginRight: "30px",
+                                    marginTop: "20px",
+                            }}>
+                                Edit
+                            </p>
+                        </div>
+                        <div className="clearfix"/>
+                        <p style={{
+                            color: "#296CF6",
+                            fontSize: "1.0em",
+                            fontWeight: "bold",
+                            marginLeft: "30px",
+                            marginTop: "15px",
+                        }}>
+                            Property Details
+                        </p>
+                        <div style={{
+                            height: "100px",
+                            marginLeft: "30px",
+                            marginRight: "30px",
+                            marginTop: "10px",
+                            width: "calc(100% - 60px)",
+                        }}>
+                            <div
+                                style={{
+                                    backgroundColor: "#d3d3d3",
+                                    float: "left",
+                                    height: "1px",
+                                    marginTop: "10px",
+                                    width: "100%",
+                                }}
+                            />
+                            <li className="edit_view_element">
+                                <div className="edit_view_first_box">
+                                    <p className="edit_view_first_box_title">
+                                        Address
+                                    </p>
+                                </div>
+                                <div className="edit_view_second_box">
+                                    <p>
+                                        {this.state.property["address_one"]}
+                                    </p>
+                                    <p>
+                                        {this.state.property["address_two"]}
+                                    </p>
+                                </div>
+                            </li>
+                            <li className="edit_view_element">
+                                <div className="edit_view_first_box">
+                                    <p className="edit_view_first_box_title">
+                                        State
+                                    </p>
+                                </div>
+                                <div className="edit_view_second_box">
+                                    <p>
+                                        {this.state.property["state"]}
+                                    </p>
+                                </div>
+                            </li>
+                            <li className="edit_view_element">
+                                <div className="edit_view_first_box">
+                                    <p className="edit_view_first_box_title">
+                                        Zip Code
+                                    </p>
+                                </div>
+                                <div className="edit_view_second_box">
+                                    <p>
+                                        {this.state.property["zip_code"]}
+                                    </p>
+                                </div>
+                            </li>
+                            <li className="edit_view_element">
+                                <div className="edit_view_first_box">
+                                    <p className="edit_view_first_box_title">
+                                        Bedrooms
+                                    </p>
+                                </div>
+                                <div className="edit_view_second_box">
+                                    <p>
+                                        {this.state.property["num_beds"]}
+                                    </p>
+                                </div>
+                            </li>
+                            <li className="edit_view_element">
+                                <div className="edit_view_first_box">
+                                    <p className="edit_view_first_box_title">
+                                        Bathrooms
+                                    </p>
+                                </div>
+                                <div className="edit_view_second_box">
+                                    <p>
+                                        {numberWithCommas(this.state.property["num_baths"])}
+                                    </p>
+                                </div>
+                            </li>
+                            <li className="edit_view_element">
+                                <div className="edit_view_first_box">
+                                    <p className="edit_view_first_box_title">
+                                        Square Footage
+                                    </p>
+                                </div>
+                                <div className="edit_view_second_box">
+                                    <p>
+                                        {numberWithCommas(this.state.property["square_footage"])}
+                                    </p>
+                                </div>
+                            </li>
+                        </div>
+                        <p style={{
+                            color: "#296CF6",
+                            float: "left",
+                            fontSize: "1.0em",
+                            fontWeight: "bold",
+                            marginLeft: "30px",
+                            marginTop: "25px",
+                        }}>
+                            Property Details
+                        </p>
+                        <div style={{
+                            height: "100px",
+                            marginLeft: "30px",
+                            marginRight: "30px",
+                            marginTop: "10px",
+                            width: "calc(100% - 60px)",
+                        }}>
+                            <div
+                                style={{
+                                    backgroundColor: "#d3d3d3",
+                                    float: "left",
+                                    height: "1px",
+                                    marginTop: "10px",
+                                    width: "100%",
+                                }}
+                            />
+                            <li className="edit_view_element">
+                                <div className="edit_view_first_box">
+                                    <p className="edit_view_first_box_title">
+                                        Bought Date
+                                    </p>
+                                </div>
+                                <div className="edit_view_second_box">
+                                    <p>
+                                        {this.state.property["bought_date"]}
+                                    </p>
+                                </div>
+                            </li>
+                            <li className="edit_view_element">
+                                <div className="edit_view_first_box">
+                                    <p className="edit_view_first_box_title">
+                                        Bought Price
+                                    </p>
+                                </div>
+                                <div className="edit_view_second_box">
+                                    <p>
+                                        ${numberWithCommas(this.state.property["price_bought"])}
+                                    </p>
+                                </div>
+                            </li>
+                            <li className="edit_view_element">
+                                <div className="edit_view_first_box">
+                                    <p className="edit_view_first_box_title">
+                                        Estimate
+                                    </p>
+                                </div>
+                                <div className="edit_view_second_box">
+                                    <p>
+                                        ${numberWithCommas(this.state.property["estimate"])}
+                                    </p>
+                                </div>
+                            </li>
+                            <li className="edit_view_element">
+                                <div className="edit_view_first_box">
+                                    <p className="edit_view_first_box_title">
+                                        Down Payment
+                                    </p>
+                                </div>
+                                <div className="edit_view_second_box">
+                                    <p>
+                                        ${numberWithCommas(this.state.property["down_payment"])}
+                                    </p>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+                );
         }
     }
 
@@ -714,10 +1051,44 @@ class PropertyPage extends React.Component {
                         currentPage: "properties",
                     }
                 }}/>
-                {this.state.isLoading ? <div></div> : 
+                {this.state.isLoading ? <div></div> :
                 <div>
+                    {
+                        this.state.displayDeletePropertyModal ?
+                        <WarningModal 
+                            data={{
+                                state: {
+                                    titleText: "Are you sure you would like to delete this property?",
+                                    subText: "This action is irreversible and will delete all information associated with this property, including files, expenses, etc.",
+                                    closeModal: this.closeModal,
+                                }
+                            }}
+                        /> :
+                        <div></div>
+                    }
+                    {
+                        this.state.displayNewTenant ?
+                        <AddNewTenantModal data={{
+                            state: {
+                                closeModal: this.closeNewTenantModal,
+                            }
+                        }}/>:
+                        <div>
+                        </div>
+                    }
+                    {
+                        this.state.displayNewPropertyManager ?
+                        <AddNewPropertyManagerModal data={{
+                            state: {
+                                closeModal: this.closeNewPropertyManagerModal,
+                            }
+                        }}/>:
+                        <div>
+                        </div>
+                    }
                     <div className="property_page_property_type_box">
-                        {this.state.currActiveExpandedExpense !== null ? 
+                        {
+                            this.state.currActiveExpandedExpense !== null ? 
                             <div className="expenses_dashboard_display_add_expense_box">
                                 <ExpandedExpenseCard data={{
                                     state: {
@@ -726,10 +1097,10 @@ class PropertyPage extends React.Component {
                                         propertiesMap: this.state.propertiesMap,
                                         setActiveExpandedExpenseCard: this.setActiveExpandedExpenseCard,
                                     }
-                                }}>
-                                </ExpandedExpenseCard>
+                                }}/>
                             </div> :
-                            <div></div>}
+                            <div></div>
+                        }
                         <div className="property_page_inner_box">
                             <div className="property_page_buttons_box">
                                 <Link to={{
@@ -748,7 +1119,7 @@ class PropertyPage extends React.Component {
                             </div>
                             <div className="property_page_redirect_back_box">
                                 <div 
-                                    onClick={() => {
+                                    onMouseDown={() => {
                                         this.setState({
                                             redirectToPropertiesPage: "/properties",
                                         })
@@ -761,10 +1132,17 @@ class PropertyPage extends React.Component {
                                 <p className="property_page_folder_name_subtitle">{this.state.property["state"]},&nbsp;{this.state.property["zip_code"]}</p>
                             </div>
                             <div className="clearfix"/>
-                            <div className="property_page_view_box">
-                                <div className="property_page_view_box_tabs_box">
+                            <div 
+                                style={{
+                                    marginTop: "10px",
+                            }}>
+                                <div 
+                                    style={{
+                                        height: "60px",
+                                        width: "100%",
+                                    }}>
                                     <li 
-                                        onClick={() => {
+                                        onMouseDown={() => {
                                             this.setState({
                                                 viewToDisplay: overviewView,
                                             })
@@ -786,7 +1164,7 @@ class PropertyPage extends React.Component {
                                         }>Overview</p>
                                     </li>
                                     <li 
-                                        onClick={() => {
+                                        onMouseDown={() => {
                                             this.setState({
                                                 viewToDisplay: analysisView,
                                             })
@@ -808,7 +1186,7 @@ class PropertyPage extends React.Component {
                                         }>Analysis</p>
                                     </li>
                                     <li 
-                                        onClick={() => {
+                                        onMouseDown={() => {
                                             this.setState({
                                                 viewToDisplay: expensesView,
                                             })
@@ -830,7 +1208,7 @@ class PropertyPage extends React.Component {
                                         }>Expenses</p>
                                     </li>
                                     <li 
-                                        onClick={() => {
+                                        onMouseDown={() => {
                                             this.setState({
                                                 viewToDisplay: filesView,
                                             })
@@ -852,7 +1230,7 @@ class PropertyPage extends React.Component {
                                         }>Files</p>
                                     </li>
                                     <li 
-                                        onClick={() => {
+                                        onMouseDown={() => {
                                             this.setState({
                                                 viewToDisplay: settingsView,
                                             })
@@ -873,10 +1251,42 @@ class PropertyPage extends React.Component {
                                             "property_page_view_box_tab_text"
                                         }>Settings</p>
                                     </li>
+                                    <div style={{
+                                        float: "right",
+                                        marginTop: "10px",
+                                    }}> 
+                                        <TiUser 
+                                            className={
+                                                this.state.viewToDisplay === peopleView ? 
+                                                "property_page_icons active_property_page_icons" :
+                                                "property_page_icons"
+                                            }
+                                            onMouseDown={() => {
+                                                this.setState({
+                                                    viewToDisplay: peopleView,
+                                                })
+                                            }}/>
+                                        <MdEdit 
+                                            className={
+                                                this.state.viewToDisplay === editView ? 
+                                                "property_page_icons active_property_page_icons" :
+                                                "property_page_icons"
+                                            }
+                                            onMouseDown={() => {
+                                                this.setState({
+                                                    viewToDisplay: editView,
+                                                })
+                                            }}/>
+                                        <IoTrashSharp 
+                                            onMouseDown={() => {
+                                                this.setState({
+                                                    displayDeletePropertyModal: true,
+                                                })
+                                            }}
+                                            className="property_page_icons"/>
+                                    </div>
                                 </div>
                                 <div className="clearfix"/>
-                                {/* <div className="property_page_view_box_bottom_border">
-                                </div> */}
                                 {this.renderViewPage()}
                             </div>
                         </div>

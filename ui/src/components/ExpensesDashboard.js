@@ -512,38 +512,44 @@ class ExpensesDashboard extends React.Component {
                         currentPage: "expenses"
                     }
                 }}/>
-                <div id="expenses_dashboard_parent_box">
-                    {this.state.displayAddExpense ?
-                        <div className="expenses_dashboard_display_add_expense_box">
-                            <CreateExpenseModal
-                                data={{
-                                state: {
-                                    user: this.state.user,
-                                    propertiesMap: this.state.propertiesMap,
-                                    addExpense: this.addExpense,
-                                    closeCreateExpenseModal: this.closeCreateExpenseModal,
-                                }                       
-                            }}
-                            ></CreateExpenseModal>
-                        </div> :
-                        <div></div>}
-                    {this.state.expenseToEdit ?
-                        <div className="expenses_dashboard_display_add_expense_box">
-                        </div> :
-                        <div></div>}
-                    {this.state.currActiveExpandedExpense !== null ? 
-                        <div className="expenses_dashboard_display_add_expense_box">
-                            <ExpandedExpenseCard data={{
-                                state: {
-                                    user: this.state.user,
-                                    expense: this.state.currActiveExpandedExpense,
-                                    propertiesMap: this.state.propertiesMap,
-                                    setActiveExpandedExpenseCard: this.setActiveExpandedExpenseCard,
-                                }
-                            }}>
-                            </ExpandedExpenseCard>
-                        </div> :
-                        <div></div>}
+                {this.state.displayAddExpense ?
+                    <div className="full-background-tint">
+                        <CreateExpenseModal
+                            data={{
+                            state: {
+                                user: this.state.user,
+                                propertiesMap: this.state.propertiesMap,
+                                addExpense: this.addExpense,
+                                closeCreateExpenseModal: this.closeCreateExpenseModal,
+                            }                       
+                        }}
+                        ></CreateExpenseModal>
+                    </div> :
+                    <div></div>}
+                {this.state.expenseToEdit ?
+                    <div className="full-background-tint">
+                    </div> :
+                    <div></div>}
+                {this.state.currActiveExpandedExpense !== null ? 
+                    <div className="full-background-tint">
+                        <ExpandedExpenseCard data={{
+                            state: {
+                                user: this.state.user,
+                                expense: this.state.currActiveExpandedExpense,
+                                propertiesMap: this.state.propertiesMap,
+                                setActiveExpandedExpenseCard: this.setActiveExpandedExpenseCard,
+                            }
+                        }}>
+                        </ExpandedExpenseCard>
+                    </div> :
+                    <div></div>}
+                <div style={{
+                    backgroundColor: "#F5F5FA",
+                    float: "left",
+                    height: "100vh",
+                    marginLeft: "220px",
+                    width: "calc(100% - 220px - 350px)",
+                }}>
                     <div className="expenses_dashboard_parent_inner_box">
                         <div className="expenses_dashboard_title_box">
                             <div className="expenses_dashboard_parent_inner_box_title">
