@@ -370,7 +370,6 @@ class PropertiesDashboard extends React.Component {
     renderProperties() {
         let elements = [];
         let propertiesMap = this.state.propertiesMap;
-        let isFirstChild = true;
         propertiesMap.forEach((value, key, map) => {
             let propertyArr = value[1];
             for (let i = 0; i < propertyArr.length; i++) {
@@ -386,7 +385,6 @@ class PropertiesDashboard extends React.Component {
                         data={{
                         state: {
                             user: this.state.user,
-                            isFirstChild: isFirstChild,
                             property_details: property
                         }                       
                     }}/>
@@ -407,7 +405,6 @@ class PropertiesDashboard extends React.Component {
                 //         }                       
                 //     }}/>
                 // );
-                isFirstChild = false;
             }
         });
         return elements;
