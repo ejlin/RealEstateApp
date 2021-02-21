@@ -63,6 +63,7 @@ class PropertyCard extends React.Component {
                 }}
                 >
                     <img style={{
+                        height: "175px",
                         width: "100%",
                     }}
                     src={this.state.googleMapsURL}/>
@@ -105,7 +106,7 @@ class PropertyCard extends React.Component {
                         marginTop: "5px",
                         width: "calc(100% - 60px)",
                     }}>
-                        {this.state.property["city"]}, {this.state.property["state"]} &nbsp; {this.state.property["zip_code"]}
+                        {this.state.property["city"]}, {this.state.property["state"]} {this.state.property["zip_code"]}
                     </p>              
                 </div>
                 <p style={{

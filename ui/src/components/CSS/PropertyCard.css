@@ -6,13 +6,13 @@
     border-top: 7.5px solid #296CF6;
     float: left;
     margin-bottom: 30px;
-    margin-right: 20px;    /* 100% - 4 cards at 250px width each, 3 spacings in between them) */
+    margin-right: 25px;    /* 100% - 4 cards at 250px width each, 3 spacings in between them) */
     min-width: 300px;
     /* min-width: 276px;   4px for border */
-    width: 200px;
+    width: 300px;
 }
 
-.property_card_box:nth-child(4){
+.property_card_box:nth-child(3){
     margin-right: 0px !important;
 }
 

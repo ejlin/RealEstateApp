@@ -89,7 +89,10 @@ class PropertyPage extends React.Component {
         let propertyGoogleMapsURL = (this.state.property["address_one"] + (this.state.property["address_two"] ? " " + this.state.property["address_two"] : "")) + "," + this.state.property["city"] + "," + this.state.property["state"];
         propertyGoogleMapsURL = propertyGoogleMapsURL.replace(" ", "+");
 
-        let googleMapsURL = 'https://maps.googleapis.com/maps/api/staticmap?center=' + propertyGoogleMapsURL + '&zoom=15&size=1000x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&key=AIzaSyCbudHvO__fMV1eolNO_g5qtE2r2UNcjcA';
+        let markerCenter = (this.state.property["address_one"] + (this.state.property["address_two"] ? " " + this.state.property["address_two"] : "")) + "," + this.state.property["state"];
+        markerCenter = markerCenter.replace(" ", "+");
+
+        let googleMapsURL = 'https://maps.googleapis.com/maps/api/staticmap?center=' + propertyGoogleMapsURL + '&zoom=15&size=1000x300&maptype=roadmap&markers=color:0x296CF6%7C' + markerCenter + '&key=AIzaSyCbudHvO__fMV1eolNO_g5qtE2r2UNcjcA';
         this.setState({
             googleMapsURL: googleMapsURL
         })
@@ -354,7 +357,7 @@ class PropertyPage extends React.Component {
                                 </li>
                                 <li className="view_to_display_info_box_bullet">
                                     <p className="view_to_display_info_box_subtitle">
-                                        <b>{this.state.property["num_units"]}</b>&nbsp;unit(s)
+                                        <b>{this.state.property["num_units"] ? this.state.property["num_units"] : 1}</b>&nbsp;unit(s)
                                     </p>
                                 </li>
                             </div>

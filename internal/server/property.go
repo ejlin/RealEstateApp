@@ -229,14 +229,11 @@ func (s *Server) addPropertyByUser(w http.ResponseWriter, r *http.Request) {
 		property.Estimate = estatedProperty.Data.Valuation.Value
 	}
 	
-	// Store our estimate in a separate goroutine so we don't block.
-	go func() {
-		err := StoreEstimate(s.DBHandle, &property, estatedProperty.Data.Valuation.Value)
-		if err != nil {
-			ll.Warn().Err(err).Msg("unable to store property estimate in property creation")
-			// Just log, unable to get estimate from Estated.
-		}
-	}()
+	err := StoreEstimate(s.DBHandle, &property, estatedProperty.Data.Valuation.Value)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to store property estimate in property creation")
+		// Just log, unable to get estimate from Estated.
+	}
 
 	// Fill in required information.
 	createdAt := time.Now().UTC()

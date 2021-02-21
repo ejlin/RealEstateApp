@@ -119,16 +119,17 @@ class FolderPage extends React.Component {
             // Credit: https://gist.github.com/javilobo8/097c30a233786be52070986d8cdb1743
             let activeFolderFilesMap = new Map();
             let activeFolderFiles = response.data;
+            
+            if (activeFolderFiles !== undefined && activeFolderFiles && activeFolderFiles.length > 0) {
+                activeFolderFiles = activeFolderFiles.sort(function(a, b){
+                    if (a["last_modified_at"] < b["last_modified_at"]) {
+                        return 1;
+                    } else if (a["last_modified_at"] > b["last_modified_at"]) {
+                        return -1;
+                    }
+                    return 0;
+                });
 
-            activeFolderFiles = activeFolderFiles.sort(function(a, b){
-                if (a["last_modified_at"] < b["last_modified_at"]) {
-                    return 1;
-                } else if (a["last_modified_at"] > b["last_modified_at"]) {
-                    return -1;
-                }
-                return 0;
-            });
-            if (activeFolderFiles && activeFolderFiles.length > 0) {
                 for (let i = 0; i < activeFolderFiles.length; i++) {
                     let activeFolderFile = activeFolderFiles[i];
                     let fileID = activeFolderFile["id"];
@@ -427,7 +428,7 @@ class FolderPage extends React.Component {
                 <p className="files_dashboard_folder_name_title">{this.state.folderName}</p>
                 <div className="clearfix"/>
                 <div>
-                    {fileElements}
+                    {fileElements.length > 0 ? fileElements : <p>No Files</p>}
                 </div>
             </div>
         );

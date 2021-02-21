@@ -419,7 +419,11 @@ class NewPropertyForm extends React.Component {
                         profilePicture: this.state.profilePicture
                     }
                 }}/>
-                <div id="new_property_form_box">
+                <div style={{
+                    float: "left",
+                    marginLeft: "220px",
+                    width: "calc(100% - 220px)",
+                }}>
                     { this.state.displayAddressVerificationBox ? 
                     <div
                         className="full-background-tint"
@@ -560,11 +564,21 @@ class NewPropertyForm extends React.Component {
                         marginTop: "80px",
                         width: "calc((100% - 120px))",
                     }}>
-                        <p className="new_property_dashboard_title_box_title">
+                        <p style={{
+                            fontSize: "1.6em",
+                            fontWeight: "bold",
+                        }}>
                             New Property
                         </p>
-                        <div className="new_property_dashboard_bottom_box">
-                            <div className="new_property_dashboard_bottom_left_box">
+                        <div style={{
+                            float: "left",
+                            marginTop: "40px",
+                            width: "100%",
+                        }}>
+                            <div style={{
+                                float: "left",
+                                width: "250px",
+                            }}>
                                 <li 
                                     onClick={() => this.setState({
                                         toDisplay: generalInformation
@@ -627,7 +641,13 @@ class NewPropertyForm extends React.Component {
                                     </p>
                                 </li>
                             </div>
-                            <div className="new_property_dashboard_bottom_right_box">
+                            <div style={{
+                                backgroundColor: "white",
+                                borderRadius: "10px",
+                                boxhadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                                float: "left",
+                                width: "calc(100% - 250px - 250px)",
+                            }}>
                                 {this.renderFormParts()}
                             </div>
                         </div>

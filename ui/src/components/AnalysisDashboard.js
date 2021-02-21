@@ -445,7 +445,7 @@ class AnalysisDashboard extends React.Component {
                                 <AiFillQuestionCircle className="analysis_dashboard_inner_box_middle_box_element_add_icon"/>
                                 <div className="clearfix"/>
                                 <p className="analysis_dashboard_inner_box_middle_cards_right_element_box_title">
-                                    ${numberWithCommas(this.state.propertiesSummary["total_property_manager_fee"])}
+                                    $0
                                 </p>
                                 <p className="analysis_dashboard_inner_box_middle_cards_right_element_box_subtitle">
                                     in expenses this month

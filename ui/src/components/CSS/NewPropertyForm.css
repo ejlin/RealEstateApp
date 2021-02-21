@@ -1,19 +1,3 @@
-#new_property_form_box {
-    float: left;
-    margin-left: 220px;
-    width: calc(100% - 220px);
-}
-
-.new_property_dashboard_title_box_title{
-    font-size: 1.6em;
-    font-weight: bold;
-}
-
-.new_property_dashboard_bottom_box {
-    float: left;
-    margin-top: 40px;
-    width: 100%;
-}
 
 .new_property_dashboard_bottom_left_box_list {
     background-color: white;
@@ -67,25 +51,12 @@
     margin-left: 10px;
 }
 
-.new_property_dashboard_bottom_left_box {
-    float: left;
-    width: 250px;
-}
-
 .form_footer_box {
     float: left;
     height: 25px;
     margin-bottom: 25px;
     padding-bottom: 25px;
     width: 100%;
-}
-
-.new_property_dashboard_bottom_right_box {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
-    float: left;
-    width: calc(100% - 250px - 250px);
 }
 
 .form_title {
@@ -108,13 +79,6 @@ input {
 
 input::placeholder {
     color: grey;
-}
-
-.new_property_form_label {
-    background-color:  #F6F7F9;
-    float: left;
-    font-size: 1.1em;
-    margin-top: 10px;
 }
 
 .new_property_form_required {
@@ -262,30 +226,6 @@ input::placeholder {
 .new_property_form_triple_box {
     margin-left: 40px;
     width: calc(100% - 80px);
-}
-
-#new_property_submit_button {
-    background-color: #296CF6;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    cursor: pointer;
-    float: right;
-    font-size: 1.1em;
-    margin-bottom: 40px;
-    margin-left: 40px;
-    margin-right: 40px;
-    margin-top: 40px;
-    padding: 7.5px 15px 7.5px 15px;
-    transition: 0.4s;
-}
-
-#new_property_submit_button:hover {
-    opacity: 0.7;
-}
-
-#new_property_submit_button:focus {
-    outline: none;
 }
 
 .new_property_form_double_box {
