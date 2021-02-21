@@ -155,6 +155,7 @@ class PropertyCard extends React.Component {
                 }
                 <div className="clearfix"/>
                 <p style={{
+                    color: "#296cf6",
                     fontSize: "1.1em",
                     fontWeight: "bold",
                     marginTop: "20px",
@@ -164,7 +165,7 @@ class PropertyCard extends React.Component {
                     {
                         this.state.property["currently_rented"] && this.state.property["price_rented"] ?
                         "$" + numberWithCommas(this.state.property["price_rented"]) + "/mo." :
-                        ""
+                        "$- /mo."
                     }
                 </p>
                 

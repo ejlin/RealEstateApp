@@ -86,10 +86,10 @@
 .expenses_dashboard_body_inner_box_no_expenses_inner_box_text {
     color: grey;
     font-size: 1.1em;
-    margin-left: calc((100% - 100px)/2);
+    margin-left: calc((100% - 120px)/2);
     margin-top: 0px;
     text-align: center;
-    width: 100px;
+    width: 120px;
 }
 
 .expenses_dashboard_display_add_expense_box {

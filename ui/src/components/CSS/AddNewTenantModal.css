@@ -1,15 +1,67 @@
 .add_new_tenant_modal_input {
-    background-color: #f5f5fa;
+    /* background-color: #f5f5fa;
     border: none;
     border-radius: 8px;
     font-size: 1.0em;
-    margin-left: 30px;
-    margin-right: 30px;
     margin-top: 7.5px;
     padding: 10px 15px 10px 15px;
-    width: calc(100% - 90px);
+    position: relative;
+    width: calc(100% - 30px); */
+    position: relative;
+    height: 30px;
+    border-radius: 5px;
+    outline: none;
+    padding: 5px;
+    border: 1px solid lightblue;
+    width: 100%;
+}
+
+.placeholder {
+    position: absolute;
+    left: 20px;
+    top: 0px;
+    background-color: black;
+    padding: 0 20px;
+}
+
+.add_new_tenant_modal_input:focus ~ .placeholder,
+.add_new_tenant_modal_input:valid ~ .placeholder {
+  display: none;
 }
 
 .add_new_tenant_modal_input:focus {
     outline: none;
+}
+
+.group{
+    position:relative;
+}
+.group>label{
+    font-size: 0.7em;
+    padding:0 0.2em;
+    position:absolute;
+    left: 5px;
+    margin-top: 5px;
+    background-color:white;
+}
+
+.group>input:focus ~ label,
+.group>input:valid ~ label{
+    display: none;
+}
+  
+.group>input{
+    padding:0.8em;
+    border-radius: 4px;
+    border: 1px solid #296cf6;
+    outline:none;
+}
+
+.add_new_tenant_modal_input::placeholder {
+    color: #296cf6;
+    font-size: 0.6em;
+    font-weight: bold;
+    margin-top: -10px;
+    position: absolute;
+    top: 0;
 }

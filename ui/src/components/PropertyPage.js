@@ -132,15 +132,16 @@ class PropertyPage extends React.Component {
             let filesMap = new Map();
             let files = filesRequestResponse.data;
 
-            files = files.sort(function(a, b){
-                if (a["last_modified_at"] < b["last_modified_at"]) {
-                    return 1;
-                } else if (a["last_modified_at"] > b["last_modified_at"]) {
-                    return -1;
-                }
-                return 0;
-            });
-            if (files && files.length > 0) {
+            if (files && files !== undefined && files.length > 0) {
+                files = files.sort(function(a, b){
+                    if (a["last_modified_at"] < b["last_modified_at"]) {
+                        return 1;
+                    } else if (a["last_modified_at"] > b["last_modified_at"]) {
+                        return -1;
+                    }
+                    return 0;
+                });
+
                 for (let i = 0; i < files.length; i++) {
                     let file = files[i];
                     let fileID = file["id"];
@@ -155,7 +156,7 @@ class PropertyPage extends React.Component {
             /* Handle our summary response */
             const propertySummaryRequestResponse = responses[3];
             let propertySummary = propertySummaryRequestResponse.data;
-
+            console.log(propertySummary);
             let cashFlowObj = getCashFlowData(propertySummary, expenses);
             let cashFlowData = cashFlowObj[0];
             let totalIncome = cashFlowObj[1];
@@ -189,6 +190,10 @@ class PropertyPage extends React.Component {
     }
 
     convertBoughDateToText(boughtDate) {
+
+        if (!boughtDate || boughtDate === undefined) {
+            return "";
+        }
 
         let monthArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         // Format is 10/2020
@@ -1229,7 +1234,7 @@ class PropertyPage extends React.Component {
                                             "property_page_view_box_tab_text"
                                         }>Files</p>
                                     </li>
-                                    <li 
+                                    {/* <li 
                                         onMouseDown={() => {
                                             this.setState({
                                                 viewToDisplay: settingsView,
@@ -1250,7 +1255,7 @@ class PropertyPage extends React.Component {
                                             "property_page_view_box_tab_text property_page_view_box_tab_active_text" :
                                             "property_page_view_box_tab_text"
                                         }>Settings</p>
-                                    </li>
+                                    </li> */}
                                     <div style={{
                                         float: "right",
                                         marginTop: "10px",

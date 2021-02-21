@@ -35,7 +35,7 @@ class NewPropertyForm extends React.Component {
             properties: [],
             addressToUse: Lob,
         };
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.addProperty = this.addProperty.bind(this);
         this.handleFieldChange = this.handleFieldChange.bind(this);
         this.propertyTypeOnChange = this.propertyTypeOnChange.bind(this);
         this.purchaseTypeOnChange = this.purchaseTypeOnChange.bind(this);
@@ -48,17 +48,16 @@ class NewPropertyForm extends React.Component {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    handleSubmit(event) {
-        event.preventDefault();
+    addProperty() {
 
-        let axiosAddPropertyURL = URLBuilder('/api/user/property/', this.state.userID);
+        let axiosAddPropertyURL = URLBuilder('/api/user/property/', this.state.user["id"]);
         axios({
             method: 'post',
             url: axiosAddPropertyURL,
             timeout: 5000,  // 5 seconds timeout
             data: {
-                addressOne: this.state.addressOne,
-                addressTwo: this.state.addressTwo,
+                address_one: this.state.address_one,
+                address_two: this.state.address_two,
                 city: this.state.city,
                 state: this.state.state,
                 zip_code: this.state.zip_code,
@@ -69,14 +68,18 @@ class NewPropertyForm extends React.Component {
                 price_down_payment: parseFloat(this.state.price_down_payment),
                 mortgage_company: this.state.mortgage_company,
                 mortgage_interest_rate: parseFloat(this.state.mortgage_interest_rate),
-                property_type: this.state.property_type
+                property_type: this.state.propertyType
             }
         }).then(response => {
             console.log(response);
             this.setState({
                 redirect: "/dashboard"
             })
-        }).catch(error => console.error('timeout exceeded'));
+        }).catch(error => {
+            console.log(error);
+        }
+        // console.error('timeout exceeded')
+        );
     }
 
     propertyTypeOnChange(e) {
@@ -98,10 +101,10 @@ class NewPropertyForm extends React.Component {
         axios({
             method: 'post',
             url: validatePropertyURL,
-            timeout: 15000,  // 15 seconds timeout
+            // timeout: 15000,  // 15 seconds timeout
             data: {
-                address_one: this.state.addressOne,
-                address_two: this.state.addressTwo,
+                address_one: this.state.address_one,
+                address_two: this.state.address_two,
                 city: this.state.city,
                 state: this.state.state,
                 zip_code: this.state.zip_code,
@@ -110,6 +113,7 @@ class NewPropertyForm extends React.Component {
             let lobVerifiedAddress = response.data;
             if (this.isEqualAddress(lobVerifiedAddress)) {
                 // Send a create request
+                this.addProperty();
             } else {
                 // Send a popup to the user asking them to verify address.
                 this.setState({
@@ -117,27 +121,40 @@ class NewPropertyForm extends React.Component {
                     displayAddressVerificationBox: true,
                 });
             }
-        }).catch(error => console.error('timeout exceeded'));
+        }).catch(error => {
+            console.log(error);
+            // error('timeout exceeded')
+        });
     }
 
     // isEqualAddress will compare the Lob verified address we received and compare it
     // with the one the user sent us. If it's different, we return false; otherwise true.
     isEqualAddress(lobAddress) {
-        if (lobAddress["address_line1"].toLowerCase() !== this.state.addressOne.toLowerCase()) {
-            return false;
+        if (lobAddress["address_line1"] && this.state.address_one) {
+            if (lobAddress["address_line1"].toLowerCase() !== this.state.address_one.toLowerCase()) {
+                return false;
+            }
         }
-        if (lobAddress["address_line2"].toLowerCase() !== this.state.addressTwo.toLowerCase()) {
-            return false;
+        if (lobAddress["address_line2"] && this.state.address_two) {
+            if (lobAddress["address_line2"].toLowerCase() !== this.state.address_two.toLowerCase()) {
+                return false;
+            }
         }
-        if (lobAddress["address_city"].toLowerCase() !== this.state.city.toLowerCase()) {
-            return false;
+        if (lobAddress["address_city"] && this.state.city) {
+            if (lobAddress["address_city"].toLowerCase() !== this.state.city.toLowerCase()) {
+                return false;
+            }
         }
-        if (lobAddress["address_state"].toLowerCase() !== this.state.state.toLowerCase()) {
-            return false;
+        if (lobAddress["address_state"] && this.state.state) {
+            if (lobAddress["address_state"].toLowerCase() !== this.state.state.toLowerCase()) {
+                return false;
+            }
         }
-        if (lobAddress["address_zip"].toLowerCase() !== this.state.zip_code.toLowerCase()) {
-            return false;
-        }   
+        if (lobAddress["address_zip"] && this.state.zip_code) {
+            if (lobAddress["address_zip"].toLowerCase() !== this.state.zip_code.toLowerCase()) {
+                return false;
+            }  
+        }
         return true;
     }
 
@@ -158,13 +175,13 @@ class NewPropertyForm extends React.Component {
                                 placeholder="Address Line 1" 
                                 className="new_property_form_input new_property_form_input_long" 
                                 type="text" 
-                                name="addressOne" 
+                                name="address_one" 
                                 onChange={this.handleFieldChange}/>
                             <input 
                                 placeholder="APT or Suite #" 
                                 className="new_property_form_input new_property_form_input_long" 
                                 type="text" 
-                                name="addressTwo" 
+                                name="address_two" 
                                 onChange={this.handleFieldChange}/>
                             <div className="clearfix"/>
                             <div className="">
@@ -411,8 +428,8 @@ class NewPropertyForm extends React.Component {
                             backgroundColor: "white",
                             borderRadius: "10px",
                             boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
-                            marginLeft: "calc((100% - 500px)/2 - 25px)",
-                            marginRight: "calc((100% - 500px)/2 + 25px)",
+                            marginLeft: "calc((100% - 330px - 500px)/2 - 25px)",
+                            marginRight: "calc((100% - 330px - 500px)/2 + 25px)",
                             marginTop: "200px",
                             position: "absolute",
                             width: "500px",
@@ -445,13 +462,13 @@ class NewPropertyForm extends React.Component {
                                         paddingRight: "25px",
                                         paddingTop: "15px",
                                     }}>
-                                    {/* {this.state.addressOne} */}
+                                    {/* {this.state.address_one} */}
                                     <p style={{
                                         fontSize: "1.1em",
-                                    }}>{this.state.addressOne}</p>
+                                    }}>{this.state.address_one}</p>
                                     <p style={{
                                         fontSize: "1.1em",
-                                    }}>{this.state.addressTwo}</p>
+                                    }}>{this.state.address_two}</p>
                                     <p style={{
                                         fontSize: "1.1em",
                                     }}>
@@ -499,7 +516,7 @@ class NewPropertyForm extends React.Component {
                                         paddingRight: "25px",
                                         paddingTop: "15px",
                                     }}>
-                                    {/* {this.state.addressOne} */}
+                                    {/* {this.state.address_one} */}
                                     <p style={{
                                         fontSize: "1.1em",
                                     }}>{this.state.lobVerfiedAddress["address_line1"]}</p>
@@ -514,25 +531,35 @@ class NewPropertyForm extends React.Component {
                                 </div>
                             </div>
                             <div className="clearfix"/>
-                            <div style={{
-                                backgroundColor: "#296CF6",
-                                borderRadius: "8px",
-                                color: "white",
-                                cursor: "pointer",
-                                float: "right",
-                                fontWeight: "bold",
-                                marginBottom: "25px",
-                                marginRight: "7.5%",
-                                padding: "10px 15px 10px 15px",
-                                textAlign: "center",
-                                userSelect: "none",
-                            }}>
+                            <div 
+                                onMouseDown={() => {
+                                    this.addProperty()
+                                }}
+                                style={{
+                                    backgroundColor: "#296CF6",
+                                    borderRadius: "8px",
+                                    color: "white",
+                                    cursor: "pointer",
+                                    float: "right",
+                                    fontWeight: "bold",
+                                    marginBottom: "25px",
+                                    marginRight: "7.5%",
+                                    padding: "10px 15px 10px 15px",
+                                    textAlign: "center",
+                                    userSelect: "none",
+                                }}>
                                 Continue
                             </div>
                         </div>
                     </div> :
                     <div></div>}
-                    <div className="new_property_form_inner_box">
+                    <div style={{
+                        borderRadius: "4px",
+                        float: "left",
+                        marginLeft: "60px",
+                        marginTop: "80px",
+                        width: "calc((100% - 120px))",
+                    }}>
                         <p className="new_property_dashboard_title_box_title">
                             New Property
                         </p>

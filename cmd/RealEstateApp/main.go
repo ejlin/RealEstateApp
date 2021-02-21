@@ -22,6 +22,7 @@ var (
 	conn = "host=realestate-296303:us-west2:realestate-db user=postgres password=realestate dbname=realestate-db sslmode=disable"
 
 	lobTestKey = "live_2f48bd4951176adacfb5dd8c99d0a60e0a0"
+	estatedKey = "6FNRDJLHshOnHUImX5oxzVf02YKzsQ"
 	
 	// conn = "host=realestate-296303:us-west2:realestate-db user=postgres password=realestate dbname=realestate-admin-db sslmode=disable"
 
@@ -82,6 +83,7 @@ func main() {
 		GoogleAccessID:   creds.AccessID,
 		GooglePrivateKey: creds.PrivateKey,
 		LobAPIKey: lobTestKey,
+		EstatedAPIKey: estatedKey,
 	}
 
 	s.HandleRoutes()

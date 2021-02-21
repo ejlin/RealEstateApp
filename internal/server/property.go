@@ -43,7 +43,7 @@ type PropertiesSummary struct {
 
 	TotalSquareFootage int `json:"total_square_footage,omitempty"`
 	TotalBedrooms      int `json:"total_bedrooms,omitempty"`
-	TotalBathrooms     int `json:"total_bathrooms,omitempty"`
+	TotalBathrooms     float64 `json:"total_bathrooms,omitempty"`
 
 	MissingEstimate bool `json:"missing_estimate,omitempty"`
 }
@@ -62,7 +62,7 @@ func calculatePropertiesSummary(properties []*db.Property) *PropertiesSummary {
 	var missingEstimate bool
 	var totalSquareFootage int
 	var totalBedrooms int
-	var totalBathrooms int
+	var totalBathrooms float64
 
 	rentPaymentDateMap := make(map[int]*RentPaymentAtDateSummary)
 	// TODO: make this a map to mortgage IDs
@@ -109,13 +109,29 @@ func calculatePropertiesSummary(properties []*db.Property) *PropertiesSummary {
 		totalMortgagePayment += property.PriceMortgage
 	}
 
-	averageLTV := totalLoan / totalEstimateWorth * 100.0
+	var averageLTV float64
+	if (totalEstimateWorth != 0.0) {
+		averageLTV = totalLoan / totalEstimateWorth * 100.0
+	} else {
+		averageLTV = 0.0
+	}
 	userMonthlySalary := 0.0
 	// if (user.Salary != 0.0) {
 	// 	userMonthlySalary = user.Salary / 12.0
 	// }
-	averageDTI := totalCost / (totalRent + userMonthlySalary) * 100.0
-	annualRateOfReturn := (totalRent - totalCost) / totalDownPayment * 100.0 * 12.0
+	var averageDTI float64
+	if (totalRent + userMonthlySalary != 0.0) {
+		averageDTI = totalCost / (totalRent + userMonthlySalary) * 100.0
+	} else {
+		averageDTI = 0.0
+	}
+
+	var annualRateOfReturn float64
+	if (totalDownPayment != 0.0) {
+		annualRateOfReturn = (totalRent - totalCost) / totalDownPayment * 100.0 * 12.0
+	} else {
+		annualRateOfReturn = 0.0
+	}
 
 	return &PropertiesSummary{
 		TotalProperties:         len(properties),
@@ -202,6 +218,18 @@ func (s *Server) addPropertyByUser(w http.ResponseWriter, r *http.Request) {
 
 	sanitizeNewProperty(&property)
 
+	estatedProperty, err := external.GetEstatedProperty(&property, s.EstatedAPIKey)
+	if err != nil {
+		// Just log, unable to get estimated from Estated.
+		// TODO: throw this property in a DLQ to generate estimates later?
+	} else {
+		property.NumBeds = estatedProperty.Data.Structure.NumBeds
+		property.NumBaths = estatedProperty.Data.Structure.NumBaths
+		property.SquareFootage = estatedProperty.Data.Parcel.AreaSqFt
+		property.Estimate = estatedProperty.Data.Valuation.Value
+	}
+	
+
 	// Fill in required information.
 	createdAt := time.Now().UTC()
 
@@ -212,8 +240,9 @@ func (s *Server) addPropertyByUser(w http.ResponseWriter, r *http.Request) {
 	if err := s.DBHandle.AddPropertyByUser(userID, &property); err != nil {
 		ll.Error().Err(err).Msg("unable to add property by user")
 		http.Error(w, fmt.Sprintf("unable to add property by user: %w", err), http.StatusBadRequest)
+		return
 	}
 
-	w.Write([]byte(fmt.Sprintf("added property: %s by user: %s", property.ID, property.UserID)))
-	w.WriteHeader(http.StatusOK)
+	RespondToRequest(w, property)
+	return
 }

@@ -38,7 +38,7 @@ class AddNewTenantModal extends React.Component {
                         float: "left",
                         marginLeft: "calc((100% - 500px)/2)",
                         marginRight: "calc((100% - 500px)/2)",
-                        marginTop: "150px",
+                        marginTop: "125px",
                         width: "500px",
                     }}>
                     <div
@@ -60,16 +60,34 @@ class AddNewTenantModal extends React.Component {
                             }}
                         />
                     </div>
-                    <div>
+                    <div style={{
+                        paddingLeft: "30px",
+                        paddingRight: "30px",
+                    }}>
                         <p style={{
                             borderBottom: "4px solid #296CF6",
                             float: "left",
                             fontWeight: "bold",
-                            marginLeft: "30px",
                             paddingBottom: "7.5px",
                         }}>
                             Add New Tenant
                         </p>
+                        <div className="clearfix"/>
+                        <div class="group">
+                            {
+                                this.state.activeIncome ?
+                                <div></div>:
+                                <label>Name</label>
+                            }
+                            <input 
+                                onMouseDown={() => {
+                                    this.setState({
+                                        activeIncome: !this.state.activeIncome,
+                                    })
+                                }}
+                                type="text"
+                                className="add_new_tenant_modal_input"/>
+                        </div>
                         <input
                             className="add_new_tenant_modal_input"
                             placeholder="Name"
@@ -90,10 +108,55 @@ class AddNewTenantModal extends React.Component {
                             className="add_new_tenant_modal_input"
                             placeholder="Occupation"
                         />
+                        <div className="clearfix"/>
                         <input
                             className="add_new_tenant_modal_input"
-                            placeholder="Income"
+                            type="text"
                         />
+                        <span class="placeholder">Income</span>
+                        <div className="clearfix"/>
+                        <div class="group">
+                            {
+                                this.state.activeIncome ?
+                                <div></div>:
+                                <label>First name</label>
+                            }
+                            <input 
+                                onMouseDown={() => {
+                                    this.setState({
+                                        activeIncome: !this.state.activeIncome,
+                                    })
+                                }}
+                                type="text" class=""/>
+                        </div>
+                        <div style={{
+                            float: "left",
+                            width: "calc(50% - 10px)",
+                        }}>
+                            <p style={{
+                            }}>
+                                Start
+                            </p>
+                            <input 
+                                className="add_new_tenant_modal_input"
+                                name="start_date"
+                                type="date"
+                            />
+                        </div>
+                        <div style={{
+                            float: "right",
+                            width: "calc(50% - 10px)",
+                        }}>
+                            <p style={{
+                            }}>
+                                End
+                            </p>
+                            <input 
+                                className="add_new_tenant_modal_input"
+                                name="end_date"
+                                type="date"
+                            />
+                        </div>
                         <textarea 
                             className="no-outline-focus"
                             placeholder="Description"
@@ -103,12 +166,10 @@ class AddNewTenantModal extends React.Component {
                                 borderRadius: "10px",
                                 fontSize: "1.0em",
                                 height: "100px",
-                                marginLeft: "30px",
-                                marginRight: "30px",
                                 marginTop: "7.5px",
                                 padding: "10px 15px 10px 15px",
                                 resize: "none",
-                                width: "calc(100% - 90px)",
+                                width: "calc(100% - 30px)",
                             }}/>
                     </div>
                     <div style={{
@@ -137,7 +198,7 @@ class AddNewTenantModal extends React.Component {
                         <div
                             style={{
                                 float: "right",
-                                marginTop: "20px",
+                                marginTop: "10px",
                             }}
                         >
                             <div

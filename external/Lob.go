@@ -42,9 +42,7 @@ type LobResponseComponents struct {
 // ValidateAddress will return the USPS CASS standardized address.
 func ValidateAddress(property db.Property, apiKey string) (*LobAddress, error) {
 
-	fmt.Println(property)
 	addressRequestURL := fmt.Sprintf("%sv1/us_verifications/", lobEndpoint)
-	fmt.Println(addressRequestURL)
 	requestBody, err := json.Marshal(map[string]string{
 		"primary_line": property.AddressOne,
 		"city": property.City,

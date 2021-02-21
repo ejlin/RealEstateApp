@@ -22,4 +22,5 @@ type Server struct {
 	GooglePrivateKey string
 
 	LobAPIKey string
+	EstatedAPIKey string
 }

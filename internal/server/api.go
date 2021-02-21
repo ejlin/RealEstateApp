@@ -430,10 +430,10 @@ func validateNewProperty(property *db.Property) error {
 		return errors.New("property created at is already set")
 	}
 
-	if property.AddressOne == "" || property.State == "" || property.City == "" || property.ZipCode == "" || property.BoughtDate == "" || property.PriceBought == 0.0 {
-		log.Info().Str("address", property.AddressOne).Str("state", property.State).Str("zip_code", property.ZipCode).Str("bought_date", property.BoughtDate).Float64("price_bought", property.PriceBought).Msg("missing fields")
-		return errors.New("missing required information at property creation")
-	}
+	// if property.AddressOne == "" || property.State == "" || property.City == "" || property.ZipCode == "" || property.BoughtDate == "" || property.PriceBought == 0.0 {
+	// 	log.Info().Str("address", property.AddressOne).Str("state", property.State).Str("zip_code", property.ZipCode).Str("bought_date", property.BoughtDate).Float64("price_bought", property.PriceBought).Msg("missing fields")
+	// 	return errors.New("missing required information at property creation")
+	// }
 
 	return nil
 }

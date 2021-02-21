@@ -1,7 +1,11 @@
 package db
 
 import (
+	"errors"
+	"fmt"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Tenant struct {
@@ -20,7 +24,7 @@ type Tenant struct {
 	LastModifiedAt *time.Time `json:"last_modified_at,omitempty",sql:"type:timestamp"`
 }
 
-func AddTenantByUser(userID string, tenant *Tenant) error {
+func (handle *Handle) AddTenantByUser(userID string, tenant *Tenant) error {
 
 	_, err := uuid.Parse(userID)
 	if err != nil {
@@ -34,7 +38,7 @@ func AddTenantByUser(userID string, tenant *Tenant) error {
 	return handle.DB.FirstOrCreate(&tenant, tenant).Error
 }
 
-func GetTenantsByPropertyID(userID, propertyID string) ([]*Tenant, error) {
+func (handle *Handle) GetTenantsByPropertyID(userID, propertyID string) ([]*Tenant, error) {
 
 	if _, err := uuid.Parse(userID); err != nil {
 		return nil, err

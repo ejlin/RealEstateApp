@@ -34,7 +34,7 @@ type Property struct {
 
 	NumUnits      int `json:"num_units,omitempty",sql:"type:INT"`
 	NumBeds       int `json:"num_beds,omitempty",sql:"type:INT"`
-	NumBaths      int `json:"num_baths,omitempty",sql:"type:INT"`
+	NumBaths      float64 `json:"num_baths,omitempty",sql:"type:Numeric(4,1)"`
 	SquareFootage int `json:"square_footage,omitempty",sql:"type:INT"`
 
 	// The day the user can expect rent to come in for this property.
