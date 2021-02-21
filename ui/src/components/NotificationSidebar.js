@@ -10,12 +10,19 @@ class NotificationSidebar extends React.Component {
     
     constructor(props) {
         super(props);
+
+        const totalEstimateWorth = localStorage.getItem("total_estimate_worth");
+
+
         this.state = {
-            totalEstimateWorth: this.props.data.state.totalEstimateWorth,
+            totalEstimateWorth: totalEstimateWorth,
             missingEstimate: this.props.data.state.missingEstimate
         };
-
         this.numberWithCommas = this.numberWithCommas.bind(this);
+    }
+
+    componentDidMount() {
+        console.log(this.state.totalEstimateWorth);
     }
 
     numberWithCommas(x) {

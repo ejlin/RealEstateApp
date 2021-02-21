@@ -145,6 +145,9 @@ class PropertiesDashboard extends React.Component {
                 missingEstimate: missingEstimate,
                 isLoading: false
             });
+
+            localStorage.setItem('total_estimate_worth', JSON.stringify(this.state.totalEstimateWorth));
+            
         }).catch(error => console.log(error));
 
     }

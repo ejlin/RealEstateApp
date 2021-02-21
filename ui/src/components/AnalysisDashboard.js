@@ -71,7 +71,6 @@ class AnalysisDashboard extends React.Component {
     }
 
     handleClickOutside(event) {
-        console.log(event.target.name);
         if (event.target.name !== "select_property_search_bar" && event.target.className !== "property_search_bar_element_text") {
             this.setState({
                 activePropertySearchBar: false,
@@ -80,6 +79,7 @@ class AnalysisDashboard extends React.Component {
     }
 
     componentDidMount() {
+        console.log(this.state.totalEstimateWorth);
 
         document.addEventListener('mousedown', this.handleClickOutside);
 
@@ -223,7 +223,7 @@ class AnalysisDashboard extends React.Component {
         } else {
             summaryRequest = axios.get(summaryURL);
         }
-        
+
         axios.all(
             [summaryRequest]
         ).then(axios.spread((...responses) => {

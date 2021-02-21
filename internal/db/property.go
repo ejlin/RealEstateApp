@@ -24,7 +24,7 @@ type Property struct {
 	BoughtDate           string  `json:"bought_date,omitempty",sql:"type:VARCHAR(5)"`
 	PriceBought          float64 `json:"price_bought,omitempty",sql:"type:NUMERIC(16,2)"`
 	PriceRented          float64 `json:"price_rented,omitempty",sql:"type:NUMERIC(10,2)"`
-	Estimate             float64 `json:"estimate,omitempty",sql:"type:NUMERIC(16,2)"`
+	Estimate             int `json:"estimate,omitempty",sql:"type:INT"`
 	PriceMortgage        float64 `json:"price_mortgage,omitempty",sql:"type:NUMERIC(12,2)"`
 	DownPayment          float64 `json:"down_payment,omitempty",sql:"type:NUMERIC(12,2)"`
 

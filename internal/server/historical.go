@@ -49,7 +49,7 @@ func (s *Server) calculateHistoricalAnalysis(userID string, propertyIDs []string
 		propertyEstimate := &PropertyEstimate{
 			Month: int(createdAt.Month()),
 			Year: int(createdAt.Year()),
-			Estimate:  propertyHistoricalData.Estimate,
+			Estimate:  float64(propertyHistoricalData.Estimate),
 		}
 
 		if estimateSlice, ok := propertyToEstimatesSliceMap[propertyID]; !ok {

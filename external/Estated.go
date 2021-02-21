@@ -37,7 +37,7 @@ type EstatedAPIDataStructure struct {
 }
 
 type EstatedAPIDataValuation struct {
-	Value float64 `json:"value,omitempty"`
+	Value int `json:"value,omitempty"`
 }
 
 type EstatedAPIMetadata struct {
@@ -77,3 +77,4 @@ func GetEstatedProperty(property *db.Property, apiKey string) (*EstatedAPIRespon
 
 	return &estatedResponse, nil
 }
+

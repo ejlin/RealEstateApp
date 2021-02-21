@@ -83,7 +83,7 @@ func calculatePropertiesSummary(properties []*db.Property) *PropertiesSummary {
 			missingEstimate = true
 			totalEstimateWorth += property.PriceBought
 		} else {
-			totalEstimateWorth += property.Estimate
+			totalEstimateWorth += float64(property.Estimate)
 		}
 		totalDownPayment += property.DownPayment
 		if property.CurrentlyRented && property.PriceRented != 0.0 && property.RentPaymentDate != 0 {
@@ -220,7 +220,7 @@ func (s *Server) addPropertyByUser(w http.ResponseWriter, r *http.Request) {
 
 	estatedProperty, err := external.GetEstatedProperty(&property, s.EstatedAPIKey)
 	if err != nil {
-		// Just log, unable to get estimated from Estated.
+		// Just log, unable to get estimate from Estated.
 		// TODO: throw this property in a DLQ to generate estimates later?
 	} else {
 		property.NumBeds = estatedProperty.Data.Structure.NumBeds
@@ -229,6 +229,14 @@ func (s *Server) addPropertyByUser(w http.ResponseWriter, r *http.Request) {
 		property.Estimate = estatedProperty.Data.Valuation.Value
 	}
 	
+	// Store our estimate in a separate goroutine so we don't block.
+	go func() {
+		err := StoreEstimate(s.DBHandle, &property, estatedProperty.Data.Valuation.Value)
+		if err != nil {
+			ll.Warn().Err(err).Msg("unable to store property estimate in property creation")
+			// Just log, unable to get estimate from Estated.
+		}
+	}()
 
 	// Fill in required information.
 	createdAt := time.Now().UTC()

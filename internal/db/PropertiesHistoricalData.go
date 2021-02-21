@@ -26,7 +26,7 @@ type PropertiesHistoricalData struct {
 	PropertyID string `json:"property_id,omitempty",sql:"type:uuid; foreign key"`
 
 	CreatedAt *time.Time `json:"created_at,omitempty",sql:"type:timestamp"`
-	Estimate  float64    `json:"estimate,omitempty",sql:"type:NUMERIC(16,2)"`
+	Estimate  int    `json:"estimate,omitempty",sql:"type:INT"`
 }
 
 // AddPropertiesHistoricalData will add a historical data row to our table.

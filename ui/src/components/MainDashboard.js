@@ -128,6 +128,9 @@ class MainDashboard extends React.Component {
                 totalExpenses: expensesSummary["total_expenses"],
                 isLoading: false
             }, () => {console.log(this.state.historicalAnalysis)});
+
+            localStorage.setItem('total_estimate_worth', JSON.stringify(this.state.totalEstimateWorth));
+            
         })).catch(errors => {
             console.log(errors);
         });
