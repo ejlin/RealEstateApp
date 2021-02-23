@@ -644,7 +644,7 @@ class NewPropertyForm extends React.Component {
                             <div style={{
                                 backgroundColor: "white",
                                 borderRadius: "10px",
-                                boxhadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                                boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                                 float: "left",
                                 width: "calc(100% - 250px - 250px)",
                             }}>

@@ -1078,6 +1078,8 @@ class PropertyPage extends React.Component {
                         this.state.displayNewTenant ?
                         <AddNewTenantModal data={{
                             state: {
+                                user: this.state.user,
+                                propertyID: this.state.property["id"],
                                 closeModal: this.closeNewTenantModal,
                             }
                         }}/>:

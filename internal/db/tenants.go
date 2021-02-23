@@ -16,9 +16,11 @@ type Tenant struct {
 	Email string `json:"email,omitempty",sql:"type:VARCHAR(255)"`
 	Phone string `json:"phone,omitempty",sql:"type:VARCHAR(15)"`
 
-	StartDate string `json:"start_date,omitempty",sql:"VARCHAR(7)"`
-	EndDate string `json:"end_date,omitempty",sql:"VARCHAR(7)"`
+	StartDate string `json:"start_date,omitempty",sql:"VARCHAR(8)"`
+	EndDate string `json:"end_date,omitempty",sql:"VARCHAR(8)"`
 	Active bool `json:"active,omitempty",sql:"BOOL"`
+
+	Description string `json:"description,omitempty",sql:"VARCHAR(500)"`
 
 	CreatedAt *time.Time `json:"created_at,omitempty",sql:"type:timestamp"`
 	LastModifiedAt *time.Time `json:"last_modified_at,omitempty",sql:"type:timestamp"`
@@ -35,7 +37,22 @@ func (handle *Handle) AddTenantByUser(userID string, tenant *Tenant) error {
 		return errors.New("nil tenant")
 	}
 
+	fmt.Println(tenant.ID)
+	fmt.Println(tenant.UserID)
+	fmt.Println(tenant.PropertyID)
+
 	return handle.DB.FirstOrCreate(&tenant, tenant).Error
+}
+
+func (handle *Handle) GetTenantsByUser(userID string)([]*Tenant, error) {
+	if _, err := uuid.Parse(userID); err != nil {
+		return nil, err
+	}
+	var tenants []*Tenant
+	if err := handle.DB.Where("user_id = ?", userID).First(&tenants).Error; err != nil {
+		return nil, err
+	}
+	return tenants, nil
 }
 
 func (handle *Handle) GetTenantsByPropertyID(userID, propertyID string) ([]*Tenant, error) {
@@ -49,7 +66,7 @@ func (handle *Handle) GetTenantsByPropertyID(userID, propertyID string) ([]*Tena
 	}
 
 	var tenants []*Tenant
-	if err := handle.DB.Where("user_ud = ? AND property_id = ?", userID, propertyID).First(&tenants).Error; err != nil {
+	if err := handle.DB.Where("user_id = ? AND property_id = ?", userID, propertyID).First(&tenants).Error; err != nil {
 		return nil, err
 	}
 	return tenants, nil

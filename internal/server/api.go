@@ -32,6 +32,9 @@ func (s *Server) HandleRoutes() {
 	r.HandleFunc("/api/user/property/{id}", s.removePropertyByUser).Queries("property_id", "{property_id}").Methods("DELETE")
 	r.HandleFunc("/api/user/property/{id}", s.addPropertyByUser).Methods("POST")
 
+	r.HandleFunc("/api/user/tenants/{id}", s.getTenantsByUser).Methods("GET")
+	r.HandleFunc("/api/user/tenants/{id}", s.addTenantByUser).Methods("POST")
+
 	// Used to display our main dashboard page. Provides a summary for users.
 	r.HandleFunc("/api/user/summary/{id}/{property_id}", s.getUserSummaryByProperty).Methods("GET")
 	r.HandleFunc("/api/user/summary/{id}", s.getUserSummary).Methods("GET")

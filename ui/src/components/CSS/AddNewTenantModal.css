@@ -1,47 +1,12 @@
-.add_new_tenant_modal_input {
-    /* background-color: #f5f5fa;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.0em;
-    margin-top: 7.5px;
-    padding: 10px 15px 10px 15px;
-    position: relative;
-    width: calc(100% - 30px); */
-    position: relative;
-    height: 30px;
-    border-radius: 5px;
-    outline: none;
-    padding: 5px;
-    border: 1px solid lightblue;
-    width: 100%;
-}
-
-.placeholder {
-    position: absolute;
-    left: 20px;
-    top: 0px;
-    background-color: black;
-    padding: 0 20px;
-}
-
-.add_new_tenant_modal_input:focus ~ .placeholder,
-.add_new_tenant_modal_input:valid ~ .placeholder {
-  display: none;
-}
-
-.add_new_tenant_modal_input:focus {
-    outline: none;
-}
 
 .group{
-    position:relative;
+    margin-top: 10px;
 }
+
 .group>label{
-    font-size: 0.7em;
-    padding:0 0.2em;
-    position:absolute;
-    left: 5px;
-    margin-top: 5px;
+    font-size: 0.8em;
+    left: 10px;
+    margin: 0;
     background-color:white;
 }
 
@@ -51,15 +16,19 @@
 }
   
 .group>input{
-    padding:0.8em;
+    border: 1px solid #d3d3d3;
     border-radius: 4px;
-    border: 1px solid #296cf6;
-    outline:none;
+    height: 30px;
+    margin-bottom: 0;
+    margin-top: 5px;
+    outline: none;
+    padding: 3px 10px 3px 10px;
+    position: relative;
+    width: calc(100% - 20px - 2px);
 }
 
 .add_new_tenant_modal_input::placeholder {
     color: #296cf6;
-    font-size: 0.6em;
     font-weight: bold;
     margin-top: -10px;
     position: absolute;
