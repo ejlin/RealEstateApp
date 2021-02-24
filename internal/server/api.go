@@ -33,6 +33,7 @@ func (s *Server) HandleRoutes() {
 	r.HandleFunc("/api/user/property/{id}", s.addPropertyByUser).Methods("POST")
 
 	r.HandleFunc("/api/user/tenants/{id}", s.getTenantsByUser).Methods("GET")
+	r.HandleFunc("/api/user/tenants/{id}/{property_id}", s.getTenantsByUserProperty).Methods("GET")
 	r.HandleFunc("/api/user/tenants/{id}", s.addTenantByUser).Methods("POST")
 
 	// Used to display our main dashboard page. Provides a summary for users.

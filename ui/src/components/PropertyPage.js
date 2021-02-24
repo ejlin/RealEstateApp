@@ -33,7 +33,7 @@ import { GoFileDirectory } from 'react-icons/go';
 import { SiGoogleanalytics } from 'react-icons/si';
 import { FaMoneyCheck, FaCheckCircle } from 'react-icons/fa';
 import { MdDashboard, MdEdit } from 'react-icons/md';
-import { IoTrashSharp, IoCaretBackOutline, IoSettingsSharp } from 'react-icons/io5';
+import { IoTrashSharp, IoCaretBackOutline, IoSettingsSharp, IoAddCircleSharp } from 'react-icons/io5';
 import { TiUser } from 'react-icons/ti';
 
 let URLBuilder = require('url-join');
@@ -80,6 +80,8 @@ class PropertyPage extends React.Component {
         this.closeModal = this.closeModal.bind(this);
         this.closeNewTenantModal = this.closeNewTenantModal.bind(this);
         this.closeNewPropertyManagerModal = this.closeNewPropertyManagerModal.bind(this);
+
+        this.renderTenants = this.renderTenants.bind(this);
     }
 
     componentDidMount() {
@@ -105,14 +107,22 @@ class PropertyPage extends React.Component {
         let getFilesByPropertyURL = URLBuilder(host, '/api/user/files/property', userID, propertyID);
         let getPropertiesHistoryURL = URLBuilder(host, '/api/user/history', userID, propertyID);
         let getPropertySummaryURL = URLBuilder(host, '/api/user/summary', userID, propertyID);
+        let getTenantsURL = URLBuilder(host, '/api/user/tenants', userID, propertyID);
 
         const getExpensesByPropertyRequest = axios.get(getExpensesByPropertyListURL);
         const getFilesByPropertyRequest = axios.get(getFilesByPropertyURL);
         const getPropertiesHistoricalRequest = axios.get(getPropertiesHistoryURL);
         const getPropertySummaryRequest = axios.get(getPropertySummaryURL);
+        const getTenantsRequest = axios.get(getTenantsURL);
 
         axios.all(
-            [getExpensesByPropertyRequest, getFilesByPropertyRequest, getPropertiesHistoricalRequest, getPropertySummaryRequest]
+            [
+                getExpensesByPropertyRequest, 
+                getFilesByPropertyRequest, 
+                getPropertiesHistoricalRequest, 
+                getPropertySummaryRequest, 
+                getTenantsRequest
+            ]
         ).then(axios.spread((...responses) => {
             const expensesRequestResponse = responses[0];
             /* Handle our expenses response */
@@ -159,11 +169,14 @@ class PropertyPage extends React.Component {
             /* Handle our summary response */
             const propertySummaryRequestResponse = responses[3];
             let propertySummary = propertySummaryRequestResponse.data;
-            console.log(propertySummary);
             let cashFlowObj = getCashFlowData(propertySummary, expenses);
             let cashFlowData = cashFlowObj[0];
             let totalIncome = cashFlowObj[1];
             let totalExpenses = cashFlowObj[2];
+
+            /* Handle our tenants response */
+            const tenantsRequestResponse = responses[4];
+            let tenants = tenantsRequestResponse.data;
 
             this.setState({
                 expenses: expenses,
@@ -175,6 +188,7 @@ class PropertyPage extends React.Component {
                 cashFlowData: cashFlowData,
                 totalIncome: totalIncome,
                 totalExpenses: totalExpenses,
+                tenants: tenants,
                 isLoading: false
             });
         })).catch(errors => {
@@ -303,6 +317,76 @@ class PropertyPage extends React.Component {
             );
         }
         return fileElements;
+    }
+
+    renderTenants() {
+        let tenants = this.state.tenants;
+
+        let elements = [];
+        for (let i = 0; i < tenants.length; i++) {
+            let tenant = tenants[i];
+            let borderRadius;
+            if (i === 0 && i === tenants.length - 1) {
+                borderRadius = "8px";
+            } else if (i === 0) {
+                borderRadius = "8px 8px 0px 0px";
+            } else if (i === tenants.length - 1) {
+                borderRadius = "0px 0px 8px 8px";
+            } else {
+                borderRadius = "0px";
+            }
+
+            elements.push(
+                <div style={{
+                    backgroundColor: "#32384D",
+                    border: "1px solid #d3d3d3",
+                    borderRadius: borderRadius,
+                    boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                    float: "left",
+                    height: "250px",
+                    padding: "15px 20px 15px 20px",
+                    width: "200px",
+                }}>
+                    <div style={{
+                    }}>
+                        <p style={{
+                            fontSize: "1.1em",
+                            fontWeight: "bold",
+                        }}>
+                            {tenant["name"]}
+                        </p>
+                        <p>
+                            {tenant["email"]}
+                        </p>
+                        <p>
+                            {tenant["phone"]}
+                        </p>
+                    </div>
+                    <div style={{
+                        marginTop: "15px",
+                    }}>
+                        <p>
+                            {tenant["occupation"]}
+                        </p>
+                        <p>
+                            {tenant["income"] ? "$" + numberWithCommas(tenant["income"]) : "$-"}
+                        </p>
+                    </div>
+                </div>
+            );
+        }
+
+        return (
+            <div style={{
+                marginLeft: "30px",
+                marginRight: "30px",
+                marginTop: "10px",
+                minHeight: "300px",
+                width: "calc(100% - 60px)",
+            }}>
+                {elements}
+            </div>
+        );
     }
 
     closeModal() {
@@ -723,15 +807,38 @@ class PropertyPage extends React.Component {
                     <div className="view_to_display_box">
                         <div className="view_to_display_info_box">
                             <p className="view_to_display_info_box_title">
-                                Tenant
+                                Tenants
                             </p>
+                            {
+                                this.state.tenants && this.state.tenants.length > 0 ?
+                                <IoAddCircleSharp 
+                                    onMouseDown={() => {
+                                        this.setState({
+                                            displayNewTenant: true,
+                                        })
+                                    }}
+                                    className="opacity"
+                                    style={{
+                                        color: "#296CF6",
+                                        cursor: "pointer",
+                                        float: "left",
+                                        height: "25px",
+                                        marginLeft: "15px",
+                                        marginTop: "20px",
+                                        width: "25px",
+                                    }}/> : 
+                                <div></div>
+                            }
                         </div>
                         <div className="clearfix"/>
                         <div>
                             {
-                                this.state.tenantsSummary ?
-                                <div></div> :
+                                this.state.tenants && this.state.tenants.length > 0 ?
+                                <div>
+                                    {this.renderTenants()}
+                                </div> :
                                 <div style={{
+                                    height: "300px",
                                     width: "100%",
                                 }}>
                                     <p style={{
@@ -783,6 +890,7 @@ class PropertyPage extends React.Component {
                                 this.state.tenantsSummary ?
                                 <div></div> :
                                 <div style={{
+                                    height: "300px",
                                     width: "100%",
                                 }}>
                                     <p style={{

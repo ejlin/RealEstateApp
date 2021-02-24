@@ -36,6 +36,36 @@ func (s *Server) getTenantsByUser(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func (s *Server) getTenantsByUserProperty(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Warn().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	propertyID, ok := vars["property_id"]
+	if !ok {
+		log.Warn().Msg("missing property id")
+		http.Error(w, "missing property id", http.StatusBadRequest)
+		return
+	}
+
+	tenants, err := s.DBHandle.GetTenantsByUserProperty(userID, propertyID)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to get tenants by user property")
+		http.Error(w, "unable to get tenants by user property", http.StatusInternalServerError)
+		return
+	}
+
+	RespondToRequest(w, tenants)
+	return
+}
+
 func (s *Server) addTenantByUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 

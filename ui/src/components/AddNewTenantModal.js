@@ -40,7 +40,7 @@ class AddNewTenantModal extends React.Component {
                 email: this.state.email,
                 phone: this.state.phone,
                 occupation: this.state.occupation,
-                income: this.state.income,
+                income: parseInt(this.state.income),
                 start_date: this.state.start_date,
                 end_date: this.state.end_date,
                 description: this.state.description,
@@ -136,7 +136,7 @@ class AddNewTenantModal extends React.Component {
                         <div className="group">
                             <label>PHONE</label>
                             <input
-                                name="phoneNumber"
+                                name="phone"
                                 type="text"
                                 onChange={this.handleFieldChange}
                                 className="add_new_tenant_modal_input"/>

@@ -22,6 +22,9 @@ type Tenant struct {
 
 	Description string `json:"description,omitempty",sql:"VARCHAR(500)"`
 
+	Occupation string `json:"occupation,omitempty",sql:"VARCHAR(60)"`
+	Income int `json:"income,omitempty",sql:"INT"`
+
 	CreatedAt *time.Time `json:"created_at,omitempty",sql:"type:timestamp"`
 	LastModifiedAt *time.Time `json:"last_modified_at,omitempty",sql:"type:timestamp"`
 }
@@ -55,7 +58,7 @@ func (handle *Handle) GetTenantsByUser(userID string)([]*Tenant, error) {
 	return tenants, nil
 }
 
-func (handle *Handle) GetTenantsByPropertyID(userID, propertyID string) ([]*Tenant, error) {
+func (handle *Handle) GetTenantsByUserProperty(userID, propertyID string) ([]*Tenant, error) {
 
 	if _, err := uuid.Parse(userID); err != nil {
 		return nil, err
