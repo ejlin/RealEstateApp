@@ -83,41 +83,42 @@ class AddNewTenantModal extends React.Component {
                         overflow: "scroll",
                         width: "500px",
                     }}>
-                    <div
-                        style={{
-                            float: "right",
-                            height: "30px",
-                            marginTop: "15px",
-                            width: "100%",
-                        }}
-                    >
-                        <IoCloseOutline
-                            onMouseDown={() => this.state.closeModal()}
-                            style={{
-                                cursor: "pointer",
-                                float: "right",
-                                height: "30px",
-                                marginRight: "20px",
-                                width: "30px",
-                            }}
-                        />
-                    </div>
                     <div style={{
+                        marginTop: "25px",
                         paddingLeft: "30px",
                         paddingRight: "30px",
+                        width: "calc(100% - 60px)"
                     }}>
                         <p style={{
                             borderBottom: "4px solid #296CF6",
                             float: "left",
                             fontWeight: "bold",
-                            marginBottom: "10px",   
-                            paddingBottom: "7.5px",
+                            paddingBottom: "6px",
                         }}>
                             New Tenant
                         </p>
+                        <div
+                            style={{
+                                float: "right",
+                                height: "30px",
+                            }}
+                        >
+                            <IoCloseOutline
+                                onMouseDown={() => this.state.closeModal()}
+                                style={{
+                                    cursor: "pointer",
+                                    float: "right",
+                                    height: "30px",
+                                    width: "30px",
+                                }}
+                            />
+                        </div>
                         <div className="clearfix"/>
                         <div 
-                            className="group">
+                            className="group"
+                            style={{
+                                marginTop: "25px",
+                            }}>
                             <label>NAME</label>
                             <input
                                 name="name"
