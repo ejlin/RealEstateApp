@@ -406,3 +406,12 @@
     opacity: 0.7;
 }
 
+
+
+.tenant_element {
+
+}
+
+.tenant_element:hover {
+    background-color: #f1f1f1;
+}

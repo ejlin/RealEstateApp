@@ -8,6 +8,7 @@ import NotificationSidebar from './NotificationSidebar.js';
 import ExpensesTable from './ExpensesTable.js';
 import FileCard from './FileCard.js';
 import ExpandedExpenseCard from './ExpandedExpenseCard.js';
+import TenantCard from './TenantCard.js';
 import BarChart from '../charts/BarChart.js';
 import SideBarChart from '../charts/SideBarChart.js';
 import Dropdown from './Dropdown.js';
@@ -37,6 +38,7 @@ import { IoMdBriefcase } from 'react-icons/io';
 import { IoTrashSharp, IoCaretBackOutline, IoSettingsSharp, IoAddCircleSharp, IoCalendarClearSharp } from 'react-icons/io5';
 import { TiUser } from 'react-icons/ti';
 import { AiFillCalendar } from 'react-icons/ai';
+import { VscExpandAll } from 'react-icons/vsc';
 
 let URLBuilder = require('url-join');
 
@@ -179,7 +181,7 @@ class PropertyPage extends React.Component {
             /* Handle our tenants response */
             const tenantsRequestResponse = responses[4];
             let tenants = tenantsRequestResponse.data;
-
+            console.log(tenants);
             this.setState({
                 expenses: expenses,
                 expensesMap: expensesMap,
@@ -323,7 +325,6 @@ class PropertyPage extends React.Component {
 
     renderTenants() {
         let tenants = this.state.tenants;
-
         let elements = [];
         for (let i = 0; i < tenants.length; i++) {
             let tenant = tenants[i];
@@ -339,164 +340,28 @@ class PropertyPage extends React.Component {
             }
 
             elements.push(
-                <div style={{
-                    float: "left",
-                    marginTop: "10px",
-                    width: "100%",
-                }}>
-                    <div style={{
-                    }}>
-                        <TiUser style={{
-                            border: "1px solid #d3d3d3",
-                            borderRadius: "50%",
-                            color: "#d3d3d3",
-                            float: "left",
-                            height: "50px",
-                            width: "50px", 
-                        }}/>
-                        <div style={{
-                            float: "left",
-                            marginLeft: "10px",
-                            marginTop: "6px",
-                        }}>
-                            <p style={{
-                                fontWeight: "bold",
-                            }}>
-                                {tenant["name"]}
-                            </p>
-                            <p style={{
-
-                            }}>
-                                {tenant["email"]}
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                <TenantCard data={{
+                    state: {
+                        tenant: tenant,
+                        firstChild: i === 0,
+                    }
+                }}/>
             );
-
-            // elements.push(
-            //     <div style={{
-            //         // backgroundColor: "#f5f5fa",
-            //         border: "1px solid #d3d3d3",
-            //         borderRadius: borderRadius,
-            //         // boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
-            //         float: "left",
-            //         padding: "15px 20px 15px 20px",
-            //         width: "calc(100% - 40px)",
-            //     }}>
-            //         <div style={{
-            //             marginTop: "0px",
-            //         }}>
-            //             <p style={{
-            //                 fontSize: "1.2em",
-            //                 fontWeight: "bold",
-            //             }}>
-            //                 {tenant["name"]}
-            //             </p>
-            //             <div style={{
-            //                 marginTop: "20px",
-            //             }}>
-            //                 {/* <MdEmail style={{
-            //                     color: "#32384D",
-            //                     float: "left",
-            //                     height: "25px",
-            //                     width: "25px",
-            //                 }}/> */}
-            //                 <p style={{
-            //                     float: "left",
-            //                     lineHeight: "25px",
-            //                     marginLeft: "7.5px",
-            //                 }}>
-            //                     {tenant["email"]}
-            //                 </p>
-            //             </div>
-            //             <div className="clearfix"/>
-            //             <div style={{
-            //                 marginTop: "10px",
-            //             }}>
-            //                 {/* <MdPhone style={{
-            //                     color: "#32384D",
-            //                     float: "left",
-            //                     height: "25px",
-            //                     width: "25px",
-            //                 }}/> */}
-            //                 <p style={{
-            //                     float: "left",
-            //                     lineHeight: "25px",
-            //                     marginLeft: "7.5px",
-            //                 }}>
-            //                     {tenant["phone"]}
-            //                 </p>
-            //             </div>
-            //             <div className="clearfix"/>
-            //             <div style={{
-            //                 marginTop: "10px",
-            //             }}>
-            //                 {/* <IoMdBriefcase style={{
-            //                         color: "#32384D",
-            //                         float: "left",
-            //                         height: "25px",
-            //                         width: "25px",
-            //                     }}/> */}
-            //                 <p style={{
-            //                     float: "left",
-            //                     lineHeight: "25px",
-            //                     marginLeft: "7.5px",
-            //                 }}>
-            //                     {tenant["occupation"]}
-            //                 </p>
-            //             </div>
-            //             <div className="clearfix"/>
-            //             <div style={{
-            //                 marginTop: "10px",
-            //             }}>
-            //                 {/* <MdAttachMoney style={{
-            //                         color: "#32384D",
-            //                         float: "left",
-            //                         height: "25px",
-            //                         width: "25px",
-            //                     }}/> */}
-            //                 <p style={{
-            //                     float: "left",
-            //                     lineHeight: "25px",
-            //                     marginLeft: "7.5px",
-            //                 }}>
-            //                     {tenant["income"] ? "$" + numberWithCommas(tenant["income"]) : "$-"}
-            //                 </p>
-            //             </div>
-            //             <div className="clearfix"/>
-            //             <div style={{
-            //                 marginTop: "40px",
-            //             }}>
-            //                 {/* <IoCalendarClearSharp style={{
-            //                     color: "#32384D",
-            //                     float: "left",
-            //                     height: "25px",
-            //                     width: "25px",
-            //                 }}/> */}
-            //                 <p style={{
-            //                     float: "left",
-            //                     lineHeight: "25px",
-            //                     marginLeft: "7.5px",
-            //                 }}>
-            //                     {tenant["start_date"]} - {tenant["active"] ? "present" : tenant["end_date"]}
-            //                 </p>
-            //             </div>
-            //         </div>
-            //     </div>
-            // );
+            elements.push(
+                <div className="clearfix"/>
+            );
         }
 
         return (
             <div style={{
-                marginLeft: "30px",
-                marginRight: "30px",
                 marginTop: "10px",
                 minHeight: "250px",
-                width: "calc(100% - 60px)",
+                width: "100%",
             }}>
                 <div style={{
-                    width: "100%",
+                    paddingLeft: "30px",
+                    paddingRight: "30px",
+                    width: "calc(100% - 60px)",
                 }}>
                     <div style={{
                         float: "left",
@@ -511,7 +376,7 @@ class PropertyPage extends React.Component {
                     </div>
                     <div style={{
                         float: "left",
-                        width: "22.5%",
+                        width: "calc(22.5% - 15px)",
                     }}>
                         <p style={{
                             float: "left",
@@ -522,7 +387,7 @@ class PropertyPage extends React.Component {
                     </div>
                     <div style={{
                         float: "left",
-                        width: "22.5%",
+                        width: "calc(22.5% - 15px)",
                     }}>
                         <p style={{
                             float: "left",
@@ -1028,7 +893,7 @@ class PropertyPage extends React.Component {
                             }
                         </div>
                         <div className="clearfix"/>
-                        <div className="view_to_display_info_box">
+                        {/* <div className="view_to_display_info_box">
                             <p className="view_to_display_info_box_title">
                                 Property Manager
                             </p>
@@ -1079,7 +944,7 @@ class PropertyPage extends React.Component {
                                     </div>
                                 </div>
                             }
-                        </div>
+                        </div> */}
                     </div>
                 );
             case editView:

@@ -69,7 +69,7 @@ func (handle *Handle) GetTenantsByUserProperty(userID, propertyID string) ([]*Te
 	}
 
 	var tenants []*Tenant
-	if err := handle.DB.Where("user_id = ? AND property_id = ?", userID, propertyID).First(&tenants).Error; err != nil {
+	if err := handle.DB.Where("user_id = ? AND property_id = ?", userID, propertyID).Find(&tenants).Error; err != nil {
 		return nil, err
 	}
 	return tenants, nil
