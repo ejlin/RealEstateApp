@@ -19,11 +19,12 @@ class AddNewTenantModal extends React.Component {
         this.state = {
             user: this.props.data.state.user,
             propertyID: this.props.data.state.propertyID,
+            addTenant: this.props.data.state.addTenant,
             closeModal: this.props.data.state.closeModal,
             displayView: user,
         };
         this.handleFieldChange = this.handleFieldChange.bind(this);
-        this.addTenant = this.addTenant.bind(this);
+        this.verifyAndAddTenant = this.verifyAndAddTenant.bind(this);
         this.renderActiveView = this.renderActiveView.bind(this);
     }
 
@@ -47,6 +48,7 @@ class AddNewTenantModal extends React.Component {
                             }}>
                             <label>NAME</label>
                             <input
+                                key="name"
                                 name="name"
                                 type="text"
                                 onChange={this.handleFieldChange}
@@ -55,6 +57,7 @@ class AddNewTenantModal extends React.Component {
                         <div className="group">
                             <label>EMAIL</label>
                             <input
+                                key="email"
                                 name="email"
                                 type="text"
                                 onChange={this.handleFieldChange}
@@ -63,6 +66,7 @@ class AddNewTenantModal extends React.Component {
                         <div className="group">
                             <label>PHONE</label>
                             <input
+                                key="phone"
                                 name="phone"
                                 type="text"
                                 onChange={this.handleFieldChange}
@@ -116,6 +120,7 @@ class AddNewTenantModal extends React.Component {
                         <div className="group">
                             <label>OCCUPATION</label>
                             <input
+                                key="occupation"
                                 name="occupation"
                                 type="text"
                                 onChange={this.handleFieldChange}
@@ -124,6 +129,7 @@ class AddNewTenantModal extends React.Component {
                         <div className="group">
                             <label>INCOME</label>
                             <input
+                                key="income"
                                 name="income"
                                 type="text"
                                 onChange={this.handleFieldChange}
@@ -137,6 +143,7 @@ class AddNewTenantModal extends React.Component {
                             <div className="group">
                                 <label>START DATE</label>
                                 <input
+                                    key="start_date"
                                     name="start_date"
                                     type="text"
                                     onChange={this.handleFieldChange}
@@ -150,6 +157,7 @@ class AddNewTenantModal extends React.Component {
                             <div className="group">
                                 <label>END DATE</label>
                                 <input
+                                    key="end_date"
                                     name="end_date"
                                     type="text"
                                     onChange={this.handleFieldChange}
@@ -160,6 +168,7 @@ class AddNewTenantModal extends React.Component {
                         <div className="group">
                             <label>DESCRIPTION</label>
                             <textarea 
+                                key="description"
                                 name="description"
                                 className="no-outline-focus"
                                 onChange={this.handleFieldChange}
@@ -167,7 +176,7 @@ class AddNewTenantModal extends React.Component {
                                     backgroundColor: "white",
                                     border: "1px solid #d3d3d3",
                                     borderRadius: "4px",
-                                    fontSize: "1.0em",
+                                    fontSize: "0.9em",
                                     height: "100px",
                                     marginTop: "7.5px",
                                     padding: "10px 15px 10px 15px",
@@ -209,7 +218,7 @@ class AddNewTenantModal extends React.Component {
                                 </div>
                                 <div
                                     onMouseDown={() => {
-                                        this.addTenant()
+                                        this.verifyAndAddTenant()
                                     }}
                                     className="opacity"
                                     style={{
@@ -239,31 +248,20 @@ class AddNewTenantModal extends React.Component {
         }
     }
 
-    addTenant() {
-        let axiosAddTenantURL = URLBuilder('/api/user/tenants/', this.state.user["id"]);
-        axios({
-            method: 'post',
-            url: axiosAddTenantURL,
-            timeout: 5000,  // 5 seconds timeout
-            data: {
-                property_id: this.state.propertyID,
-                name: this.state.name,
-                email: this.state.email,
-                phone: this.state.phone,
-                occupation: this.state.occupation,
-                income: parseInt(this.state.income),
-                start_date: this.state.start_date,
-                end_date: this.state.end_date,
-                description: this.state.description,
-            }
-        }).then(response => {
-            console.log(response);
-            this.state.closeModal();
-        }).catch(error => {
-            console.log(error);
-        }
-        // console.error('timeout exceeded')
-        );
+    verifyAndAddTenant() {
+
+        let tenant = [];
+        tenant["property_id"] = this.state.propertyID;
+        tenant["name"] = this.state.name;
+        tenant["email"] = this.state.email;
+        tenant["phone"] = this.state.phone;
+        tenant["occupation"] = this.state.occupation;
+        tenant["income"] = this.state.income;
+        tenant["start_date"] = this.state.start_date;
+        tenant["end_date"] = this.state.end_date;
+        tenant["description"] = this.state.desription;
+
+        this.state.addTenant(tenant);
     }
 
     render() {

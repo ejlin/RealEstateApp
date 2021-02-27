@@ -85,7 +85,9 @@ class PropertyPage extends React.Component {
         this.closeNewTenantModal = this.closeNewTenantModal.bind(this);
         this.closeNewPropertyManagerModal = this.closeNewPropertyManagerModal.bind(this);
 
+        this.addTenant = this.addTenant.bind(this);
         this.renderTenants = this.renderTenants.bind(this);
+        this.deleteTenant = this.deleteTenant.bind(this);
     }
 
     componentDidMount() {
@@ -323,6 +325,67 @@ class PropertyPage extends React.Component {
         return fileElements;
     }
 
+    addTenant(tenant) {
+        let host = this.state.host;
+        let userID = this.state.user["id"];
+        let axiosAddTenantURL = URLBuilder(host, '/api/user/tenants/', userID);
+
+        axios({
+            method: 'post',
+            url: axiosAddTenantURL,
+            timeout: 5000,  // 5 seconds timeout
+            data: {
+                property_id: tenant["property_id"],
+                name: tenant["name"],
+                email: tenant["email"],
+                phone: tenant["phone"],
+                occupation: tenant["occupation"],
+                income: parseInt(tenant["income"]),
+                start_date: tenant["start_date"],
+                end_date: tenant["end_date"],
+                description: tenant["description"],
+            }
+        }).then(response => {
+            console.log(response);
+            this.closeNewTenantModal();
+        }).catch(error => {
+            console.log(error);
+        }
+        // console.error('timeout exceeded')
+        );
+    }
+
+    deleteTenant(tenantID) {
+        let host = this.state.host;
+        let userID = this.state.user["id"];
+
+        let deleteTenantURL = URLBuilder(host, 'api/user/tenants/', userID, tenantID);
+        
+        axios({
+            method: 'delete',
+            url: deleteTenantURL,
+        }).then(response => {
+            let tenants = this.state.tenants;
+            let index = -1;
+            for (let i = 0; i < tenants.length; i++) {
+                let tenant = tenants[i];
+                if (tenant["id"] === tenantID) {
+                    index = i;
+                }
+            }
+
+            if (index >= 0) {
+                tenants.splice(index, 1);
+            }
+
+            this.setState({
+                tenants: tenants,
+            })
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
     renderTenants() {
         let tenants = this.state.tenants;
         let elements = [];
@@ -340,12 +403,15 @@ class PropertyPage extends React.Component {
             }
 
             elements.push(
-                <TenantCard data={{
-                    state: {
-                        tenant: tenant,
-                        firstChild: i === 0,
-                    }
-                }}/>
+                <TenantCard 
+                    key={tenant["id"]}
+                    data={{
+                        state: {
+                            tenant: tenant,
+                            firstChild: i === 0,
+                            deleteTenant: this.deleteTenant,
+                        }
+                    }}/>
             );
             elements.push(
                 <div className="clearfix"/>
@@ -1202,6 +1268,7 @@ class PropertyPage extends React.Component {
                             state: {
                                 user: this.state.user,
                                 propertyID: this.state.property["id"],
+                                addTenant: this.addTenant,
                                 closeModal: this.closeNewTenantModal,
                             }
                         }}/>:

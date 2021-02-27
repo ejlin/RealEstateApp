@@ -9,7 +9,7 @@ import { convertDate } from './ExpensesDashboard.js';
 
 import { numberWithCommas, capitalizeName } from '../utility/Util.js'; 
 
-import { MdEdit, MdPhone } from 'react-icons/md';
+import { MdEdit, MdPhone, MdTrash } from 'react-icons/md';
 import { IoTrashSharp, IoReturnDownForwardSharp, IoAttachSharp } from 'react-icons/io5';
 import { FaCaretDown } from 'react-icons/fa';
 import { VscExpandAll } from 'react-icons/vsc';
@@ -23,6 +23,7 @@ class TenantCard extends React.Component {
         this.state = {
             tenant: this.props.data.state.tenant,
             firstChild: this.props.data.state.firstChild,
+            deleteTenant: this.props.data.state.deleteTenant,
         }
     }
 
@@ -72,11 +73,11 @@ class TenantCard extends React.Component {
                             <p style={{
                                 fontWeight: "bold",
                             }}>
-                                {tenant["name"]}
+                                {tenant["name"] ? tenant["name"] : "N/A"}
                             </p>
                             <p style={{
                             }}>
-                                {tenant["email"]}
+                                {tenant["email"] ? tenant["email"] : "n/a"}
                             </p>
                         </div>
                     </div>
@@ -86,7 +87,7 @@ class TenantCard extends React.Component {
                         width: "calc(22.5% - 10px)",
                     }}>
                         <p>
-                            {tenant["start_date"]}
+                            {tenant["start_date"] ? tenant["start_date"] : "N/A"}
                         </p>
                     </div>
                     <div style={{
@@ -95,10 +96,19 @@ class TenantCard extends React.Component {
                         width: "calc(22.5% - 10px)",
                     }}>
                         <p>
-                            {tenant["active"] ? "Active" : tenant["end_date"]}
+                            {tenant["active"] ? "Active" : (tenant["end_date"] ? tenant["end_date"] : "N/A")}
                         </p>
                     </div>
-                </div>
+                    <MdEdit 
+                        className="opacity"
+                        style={{
+                            color: "#296cf6",
+                            cursor: "pointer",
+                            height: "20px",
+                            marginTop: "calc((40px - 20px)/2)",
+                            width: "20px",
+                        }}/>
+                </div>  
                 {this.state.expandCard ? 
                     <div style={{
                         backgroundColor: "#f1f1f1",
@@ -149,6 +159,15 @@ class TenantCard extends React.Component {
                                     ${tenant["income"] ? numberWithCommas(tenant["income"]) : "-"}
                                 </p>
                             </div>
+                            <IoTrashSharp 
+                                onMouseDown={() => this.state.deleteTenant(tenant["id"])}
+                                className="opacity"
+                                style={{
+                                    color: "#296cf6",
+                                    cursor: "pointer",
+                                    height: "20px",
+                                    width: "20px",
+                                }}/>
                         </div>
                     </div>: 
                     <div></div>

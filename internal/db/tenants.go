@@ -74,3 +74,17 @@ func (handle *Handle) GetTenantsByUserProperty(userID, propertyID string) ([]*Te
 	}
 	return tenants, nil
 }
+
+func (handle *Handle) DeleteTenantByID(userID, tenantID string) error {
+
+	if _, err := uuid.Parse(userID); err != nil {
+		return err
+	}
+
+	if _, err := uuid.Parse(tenantID); err != nil {
+		return err
+	}
+
+	var tenant Tenant
+	return handle.DB.Where("user_id = ? AND id = ?", userID, tenantID).Delete(&tenant).Error
+}

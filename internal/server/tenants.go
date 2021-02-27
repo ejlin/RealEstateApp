@@ -66,6 +66,39 @@ func (s *Server) getTenantsByUserProperty(w http.ResponseWriter, r *http.Request
 	return
 }
 
+func (s *Server) deleteTenant(w http.ResponseWriter, r *http.Request) {
+	
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Warn().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	tenantID, ok := vars["tenant_id"]
+	if !ok {
+		log.Warn().Msg("missing tenant id")
+		http.Error(w, "missing tenant id", http.StatusBadRequest)
+		return
+	}
+
+	ll = ll.With().Str("tenant_id", userID).Logger()
+
+	if err := s.DBHandle.DeleteTenantByID(userID, tenantID); err != nil {
+		ll.Warn().Msg("unable to delete tenant by id")
+		http.Error(w, "unable to delete tenant by id", http.StatusBadRequest)
+		return
+	}
+
+	ll.Info().Msg("tenant deleted successfully")
+	w.Write([]byte("success"))
+	return
+}
+
 func (s *Server) addTenantByUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
