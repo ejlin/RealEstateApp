@@ -347,6 +347,12 @@ class PropertyPage extends React.Component {
             }
         }).then(response => {
             console.log(response);
+            let tenant = response.data;
+            let tenants = this.state.tenants;
+            tenants.unshift(tenant);
+            this.setState({
+                tenants: tenants,
+            })
             this.closeNewTenantModal();
         }).catch(error => {
             console.log(error);

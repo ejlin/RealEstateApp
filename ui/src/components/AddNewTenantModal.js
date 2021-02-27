@@ -74,6 +74,76 @@ class AddNewTenantModal extends React.Component {
                         </div>
                         <div style={{
                             float: "left",
+                            width: "calc(50% - 40px)",
+                        }}>
+                            <div className="group">
+                                <label>START DATE</label>
+                                <input
+                                    key="start_date"
+                                    name="start_date"
+                                    type="text"
+                                    onChange={this.handleFieldChange}
+                                    className="add_new_tenant_modal_input"/>
+                            </div>
+                        </div>
+                        <div style={{
+                            float: "left",
+                            marginLeft: "20px",
+                            width: "calc(50% - 40px)",
+                        }}>
+                            <div className="group">
+                                <label>END DATE</label>
+                                <input
+                                    id="end_date_input"
+                                    key="end_date"
+                                    name="end_date"
+                                    type="text"
+                                    onChange={this.handleFieldChange}
+                                    className="add_new_tenant_modal_input"
+                                    style={{
+                                        backgroundColor: this.state.activeProperty ? "#d3d3d3" : "white",
+                                    }}/>
+                            </div>
+                        </div>
+                        <div style={{
+                            float: "left",
+                            marginLeft: "20px",
+                            width: "40px",
+                        }}>
+                            <div className="group">
+                                <label>ACTIVE</label>
+                                <div 
+                                    onMouseDown={() => {
+                                        let activeProperty = this.state.activeProperty;
+                                        // Currently active property, set it back to not active property.
+                                        // Allow input field to be editable again. 
+                                        let endDateInput = document.getElementById("end_date_input");
+                                        endDateInput.readOnly = !activeProperty;
+                                        endDateInput.value = !activeProperty || !this.state.end_date ? "" : this.state.end_date;
+                                        this.setState({
+                                            activeProperty: !this.state.activeProperty,
+                                        })
+                                    }}
+                                    style={{
+                                        border: "1px solid #d3d3d3",
+                                        borderRadius: "4px",
+                                        height: "36px",
+                                        marginTop: "5px",
+                                        width: "40px",
+                                    }}>
+                                    <div style={{
+                                        backgroundColor: this.state.activeProperty ? "#296cf6": "white",
+                                        borderRadius: "4px",
+                                        height: "20px",
+                                        marginLeft: "10px",
+                                        marginTop: "8px",
+                                        width: "20px",
+                                    }}></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style={{
+                            float: "left",
                             paddingBottom: "10px",
                             width: "100%",
                         }}>
@@ -134,35 +204,6 @@ class AddNewTenantModal extends React.Component {
                                 type="text"
                                 onChange={this.handleFieldChange}
                                 className="add_new_tenant_modal_input"/>
-                        </div>
-                        <div className="clearfix"/>
-                        <div style={{
-                            float: "left",
-                            width: "calc(50% - 10px)",
-                        }}>
-                            <div className="group">
-                                <label>START DATE</label>
-                                <input
-                                    key="start_date"
-                                    name="start_date"
-                                    type="text"
-                                    onChange={this.handleFieldChange}
-                                    className="add_new_tenant_modal_input"/>
-                            </div>
-                        </div>
-                        <div style={{
-                            float: "right",
-                            width: "calc(50% - 10px)",
-                        }}>
-                            <div className="group">
-                                <label>END DATE</label>
-                                <input
-                                    key="end_date"
-                                    name="end_date"
-                                    type="text"
-                                    onChange={this.handleFieldChange}
-                                    className="add_new_tenant_modal_input"/>
-                            </div>
                         </div>
                         <div className="clearfix"/>
                         <div className="group">
