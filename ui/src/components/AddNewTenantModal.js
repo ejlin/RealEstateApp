@@ -4,8 +4,13 @@ import axios from 'axios';
 import './CSS/AddNewTenantModal.css';
 
 import { IoCloseOutline } from 'react-icons/io5';
+import { MdWork } from 'react-icons/md';
+import { TiUser } from 'react-icons/ti';
 
 let URLBuilder = require('url-join');
+
+const user = "user";
+const work = "work";
 
 class AddNewTenantModal extends React.Component {
     constructor(props) {
@@ -15,9 +20,11 @@ class AddNewTenantModal extends React.Component {
             user: this.props.data.state.user,
             propertyID: this.props.data.state.propertyID,
             closeModal: this.props.data.state.closeModal,
+            displayView: user,
         };
         this.handleFieldChange = this.handleFieldChange.bind(this);
         this.addTenant = this.addTenant.bind(this);
+        this.renderActiveView = this.renderActiveView.bind(this);
     }
 
     componentDidMount() {
@@ -28,92 +35,11 @@ class AddNewTenantModal extends React.Component {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    addTenant() {
-        let axiosAddTenantURL = URLBuilder('/api/user/tenants/', this.state.user["id"]);
-        axios({
-            method: 'post',
-            url: axiosAddTenantURL,
-            timeout: 5000,  // 5 seconds timeout
-            data: {
-                property_id: this.state.propertyID,
-                name: this.state.name,
-                email: this.state.email,
-                phone: this.state.phone,
-                occupation: this.state.occupation,
-                income: parseInt(this.state.income),
-                start_date: this.state.start_date,
-                end_date: this.state.end_date,
-                description: this.state.description,
-            }
-        }).then(response => {
-            console.log(response);
-            this.state.closeModal();
-        }).catch(error => {
-            console.log(error);
-        }
-        // console.error('timeout exceeded')
-        );
-    }
-
-    render() {
-        return (
-            <div
-                style={{
-                    backgroundColor: "rgba(245,245,250, 0.85)",
-                    borderRadius: "4px",
-                    content: '',
-                    height: "100vh",
-                    marginBottom: "25px",
-                    marginLeft: "220px",
-                    position: "absolute",
-                    width: "calc(100% - 220px - 350px)",
-                    zIndex: "45",
-                }}>
-                <div
-                    style={{
-                        backgroundColor: "white",
-                        borderRadius: "10px",
-                        boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
-                        float: "left",
-                        marginLeft: "calc((100% - 500px)/2)",
-                        marginRight: "calc((100% - 500px)/2)",
-                        marginTop: "125px",
-                        maxHeight: "75vh",
-                        minHeight: "300px",
-                        overflow: "scroll",
-                        width: "500px",
-                    }}>
-                    <div style={{
-                        marginTop: "25px",
-                        paddingLeft: "30px",
-                        paddingRight: "30px",
-                        width: "calc(100% - 60px)"
-                    }}>
-                        <p style={{
-                            borderBottom: "4px solid #296CF6",
-                            float: "left",
-                            fontWeight: "bold",
-                            paddingBottom: "6px",
-                        }}>
-                            New Tenant
-                        </p>
-                        <div
-                            style={{
-                                float: "right",
-                                height: "30px",
-                            }}
-                        >
-                            <IoCloseOutline
-                                onMouseDown={() => this.state.closeModal()}
-                                style={{
-                                    cursor: "pointer",
-                                    float: "right",
-                                    height: "30px",
-                                    width: "30px",
-                                }}
-                            />
-                        </div>
-                        <div className="clearfix"/>
+    renderActiveView() {
+        switch (this.state.displayView) {
+            case user:
+                return (
+                    <div>
                         <div 
                             className="group"
                             style={{
@@ -142,6 +68,51 @@ class AddNewTenantModal extends React.Component {
                                 onChange={this.handleFieldChange}
                                 className="add_new_tenant_modal_input"/>
                         </div>
+                        <div style={{
+                            float: "left",
+                            paddingBottom: "10px",
+                            width: "100%",
+                        }}>
+                            <div
+                                style={{
+                                    float: "right",
+                                    marginTop: "20px",
+                                }}
+                            >
+                                <div
+                                    onMouseDown={() => {
+                                        this.setState({
+                                            displayView: work,
+                                        })
+                                    }}
+                                    className="opacity"
+                                    style={{
+                                        backgroundColor: "#296CF6",
+                                        borderRadius: "50px",
+                                        cursor: "pointer",
+                                        float: "right",
+                                        marginLeft: "10px",
+                                        paddingBottom: "7.5px",
+                                        paddingLeft: "15px",
+                                        paddingRight: "15px",
+                                        paddingTop: "7.5px",
+                                    }}
+                                >
+                                    <p
+                                        style={{
+                                            color: "white",
+                                        }}
+                                    >
+                                        Next
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            case work: 
+                return (
+                    <div>
                         <div className="group">
                             <label>OCCUPATION</label>
                             <input
@@ -204,79 +175,197 @@ class AddNewTenantModal extends React.Component {
                                     width: "calc(100% - 30px)",
                                 }}/>
                         </div>
+                        <div style={{
+                            float: "left",
+                            paddingBottom: "10px",
+                            width: "100%",
+                        }}>
+                            <div
+                                style={{
+                                    float: "right",
+                                    marginTop: "20px",
+                                }}
+                            >
+                                <div
+                                    onMouseDown={() => {
+                                        this.setState({
+                                            displayView: user,
+                                        })
+                                    }}
+                                    style={{
+                                        cursor: "pointer",
+                                        float: "left",
+                                        paddingBottom: "7.5px",
+                                        paddingLeft: "15px",
+                                        paddingRight: "15px",
+                                        paddingTop: "7.5px",
+                                    }}
+                                >
+                                    <p
+                                        className="opacity"
+                                    >
+                                        Back
+                                    </p>
+                                </div>
+                                <div
+                                    onMouseDown={() => {
+                                        this.addTenant()
+                                    }}
+                                    className="opacity"
+                                    style={{
+                                        backgroundColor: "#296CF6",
+                                        borderRadius: "50px",
+                                        cursor: "pointer",
+                                        float: "left",
+                                        marginLeft: "10px",
+                                        paddingBottom: "7.5px",
+                                        paddingLeft: "15px",
+                                        paddingRight: "15px",
+                                        paddingTop: "7.5px",
+                                    }}
+                                >
+                                    <p
+                                        style={{
+                                            color: "white",
+                                        }}
+                                    >
+                                        Add Tenant
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div style={{
+                );
+        }
+    }
+
+    addTenant() {
+        let axiosAddTenantURL = URLBuilder('/api/user/tenants/', this.state.user["id"]);
+        axios({
+            method: 'post',
+            url: axiosAddTenantURL,
+            timeout: 5000,  // 5 seconds timeout
+            data: {
+                property_id: this.state.propertyID,
+                name: this.state.name,
+                email: this.state.email,
+                phone: this.state.phone,
+                occupation: this.state.occupation,
+                income: parseInt(this.state.income),
+                start_date: this.state.start_date,
+                end_date: this.state.end_date,
+                description: this.state.description,
+            }
+        }).then(response => {
+            console.log(response);
+            this.state.closeModal();
+        }).catch(error => {
+            console.log(error);
+        }
+        // console.error('timeout exceeded')
+        );
+    }
+
+    render() {
+        return (
+            <div
+                style={{
+                    backgroundColor: "rgba(245,245,250, 0.85)",
+                    borderRadius: "4px",
+                    content: '',
+                    height: "100vh",
+                    marginBottom: "25px",
+                    marginLeft: "220px",
+                    position: "absolute",
+                    width: "calc(100% - 220px - 350px)",
+                    zIndex: "45",
+                }}>
+                <div
+                    style={{
+                        backgroundColor: "white",
+                        borderRadius: "10px",
+                        boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                         float: "left",
-                        marginLeft: "20px",
-                        marginRight: "20px",
-                        paddingBottom: "25px",
-                        width: "calc(100% - 40px)",
+                        marginLeft: "calc((100% - 500px)/2)",
+                        marginRight: "calc((100% - 500px)/2)",
+                        marginTop: "175px",
+                        maxHeight: "75vh",
+                        minHeight: "300px",
+                        overflow: "scroll",
+                        width: "500px",
                     }}>
-                        <p
-                            style={{
-                                fontSize: "1.1em",
-                                fontWeight: "bold",
-                            }}
-                        >
-                            {this.state.titleText}
-                        </p>
-                        <p
-                            style={{
-                                color: "grey",
-                                marginTop: "10px",
-                            }}
-                        >
-                            {this.state.subText}
+                    <div style={{
+                        marginTop: "25px",
+                        paddingLeft: "30px",
+                        paddingRight: "30px",
+                        width: "calc(100% - 60px)"
+                    }}>
+                        <p style={{
+                            borderBottom: "4px solid #296CF6",
+                            float: "left",
+                            fontWeight: "bold",
+                            paddingBottom: "6px",
+                        }}>
+                            New Tenant
                         </p>
                         <div
                             style={{
                                 float: "right",
-                                marginTop: "10px",
+                                height: "30px",
                             }}
                         >
-                            <div
+                            <IoCloseOutline
                                 onMouseDown={() => this.state.closeModal()}
                                 style={{
                                     cursor: "pointer",
-                                    float: "left",
-                                    paddingBottom: "7.5px",
-                                    paddingLeft: "15px",
-                                    paddingRight: "15px",
-                                    paddingTop: "7.5px",
+                                    float: "right",
+                                    height: "30px",
+                                    width: "30px",
                                 }}
-                            >
-                                <p
-                                    className="opacity"
-                                >
-                                    Cancel
-                                </p>
-                            </div>
-                            <div
-                                onMouseDown={() => {
-                                    this.addTenant()
-                                }}
-                                className="opacity"
-                                style={{
-                                    backgroundColor: "#296CF6",
-                                    borderRadius: "50px",
-                                    cursor: "pointer",
-                                    float: "left",
-                                    marginLeft: "10px",
-                                    paddingBottom: "7.5px",
-                                    paddingLeft: "15px",
-                                    paddingRight: "15px",
-                                    paddingTop: "7.5px",
-                                }}
-                            >
-                                <p
-                                    style={{
-                                        color: "white",
-                                    }}
-                                >
-                                    Add Tenant
-                                </p>
-                            </div>
+                            />
                         </div>
+                        <div className="clearfix"/>
+                        <div style={{
+                            backgroundColor: "#f5f5fa",
+                            borderRadius: "4px",
+                            float: "left",
+                            marginTop: "25px",
+                            paddingBottom: "20px",
+                            paddingLeft: "calc(50% - 40px - 20px - 6px - 20px)",
+                            paddingRight: "calc(50% - 40px - 20px - 6px - 20px)",
+                            paddingTop: "20px",
+                            width: "calc(40px + 40px + 20px + 20px + 6px + 6px + 40px)",
+                        }}>
+                            <TiUser style={{
+                                border: "3px solid #296cf6",
+                                borderRadius: "50%",
+                                color: "#296cf6",
+                                float: "left",
+                                height: "35px",
+                                padding: "7.5px",
+                                width: "35px",
+                            }}/>
+                            <div style={{
+                                backgroundColor: this.state.displayView === user ? "#d3d3d3" : "#296cf6",
+                                float: "left",
+                                height: "6px",
+                                marginTop: "25px",
+                                width: "60px",
+                            }}>
+
+                            </div>
+                            <MdWork style={{
+                                border: this.state.displayView === user ? "3px solid #d3d3d3" : "3px solid #296cf6",
+                                borderRadius: "50%",
+                                color: this.state.displayView === user ? "#d3d3d3" : "#296cf6",
+                                float: "right",
+                                height: "30px",
+                                padding: "10px",
+                                width: "30px",
+                            }}/>
+                        </div>
+                        <div className="clearfix"/>
+                        {this.renderActiveView()}  
                     </div>
                 </div>
             </div>

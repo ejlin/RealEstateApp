@@ -9,7 +9,7 @@ import { convertDate } from './ExpensesDashboard.js';
 
 import { numberWithCommas, capitalizeName } from '../utility/Util.js'; 
 
-import { MdEdit } from 'react-icons/md';
+import { MdEdit, MdPhone } from 'react-icons/md';
 import { IoTrashSharp, IoReturnDownForwardSharp, IoAttachSharp } from 'react-icons/io5';
 import { FaCaretDown } from 'react-icons/fa';
 import { VscExpandAll } from 'react-icons/vsc';
@@ -75,7 +75,6 @@ class TenantCard extends React.Component {
                                 {tenant["name"]}
                             </p>
                             <p style={{
-
                             }}>
                                 {tenant["email"]}
                             </p>
@@ -103,11 +102,54 @@ class TenantCard extends React.Component {
                 {this.state.expandCard ? 
                     <div style={{
                         backgroundColor: "#f1f1f1",
+                        borderBottom: "1px solid #d3d3d3",
                         float: "left",
-                        height: "200px",
-                        width: "100%",
+                        padding: "0px 30px 0px 30px",
+                        width: "calc(100% - 60px)",
                     }}>
-                        
+                        <div style={{
+                            float: "left",
+                            marginTop: "10px",
+                            paddingBottom: "15px",
+                            width: "100%",
+                        }}>
+                            <div style={{
+                                float: "left",
+                                width: "55%",
+                            }}>
+                                <MdPhone style={{
+                                    color: "#296CF6",
+                                    float: "left",
+                                    height: "25px",
+                                    marginLeft: "calc((40px - 25px)/2)",
+                                    marginRight: "calc((40px - 25px)/2)",
+                                    width: "25px",
+                                }}/>
+                                <p style={{
+                                    float: "left",
+                                    lineHeight: "25px",
+                                    marginLeft: "15px",
+                                }}>
+                                    {tenant["phone"] ? tenant["phone"] : "N/A"}
+                                </p>
+                            </div>
+                            <div style={{
+                                float: "left",
+                                width: "calc(22.5% - 10px)",
+                            }}>
+                                <p>
+                                    {tenant["occupation"] ? tenant["occupation"] : "N/A"}
+                                </p>
+                            </div>
+                            <div style={{
+                                float: "left",
+                                width: "calc(22.5% - 10px)",
+                            }}>
+                                <p>
+                                    ${tenant["income"] ? numberWithCommas(tenant["income"]) : "-"}
+                                </p>
+                            </div>
+                        </div>
                     </div>: 
                     <div></div>
                 }
