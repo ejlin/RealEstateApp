@@ -344,6 +344,7 @@ class PropertyPage extends React.Component {
                 start_date: tenant["start_date"],
                 end_date: tenant["end_date"],
                 description: tenant["description"],
+                active: tenant["active"],
             }
         }).then(response => {
             console.log(response);

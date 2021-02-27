@@ -101,7 +101,7 @@ class AddNewTenantModal extends React.Component {
                                     onChange={this.handleFieldChange}
                                     className="add_new_tenant_modal_input"
                                     style={{
-                                        backgroundColor: this.state.activeProperty ? "#d3d3d3" : "white",
+                                        backgroundColor: this.state.activeProperty ? "#f5f5fa" : "white",
                                     }}/>
                             </div>
                         </div>
@@ -301,6 +301,7 @@ class AddNewTenantModal extends React.Component {
         tenant["start_date"] = this.state.start_date;
         tenant["end_date"] = this.state.end_date;
         tenant["description"] = this.state.desription;
+        tenant["active"] = this.state.activeProperty;
 
         this.state.addTenant(tenant);
     }
