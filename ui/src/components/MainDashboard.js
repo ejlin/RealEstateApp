@@ -130,9 +130,12 @@ class MainDashboard extends React.Component {
             }, () => {console.log(this.state.historicalAnalysis)});
 
             localStorage.setItem('total_estimate_worth', JSON.stringify(this.state.totalEstimateWorth));
-            
+
         })).catch(errors => {
             console.log(errors);
+            this.setState({
+                isLoading: false,
+            })
         });
     }
 
@@ -217,6 +220,9 @@ class MainDashboard extends React.Component {
         let mortgagePaymentDateMap = this.state.mortgagePaymentDateMap;
         let timeline = [];
 
+        if (!mortgagePaymentDateMap || mortgagePaymentDateMap === undefined) {
+            return timeline;
+        }
         for (const [key, value] of Object.entries(mortgagePaymentDateMap)) {
             let iKey = parseInt(key);
             let daysUntil = getDaysUntil(iKey);
@@ -256,7 +262,9 @@ class MainDashboard extends React.Component {
         let rentPaymentDateMap = this.state.rentPaymentDateMap;
 
         let timeline = [];
-
+        if (!rentPaymentDateMap || rentPaymentDateMap === undefined) {
+            return timeline;
+        }
         for (const [key, value] of Object.entries(rentPaymentDateMap)) {
             let iKey = parseInt(key);
             let daysUntil = getDaysUntil(iKey)
@@ -352,7 +360,7 @@ class MainDashboard extends React.Component {
                                                 {this.state.totalProperties ? this.state.totalProperties : 0} total
                                             </p>   
                                             <p className="main_dashboard_summary_cards_subtitle">
-                                                {this.state.totalProperties > 1 ? "properties" : "property"}
+                                                {this.state.totalProperties === 1 ? "property" : "properties"}
                                             </p>
                                         </div>
                                     </div>
@@ -714,6 +722,7 @@ class MainDashboard extends React.Component {
                         </div>
                         <NotificationSidebar data={{
                             state: {
+                                user: this.state.user,
                                 totalEstimateWorth: this.state.totalEstimateWorth,
                                 missingEstimate: this.state.missingEstimate 
                             }

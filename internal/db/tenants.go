@@ -40,10 +40,6 @@ func (handle *Handle) AddTenantByUser(userID string, tenant *Tenant) error {
 		return errors.New("nil tenant")
 	}
 
-	fmt.Println(tenant.ID)
-	fmt.Println(tenant.UserID)
-	fmt.Println(tenant.PropertyID)
-
 	return handle.DB.FirstOrCreate(&tenant, tenant).Error
 }
 
@@ -52,7 +48,7 @@ func (handle *Handle) GetTenantsByUser(userID string)([]*Tenant, error) {
 		return nil, err
 	}
 	var tenants []*Tenant
-	if err := handle.DB.Where("user_id = ?", userID).First(&tenants).Error; err != nil {
+	if err := handle.DB.Where("user_id = ?", userID).Find(&tenants).Error; err != nil {
 		return nil, err
 	}
 	return tenants, nil

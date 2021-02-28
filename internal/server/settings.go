@@ -1,9 +1,11 @@
 package server
 
 import (
+	"errors"
 	"encoding/json"
 	"net/http"
 
+	"cloud.google.com/go/storage"
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
 )
@@ -162,6 +164,12 @@ func (s *Server) getProfilePictureByUser(w http.ResponseWriter, r *http.Request)
 
 	url, err := s.getProfilePictureData(ctx, userID)
 	if err != nil {
+		// If object does not exist, then return a not found.
+		if errors.Is(err, storage.ErrObjectNotExist) {
+			ll.Info().Err(err).Msg("user does not have a profile picture")
+			http.Error(w, "user does not have a profile picture", http.StatusNotFound)
+			return
+		}
 		ll.Warn().Err(err).Msg("unable to get profile picture data by user")
 		http.Error(w, "unable to get profile picture data by user", http.StatusInternalServerError)
 		return

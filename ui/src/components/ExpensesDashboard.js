@@ -592,6 +592,7 @@ class ExpensesDashboard extends React.Component {
                 </div>
                 <NotificationSidebar data={{
                     state: {
+                        user: this.state.user,
                         totalEstimateWorth: this.state.totalEstimateWorth,
                         missingEstimate: this.state.missingEstimate 
                     }

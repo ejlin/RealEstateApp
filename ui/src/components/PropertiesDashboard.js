@@ -490,15 +490,58 @@ class PropertiesDashboard extends React.Component {
                                     fontSize: "1.3em",
                                     marginLeft: "5px",
                                 }}>
-                                    Properties
+                                    {this.state.totalProperties === 1 ? "Property" : "Properties"}
                                 </p>
-                                <div className="properties_dashboard_property_inner_box">
-                                    {this.renderProperties()}
-                                </div>
+                                {
+                                    this.state.totalProperties === 0 ? 
+                                    <div style={{
+                                        marginTop: "150px",
+                                        textAlign: "center",
+                                        width: "100%",
+                                    }}>
+                                        <p style={{
+                                            textAlign: "center",
+                                        }}>
+                                            No properties
+                                        </p>
+                                        <Link to={{
+                                            pathname: "/addproperty",
+                                            state: {
+                                                user: this.state.user,
+                                                totalEstimateWorth: this.state.totalEstimateWorth,
+                                                missingEstimate: this.state.missingEstimate,
+                                                profilePicture: this.state.profilePicture
+                                            }
+                                        }}>
+                                            <div 
+                                                className="opacity"
+                                                style={{
+                                                    backgroundColor: "#296cf6",
+                                                    borderRadius: "50px",
+                                                    boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.10), 0 6px 10px 0 rgba(0, 0, 0, 0.09)",
+                                                    cursor: "pointer",
+                                                    display: "inline-block",
+                                                    marginTop: "15px",
+                                                    padding: "7.5px 15px 7.5px 15px",
+                                                }}>
+                                                <p style={{
+                                                    color: "white",
+                                                }}>
+                                                    Add a Property to Start
+                                                </p>
+                                            </div>
+                                        </Link>
+                                    </div> :
+                                    <div className="properties_dashboard_property_inner_box">
+                                        {this.renderProperties()}
+                                    </div>
+                                }
+                                
                             </div>
                         </div>
                         <NotificationSidebar data={{
                             state: {
+                                user: this.state.user,
                                 totalEstimateWorth: this.state.totalEstimateWorth,
                                 missingEstimate: this.state.missingEstimate 
                             }

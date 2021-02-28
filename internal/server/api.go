@@ -27,6 +27,8 @@ func (s *Server) HandleRoutes() {
 
 	r.HandleFunc("/api/validate/property", s.validateProperty).Methods("POST")
 
+	r.HandleFunc("/api/user/notifications/{id}", s.getNotificationsByUser).Methods("GET")
+
 	r.HandleFunc("/api/user/property/{id}", s.getPropertiesAddresses).Queries("addresses", "{addresses}").Methods("GET")
 	r.HandleFunc("/api/user/property/{id}", s.getProperties).Methods("GET")
 	r.HandleFunc("/api/user/property/{id}", s.removePropertyByUser).Queries("property_id", "{property_id}").Methods("DELETE")
@@ -143,7 +145,8 @@ func (s *Server) addUser(w http.ResponseWriter, r *http.Request) {
 	// Fill in required information.
 	now := time.Now().UTC()
 
-	user.ID = uuid.New().String()
+	userID := uuid.New().String()
+	user.ID = userID
 	user.CreatedAt = &now
 	user.LastLogin = &now
 
@@ -155,6 +158,21 @@ func (s *Server) addUser(w http.ResponseWriter, r *http.Request) {
 		log.Error().Err(err).Msg("error creating user")
 		http.Error(w, fmt.Sprintf("error creating user: %s", err.Error()), http.StatusBadRequest)
 		return
+	}
+
+	// Add a primary notification.
+	notification := db.Notification {
+		ID: uuid.New().String(),
+		UserID: userID,
+		CreatedAt: &now,
+		Body: "Welcome to Reime! Look around and explore.",
+		Seen: false,
+		Hide: false,
+	}
+
+	if err := s.DBHandle.AddNotificationByUser(userID, &notification); err != nil {
+		// Just log.
+		log.Error().Err(err).Msg("error adding initial notification by user")
 	}
 
 	RespondToRequest(w, user)

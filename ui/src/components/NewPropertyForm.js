@@ -171,79 +171,126 @@ class NewPropertyForm extends React.Component {
                             Please input your property's general information
                         </p>
                         <div className="form_box">
+                            <label className="new_property_form_input_label">
+                                ADDRESS LINE 1
+                            </label>
                             <input 
-                                placeholder="Address Line 1" 
+                                // placeholder="Address Line 1" 
                                 className="new_property_form_input new_property_form_input_long" 
                                 type="text" 
                                 name="address_one" 
                                 onChange={this.handleFieldChange}/>
+                            <label className="new_property_form_input_label">
+                                APT OR SUITE #
+                            </label>
                             <input 
-                                placeholder="APT or Suite #" 
+                                // placeholder="APT or Suite #" 
                                 className="new_property_form_input new_property_form_input_long" 
                                 type="text" 
                                 name="address_two" 
                                 onChange={this.handleFieldChange}/>
                             <div className="clearfix"/>
                             <div className="">
-                                <input 
-                                    placeholder="City" 
-                                    className="new_property_form_input_triple" 
-                                    type="text" 
-                                    name="city" 
-                                    onChange={this.handleFieldChange} />
-                                <input 
-                                    placeholder="State" 
-                                    className="new_property_form_input_triple" 
-                                    type="text" 
-                                    name="state" 
-                                    onChange={this.handleFieldChange} />
-                                <input 
-                                    placeholder="Zip Code" 
-                                    className="new_property_form_input_triple" 
-                                    type="text" 
-                                    name="zip_code" 
-                                    onChange={this.handleFieldChange} />
+                                <div className="new_property_form_input_triple_box">
+                                    <label className="new_property_form_input_label">
+                                        CITY
+                                    </label>
+                                    <input 
+                                        // placeholder="City" 
+                                        className="new_property_form_input_triple" 
+                                        type="text" 
+                                        name="city" 
+                                        onChange={this.handleFieldChange} />
+                                </div>
+                                <div className="new_property_form_input_triple_box">
+                                    <label className="new_property_form_input_label">
+                                        STATE
+                                    </label>
+                                    <input 
+                                        // placeholder="State" 
+                                        className="new_property_form_input_triple" 
+                                        type="text" 
+                                        name="state" 
+                                        onChange={this.handleFieldChange} />
+                                </div>
+                                <div className="new_property_form_input_triple_box">
+                                    <label className="new_property_form_input_label">
+                                        ZIP CODE
+                                    </label>
+                                    <input 
+                                        // placeholder="Zip Code" 
+                                        className="new_property_form_input_triple" 
+                                        type="text" 
+                                        name="zip_code" 
+                                        onChange={this.handleFieldChange} />
+                                </div>
                             </div>
                             <div className="clearfix"/>
                             <div className="form_footer_box">
-                                <select className="form_select_input" onChange={this.propertyTypeOnChange}>
-                                    <option name="SFH" value="SFH">
-                                        Single Family Home
-                                    </option>
-                                    <option name="manufactured" value="manufactured">
-                                        Manufactured
-                                    </option>
-                                    <option name="condo/ops" value="condo/ops">
-                                        Condo/Ops
-                                    </option>
-                                    <option name="multi-family" value="multi-family">
-                                        Multi-Family
-                                    </option>
-                                    <option name="apartment" value="apartment">
-                                        Apartment
-                                    </option>
-                                    <option name="lot/land" value="lot/land">
-                                        Lot/Land
-                                    </option>
-                                    <option name="townhome" value="townhome">
-                                        Townhome
-                                    </option>
-                                    <option name="commercial" value="commercial">
-                                        Commercial
-                                    </option>
-                                </select>
+                                <div style={{
+                                    float: "left",
+                                    width: "calc((100% - 50px - 3px)/3)",
+                                }}>
+                                    <label className="new_property_form_input_label">
+                                        PROPERTY TYPE
+                                    </label>
+                                    <div className="clearfix"/>
+                                    <select className="form_select_input" onChange={this.propertyTypeOnChange}>
+                                        <option name="SFH" value="SFH">
+                                            Single Family Home
+                                        </option>
+                                        <option name="manufactured" value="manufactured">
+                                            Manufactured
+                                        </option>
+                                        <option name="condo/ops" value="condo/ops">
+                                            Condo/Ops
+                                        </option>
+                                        <option name="multi-family" value="multi-family">
+                                            Multi-Family
+                                        </option>
+                                        <option name="apartment" value="apartment">
+                                            Apartment
+                                        </option>
+                                        <option name="lot/land" value="lot/land">
+                                            Lot/Land
+                                        </option>
+                                        <option name="townhome" value="townhome">
+                                            Townhome
+                                        </option>
+                                        <option name="commercial" value="commercial">
+                                            Commercial
+                                        </option>
+                                    </select>
+                                </div>
                                 {
                                     this.state.propertyType === "apartment" || 
                                     this.state.propertyType === "multi-family" || 
                                     this.state.propertyType === "commercial" ? 
-                                    <input 
-                                        placeholder="# of Units" 
-                                        className="new_property_form_input_short" 
-                                        type="number" 
-                                        name="number_of_units" 
-                                        onChange={this.handleFieldChange} />:
+                                    <div style={{
+                                        float: "left",
+                                        marginLeft: "25px",
+                                        paddingBottom: "0px",
+                                        width: "calc(((100% - 50px)/3) - 30px)",
+                                    }}>
+                                        <label className="new_property_form_input_label">
+                                            # OF UNITS
+                                        </label>
+                                        <div className="clearfix"/>
+                                        <input 
+                                            // placeholder="# of Units" 
+                                            className="new_property_form_input_short" 
+                                            type="number" 
+                                            name="number_of_units" 
+                                            onChange={this.handleFieldChange} />
+                                    </div>:
                                     <div></div>
                                 }
+                            </div>
+                            <div style={{
+                                float: "left",
+                                paddingBottom: "25px",
+                                width: "100%",
+                            }}>
                                 <div 
                                     onClick={() => this.setState({
                                         toDisplay: purchaseInformation
@@ -267,60 +314,87 @@ class NewPropertyForm extends React.Component {
                         </p>
                         <div className="form_box">
                             <div className="">
+                                <label className="new_property_form_input_label">
+                                    PURCHASE PRICE
+                                </label>
                                 <input 
-                                    placeholder="$ Purchase Price" 
+                                    // placeholder="$ Purchase Price" 
                                     className="new_property_form_input_triple" 
                                     type="number" 
                                     name="purchase_price" 
                                     onChange={this.handleFieldChange} />
-                                <input 
-                                    placeholder="Purchase Date: MM / YY" 
-                                    className="new_property_form_input_triple" 
-                                    type="text" 
-                                    name="purchase_date" 
-                                    onChange={this.handleFieldChange} />
-                                <select id="form_select_input_purchase_type" className="form_select_input" onChange={this.purchaseTypeOnChange}>
-                                    <option name="mortgage" value="mortgage">
-                                        Mortgage
-                                    </option>
-                                    <option name="cash" value="cash">
-                                        Cash
-                                    </option>
-                                    <option name="hard_money_loan" value="hard_money_loan">
-                                        Hard Money Loan
-                                    </option>
-                                    <option name="hard_money_loan" value="hard_money_loan">
-                                        Lease Option
-                                    </option>
-                                    <option name="hard_money_loan" value="hard_money_loan">
-                                        Seller Finance
-                                    </option>
-                                    <option name="hard_money_loan" value="hard_money_loan">
-                                        Loan
-                                    </option>
-                                    <option name="gift" value="gift">
-                                        Gift/Inheritance
-                                    </option>
-                                    <option name="other" value="other">
-                                        Other
-                                    </option>
-                                </select>
+                                <div className="clearfix"/>
+                                <div style={{
+                                    float: "left",
+                                    width: "calc(50% - 12.5px)",
+                                }}>
+                                    <label className="new_property_form_input_label">
+                                        PURCHASE DATE: MM/YY
+                                    </label>
+                                    <input 
+                                        // placeholder="Purchase Date: MM / YY" 
+                                        className="new_property_form_input_triple" 
+                                        type="text" 
+                                        name="purchase_date" 
+                                        onChange={this.handleFieldChange} />
+                                </div>
+                                <div style={{
+                                    float: "right",
+                                    width: "calc(50% - 12.5px)",
+                                }}>
+                                    <label className="new_property_form_input_label">
+                                        PURCHASE TYPE
+                                    </label>
+                                    <select id="form_select_input_purchase_type" className="form_select_input" onChange={this.purchaseTypeOnChange}>
+                                        <option name="mortgage" value="mortgage">
+                                            Mortgage
+                                        </option>
+                                        <option name="cash" value="cash">
+                                            Cash
+                                        </option>
+                                        <option name="hard_money_loan" value="hard_money_loan">
+                                            Hard Money Loan
+                                        </option>
+                                        <option name="hard_money_loan" value="hard_money_loan">
+                                            Lease Option
+                                        </option>
+                                        <option name="hard_money_loan" value="hard_money_loan">
+                                            Seller Finance
+                                        </option>
+                                        <option name="hard_money_loan" value="hard_money_loan">
+                                            Loan
+                                        </option>
+                                        <option name="gift" value="gift">
+                                            Gift/Inheritance
+                                        </option>
+                                        <option name="other" value="other">
+                                            Other
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
                             <div className="clearfix"/>
                             <div className="form_footer_box">
-                                <div 
-                                    onClick={() => this.setState({
-                                        toDisplay: incomeInformation
-                                    })}
-                                    className="form_continue_button">
-                                    Continue
-                                </div>
-                                <div 
-                                    onClick={() => this.setState({
-                                        toDisplay: generalInformation
-                                    })}
-                                    className="form_back_button">
-                                    Back
+                                <div style={{
+                                    float: "left",
+                                    marginTop: "10px",
+                                    paddingBottom: "25px",
+                                    width: "100%",
+                                }}>
+                                    <div 
+                                        onClick={() => this.setState({
+                                            toDisplay: incomeInformation
+                                        })}
+                                        className="form_continue_button">
+                                        Continue
+                                    </div>
+                                    <div 
+                                        onClick={() => this.setState({
+                                            toDisplay: generalInformation
+                                        })}
+                                        className="form_back_button">
+                                        Back
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -338,18 +412,29 @@ class NewPropertyForm extends React.Component {
                         </p>
                         <div className="form_box">
                             <div className="">
+                                <label className="new_property_form_input_label">
+                                    $ MONTHLY RENT
+                                </label>
                                 <input 
-                                    placeholder="$ Monthly Rent" 
+                                    // placeholder="$ Monthly Rent" 
                                     className="new_property_form_input_triple" 
                                     type="number" 
                                     name="monthly_rent" 
                                     onChange={this.handleFieldChange} />
+                                <div className="clearfix"/>
+                                <label className="new_property_form_input_label">
+                                    PURCHASE DATE: MM/YY
+                                </label>
                                 <input 
-                                    placeholder="Purchase Date: MM / YY" 
+                                    // placeholder="Purchase Date: MM / YY" 
                                     className="new_property_form_input_triple" 
                                     type="text" 
                                     name="state" 
                                     onChange={this.handleFieldChange} />
+                                <div className="clearfix"/>
+                                <label className="new_property_form_input_label">
+                                    PURCHASE TYPE
+                                </label>
                                 <select id="form_select_input_purchase_type" className="form_select_input" onChange={this.purchaseTypeOnChange}>
                                     <option name="mortgage" value="mortgage">
                                         Mortgage
@@ -379,19 +464,26 @@ class NewPropertyForm extends React.Component {
                             </div>
                             <div className="clearfix"/>
                             <div className="form_footer_box">
-                                <div 
-                                    onClick={() => {
-                                        this.validatePropertyWithLob()
-                                    }}
-                                    className="form_continue_button">
-                                    Add Property
-                                </div>
-                                <div 
-                                    onClick={() => this.setState({
-                                        toDisplay: generalInformation
-                                    })}
-                                    className="form_back_button">
-                                    Back
+                                <div style={{
+                                    float: "left",
+                                    marginTop: "25px",
+                                    paddingBottom: "25px",
+                                    width: "100%",
+                                }}>
+                                    <div 
+                                        onClick={() => {
+                                            this.validatePropertyWithLob()
+                                        }}
+                                        className="form_continue_button">
+                                        Add Property
+                                    </div>
+                                    <div 
+                                        onClick={() => this.setState({
+                                            toDisplay: purchaseInformation
+                                        })}
+                                        className="form_back_button">
+                                        Back
+                                    </div>
                                 </div>
                             </div>
                         </div>

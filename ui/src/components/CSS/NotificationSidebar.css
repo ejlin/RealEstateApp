@@ -1,37 +1,4 @@
 
-#main_dashboard_summary {
-    background-color: #F5F5FA;
-    right: 0;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    user-select: none;
-    width: 350px;
-    z-index: 20;
-}
-
-#main_dashboard_summary_estimated_net_worth {
-    background-color: #296CF6;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
-    /* box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 12px 40px 0 rgba(0, 0, 0, 0.19); */
-    height: 100px;
-    margin-left: 10%;
-    margin-top: calc(80px);
-    width: calc(80%);
-}
-
-
-#main_dashboard_summary_estimated_net_worth_subtitle {
-    background-color: transparent !important;
-    color: white;
-    float: left;
-    font-size: 0.9em;
-    margin-left: 25px;
-    margin-right: 5px;
-    margin-top: 17.5px;
-}
-
 #main_dashboard_summary_estimated_net_worth_title {
     background-color: transparent !important;
     color: white;

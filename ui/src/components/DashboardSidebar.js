@@ -49,12 +49,15 @@ class DashboardSidebar extends React.Component {
                 url: '/api/user/settings/profile/picture/' + this.state.user["id"],
             }).then(response => {
                 var src = response.data;
-                console.log(response.data);
                 this.setState({
                     profilePicture: src
                 })
             }).catch(error => {
                 console.log(error);
+                let statusCode = error.response.status;
+                if (statusCode === 404) {
+                    console.log("here");
+                }
                 this.setState({
                     profilePicture: null,
                 })
