@@ -11,6 +11,7 @@ class WarningModal extends React.Component {
         this.state = {
             titleText: this.props.data.state.titleText,
             subText: this.props.data.state.subText,
+            confirmFunc: this.props.data.state.confirmFunc,
             closeModal: this.props.data.state.closeModal,
         };
     }
@@ -109,6 +110,9 @@ class WarningModal extends React.Component {
                                 </p>
                             </div>
                             <div
+                                onMouseDown={() => {
+                                    this.state.confirmFunc();
+                                }}
                                 className="opacity"
                                 style={{
                                     backgroundColor: "#296CF6",

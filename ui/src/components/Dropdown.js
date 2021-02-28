@@ -104,8 +104,8 @@ class Dropdown extends React.Component {
                     height: this.state.height + "px",
                     fontWeight: this.state.fontWeight,
                     fontSize: this.state.fontSize,
-                    paddingLeft: "15px",
-                    paddingRight: "15px",
+                    paddingLeft: "12.5px",
+                    paddingRight: "10px",
                     textAlign: "center",
                 }}>
                     <div style={{

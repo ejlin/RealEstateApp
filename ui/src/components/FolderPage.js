@@ -37,16 +37,6 @@ const files = "files";
 
 const All = "All";
 
-export function renderNoFiles() {
-    return (
-        <div id="files_dashboard_no_files_box">
-            <p id="files_dashboard_no_files_box_title">
-                No Files
-            </p>
-        </div>
-    );
-}
-
 class FolderPage extends React.Component {
         
     constructor(props) {
@@ -93,6 +83,7 @@ class FolderPage extends React.Component {
         this.renderActiveFolderFiles = this.renderActiveFolderFiles.bind(this);
         this.setRecentlyUploadedFile = this.setRecentlyUploadedFile.bind(this);
         this.renderFileElements = this.renderFileElements.bind(this);
+        this.renderNoFiles = this.renderNoFiles.bind(this);
     }
 
     componentDidMount() {
@@ -143,6 +134,48 @@ class FolderPage extends React.Component {
             })
         }).catch(error => console.log(error));
     }
+
+    renderNoFiles() {
+        return (
+            <div style={{
+                borderRadius: "8px",
+                float: "left",
+                marginTop: "150px",
+                textAlign: "center",
+                width: "100%",
+            }}>
+                <p style={{
+                    color: "black",
+                    fontSize: "1.0em",
+                    fontWeight: "bold",
+                }}>
+                    No Files
+                </p>
+                <div 
+                    onMouseDown={() => {
+                        this.setState({
+                            displayUploadFileBox: true,
+                        })
+                    }}
+                    className="opacity"
+                    style={{
+                        backgroundColor: "#296cf6",
+                        borderRadius: "50px",
+                        boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.10), 0 6px 10px 0 rgba(0, 0, 0, 0.09)",
+                        cursor: "pointer",
+                        display: "inline-block",
+                        marginTop: "15px",
+                        padding: "7.5px 15px 7.5px 15px",
+                    }}>
+                    <p style={{
+                        color: "white",
+                    }}>
+                        Add a File to Start
+                    </p>
+                </div>
+            </div>
+        );
+    }    
 
     closeUploadFileModal() {
         this.setState({
@@ -353,7 +386,7 @@ class FolderPage extends React.Component {
     }
 
     renderActiveSearchFiles() {
-        return this.state.activeSearchFiles.length > 0 ? this.state.activeSearchFiles : renderNoFiles();
+        return this.state.activeSearchFiles.length > 0 ? this.state.activeSearchFiles : this.renderNoFiles();
     }
 
     renderFileElements(activeFolderFilesMap) {
@@ -382,7 +415,7 @@ class FolderPage extends React.Component {
         }
         if (fileElements.length === 0){
             fileElements.push(
-                renderNoFiles()
+                this.renderNoFiles()
             );
         }
         return fileElements;
@@ -483,7 +516,7 @@ class FolderPage extends React.Component {
                     <div id="files_dashboard_icons_box">
                         <div
                             className="page_button" 
-                            onClick={() => this.setState({
+                            onMouseDown={() => this.setState({
                                 displayUploadFileBox: true
                                 })}>Add File</div>
                         {this.state.activeFiles.size >= 1 ?
@@ -517,6 +550,7 @@ class FolderPage extends React.Component {
                 </div>
                 <NotificationSidebar data={{
                     state: {
+                        user: this.state.user,
                         totalEstimateWorth: this.state.totalEstimateWorth,
                         missingEstimate: this.state.missingEstimate 
                     }

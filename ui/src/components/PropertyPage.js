@@ -16,12 +16,9 @@ import AddNewTenantModal from './AddNewTenantModal.js';
 import AddNewPropertyManagerModal from './AddNewPropertyManagerModal.js';
 import WarningModal from '../utility/WarningModal.js';
 
-import { monthArr, 
-        numberWithCommas, 
+import {numberWithCommas, 
         openSignedURL, 
-        getDateSuffix, 
-        getTrailingTwelveMonths, 
-        getMonthAndYear,
+        getDateSuffix,
         getCashFlowData,
         getHistoricalAnalysisData } from '../utility/Util.js';
 import { renderNoFiles } from './FilesDashboard.js';
@@ -33,12 +30,9 @@ import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-pro
 import { GoFileDirectory } from 'react-icons/go';
 import { SiGoogleanalytics } from 'react-icons/si';
 import { FaMoneyCheck, FaCheckCircle } from 'react-icons/fa';
-import { MdDashboard, MdEdit, MdEmail, MdPhone, MdAttachMoney } from 'react-icons/md';
-import { IoMdBriefcase } from 'react-icons/io';
-import { IoTrashSharp, IoCaretBackOutline, IoSettingsSharp, IoAddCircleSharp, IoCalendarClearSharp } from 'react-icons/io5';
+import { MdDashboard, MdEdit } from 'react-icons/md';
+import { IoTrashSharp, IoCaretBackOutline, IoAddCircleSharp } from 'react-icons/io5';
 import { TiUser } from 'react-icons/ti';
-import { AiFillCalendar } from 'react-icons/ai';
-import { VscExpandAll } from 'react-icons/vsc';
 
 let URLBuilder = require('url-join');
 
@@ -201,6 +195,23 @@ class PropertyPage extends React.Component {
             console.log(errors);
         });
 
+    }
+
+    deleteProperty() {
+        let userID = this.state.user["id"];
+        let propertyID = this.state.property["id"];
+        let deletePropertyURL = URLBuilder('api/user/property/', userID, propertyID);
+        
+        axios({
+            method: 'delete',
+            url: deletePropertyURL,
+        }).then(response => {
+            this.setState({
+                redirectToPropertiesPage: true,
+            })
+        }).catch(error => {
+            console.log(error)
+        })
     }
 
     convertPropertyTypeToText(propertyType){
@@ -562,17 +573,17 @@ class PropertyPage extends React.Component {
                             <div className="view_to_display_info_left_box">
                                 <li className="view_to_display_info_box_bullet">
                                     <p className="view_to_display_info_box_subtitle">
-                                        Bought on: <b>{this.convertBoughDateToText(this.state.property["bought_date"])}</b>
+                                        Bought on: <b>{this.state.property["bought_date"] ? this.convertBoughDateToText(this.state.property["bought_date"]) : "mm/yy"}</b>
                                     </p>
                                 </li>
                                 <li className="view_to_display_info_box_bullet">
                                     <p className="view_to_display_info_box_subtitle">
-                                        Price Bought: <b>${numberWithCommas(this.state.property["price_bought"])}</b>
+                                        Price Bought: <b>${this.state.property["price_bought"] ? numberWithCommas(this.state.property["price_bought"]) : "-"}</b>
                                     </p>
                                 </li>
                                 <li className="view_to_display_info_box_bullet">
                                     <p className="view_to_display_info_box_subtitle">
-                                        Down Payment: <b>${numberWithCommas(this.state.property["down_payment"])}</b>
+                                        Down Payment: <b>${this.state.property["down_payment"] ? numberWithCommas(this.state.property["down_payment"]) : "-"}</b>
                                     </p>
                                 </li>
                             </div>
@@ -581,14 +592,14 @@ class PropertyPage extends React.Component {
                                     this.state.property["currently_rented"] ?
                                     <li className="view_to_display_info_box_bullet">
                                         <p className="view_to_display_info_box_subtitle">
-                                            Rent:&nbsp;<b>${numberWithCommas(this.state.property["price_rented"])}</b> / mo.
+                                            Rent:&nbsp;<b>${this.state.property["price_rented"] ? numberWithCommas(this.state.property["price_rented"]) : "-"}</b> / mo.
                                         </p>
                                     </li> :
                                     <div></div>
                                 }
                                 <li className="view_to_display_info_box_bullet">
                                     <p className="view_to_display_info_box_subtitle">
-                                        Loan/Mortgage:&nbsp;<b>${numberWithCommas(this.state.property["price_mortgage"])}</b> / mo.
+                                        Loan/Mortgage:&nbsp;<b>${this.state.property["price_mortgage"] ? numberWithCommas(this.state.property["price_mortgage"]) : "-"}</b> / mo.
                                     </p>
                                 </li>
                             </div>
@@ -675,12 +686,12 @@ class PropertyPage extends React.Component {
                                     <Dropdown
                                         backgroundColor={"#296CF6"}
                                         borderRadius={"50px"}
-                                        height={"30"}
+                                        height={"27.5"}
                                         width={"110"}
                                         defaultValue={this.state.percentPortfolioSelected}
                                         color={"white"}
                                         fontWeight={"bold"}
-                                        fontSize={"0.85em"}
+                                        fontSize={"0.80em"}
                                         selectables={["Estimate", "Price Bought", "Square Ft"]}
                                         callback={this.portfolioPercentageCallback}
                                     ></Dropdown>
@@ -692,7 +703,7 @@ class PropertyPage extends React.Component {
                                 }}
                                 className="percent_portfolio_circle_graph">
                                     <CircularProgressbarWithChildren
-                                        value={this.getPercentPortfolioValue()}
+                                        value={this.getPercentPortfolioValue() && !isNaN(parseFloat(this.getPercentPortfolioValue())) ? this.getPercentPortfolioValue() : 0.0}
                                         backgroundPadding={3}
                                         strokeWidth={12}
                                         styles={buildStyles({
@@ -709,7 +720,11 @@ class PropertyPage extends React.Component {
                                                         userSelect: "none",
                                                     }}
                                                     className="circular_progress_bar_inner_text_large">
-                                                    {numberWithCommas(Number(this.getPercentPortfolioValue()).toFixed(2))}%
+                                                    {
+                                                        this.getPercentPortfolioValue() && !isNaN(parseFloat(this.getPercentPortfolioValue())) ?
+                                                        numberWithCommas(Number(this.getPercentPortfolioValue()).toFixed(2)) : 
+                                                        "-"
+                                                    }%
                                                 </p>
                                                 <p 
                                                     style={{
@@ -1180,7 +1195,7 @@ class PropertyPage extends React.Component {
                                 </div>
                                 <div className="edit_view_second_box">
                                     <p>
-                                        {this.state.property["bought_date"]}
+                                        {this.state.property["bought_date"] ? this.state.property["bought_date"] : "MM/YY"}
                                     </p>
                                 </div>
                             </li>
@@ -1192,7 +1207,7 @@ class PropertyPage extends React.Component {
                                 </div>
                                 <div className="edit_view_second_box">
                                     <p>
-                                        ${numberWithCommas(this.state.property["price_bought"])}
+                                        ${this.state.property["price_bought"] ? numberWithCommas(this.state.property["price_bought"]) : "-"}
                                     </p>
                                 </div>
                             </li>
@@ -1216,7 +1231,7 @@ class PropertyPage extends React.Component {
                                 </div>
                                 <div className="edit_view_second_box">
                                     <p>
-                                        ${numberWithCommas(this.state.property["down_payment"])}
+                                        ${this.state.property["down_payment"] ? numberWithCommas(this.state.property["down_payment"]) : "-"}
                                     </p>
                                 </div>
                             </li>
@@ -1263,6 +1278,7 @@ class PropertyPage extends React.Component {
                                 state: {
                                     titleText: "Are you sure you would like to delete this property?",
                                     subText: "This action is irreversible and will delete all information associated with this property, including files, expenses, etc.",
+                                    confirmFunc: this.deleteProperty,
                                     closeModal: this.closeModal,
                                 }
                             }}
@@ -1501,6 +1517,7 @@ class PropertyPage extends React.Component {
                 </div>}
                 <NotificationSidebar data={{
                     state: {
+                        user: this.state.user,
                         totalEstimateWorth: this.state.totalEstimateWorth,
                         missingEstimate: this.state.missingEstimate 
                     }

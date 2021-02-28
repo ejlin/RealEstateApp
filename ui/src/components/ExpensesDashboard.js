@@ -32,8 +32,15 @@ let URLBuilder = require('url-join');
 export function renderNoExpenses() {
     return (
         <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
-            <RiErrorWarningFill className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></RiErrorWarningFill>
-            <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
+            {/* <RiErrorWarningFill className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></RiErrorWarningFill> */}
+            <p style={{
+                color: "grey",
+                fontSize: "1.1em",
+                marginLeft: "calc((100% - 120px)/2)",
+                marginTop: "0px",
+                textAlign: "center",
+                width: "120px",
+            }}>
                 No Expenses
             </p>
         </div>
@@ -155,6 +162,7 @@ class ExpensesDashboard extends React.Component {
         this.renderActiveSearchExpenses = this.renderActiveSearchExpenses.bind(this);
         this.convertExpenseToExpenseCard = this.convertExpenseToExpenseCard.bind(this);
         this.setActiveExpandedExpenseCard = this.setActiveExpandedExpenseCard.bind(this);
+        this.displayAddExpense = this.displayAddExpense.bind(this);
         this.renderPageLoadingView = this.renderPageLoadingView.bind(this);
     }
 
@@ -291,6 +299,12 @@ class ExpensesDashboard extends React.Component {
         })
     }
 
+    displayAddExpense() {
+        this.setState({
+            displayAddExpense: true,
+        })
+    }
+
     setToggleFields(field) {
         // This is a state machine. If the currFieldToggled is not this field,
         // set it to be in the "UP" direction. If it already is and in the "UP" direction,
@@ -413,7 +427,7 @@ class ExpensesDashboard extends React.Component {
                             Name
                         </p>
                         <BsArrowUp 
-                            onClick={() => {
+                            onMouseDown={() => {
                                 this.setToggleFields(title);
                             }}
                             className={this.state.currFieldToggled === title && this.state.currFieldToggledDirectionIsUp ?
@@ -425,7 +439,7 @@ class ExpensesDashboard extends React.Component {
                             Properties
                         </p>
                         <BsArrowUp 
-                            onClick={() => {
+                            onMouseDown={() => {
                                 this.setToggleFields(properties);
                             }}
                             className={this.state.currFieldToggled === properties && this.state.currFieldToggledDirectionIsUp ?
@@ -437,7 +451,7 @@ class ExpensesDashboard extends React.Component {
                             Frequency
                         </p>
                         <BsArrowUp 
-                            onClick={() => {
+                            onMouseDown={() => {
                                 this.setToggleFields(frequency);
                             }}
                             className={this.state.currFieldToggled === frequency && this.state.currFieldToggledDirectionIsUp ?
@@ -449,7 +463,7 @@ class ExpensesDashboard extends React.Component {
                             Date
                         </p>
                         <BsArrowUp 
-                            onClick={() => {
+                            onMouseDown={() => {
                                 this.setToggleFields(date);
                             }}
                             className={this.state.currFieldToggled === date && this.state.currFieldToggledDirectionIsUp ?
@@ -461,7 +475,7 @@ class ExpensesDashboard extends React.Component {
                             Amount
                         </p>
                         <BsArrowUp 
-                            onClick={() => {
+                            onMouseDown={() => {
                                 this.setToggleFields(amount);
                             }}
                             className={this.state.currFieldToggled === amount && this.state.currFieldToggledDirectionIsUp ?
@@ -548,7 +562,7 @@ class ExpensesDashboard extends React.Component {
                     float: "left",
                     height: "100vh",
                     marginLeft: "220px",
-                    width: "calc(100% - 220px - 350px)",
+                    width: "calc(100% - 220px - 375px)",
                 }}>
                     <div className="expenses_dashboard_parent_inner_box">
                         <div className="expenses_dashboard_title_box">
@@ -561,11 +575,7 @@ class ExpensesDashboard extends React.Component {
                         <div className="expenses_dashboard_body_box">
                             <div className="expenses_dashboard_buttons_box">
                                 <div 
-                                    onClick={() => {
-                                        this.setState({
-                                            displayAddExpense: true
-                                        })
-                                    }}
+                                    onMouseDown={() => this.displayAddExpense()}
                                     className="page_button">
                                     Add Expense
                                 </div>
@@ -582,6 +592,7 @@ class ExpensesDashboard extends React.Component {
                                             propertiesMap: this.state.propertiesMap,
                                             isSpecificProperty: false,
                                             specificPropertyAddress: null,
+                                            displayAddExpense: this.displayAddExpense,
                                             setActiveExpandedExpenseCard: this.setActiveExpandedExpenseCard,
                                         }
                                     }}/>

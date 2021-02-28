@@ -61,7 +61,7 @@
     float: left;
     height: calc(100vh - 50px);
     margin-left: 220px;
-    width: calc(100% - 220px - 350px);
+    width: calc(100% - 220px - 375px);
 }
 
 .property_page_inner_box {
@@ -234,7 +234,7 @@
 
 .analysis_chart_title {
     font-weight: bold;
-    font-size: 1.15em;
+    font-size: 1.0em;
     margin-bottom: 25px;
 }
 

@@ -218,6 +218,19 @@ func (s *Server) addPropertyByUser(w http.ResponseWriter, r *http.Request) {
 
 	sanitizeNewProperty(&property)
 
+	// Fill in required information.
+	createdAt := time.Now().UTC()
+
+	property.ID = uuid.New().String()
+	property.CreatedAt = &createdAt
+	property.UserID = userID
+
+	if err := s.DBHandle.AddPropertyByUser(userID, &property); err != nil {
+		ll.Error().Err(err).Msg("unable to add property by user")
+		http.Error(w, fmt.Sprintf("unable to add property by user: %w", err), http.StatusBadRequest)
+		return
+	}
+
 	estatedProperty, err := external.GetEstatedProperty(&property, s.EstatedAPIKey)
 	if err != nil {
 		// Just log, unable to get estimate from Estated.
@@ -235,19 +248,40 @@ func (s *Server) addPropertyByUser(w http.ResponseWriter, r *http.Request) {
 		// Just log, unable to get estimate from Estated.
 	}
 
-	// Fill in required information.
-	createdAt := time.Now().UTC()
+	RespondToRequest(w, property)
+	return
+}
 
-	property.ID = uuid.New().String()
-	property.CreatedAt = &createdAt
-	property.UserID = userID
 
-	if err := s.DBHandle.AddPropertyByUser(userID, &property); err != nil {
-		ll.Error().Err(err).Msg("unable to add property by user")
-		http.Error(w, fmt.Sprintf("unable to add property by user: %w", err), http.StatusBadRequest)
+// removePropertyByUser will remove a property according to the user.
+func (s *Server) removePropertyByUser(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Warn().Msg("user id not set")
+		http.Error(w, "user id not set", http.StatusBadRequest)
 		return
 	}
 
-	RespondToRequest(w, property)
-	return
+	ll := log.With().Str("user_id", userID).Logger()
+
+	propertyID, ok := vars["property_id"]
+	if !ok {
+		ll.Warn().Msg("property id not set")
+		http.Error(w, "property id not set", http.StatusBadRequest)
+		return
+	}
+
+	ll = ll.With().Str("property_id", propertyID).Logger()
+
+	err := s.DBHandle.RemovePropertyByID(userID, propertyID)
+	if err != nil {
+		ll.Warn().Err(err).Msg("unable to remove property by user")
+		http.Error(w, fmt.Sprintf("unable to remove property by user: %w", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Write([]byte("success"))
 }

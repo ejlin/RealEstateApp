@@ -116,11 +116,11 @@ class MainDashboard extends React.Component {
                 totalEstimateWorth: propertiesSummary["total_estimate_worth"],
                 totalNetWorth: numberWithCommas(propertiesSummary["total_net_worth"]),
                 totalRent: numberWithCommas(propertiesSummary["total_rent"]),
-                totalCost: numberWithCommas(Number(propertiesSummary["total_cost"].toFixed(2))),
-                annualRateOfReturn: Number(propertiesSummary["annual_rate_of_return"].toFixed(3)),
+                totalCost: propertiesSummary["total_cost"] ? numberWithCommas(Number(propertiesSummary["total_cost"].toFixed(2))) : 0.0,
+                annualRateOfReturn: propertiesSummary["annual_rate_of_return"] ? Number(propertiesSummary["annual_rate_of_return"].toFixed(3)) : 0.0,
                 totalProperties: numberWithCommas(propertiesSummary["total_properties"]),
-                averageLTV: Number(propertiesSummary["average_ltv"].toFixed(2)),
-                averageDTI: Number(propertiesSummary["average_dti"].toFixed(2)),
+                averageLTV: propertiesSummary["average_ltv"] ? Number(propertiesSummary["average_ltv"].toFixed(2)) : 0.0,
+                averageDTI: propertiesSummary["average_dti"] ? Number(propertiesSummary["average_dti"].toFixed(2)) : 0.0,
                 missingEstimate: propertiesSummary["missing_estimate"],
                 totalCurrentlyRented: propertiesSummary["total_currently_rented"],
                 rentPaymentDateMap: propertiesSummary["rent_payment_date_map"],
@@ -544,7 +544,18 @@ class MainDashboard extends React.Component {
                                                     className="main_dashboard_box_icon"></AiFillQuestionCircle>
                                             </div>
                                             <div className="clearfix"/>
-                                            {this.renderRentPaymentDateMap(false)}
+                                            {
+                                                this.state.rentPaymentDateMap ? 
+                                                this.renderRentPaymentDateMap(false) :
+                                                <div>
+                                                    <p style={{
+                                                        marginTop: "20px",
+                                                        textAlign: "center",
+                                                    }}>
+                                                        No Rent Schedule
+                                                    </p>
+                                                </div>
+                                            }
                                             {/* <div className="main_dashboard_key_insight_card">
                                                 <p className="main_dashboard_key_insight_card_title">
                                                     {this.state.totalCurrentlyRented ? this.state.totalCurrentlyRented : 0}

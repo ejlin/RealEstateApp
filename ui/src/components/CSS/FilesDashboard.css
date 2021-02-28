@@ -5,7 +5,7 @@
     min-width: 700px;
     overflow: scroll;
     position: absolute;
-    width: calc(100% - 220px - 350px);
+    width: calc(100% - 220px - 375px);
 }
 
 #files_dashboard_welcome_box {
@@ -342,21 +342,6 @@
     font-weight: bold;
     font-size: 1.3em;
     margin-bottom: 18px;
-}
-
-#files_dashboard_no_files_box {
-    border-radius: 8px;
-    float: left;
-    margin-top: 25px;
-    width: 100%; 
-}
-
-#files_dashboard_no_files_box_title {
-    color: grey;
-    font-size: 1.4em;
-    font-weight: bold;
-    line-height: 150px;
-    text-align: center;
 }
 
 input::-webkit-outer-spin-button,

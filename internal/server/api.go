@@ -31,7 +31,7 @@ func (s *Server) HandleRoutes() {
 
 	r.HandleFunc("/api/user/property/{id}", s.getPropertiesAddresses).Queries("addresses", "{addresses}").Methods("GET")
 	r.HandleFunc("/api/user/property/{id}", s.getProperties).Methods("GET")
-	r.HandleFunc("/api/user/property/{id}", s.removePropertyByUser).Queries("property_id", "{property_id}").Methods("DELETE")
+	r.HandleFunc("/api/user/property/{id}/{property_id}", s.removePropertyByUser).Methods("DELETE")
 	r.HandleFunc("/api/user/property/{id}", s.addPropertyByUser).Methods("POST")
 
 	r.HandleFunc("/api/user/tenants/{id}", s.getTenantsByUser).Methods("GET")
@@ -381,39 +381,6 @@ func (s *Server) getProperty(w http.ResponseWriter, r *http.Request) {
 	log.Warn().Msg("property id required")
 	http.Error(w, "property id required", http.StatusBadRequest)
 	return
-}
-
-// removePropertyByUser will remove a property according to the user.
-func (s *Server) removePropertyByUser(w http.ResponseWriter, r *http.Request) {
-
-	vars := mux.Vars(r)
-
-	userID, ok := vars["id"]
-	if !ok {
-		log.Warn().Msg("user id not set")
-		http.Error(w, "user id not set", http.StatusBadRequest)
-		return
-	}
-
-	ll := log.With().Str("user_id", userID).Logger()
-
-	propertyID, ok := vars["property_id"]
-	if !ok {
-		ll.Warn().Msg("property id not set")
-		http.Error(w, "property id not set", http.StatusBadRequest)
-		return
-	}
-
-	ll = ll.With().Str("property_id", propertyID).Logger()
-
-	err := s.DBHandle.RemovePropertyByID(userID, propertyID)
-	if err != nil {
-		ll.Warn().Err(err).Msg("unable to remove property by user")
-		http.Error(w, fmt.Sprintf("unable to remove property by user: %w", err), http.StatusBadRequest)
-		return
-	}
-
-	w.Write([]byte("success"))
 }
 
 /****** Helper Functions ******/

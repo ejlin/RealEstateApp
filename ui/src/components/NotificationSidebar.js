@@ -59,20 +59,25 @@ class NotificationSidebar extends React.Component {
         for (let i = 0; i < notifications.length; i++) {
             let notification = notifications[i];
             elements.push(
-                <NotificationCard data={{
-                    state: {
-                        notification: notification,
-                    }
-                }}
-                />
+                <div>
+                    <NotificationCard data={{
+                        state: {
+                            notification: notification,
+                        }
+                    }}
+                    />
+                </div>
             );
         }
+        elements.push(
+            <div className="clearfix"/>
+        );
         return (
             <div style={{
-                backgroundColor: "white",
-                borderRadius: "4px",
-                boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                height: "calc(100vh - 250px - 50px)",
                 marginTop: "25px",
+                overflow: "scroll",
+                paddingBottom: "0px",
                 width: "100%",
             }}>
                 {elements}
@@ -89,7 +94,7 @@ class NotificationSidebar extends React.Component {
                 position: "fixed",
                 top: "0",
                 userSelect: "none",
-                width: "350px",
+                width: "375px",
                 zIndex: "20",
             }}>
                 <div style={{
@@ -121,20 +126,53 @@ class NotificationSidebar extends React.Component {
                         ${this.state.totalEstimateWorth && !Number.isNaN(this.state.totalEstimateWorth) ? numberWithCommas(this.state.totalEstimateWorth) : 0}
                     </p>
                 </div>
-                <div id="main_dashboard_summary_notifications">
-                    <IoMdNotifications id="main_dashboard_summary_notifications_icon"></IoMdNotifications>
-                    <p id="main_dashboard_summary_notifications_title">
-                        Notifications
-                    </p>
-                    <div className="clearfix"/>
-                    {
-                        this.state.notifications ? this.renderNotifications() : 
-                        <div id="main_dashboard_summary_notifications_no_notifications">
-                            <p id="main_dashboard_summary_notifications_no_notifications_text">
-                                No notifications
+                <div style={{
+                    float: "left",
+                    marginLeft: "10%",
+                    marginTop: "30px",
+                    width: "80%",
+                }}>
+                    <div style={{                        
+                    }}>
+                        <div style={{
+                            float: "left",
+                        }}>
+                            <IoMdNotifications style={{
+                                float: "left",
+                                height: "25px",
+                                width: "25px",
+                            }}/>
+                            <p style={{
+                                float: "left",
+                                fontSize: "1.2em",
+                                fontWeight: "bold",
+                                lineHeight: "25px",
+                                marginLeft: "7.5px",
+                            }}>
+                                Notifications
                             </p>
                         </div>
-                    }
+                        <div 
+                            className="opacity"
+                            style={{
+                                color: "#236cf6",
+                                cursor: "pointer",
+                                float: "right",
+                                lineHeight: "25px",
+                            }}>
+                            See All
+                        </div>
+                        <div className="clearfix"/>
+                        {
+                            this.state.notifications ? this.renderNotifications() : 
+                            <div id="main_dashboard_summary_notifications_no_notifications">
+                                <p id="main_dashboard_summary_notifications_no_notifications_text">
+                                    No notifications
+                                </p>
+                            </div>
+                        }
+                    </div>
+                    
                 </div>
             </div>
         )

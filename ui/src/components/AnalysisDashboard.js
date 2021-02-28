@@ -489,7 +489,10 @@ class AnalysisDashboard extends React.Component {
                             <AiFillQuestionCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
                             <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
                                 <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
-                                    {Number(this.state.propertiesSummary["average_ltv"].toFixed(2))} %
+                                    { 
+                                        this.state.propertiesSummary["average_ltv"] ?
+                                        Number(this.state.propertiesSummary["average_ltv"].toFixed(2)) :
+                                        0.0} %
                                 </p>
                                 <div className="clearfix"/>
                                 <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_subtitle">
@@ -501,7 +504,10 @@ class AnalysisDashboard extends React.Component {
                             <AiFillQuestionCircle className="analysis_dashboard_advanced_inner_box_top_cards_box_element_add_icon"/>
                             <div className="analysis_dashboard_inner_box_top_cards_box_element_text_box"> 
                                 <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_text">
-                                    {Number(this.state.propertiesSummary["average_dti"].toFixed(2))} %
+                                    {
+                                        this.state.propertiesSummary["average_dti"] ?
+                                        Number(this.state.propertiesSummary["average_dti"].toFixed(2)) :
+                                        0.0} %
                                 </p>
                                 <div className="clearfix"/>
                                 <p className="analysis_dashboard_advanced_inner_box_top_cards_box_element_subtitle">

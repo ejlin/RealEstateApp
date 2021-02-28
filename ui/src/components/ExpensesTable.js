@@ -126,6 +126,7 @@ class ExpensesTable extends React.Component {
             isSpecificProperty: this.props.data.state.isSpecificProperty,
             specificPropertyAddress: this.props.data.state.specificPropertyAddress,
             setActiveExpandedExpenseCard: this.props.data.state.setActiveExpandedExpenseCard,
+            displayAddExpense: this.props.data.state.displayAddExpense,
             host: window.location.protocol + "//" + window.location.host,
         };
         this.displayEditExpenseModal = this.displayEditExpenseModal.bind(this);
@@ -347,11 +348,44 @@ class ExpensesTable extends React.Component {
 
     renderNoExpenses() {
         return (
-            <div className="expenses_dashboard_body_inner_box_no_expenses_inner_box">
-                <RiErrorWarningFill className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></RiErrorWarningFill>
-                <p className="expenses_dashboard_body_inner_box_no_expenses_inner_box_text">
+            <div style={{
+                borderRadius: "8px",
+                height: "50px",
+                marginBottom: "20px",
+                marginTop: "100px",
+                padding: "10px 0px 10px 0px",
+                position: "relative",
+                textAlign: "center",
+                width: "100%",
+            }}>
+                {/* <RiErrorWarningFill className="expenses_dashboard_body_inner_box_no_expenses_inner_box_icon"></RiErrorWarningFill> */}
+                <p style={{
+                    color: "black",
+                    fontSize: "1.1em",
+                    marginLeft: "calc((100% - 120px)/2)",
+                    marginTop: "0px",
+                    width: "120px",
+                }}>
                     No Expenses
                 </p>
+                <div 
+                    onMouseDown={() => {this.state.displayAddExpense()}}
+                    className="opacity"
+                    style={{
+                        backgroundColor: "#296cf6",
+                        borderRadius: "50px",
+                        boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.10), 0 6px 10px 0 rgba(0, 0, 0, 0.09)",
+                        cursor: "pointer",
+                        display: "inline-block",
+                        marginTop: "15px",
+                        padding: "7.5px 15px 7.5px 15px",
+                    }}>
+                    <p style={{
+                        color: "white",
+                    }}>
+                        Add an Expense to Start
+                    </p>
+                </div>
             </div>
         )
     }

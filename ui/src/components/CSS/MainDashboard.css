@@ -8,7 +8,7 @@ body {
     float: left;
     height: calc(100vh);
     margin-left: 220px;
-    width: calc(100% - 220px - 350px);
+    width: calc(100% - 220px - 375px);
     z-index: -1;
 }
 
@@ -123,7 +123,7 @@ body {
     height: 100px;
     margin-left: 35px;
     margin-top: 25px;
-    min-width: 250px;
+    min-width: 225px;
     width: calc((100% - 175px) / 4);
 }
 

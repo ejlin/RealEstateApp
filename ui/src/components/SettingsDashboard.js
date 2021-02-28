@@ -778,8 +778,30 @@ class SettingsDashboard extends React.Component {
                         <div id="settings_dashboard_user_information_box">
                             
                             {this.state.profilePicture ? 
-                            <img id="settings_dashboard_user_information_profile_picture" src={this.state.profilePicture} alt={"logo"}/> :
-                            <TiUser id="settings_dashboard_user_information_profile_picture_default"></TiUser>}
+                            <img 
+                                src={this.state.profilePicture} 
+                                alt={"logo"}
+                                style={{
+                                    backgroundColor: "white",
+                                    borderRadius: "50%",
+                                    boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                                    float: "left",
+                                    height: "225px",
+                                    marginLeft: "calc((100% - 225px)/2)",
+                                    marginRight: "calc((100% - 225px)/2)",
+                                    width: "225px",
+                                }}/> :
+                            <TiUser style={{
+                                backgroundColor: "white",
+                                borderRadius: "50%",
+                                color:  "#d3d3d3",
+                                float: "left",
+                                height: "175px",
+                                marginLeft: "calc((100% - 225px)/2)",
+                                marginRight: "calc((100% - 225px)/2)",
+                                padding: "25px",
+                                width: "175px",
+                            }}/>}
 
                             <label htmlFor="settings_dashboard_upload_profile_picture_button">
                                 <MdEdit id="settings_dashboard_user_information_profile_picture_edit_icon"></MdEdit>

@@ -68,29 +68,6 @@
     width: 275px;
 }
 
-#settings_dashboard_user_information_profile_picture {
-    background-color: white;
-    border-radius: 50%;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
-    float: left;
-    height: 225px;
-    margin-left: calc((100% - 225px)/2);
-    margin-right: calc((100% - 225px)/2);
-    width: 225px;
-}
-
-#settings_dashboard_user_information_profile_picture_default {
-    background-color:white;
-    border: 6px solid white;
-    border-radius: 50%;
-    color:  grey;
-    float: left;
-    height: 150px;
-    margin-left: calc((100% - 225px)/2);
-    padding: 30.5px;
-    width: 150px;
-}
-
 #settings_dashboard_user_information_profile_picture_edit_icon {
     background-color:#d3d3d3;
     border: 2px solid white;

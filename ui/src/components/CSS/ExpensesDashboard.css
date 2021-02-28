@@ -63,16 +63,6 @@
     width: 100%;
 }
 
-.expenses_dashboard_body_inner_box_no_expenses_inner_box {
-    border-radius: 8px;
-    height: 50px;
-    margin-bottom: 20px;
-    margin-top: 100px;
-    padding: 10px 0px 10px 0px;
-    position: relative;
-    width: 100%;
-}
-
 .expenses_dashboard_body_inner_box_no_expenses_inner_box_icon {
     color: grey;
     float: left;
@@ -81,15 +71,6 @@
     margin-top: 0px;
     position: absolute;
     width: 20px;
-}
-
-.expenses_dashboard_body_inner_box_no_expenses_inner_box_text {
-    color: grey;
-    font-size: 1.1em;
-    margin-left: calc((100% - 120px)/2);
-    margin-top: 0px;
-    text-align: center;
-    width: 120px;
 }
 
 .expenses_dashboard_display_add_expense_box {
