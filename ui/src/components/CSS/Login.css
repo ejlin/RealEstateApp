@@ -2,6 +2,7 @@
     border: 1px solid #d3d3d3;
     border-radius: 6px;
     font-size: 1.1em;
+    margin-bottom: 2.5px;
     margin-left: 5%;
     margin-right: 5%;
     margin-top: 15px;
@@ -41,13 +42,6 @@
 
 #login_submit:focus {
     outline: none;
-}
-
-#login_forgot_password_box {
-    margin-left: 5%;
-    margin-right: 5%;
-    margin-top: 15px;
-    width: 90%;
 }
 
 #login_forgot_password_text {

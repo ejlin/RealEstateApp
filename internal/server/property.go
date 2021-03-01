@@ -225,12 +225,6 @@ func (s *Server) addPropertyByUser(w http.ResponseWriter, r *http.Request) {
 	property.CreatedAt = &createdAt
 	property.UserID = userID
 
-	if err := s.DBHandle.AddPropertyByUser(userID, &property); err != nil {
-		ll.Error().Err(err).Msg("unable to add property by user")
-		http.Error(w, fmt.Sprintf("unable to add property by user: %w", err), http.StatusBadRequest)
-		return
-	}
-
 	estatedProperty, err := external.GetEstatedProperty(&property, s.EstatedAPIKey)
 	if err != nil {
 		// Just log, unable to get estimate from Estated.
@@ -246,6 +240,12 @@ func (s *Server) addPropertyByUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		ll.Warn().Err(err).Msg("unable to store property estimate in property creation")
 		// Just log, unable to get estimate from Estated.
+	}
+
+	if err := s.DBHandle.AddPropertyByUser(userID, &property); err != nil {
+		ll.Error().Err(err).Msg("unable to add property by user")
+		http.Error(w, fmt.Sprintf("unable to add property by user: %w", err), http.StatusBadRequest)
+		return
 	}
 
 	RespondToRequest(w, property)

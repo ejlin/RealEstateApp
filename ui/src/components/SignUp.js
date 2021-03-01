@@ -63,7 +63,7 @@ class SignUp extends React.Component {
             }} />
         }
         return (
-            <div className="App">
+            <div>
                 <form onSubmit={this.handleSubmit}>
                     <input className="signup_input" placeholder="First Name" type="text" name="first_name" onChange={this.handleFieldChange}/>
                     <input className="signup_input" placeholder="Last Name" type="text" name="last_name" onChange={this.handleFieldChange}/>

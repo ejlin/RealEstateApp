@@ -25,6 +25,7 @@ class NotificationSidebar extends React.Component {
             user: this.props.data.state.user,
             totalEstimateWorth: totalEstimateWorth,
             missingEstimate: this.props.data.state.missingEstimate,
+            isLoading: true,
         };
 
         this.renderNotifications = this.renderNotifications.bind(this);
@@ -47,9 +48,13 @@ class NotificationSidebar extends React.Component {
           
             this.setState({
                 notifications: notifications,
+                isLoading: false,
             });
         })).catch(errors => {
             console.log(errors);
+            this.setState({
+                isLoading: false,
+            })
         });
     }
 
@@ -86,6 +91,11 @@ class NotificationSidebar extends React.Component {
     }
 
     render() {
+        if (this.state.isLoading) {
+            return (
+                <div></div>
+            );
+        }
         return (
             <div style={{
                 backgroundColor: "#F5F5FA",

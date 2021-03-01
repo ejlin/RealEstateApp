@@ -78,7 +78,12 @@ class Login extends React.Component {
                 <input className="login_input" placeholder="Email" type="text" name="email" onChange={this.handleEmailChange}/>
                 <input className="login_input" placeholder="Password" type="password" name="password" onChange={this.handlePasswordChange} />
                 <input id="login_submit" type="submit" value="Log In"></input>
-                <div id="login_forgot_password_box">
+                <div style={{
+                    marginLeft: "5%",
+                    marginRight: "5%",
+                    marginTop: "10px",
+                    width: "90%",
+                }}>
                     <p id="login_forgot_password_text">
                         Forgot Password?
                     </p>

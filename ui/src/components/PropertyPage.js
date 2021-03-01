@@ -79,6 +79,8 @@ class PropertyPage extends React.Component {
         this.closeNewTenantModal = this.closeNewTenantModal.bind(this);
         this.closeNewPropertyManagerModal = this.closeNewPropertyManagerModal.bind(this);
 
+        this.deleteProperty = this.deleteProperty.bind(this);
+
         this.addTenant = this.addTenant.bind(this);
         this.renderTenants = this.renderTenants.bind(this);
         this.deleteTenant = this.deleteTenant.bind(this);
@@ -177,7 +179,6 @@ class PropertyPage extends React.Component {
             /* Handle our tenants response */
             const tenantsRequestResponse = responses[4];
             let tenants = tenantsRequestResponse.data;
-            console.log(tenants);
             this.setState({
                 expenses: expenses,
                 expensesMap: expensesMap,
@@ -200,7 +201,8 @@ class PropertyPage extends React.Component {
     deleteProperty() {
         let userID = this.state.user["id"];
         let propertyID = this.state.property["id"];
-        let deletePropertyURL = URLBuilder('api/user/property/', userID, propertyID);
+        let host = this.state.host;
+        let deletePropertyURL = URLBuilder(host, 'api/user/property/', userID, propertyID);
         
         axios({
             method: 'delete',
@@ -409,16 +411,6 @@ class PropertyPage extends React.Component {
         let elements = [];
         for (let i = 0; i < tenants.length; i++) {
             let tenant = tenants[i];
-            let borderRadius;
-            if (i === 0 && i === tenants.length - 1) {
-                borderRadius = "4px";
-            } else if (i === 0) {
-                borderRadius = "4px 4px 0px 0px";
-            } else if (i === tenants.length - 1) {
-                borderRadius = "0px 0px 4px 4px";
-            } else {
-                borderRadius = "0px";
-            }
 
             elements.push(
                 <TenantCard 
