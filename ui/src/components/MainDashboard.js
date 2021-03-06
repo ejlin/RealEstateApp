@@ -192,7 +192,7 @@ class MainDashboard extends React.Component {
         return (
             <div className="main_dashboard_bottom_left_box_bottom_inner_box_text_box">
                 <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_title_two">
-                    $6,600
+                    ${ this.state.rentCollected ? this.state.rentCollected : 0}
                 </p>
                 <div className="clearfix"/>
                 <p className="main_dashboard_bottom_left_box_bottom_inner_box_text_box_subtitle_two">
@@ -592,7 +592,7 @@ class MainDashboard extends React.Component {
                                                     Month
                                                 </div>
                                             </div>
-                                            {this.state.totalEstimateWorth >= this.state.yearAgoTotalEstimateWorth ?
+                                            { this.state.totalEstimateWorth >= this.state.yearAgoTotalEstimateWorth || this.state.totalEstimateWorth === 0.0 ?
                                              <ImArrowUp2 id="main_dashboard_yoy_icon"></ImArrowUp2> : 
                                              <ImArrowDown2 id="main_dashboard_yoy_icon"></ImArrowDown2>}
                                              <p className="main_dashboard_yoy_growth_title">

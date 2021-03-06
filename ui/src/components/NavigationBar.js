@@ -23,9 +23,9 @@ class NavigationBar extends React.Component {
 
     handleScroll = () => {
         if (window.scrollY > 20) {
-          document.querySelector("#navigation_bar_parent").className = "animate scroll";
+          document.querySelector("#navigation_bar_parent").className = "scroll";
         } else {
-          document.querySelector("#navigation_bar_parent").className = "animate";
+          document.querySelector("#navigation_bar_parent").className = "";
         }
     };
 
@@ -39,6 +39,19 @@ class NavigationBar extends React.Component {
                             <img src={logo} id="navigation_bar_logo"></img>
                         </li>
                     </Link>
+                    {/* <li style={{
+                        float: "right",
+                        fontSize: "1.1em",
+                        fontWeight: "bold",
+                        lineHeight: "75px",
+                    }}>
+                        <p style={{
+                            backgroundColor: "#296cf6",
+                            float: "left",
+                        }}>
+                        Sign Up
+                        </p>
+                    </li> */}
                     <li className="navigation_bar_subparent_list">
                         FAQ
                     </li>
