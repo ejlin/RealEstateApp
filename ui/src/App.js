@@ -13,6 +13,7 @@ import FolderPage from './components/FolderPage.js';
 import ExploreDashboard from './components/ExploreDashboard.js';
 import SettingsDashboard from './components/SettingsDashboard.js';
 import FeedbackForm from './components/FeedbackForm.js';
+import ContactPage from './components/ContactPage.js';
 
 import NewPropertyForm from './components/NewPropertyForm.js';
 import {
@@ -50,6 +51,7 @@ function App() {
           <Route path="/explore" render={(props) => <ExploreDashboard {...props}/>}/>
           <Route path="/settings" render={(props) => <SettingsDashboard {...props}/>}/>
           <Route path="/feedback" render={(props) => <FeedbackForm {...props}/>}/>
+          <Route path="/contact" render={(props) => <ContactPage {...props}/>}/>
           <Route path="/">
             <HomePage/>
           </Route>

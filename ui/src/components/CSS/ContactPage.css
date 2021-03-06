@@ -1,0 +1,26 @@
+.contact_page_input {
+    border: 1px solid #d3d3d3;
+    border-radius: 4px;
+    font-size: 1.0em;
+    margin-left: calc(10% - 15px);
+    margin-right: calc(10% - 15px);
+    margin-top: 15px;
+    padding: 10px 15px 10px 15px;
+    width: 80%;
+}
+
+.contact_page_input:first-child {
+    margin-top: 50px;
+}
+
+.contact_page_input:focus {
+    outline: none;
+}
+
+.contact_page_input::placeholder, textarea::placeholder {
+    color: black;
+}
+
+textarea:focus {
+    outline: none;
+}

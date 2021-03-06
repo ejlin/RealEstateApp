@@ -381,7 +381,7 @@ class HomePage extends React.Component {
                                 fontWeight: "bold",
                                 
                             }}>
-                                Properties
+                                Expenses
                             </p>
                             <p style={{
                                 fontFamily: "'Poppins', sans-serif",
@@ -449,7 +449,7 @@ class HomePage extends React.Component {
                                 fontWeight: "bold",
                                 
                             }}>
-                                Analysis
+                                Files
                             </p>
                             <p style={{
                                 fontFamily: "'Poppins', sans-serif",
