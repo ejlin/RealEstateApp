@@ -63,16 +63,14 @@ class SignUp extends React.Component {
             }} />
         }
         return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <input className="signup_input" placeholder="First Name" type="text" name="first_name" onChange={this.handleFieldChange}/>
-                    <input className="signup_input" placeholder="Last Name" type="text" name="last_name" onChange={this.handleFieldChange}/>
-                    <input className="signup_input" placeholder="Email" type="text" name="email" onChange={this.handleFieldChange}/>
-                    <input className="signup_input" placeholder="Password" type="password" name="password" onChange={this.handleFieldChange} />
-                    <input className="signup_input" placeholder="Confirm Password" type="password" name="confirm_password" onChange={this.handleFieldChange} />
-                    <input id="signup_submit" type="submit" value="Sign Up"></input>
-                </form>
-            </div>
+            <form onSubmit={this.handleSubmit}>
+                <input className="signup_input" placeholder="First Name" type="text" name="first_name" onChange={this.handleFieldChange}/>
+                <input className="signup_input" placeholder="Last Name" type="text" name="last_name" onChange={this.handleFieldChange}/>
+                <input className="signup_input" placeholder="Email" type="text" name="email" onChange={this.handleFieldChange}/>
+                <input className="signup_input" placeholder="Password" type="password" name="password" onChange={this.handleFieldChange} />
+                <input className="signup_input" placeholder="Confirm Password" type="password" name="confirm_password" onChange={this.handleFieldChange} />
+                <input id="signup_submit" type="submit" value="Sign Up" className="opacity"></input>
+            </form>
         )
     }
 }

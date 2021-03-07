@@ -74,14 +74,19 @@ class Login extends React.Component {
             }} />
         }
         return (
-            <form onSubmit={this.handleSubmit}>
+            <form 
+                style={{
+                    float: "left",
+                }}
+                onSubmit={this.handleSubmit}>
                 <input className="login_input" placeholder="Email" type="text" name="email" onChange={this.handleEmailChange}/>
                 <input className="login_input" placeholder="Password" type="password" name="password" onChange={this.handlePasswordChange} />
                 <input id="login_submit" type="submit" value="Log In"></input>
                 <div style={{
                     marginLeft: "5%",
                     marginRight: "5%",
-                    marginTop: "10px",
+                    marginTop: "5px",
+                    paddingBottom: "20px",
                     width: "90%",
                 }}>
                     <p id="login_forgot_password_text">

@@ -10,6 +10,10 @@
     width: calc(90% - 2px - 30px);
 }
 
+.login_input:first-child {
+    margin-top: 25px;
+}
+
 .login_input:focus {
     border: 1px solid  #296CF6;
     outline: none;
@@ -22,7 +26,7 @@
 #login_submit {
     background-color: #417df7;
     border: none;
-    border-radius: 6px;
+    border-radius: 50px;
     color: white;
     cursor: pointer;
     font-size: 1.1em;

@@ -8,9 +8,19 @@ import Footer from './Footer.js';
 import './CSS/HomePage.css';
 
 import HomePageDash from './Images/HomePageDash.png';
+import PropertyCard from './Images/PropertyCard.png';
 
 import { Link } from "react-router-dom";
 import { MdPlayArrow } from 'react-icons/md';
+
+import { BsFillHouseFill } from 'react-icons/bs';
+import { GoFileDirectory } from 'react-icons/go';
+import { SiGoogleanalytics } from 'react-icons/si';
+import { IoSettingsSharp } from 'react-icons/io5';
+import { MdFeedback, MdDashboard } from 'react-icons/md';
+import { FiChevronDown } from 'react-icons/fi';
+import { FaMoneyCheck } from 'react-icons/fa';
+import { TiUser } from 'react-icons/ti';
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -19,14 +29,6 @@ class HomePage extends React.Component {
         this.state = {
             isLogin: true
         };
-
-        this.setLogin = this.setLogin.bind(this);
-    }
-    
-    setLogin(login) {
-        this.setState({
-            isLogin: login
-        })
     }
 
     render() {
@@ -39,7 +41,7 @@ class HomePage extends React.Component {
                     <div style={{
                         backgroundColor: "white",
                         // "#EEF0F3",
-                        height: "calc(100vh - 300px)",
+                        height: "calc(100vh - 250px)",
                         paddingTop: "50px",
                         width: "100%"
                         
@@ -71,31 +73,172 @@ class HomePage extends React.Component {
                                 Unlock your full potential. Let us handle the book-keeping so you can do what you do best. Invest.
                             </p>
                             <div className="clearfix"/>
-                            <div id="home_page_parent_signup_button" onClick={() => this.setLogin(false)}>
+                            <div 
+                                id="home_page_parent_signup_button" 
+                                onClick={() => this.setState({
+                                    isLogin: false,
+                                })}>
                                 Create Account
                             </div>
                         </div>
                         <div style={{
-                            backgroundColor: "white",
-                            borderRadius: "10px",
-                            boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 10px 0 rgba(0, 0, 0, 0.1)",
                             float: "right",
                             marginRight: "18%",
                             marginTop: "calc(((700px - 350px) / 2) - 40px)",
                             width: "425px",
                         }}>
-                            <div id="home_page_parent_login_signup_box" className={this.state.isLogin ? "login_height" : "signup_height"}>
                             {this.state.isLogin ? 
                                 <div>
-                                    <Login></Login>
-                                    <div className="clearfix"/>
-                                    <input id="home_page_create_account" type="submit" value="Create Account" onClick={() => this.setLogin(false)}></input>
+                                    <div style={{
+                                        backgroundColor: "white",
+                                        borderRadius: "10px",
+                                        boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 10px 0 rgba(0, 0, 0, 0.1)",
+                                        float: "left",
+                                    }}>
+                                        <Login></Login>
+                                    </div>
+                                    <input 
+                                        id="home_page_create_account" 
+                                        className="opacity" 
+                                        type="submit" 
+                                        value="Create Account" onClick={() => this.setState({
+                                            isLogin: false,
+                                        })}></input>
                                 </div> :
-                                <div>
-                                    <SignUp></SignUp>
-                                    <div className="clearfix"/>
-                                    <input id="home_page_create_account" type="submit" value="Log In" onClick={() => this.setLogin(true)}></input>
+                                    <div>
+                                        <div style={{
+                                        backgroundColor: "white",
+                                        borderRadius: "10px",
+                                        boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 10px 0 rgba(0, 0, 0, 0.1)",
+                                        float: "left",
+                                    }}>
+                                        <SignUp/>
+                                        <div style={{
+                                            paddingBottom: "15px",
+                                        }}>
+                                            <p  
+                                                className="home_page_have_account_link opacity"
+                                                onMouseDown={() => {
+                                                    this.setState({
+                                                        isLogin: true,
+                                                    });
+                                                }}
+                                                style={{
+                                                    cursor: "pointer",
+                                                    textAlign: "center",
+                                                }}>Have an account? Log In</p>
+                                        </div>
+                                    </div>
                                 </div>}
+                        </div>
+                    </div>
+                    <div style={{
+                        backgroundColor: "#296cf6",
+                        height: "200px",
+                        width: "100%",
+                    }}>
+                        <div style={{
+                            float: "left",
+                            marginLeft: "18%",
+                            marginRight: "18%",
+                            marginTop: "50px",
+                            textAlign: "center",
+                            width: "64%",
+                        }}>
+                            <div style={{
+                                float: "left",
+                                width: "20%",
+                            }}>
+                                <MdDashboard style={{
+                                    color: "white",
+                                    height: "50px",
+                                    width: "50px",
+                                }}/>
+                                <p style={{
+                                    color: "white", 
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "1.2em",
+                                    fontWeight: "bold",
+                                    marginTop: "10px",
+                                }}>
+                                    Overview
+                                </p>
+                            </div>
+                            <div style={{
+                                float: "left",
+                                width: "20%",
+                            }}>
+                                <BsFillHouseFill style={{
+                                    color: "white",
+                                    height: "50px",
+                                    width: "50px",
+                                }}/>
+                                <p style={{
+                                    color: "white", 
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "1.2em",
+                                    fontWeight: "bold",
+                                    marginTop: "10px",
+                                }}>
+                                    Properties
+                                </p>
+                            </div>
+                            <div style={{
+                                float: "left",
+                                width: "20%",
+                            }}>
+                                <SiGoogleanalytics style={{
+                                    color: "white",
+                                    height: "50px",
+                                    width: "50px",
+                                }}/>
+                                <p style={{
+                                    color: "white", 
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "1.2em",
+                                    fontWeight: "bold",
+                                    marginTop: "10px",
+                                }}>
+                                    Analysis
+                                </p>
+                            </div>
+                            <div style={{
+                                float: "left",
+                                width: "20%",
+                            }}>
+                                <FaMoneyCheck style={{
+                                    color: "white",
+                                    height: "50px",
+                                    width: "50px",
+                                }}/>
+                                <p style={{
+                                    color: "white", 
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "1.2em",
+                                    fontWeight: "bold",
+                                    marginTop: "10px",
+                                }}>
+                                    Expenses
+                                </p>
+                            </div>
+                            <div style={{
+                                float: "left",
+                                width: "20%",
+                            }}>
+                                <GoFileDirectory style={{
+                                    color: "white",
+                                    height: "50px",
+                                    width: "50px",
+                                }}/>
+                                <p style={{
+                                    color: "white", 
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "1.2em",
+                                    fontWeight: "bold",
+                                    marginTop: "10px",
+                                }}>
+                                    Files
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -287,10 +430,10 @@ class HomePage extends React.Component {
                                 style={{
                                     borderRadius: "8px",
                                     boxShadow: "2px 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
-                                    width: "125%",
+                                    width: "250px",
                                     zIndex: "-1",
                                 }}
-                                src={HomePageDash}></img>
+                                src={PropertyCard}></img>
                         </div>
                     </div>
                     <div className="clearfix"/>

@@ -10,10 +10,14 @@
     width: calc(90% - 2px - 30px);
 }
 
+.signup_input:first-child {
+    margin-top: 25px;
+}
+
 #signup_submit {
-    background-color: #417df7;
+    background-color: #3BAD2D;
     border: none;
-    border-radius: 6px;
+    border-radius: 50px;
     color: white;
     cursor: pointer;
     font-size: 1.2em;
@@ -25,10 +29,6 @@
     text-align: center;
     transition: 0.5s;
     width: calc(90%);
-}
-
-#signup_submit:hover {
-    background-color: #296CF6;
 }
 
 #signup_submit:focus {

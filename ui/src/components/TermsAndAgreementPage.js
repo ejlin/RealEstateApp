@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './CSS/ContactPage.css';
+import './CSS/TermsAndAgreementPage.css';
 
 import logo from './Images/LogoStretch.png';
 
@@ -11,7 +11,7 @@ import { BsFillHouseFill } from 'react-icons/bs';
 import { Link } from "react-router-dom";
 import { MdPlayArrow } from 'react-icons/md';
 
-class ContactPage extends React.Component {
+class TermsAndAgreementPage extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -207,4 +207,4 @@ class ContactPage extends React.Component {
     }
 }
 
-export default ContactPage;
+export default TermsAndAgreementPage;
