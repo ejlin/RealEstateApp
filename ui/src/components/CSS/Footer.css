@@ -1,8 +1,10 @@
 .footer_title {
+    font-family: 'Poppins', sans-serif;
     font-weight: bold;
 }
 
 .footer_subtitle {
     cursor: pointer;
+    font-family: 'Poppins', sans-serif;
     margin-top: 15px;
 }

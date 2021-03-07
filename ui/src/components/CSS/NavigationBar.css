@@ -36,7 +36,8 @@
     color: black;
     cursor: pointer;
     float: right;
-    font-size: 1.1em;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.0em;
     font-weight: bold;
     margin-left: 40px;
     line-height: 75px;

@@ -95,9 +95,18 @@ class Footer extends React.Component {
                                 Contact
                             </p>
                         </Link>
-                        <p className="footer_subtitle opacity">
-                            Terms & Agreements
-                        </p>
+                        <Link 
+                            style={{
+                                color: "black",
+                                textDecoration: "none",
+                            }}
+                            to={{
+                                pathname: "/termsandagreements"
+                            }}>
+                            <p className="footer_subtitle opacity">
+                                Terms & Agreements
+                            </p>
+                        </Link>
                     </div>
                 </div>
             </div>

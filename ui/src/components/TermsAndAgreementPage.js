@@ -39,7 +39,7 @@ class TermsAndAgreementPage extends React.Component {
                             fontWeight: "bold",
                             textAlign: "center",
                         }}>
-                            Contact Us
+                            Terms & Agreements
                         </p>
                         <p style={{
                             fontFamily: "'Poppins', sans-serif",
@@ -47,7 +47,7 @@ class TermsAndAgreementPage extends React.Component {
                             marginTop: "15px",
                             textAlign: "center",
                         }}>
-                            Have a Question? Please fill out the form and we'll respond shortly
+                            Please read our Terms & Agreements carefully as it pertains to you
                         </p>
                         <div style={{
                             boxShadow: "2px 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
@@ -56,148 +56,54 @@ class TermsAndAgreementPage extends React.Component {
                             width: "100%",
                         }}>
                             <div style={{
-                                backgroundColor: "#296cf6",
-                                borderRadius: "8px 0px 0px 8px",
-                                float: "left",
-                                height: "650px",
-                                textAlign: "center",
-                                width: "50%",
+                                marginLeft: "18%",
+                                marginRight: "18%",
+                                width: "64%",
                             }}>
-                                <BsFillHouseFill style={{
-                                    backgroundColor: "white",
-                                    border: "5px solid white",
-                                    borderRadius: "50%",
-                                    color: "#296cf6",
-                                    height: "50px",
-                                    marginTop: "50px",
-                                    padding: "15px",
-                                    width: "50px",
-                                }}/>
                                 <p style={{
-                                    color: "white",
-                                    fontFamily: "'Poppins', sans-serif",
-                                    fontSize: "1.4em",
-                                    fontWeight: "bold",
-                                    marginTop: "20px",
-                                }}>
-                                    How can we Help?
-                                </p>
-                                <p style={{
-                                    color: "white",
                                     fontFamily: "'Poppins', sans-serif",
                                     fontSize: "1.1em",
                                     fontWeight: "bold",
-                                    marginLeft: "10%",
-                                    marginRight: "10%",
-                                    marginTop: "50px",
-                                    width: "80%",
                                 }}>
-                                    Tell us about yourself and your question. Be as descriptive as possible so we can help you to the best of our ability.
-                                </p>
-                                <p style={{
-                                    color: "white",
-                                    fontFamily: "'Poppins', sans-serif",
-                                    fontSize: "1.25em",
-                                    fontWeight: "bold",
-                                    marginLeft: "7.5%",
-                                    marginRight: "7.5%",
-                                    marginTop: "50px",
-                                    width: "85%",
-                                }}>
-                                    Empowering the everyday Real Estate Investor. Real Estate Investing Made Easy.
-                                </p>
-                                <div 
-                                    className="opacity"
-                                    style={{
-                                        backgroundColor: "white",
-                                        borderRadius: "50px",
-                                        color: "#296cf6",
-                                        cursor: "pointer",
-                                        display: "inline-block",
-                                        fontWeight: "bold",
-                                        marginTop: "50px",
-                                        padding: "12.5px 25px 12.5px 25px",
-                                    }}>
-                                    Sign Up Instead
-                                </div>
-                                <p 
-                                    className="opacity"
-                                    style={{
-                                        color: "white",
-                                        cursor: "pointer",
-                                        fontWeight: "bold",
-                                        marginTop: "15px",
-                                    }}>
-                                    Back Home
+                                    asdfskfhsakldhjflksdhfsd
                                 </p>
                             </div>
-                            <div style={{
+                        </div>
+                    </div>
+                    <div className="clearfix"/>
+                    <div style={{
+                        backgroundColor: "#296cf6",
+                        marginTop: "100px",
+                        paddingBottom: "75px",
+                        paddingTop: "75px",
+                        textAlign: "center",
+                        width: "100%",
+                    }}>
+                        <p style={{
+                            color: "white",
+                            display: "inline-block",
+                            fontFamily: "'Poppins', sans-serif",
+                            fontSize: "2.4em",
+                            fontWeight: "bold",
+                            width: "64%",
+                        }}>
+                            Accelerate your Real Estate Career
+                        </p>
+                        <div className="clearfix"/>
+                        <div 
+                            className="opacity"
+                            style={{
                                 backgroundColor: "white",
-                                borderRadius: "0px 8px 8px 0px",
-                                float: "left",
-                                height: "650px",
-                                width: "50%",
+                                borderRadius: "50px",
+                                color: "#296cf6",
+                                cursor: "pointer",
+                                display: "inline-block",
+                                fontSize: "1.2em",
+                                fontWeight: "bold",
+                                marginTop: "40px",
+                                padding: "15px 35px 15px 35px",
                             }}>
-                                <input 
-                                    className="contact_page_input"
-                                    placeholder="Name"
-                                ></input>
-                                <input 
-                                    className="contact_page_input"
-                                    placeholder="Email"
-                                ></input>
-                                <div className="clearfix"/>
-                                <label style={{
-                                    float: "left",
-                                    fontFamily: "'Poppins', sans-serif",
-                                    marginLeft: "calc(10% - 15px)",
-                                    marginRight: "calc(10% - 15px)",
-                                    marginTop: "15px",
-                                    width: "80%",
-                                }}>Additional Information</label>
-                                <textarea 
-                                    maxLength="750"
-                                    placeholder="Additional Information"
-                                    style={{
-                                        border: "1px solid #d3d3d3",
-                                        borderRadius: "4px",
-                                        fontSize: "1.0em",
-                                        height: "200px",
-                                        marginLeft: "calc(10% - 15px)",
-                                        marginRight: "calc(10% - 15px)",
-                                        marginTop: "15px",
-                                        padding: "10px 15px 10px 15px",
-                                        resize: "none",
-                                        width: "80%",
-                                    }}/>
-                                <p style={{
-                                    marginLeft: "calc(10% - 15px)",
-                                    marginRight: "calc(10% - 15px)",
-                                    marginTop: "15px",
-                                    width: "80%",
-                                }}>
-                                    By submitting this form, I agree that ReiMe may store and use the information provided above for the sole express purpose of contacting me about my inquiry.
-                                </p>
-                                <div style={{
-                                    marginTop: "30px",
-                                    textAlign: "center",
-                                }}>
-                                    <div 
-                                        className="opacity"
-                                        style={{
-                                            backgroundColor: "#296cf6",
-                                            borderRadius: "50px",
-                                            color: "white",
-                                            cursor: "pointer",
-                                            display: "inline-block",
-                                            fontSize: "1.1em",
-                                            fontWeight: "bold",
-                                            padding: "12.5px 20px 12.5px 20px",
-                                        }}>
-                                        Contact Us
-                                    </div>
-                                </div>
-                            </div>
+                            Sign Up
                         </div>
                     </div>
                 </div>

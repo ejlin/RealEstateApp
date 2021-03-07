@@ -39,19 +39,32 @@ class NavigationBar extends React.Component {
                             <img src={logo} id="navigation_bar_logo"></img>
                         </li>
                     </Link>
-                    {/* <li style={{
-                        float: "right",
-                        fontSize: "1.1em",
-                        fontWeight: "bold",
-                        lineHeight: "75px",
-                    }}>
-                        <p style={{
-                            backgroundColor: "#296cf6",
-                            float: "left",
+                    <li 
+                        style={{
+                            float: "right",
+                            fontWeight: "bold",
+                            marginLeft: "40px",
+                            marginTop: "calc((75px - 40px)/2)",
                         }}>
+                        <p 
+                            className="opacity"
+                            style={{
+                                backgroundColor: "#296cf6",
+                                borderRadius: "50px",
+                                color: "white",
+                                cursor: "pointer",
+                                fontFamily: "'Poppins', sans-serif",
+                                float: "left",
+                                fontSize: "1.0em",
+                                height: "40px",
+                                lineHeight: "40px",
+                                paddingLeft: "20px",
+                                paddingRight: "20px",
+                                // padding: "7.5px 20px 7.5px 20px",
+                            }}>
                         Sign Up
                         </p>
-                    </li> */}
+                    </li>
                     <li className="navigation_bar_subparent_list">
                         FAQ
                     </li>

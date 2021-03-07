@@ -4,6 +4,7 @@ import { FiCheck } from 'react-icons/fi';
 import { BsFillHouseFill } from 'react-icons/bs';
 
 import NavigationBar from './NavigationBar.js';
+import Footer from './Footer.js';
 
 import './CSS/PricingPage.css';
 import './CSS/Style.css';
@@ -194,6 +195,7 @@ class PricingPage extends React.Component {
                         </div>
                     </div>
                 </div>
+                <Footer/>
             </div>
         )
     }
