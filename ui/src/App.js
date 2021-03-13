@@ -5,6 +5,7 @@ import SignUpSelectPricingPlan from './components/SignUpSelectPricingPlan.js';
 import Login from './components/Login.js';
 import MainDashboard from './components/MainDashboard.js';
 import PropertiesDashboard from './components/PropertiesDashboard.js';
+import SignUpPage from './components/SignUpPage.js';
 import PropertyPage from './components/PropertyPage.js';
 import AnalysisDashboard from './components/AnalysisDashboard.js';
 import ExpensesDashboard from './components/ExpensesDashboard.js';
@@ -53,6 +54,7 @@ function App() {
           <Route path="/settings" render={(props) => <SettingsDashboard {...props}/>}/>
           <Route path="/feedback" render={(props) => <FeedbackForm {...props}/>}/>
           <Route path="/contact" render={(props) => <ContactPage {...props}/>}/>
+          <Route path="/signup" render={(props) => <SignUpPage {...props}/>}/>
           <Route path="/termsandagreements" render={(props) => <TermsAndAgreementPage {...props}/>}/>
           <Route path="/">
             <HomePage/>

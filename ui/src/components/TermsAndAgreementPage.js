@@ -16,6 +16,10 @@ class TermsAndAgreementPage extends React.Component {
         super(props);
     }
 
+    componentDidMount() {
+        window.scrollTo(0, 0);
+    }
+
     render() {
         return (
             <div>
@@ -63,7 +67,6 @@ class TermsAndAgreementPage extends React.Component {
                                 <p style={{
                                     fontFamily: "'Poppins', sans-serif",
                                     fontSize: "1.1em",
-                                    fontWeight: "bold",
                                 }}>
                                     asdfskfhsakldhjflksdhfsd
                                 </p>

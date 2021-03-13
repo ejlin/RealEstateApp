@@ -63,9 +63,16 @@ class Footer extends React.Component {
                         <p className="footer_title">
                             Navigation
                         </p>
-                        <p className="footer_subtitle opacity">
-                            Pricing
-                        </p>
+                        <Link 
+                            style={{
+                                color: "black",
+                                textDecoration: "none",
+                            }}
+                            to="/pricing">
+                            <p className="footer_subtitle opacity">
+                                Pricing
+                            </p>
+                        </Link>
                         <p className="footer_subtitle opacity">
                             Company
                         </p>

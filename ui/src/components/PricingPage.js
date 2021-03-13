@@ -14,6 +14,10 @@ class PricingPage extends React.Component {
         super(props);
     }
 
+    componentDidMount() {
+        window.scrollTo(0, 0);
+    }
+
     render() {
         return (
             <div>
@@ -186,7 +190,7 @@ class PricingPage extends React.Component {
                                 <p className="pricing_page_custom_solutions_sales_text">
                                     Don't see a plan that fits your needs? Talk to 
                                 </p>
-                                <div className="pricing_page_custom_solutions_sales_button">
+                                <div className="pricing_page_custom_solutions_sales_button opacity">
                                     <p className="pricing_page_custom_solutions_sales_button_text">
                                         Sales
                                     </p>

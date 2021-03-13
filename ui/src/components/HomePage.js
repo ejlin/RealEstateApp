@@ -64,9 +64,9 @@ class HomePage extends React.Component {
                                 made easy.
                             </p>
                             <p style={{
+                                color: "grey",
                                 fontFamily: "'Poppins', sans-serif",
                                 fontSize: "1.4em",
-                                
                                 marginTop: "15px",
                                 width: "500px",
                             }}>
@@ -109,7 +109,7 @@ class HomePage extends React.Component {
                                         <div style={{
                                         backgroundColor: "white",
                                         borderRadius: "10px",
-                                        boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 10px 0 rgba(0, 0, 0, 0.1)",
+                                        boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.20), 0 6px 20px 0 rgba(0.2, 0, 0, 0.2)",
                                         float: "left",
                                     }}>
                                         <SignUp/>
