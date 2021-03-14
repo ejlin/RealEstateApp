@@ -17,22 +17,6 @@
     width: 100%;
 }
 
-#pricing_page_title {
-    font-family: 'Poppins', sans-serif;
-    font-size: 2.2em;
-    font-weight: bold;
-    text-align: center;
-}
-
-#pricing_page_subtitle {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.2em;
-    margin-left: calc((100% - 600px)/2);
-    margin-top: 5px;
-    text-align: center;
-    width: 600px;
-}
-
 #pricing_page_prices_box {
     margin-top: 50px;
     width: 100%;

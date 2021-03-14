@@ -5,6 +5,7 @@
 
 .footer_subtitle {
     cursor: pointer;
+    float: left;
     font-family: 'Poppins', sans-serif;
     margin-top: 15px;
 }

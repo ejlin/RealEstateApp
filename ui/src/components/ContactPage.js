@@ -48,7 +48,7 @@ class ContactPage extends React.Component {
                         <p style={{
                             fontFamily: "'Poppins', sans-serif",
                             fontSize: "1.1em",
-                            marginTop: "15px",
+                            marginTop: "10px",
                             textAlign: "center",
                         }}>
                             Have a Question? Please fill out the form and we'll respond shortly
@@ -56,7 +56,7 @@ class ContactPage extends React.Component {
                         <div style={{
                             boxShadow: "2px 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                             float: "left",
-                            marginTop: "50px",
+                            marginTop: "25px",
                             width: "100%",
                         }}>
                             <div style={{
@@ -110,30 +110,38 @@ class ContactPage extends React.Component {
                                 }}>
                                     Empowering the everyday Real Estate Investor. Real Estate Investing Made Easy.
                                 </p>
-                                <div 
-                                    className="opacity"
+                                <Link to="/signup">
+                                    <div 
+                                        className="opacity"
+                                        style={{
+                                            backgroundColor: "white",
+                                            borderRadius: "50px",
+                                            color: "#296cf6",
+                                            cursor: "pointer",
+                                            display: "inline-block",
+                                            fontWeight: "bold",
+                                            marginTop: "50px",
+                                            padding: "12.5px 25px 12.5px 25px",
+                                        }}>
+                                        Sign Up Instead
+                                    </div>
+                                </Link>
+                                <Link 
                                     style={{
-                                        backgroundColor: "white",
-                                        borderRadius: "50px",
-                                        color: "#296cf6",
-                                        cursor: "pointer",
-                                        display: "inline-block",
-                                        fontWeight: "bold",
-                                        marginTop: "50px",
-                                        padding: "12.5px 25px 12.5px 25px",
-                                    }}>
-                                    Sign Up Instead
-                                </div>
-                                <p 
-                                    className="opacity"
-                                    style={{
-                                        color: "white",
-                                        cursor: "pointer",
-                                        fontWeight: "bold",
-                                        marginTop: "15px",
-                                    }}>
-                                    Back Home
-                                </p>
+                                        textDecoration: "none",
+                                    }}
+                                    to="/">
+                                    <p 
+                                        className="opacity"
+                                        style={{
+                                            color: "white",
+                                            cursor: "pointer",
+                                            fontWeight: "bold",
+                                            marginTop: "15px",
+                                        }}>
+                                        Back Home
+                                    </p>
+                                </Link>
                             </div>
                             <div style={{
                                 backgroundColor: "white",

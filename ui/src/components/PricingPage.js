@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 import { FiCheck } from 'react-icons/fi';
 import { BsFillHouseFill } from 'react-icons/bs';
@@ -25,10 +26,22 @@ class PricingPage extends React.Component {
                 <div id="pricing_page_parent">
                     <div id="pricing_page_top_box">
                         <div id="pricing_page_title_box">
-                            <p id="pricing_page_title">
+                            <p style={{
+                                fontFamily: "'Poppins', sans-serif",
+                                fontSize: "2.2em",
+                                fontWeight: "bold",
+                                textAlign: "center",
+                            }}>
                                 Pricing
                             </p>
-                            <p id="pricing_page_subtitle">
+                            <p style={{
+                                fontFamily: "'Poppins', sans-serif",
+                                fontSize: "1.0em",
+                                marginLeft: "calc((100% - 600px)/2)",
+                                marginTop: "5px",
+                                textAlign: "center",
+                                width: "600px",
+                            }}>
                                 Plans to fit every need from the learning investor to the savvy expert. Choose the one that best fits you.
                             </p>
                         </div>
@@ -97,7 +110,7 @@ class PricingPage extends React.Component {
                                         <div className="pricing_page_bullet">
                                             <BsFillHouseFill className="pricing_page_bullet_icon white"></BsFillHouseFill>
                                             <p className="pricing_page_bullet_text white large">
-                                                $49 / month
+                                                $59 / month
                                             </p>
                                         </div>
                                         <div className="pricing_page_bullet">
@@ -151,7 +164,7 @@ class PricingPage extends React.Component {
                                         <div className="pricing_page_bullet">
                                             <BsFillHouseFill className="pricing_page_bullet_icon blue"></BsFillHouseFill>
                                             <p className="pricing_page_bullet_text blue large">
-                                                $169 / month
+                                                $179 / month
                                             </p>
                                         </div>
                                         <div className="pricing_page_bullet">
@@ -190,11 +203,13 @@ class PricingPage extends React.Component {
                                 <p className="pricing_page_custom_solutions_sales_text">
                                     Don't see a plan that fits your needs? Talk to 
                                 </p>
-                                <div className="pricing_page_custom_solutions_sales_button opacity">
-                                    <p className="pricing_page_custom_solutions_sales_button_text">
-                                        Sales
-                                    </p>
-                                </div>
+                                <Link to="/contact">
+                                    <div className="pricing_page_custom_solutions_sales_button opacity">
+                                        <p className="pricing_page_custom_solutions_sales_button_text">
+                                            Sales
+                                        </p>
+                                    </div>
+                                </Link>
                             </div>
                         </div>
                     </div>

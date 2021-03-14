@@ -13,6 +13,10 @@ class SignUpPage extends React.Component {
         super(props);
     }
 
+    componentDidMount() {
+        window.scrollTo(0, 0);
+    }
+
     render() {
         return (
             <div>
@@ -24,59 +28,71 @@ class SignUpPage extends React.Component {
                     textAlign: "center",
                     width: "100%",
                 }}>
-                    <div style={{
-                        borderRadius: "8px",
-                        boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.10), 0 3px 10px 0 rgba(0.1, 0, 0, 0.1)",
-                        display: "inline-block",
-                        marginTop: "150px",
-                        width: "450px",
-                    }}>
+                    {/* <div style={{
+                        marginLeft: "18%",
+                        marginRight: "18%",
+                        width: "64%",
+                    }}> */}
                         <div style={{
-                            backgroundColor: "#296cf6",
-                            borderRadius: "8px 8px 0px 0px",
-                            paddingBottom: "15px",
-                            paddingTop: "15px",
-                            width: "100%",
-                        }}>
-                            <p style={{
-                                color: "white",
-                                fontFamily: "'Poppins', sans-serif",
-                                fontSize: "2.2em",
-                                fontWeight: "bold",
-                            }}>
-                                Sign Up
-                            </p>
-                            <p style={{
-                                color: "white",
-                                fontFamily: "'Poppins', sans-serif",
-                                fontSize: "1.0em",
-                            }}>
-                                Start your Free Trial
-                            </p>
-                            <p style={{
-                                color: "white",
-                                fontFamily: "'Poppins', sans-serif",
-                                fontSize: "1.0em",
-                                fontWeight: "bold",
-                            }}>
-                                Cancel anytime within 30 days
-                            </p>
-                        </div>
-                        <SignUp/>
-                        <div style={{
-                            backgroundColor: "white",
                             borderRadius: "8px",
-                            paddingBottom: "15px",
+                            boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.10), 0 3px 10px 0 rgba(0.1, 0, 0, 0.1)",
+                            display: "inline-block",
+                            // float: "right",
+                            marginTop: "150px",
+                            width: "450px",
                         }}>
-                            <Link to="/">
-                                <p  
-                                    className="home_page_have_account_link opacity"
+                            <div style={{
+                                backgroundColor: "#296cf6",
+                                borderRadius: "8px 8px 0px 0px",
+                                paddingBottom: "20px",
+                                paddingTop: "20px",
+                                width: "100%",
+                            }}>
+                                <p style={{
+                                    color: "white",
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "2.2em",
+                                    fontWeight: "bold",
+                                }}>
+                                    Sign Up
+                                </p>
+                                <p style={{
+                                    color: "white",
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "1.0em",
+                                }}>
+                                    Start your Free Trial
+                                </p>
+                                <p style={{
+                                    color: "white",
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "1.0em",
+                                    fontWeight: "bold",
+                                }}>
+                                    Cancel anytime within 30 days
+                                </p>
+                            </div>
+                            <SignUp/>
+                            <div style={{
+                                backgroundColor: "white",
+                                borderRadius: "8px",
+                                paddingBottom: "15px",
+                            }}>
+                                <Link 
                                     style={{
-                                        cursor: "pointer",
-                                        textAlign: "center",
-                                    }}>Have an account? Log In</p>
-                            </Link>
-                        </div>
+                                        color: "black",
+                                        textDecoration: "none",
+                                    }}
+                                    to="/">
+                                    <p  
+                                        className="home_page_have_account_link opacity"
+                                        style={{
+                                            cursor: "pointer",
+                                            textAlign: "center",
+                                        }}>Have an account? Log In</p>
+                                </Link>
+                            </div>
+                        {/* </div> */}
                     </div>
                 </div>
                 <Footer/>

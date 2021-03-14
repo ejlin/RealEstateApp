@@ -31,6 +31,10 @@ class HomePage extends React.Component {
         };
     }
 
+    componentDidMount() {
+        window.scrollTo(0, 0);
+    }
+
     render() {
         return (
             <div>
@@ -66,25 +70,37 @@ class HomePage extends React.Component {
                             <p style={{
                                 color: "grey",
                                 fontFamily: "'Poppins', sans-serif",
-                                fontSize: "1.4em",
+                                fontSize: "1.3em",
                                 marginTop: "15px",
                                 width: "500px",
                             }}>
                                 Unlock your full potential. Let us handle the book-keeping so you can do what you do best. Invest.
                             </p>
                             <div className="clearfix"/>
-                            <div 
-                                id="home_page_parent_signup_button" 
+                            <div  
+                                className="opacity"
                                 onClick={() => this.setState({
                                     isLogin: false,
-                                })}>
+                                })}
+                                style={{
+                                    backgroundColor: "#417df7",
+                                    borderRadius: "50px",
+                                    color: "white",
+                                    cursor: "pointer",
+                                    float: "left",
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "1.15em",
+                                    fontWeight: "bold",
+                                    marginTop: "15px",
+                                    padding: "12.5px 35px 12.5px 35px",
+                                    transition: "0.5s",
+                                }}>
                                 Create Account
                             </div>
                         </div>
                         <div style={{
                             float: "right",
                             marginRight: "18%",
-                            marginTop: "calc(((700px - 350px) / 2) - 40px)",
                             width: "425px",
                         }}>
                             {this.state.isLogin ? 
@@ -93,6 +109,7 @@ class HomePage extends React.Component {
                                         backgroundColor: "white",
                                         borderRadius: "10px",
                                         boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.20), 0 6px 20px 0 rgba(0.2, 0, 0, 0.2)",
+                                        marginTop: "calc(((700px - 350px) / 2) - 40px)",
                                         float: "left",
                                     }}>
                                         <Login></Login>
@@ -111,6 +128,7 @@ class HomePage extends React.Component {
                                         borderRadius: "10px",
                                         boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.20), 0 6px 20px 0 rgba(0.2, 0, 0, 0.2)",
                                         float: "left",
+                                        marginTop: "calc(((700px - 450px) / 2) - 40px)",
                                     }}>
                                         <SignUp/>
                                         <div style={{
@@ -274,17 +292,20 @@ class HomePage extends React.Component {
                             }}>
                             <div style={{
                                 display: "inline-block",
+                                marginTop: "10px",
                             }}>
-                                <p style={{
-                                        color: "#296cf6",
-                                        display: "inline-block",
-                                        float: "left",
-                                        fontFamily: "'Poppins', sans-serif",
-                                        fontSize: "1.2em",
-                                        lineHeight: "25px",
-                                    }}>
-                                    Try one Month Free
-                                </p>
+                                <Link to="/signup">
+                                    <p style={{
+                                            color: "#296cf6",
+                                            display: "inline-block",
+                                            float: "left",
+                                            fontFamily: "'Poppins', sans-serif",
+                                            fontSize: "1.2em",
+                                            lineHeight: "25px",
+                                        }}>
+                                        Try one Month Free
+                                    </p>
+                                </Link>
                                 <MdPlayArrow 
                                     id="free_demo_arrow"
                                     style={{
@@ -296,13 +317,12 @@ class HomePage extends React.Component {
                                     }}/>
                             </div>
                         </div>
-                        
                     </div>
                     <div className="clearfix"/>
                     <div style={{
                         marginLeft: "18%",
                         marginRight: "18%",
-                        marginTop: "50px",
+                        marginTop: "75px",
                         width: "64%",
                     }}>
                         <div style={{
@@ -662,21 +682,23 @@ class HomePage extends React.Component {
                             Ready to accelerate your Real Estate Career?
                         </p>
                         <div className="clearfix"/>
-                        <div 
-                            className="opacity"
-                            style={{
-                                backgroundColor: "white",
-                                borderRadius: "50px",
-                                color: "#296cf6",
-                                cursor: "pointer",
-                                display: "inline-block",
-                                fontSize: "1.2em",
-                                fontWeight: "bold",
-                                marginTop: "40px",
-                                padding: "15px 35px 15px 35px",
-                            }}>
-                            Sign Up
-                        </div>
+                        <Link to="/signup">
+                            <div 
+                                className="opacity"
+                                style={{
+                                    backgroundColor: "white",
+                                    borderRadius: "50px",
+                                    color: "#296cf6",
+                                    cursor: "pointer",
+                                    display: "inline-block",
+                                    fontSize: "1.2em",
+                                    fontWeight: "bold",
+                                    marginTop: "40px",
+                                    padding: "15px 35px 15px 35px",
+                                }}>
+                                Sign Up
+                            </div>
+                        </Link>
                     </div>
                     <div className="clearfix"/>
                     <Footer/>

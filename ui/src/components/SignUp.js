@@ -107,6 +107,7 @@ class SignUp extends React.Component {
                             }}
                             style={{
                                 border: "2px solid #296cf6",
+                                borderRadius: "2px",
                                 float: "left",
                                 height: "15px",
                                 width: "15px",
@@ -119,6 +120,7 @@ class SignUp extends React.Component {
                         marginLeft: "15px",
                         width: "calc(100% - 15px - 15px - 4px)",
                         textAlign: "left",
+                        userSelect: "none",
                     }}>
                         I agree to ReiMe's Term's & Agreements which includes my consent to receive marketing information from ReiMe. I can unsubscribe from marketing communications at any time.
                     </p>

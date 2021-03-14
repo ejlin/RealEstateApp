@@ -15,6 +15,8 @@ import ExploreDashboard from './components/ExploreDashboard.js';
 import SettingsDashboard from './components/SettingsDashboard.js';
 import FeedbackForm from './components/FeedbackForm.js';
 import ContactPage from './components/ContactPage.js';
+import OverviewPage from './components/OverviewPage.js';
+import AboutPage from './components/AboutPage.js';
 import TermsAndAgreementPage from './components/TermsAndAgreementPage.js';
 
 import NewPropertyForm from './components/NewPropertyForm.js';
@@ -52,8 +54,10 @@ function App() {
           <Route path="/files" render={(props) => <FilesDashboard {...props}/>}/>
           <Route path="/explore" render={(props) => <ExploreDashboard {...props}/>}/>
           <Route path="/settings" render={(props) => <SettingsDashboard {...props}/>}/>
+          <Route path="/overviewpage" render={(props) => <OverviewPage {...props}/>}/>
           <Route path="/feedback" render={(props) => <FeedbackForm {...props}/>}/>
           <Route path="/contact" render={(props) => <ContactPage {...props}/>}/>
+          <Route path="/about" render={(props) => <AboutPage {...props}/>}/>
           <Route path="/signup" render={(props) => <SignUpPage {...props}/>}/>
           <Route path="/termsandagreements" render={(props) => <TermsAndAgreementPage {...props}/>}/>
           <Route path="/">

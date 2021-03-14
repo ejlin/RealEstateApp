@@ -43,15 +43,25 @@ class Footer extends React.Component {
                         <p className="footer_title">
                             Features
                         </p>
-                        <p className="footer_subtitle opacity">
-                            Overview
-                        </p>
+                        <div className="clearfix"/>
+                        <Link to="/overviewpage"
+                            style={{
+                                color: "black",
+                                textDecoration: "none",
+                            }}>
+                            <p className="footer_subtitle opacity">
+                                Overview
+                            </p>
+                        </Link>
+                        <div className="clearfix"/>
                         <p className="footer_subtitle opacity">
                             Analysis
                         </p>
+                        <div className="clearfix"/>
                         <p className="footer_subtitle opacity">
                             Expenses
                         </p>
+                        <div className="clearfix"/>
                         <p className="footer_subtitle opacity">
                             Files
                         </p>
@@ -87,9 +97,18 @@ class Footer extends React.Component {
                         <p className="footer_title">
                             Support
                         </p>
-                        <p className="footer_subtitle opacity">
-                            About
-                        </p>
+                        <Link 
+                            style={{
+                                color: "black",
+                                textDecoration: "none",
+                            }}
+                            to={{
+                                pathname: "/about"
+                            }}> 
+                            <p className="footer_subtitle opacity">
+                                About
+                            </p>
+                        </Link>
                         <Link 
                             style={{
                                 color: "black",
