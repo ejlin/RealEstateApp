@@ -3,13 +3,15 @@ import axios from 'axios';
 
 import './CSS/NotificationSidebar.css';
 import './CSS/Style.css';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
-import { numberWithCommas } from '../utility/Util.js';
+import { numberWithCommas, capitalizeName } from '../utility/Util.js';
 import NotificationCard from './NotificationCard.js';
 
 import { IoMdNotifications } from 'react-icons/io';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { TiUser } from 'react-icons/ti';
+import { FiChevronDown } from 'react-icons/fi';
 
 let URLBuilder = require('url-join');
 
@@ -19,15 +21,25 @@ class NotificationSidebar extends React.Component {
         super(props);
 
         const totalEstimateWorth = localStorage.getItem("total_estimate_worth");
+        
+        let user;
 
+        const loggedInUser = localStorage.getItem("user");
+        if (loggedInUser) {
+            user = JSON.parse(loggedInUser);
+        } else {
+            user = null;
+        }
 
         this.state = {
-            user: this.props.data.state.user,
-            totalEstimateWorth: totalEstimateWorth,
+            user: user,
+            totalEstimateWorth: this.props.data.state.totalEstimateWorth,
             missingEstimate: this.props.data.state.missingEstimate,
+            currentPage: this.props.data.state.currentPage,
+            profilePicture: this.props.data.state.profilePicture,
+            inactivatedAccount: this.props.data.state.inactivatedAccount,
             isLoading: true,
         };
-
         this.renderNotifications = this.renderNotifications.bind(this);
     }
 
@@ -56,6 +68,27 @@ class NotificationSidebar extends React.Component {
                 isLoading: false,
             })
         });
+
+        if (this.state.profilePicture === "" || this.state.profilePicture === undefined || this.state.profilePicture === null) {
+            axios({
+                method: 'get',
+                url: '/api/user/settings/profile/picture/' + this.state.user["id"],
+            }).then(response => {
+                var src = response.data;
+                this.setState({
+                    profilePicture: src
+                })
+            }).catch(error => {
+                console.log(error);
+                let statusCode = error.response.status;
+                if (statusCode === 404) {
+                    console.log("here");
+                }
+                this.setState({
+                    profilePicture: null,
+                })
+            })
+        }
     }
 
     renderNotifications() {
@@ -91,6 +124,11 @@ class NotificationSidebar extends React.Component {
     }
 
     render() {
+        if (this.state.redirect) {
+            return <Redirect to={{
+                pathname: this.state.redirect
+            }} />
+        }
         if (this.state.isLoading) {
             return (
                 <div></div>
@@ -98,7 +136,7 @@ class NotificationSidebar extends React.Component {
         }
         return (
             <div style={{
-                backgroundColor: "#F5F5FA",
+                backgroundColor: "#f5f5fa",
                 right: "0",
                 height: "100vh",
                 position: "fixed",
@@ -107,59 +145,158 @@ class NotificationSidebar extends React.Component {
                 width: "375px",
                 zIndex: "20",
             }}>
-                <div style={{
-                    backgroundColor: "#296CF6",
-                    borderRadius: "8px",
-                    boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
-                    height: "100px",
-                    marginLeft: "10%",
-                    marginTop: "calc(80px)",
-                    width: "calc(80%)",
-                }}>
-                    <p style={{
-                        backgroundColor: "transparent !important",
-                        color: "white",
-                        float: "left",
-                        fontSize: "0.9em",
-                        marginLeft: "25px",
-                        marginRight: "5px",
-                        marginTop: "17.5px",
-                    }}>
-                        Estimated Net Worth
-                    </p>
-                    {this.state.missingEstimate ? 
-                        <HiOutlineExclamationCircle id="main_dashboard_missing_estimate_icon"></HiOutlineExclamationCircle> :
-                        <div></div>
+                {
+                        this.state.profilePicture !== null && this.state.profilePicture !== undefined && this.state.profilePicture !== "" ? 
+                        <div>
+                            <img 
+                            src={this.state.profilePicture}
+                            style={{
+                                borderRadius: "50%",
+                                height: "200px",
+                                marginLeft: "calc((100% - 200px)/2)",
+                                marginTop: "80px",
+                                userSelect: "none",
+                                width: "200px",
+                            }}/>
+                            <div>
+                                <p style={{
+                                    color: "black",
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "1.1em",
+                                    fontWeight: "bold",
+                                    marginTop: "15px",
+                                    textAlign: "center",
+                                }}>{capitalizeName(this.state.user["first_name"])} {capitalizeName(this.state.user["last_name"])}
+                                <FiChevronDown
+                                    onMouseDown={() => {
+                                        if (!this.state.inactivatedAccount) {
+                                            this.setState({
+                                                displayAccountTooltip: !this.state.displayAccountTooltip
+                                            })
+                                        }
+                                    }}
+                                    style={{
+                                        color: "white !important",
+                                        cursor: "pointer",
+                                        marginLeft: "5px",
+                                        marginTop: "3px",
+                                        position: "absolute",
+                                    }}/>
+                                </p>
+                                {
+                                    this.state.displayAccountTooltip ? 
+                                    <div style={{
+                                        backgroundColor: "white",
+                                        borderRadius: "4px",
+                                        marginLeft: "calc((100% - 120px)/2)",
+                                        marginTop: "5px",
+                                        position: "absolute",
+                                        width: "120px",
+                                        zIndex: "5",
+                                    }}>
+                                        <li 
+                                            onClick={() => 
+                                                {
+                                                    localStorage.clear();
+                                                    this.setState({
+                                                        redirect: "/"
+                                                    });
+                                                }
+                                            }
+                                            className="dashboard_sidebar_tooltip"
+                                            style={{
+                                                cursor: "pointer",
+                                                padding: "7.5px 15px 7.5px 15px",
+                                                textAlign: "center",
+                                                transition: "0.5s",
+                                            }}>
+                                            Sign Out
+                                        </li>
+                                    </div> :
+                                    <div></div>
+                                }
+                            </div>
+                            <div className="clearfix"/>
+                            <p style={{
+                                fontFamily: "'Poppins', sans-serif",
+                                fontSize: "1.0em",
+                                textAlign: "center",
+                            }}>{this.state.user["email"]}</p>
+                        </div>
+                            :
+                        <TiUser style={{
+                            border: "3px solid white",
+                            borderRadius: "50px",
+                            color: "white",
+                            height: "calc(100px - 6px)",
+                            marginLeft: "calc((100% - 100px)/2)",
+                            marginTop: "80px",
+                            width: "calc(100px - 6px)",
+                        }}></TiUser>
                     }
                     <div className="clearfix"/>
-                    <p id="main_dashboard_summary_estimated_net_worth_title">
-                        ${this.state.totalEstimateWorth && !Number.isNaN(this.state.totalEstimateWorth) ? numberWithCommas(this.state.totalEstimateWorth) : 0}
+                <div style={{
+                    backgroundColor: "#d3d3d3",
+                    height: "1px",
+                    marginBottom: "20px",
+                    marginLeft: "15%",
+                    marginRight: "15%",
+                    marginTop: "20px",
+                    width: "70%",
+                }}></div>
+                <div style={{
+                    marginLeft: "15%",
+                    marginRight: "15%",
+                    width: "70%",
+                }}>
+                    <p style={{
+                        color: "#32384D",
+                        float: "left",
+                        fontSize: "0.9em",
+                        marginBottom: "0",
+                    }}>
+                        ESTIMATED NET WORTH
+                    </p>
+                    <div className="clearfix"/>
+                    <p style={{
+                        color: "#296cf6",
+                        float: "left",
+                        fontSize: "1.2em",
+                        fontWeight: "bold",
+                        marginBottom: "15px",
+                        marginTop: "15px",
+                    }}>
+                        ${
+                            this.state.totalEstimateWorth && !Number.isNaN(this.state.totalEstimateWorth) ? 
+                            numberWithCommas(this.state.totalEstimateWorth) : 
+                            0
+                        }
                     </p>
                 </div>
                 <div style={{
                     float: "left",
-                    marginLeft: "10%",
-                    marginTop: "30px",
-                    width: "80%",
+                    marginLeft: "15%",
+                    marginRight: "15%",
+                    marginTop: "15px",
+                    width: "70%",
                 }}>
                     <div style={{                        
                     }}>
                         <div style={{
                             float: "left",
                         }}>
-                            <IoMdNotifications style={{
+                            {/* <IoMdNotifications style={{
                                 float: "left",
                                 height: "25px",
+                                marginRight: "7.5px",
                                 width: "25px",
-                            }}/>
+                            }}/> */}
                             <p style={{
                                 float: "left",
-                                fontSize: "1.2em",
-                                fontWeight: "bold",
+                                fontSize: "0.9em",
                                 lineHeight: "25px",
-                                marginLeft: "7.5px",
                             }}>
-                                Notifications
+                                NOTIFICATIONS
                             </p>
                         </div>
                         <div 

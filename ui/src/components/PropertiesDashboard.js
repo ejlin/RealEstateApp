@@ -11,34 +11,12 @@ import NotificationSidebar from './NotificationSidebar.js';
 
 import { getDaysUntil } from './MainDashboard.js';
 
-import { mapFileTypeToIcon, openSignedURL } from '../utility/Util.js';
+import { mapFileTypeToIcon, openSignedURL, numberWithCommas } from '../utility/Util.js';
 
 import { Link, Redirect } from 'react-router-dom';
-import { VictoryChart, VictoryLine, VictoryAxis, VictoryLabel } from 'victory';
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-
-import { GoFileDirectory } from 'react-icons/go';
-import { SiGoogleanalytics } from 'react-icons/si';
-import { FaMoneyCheck } from 'react-icons/fa';
-import { MdDashboard, MdEdit, MdError  } from 'react-icons/md';
-import { 
-    IoOpenOutline, 
-    IoCloseOutline, 
-    IoCalendarSharp, 
-    IoBedSharp , 
-    IoWaterSharp, 
-    IoTrailSignSharp, 
-    IoBookmarkSharp,
-    IoFolderSharp,
-    IoWalletSharp,
-    IoReaderSharp,
-    IoPersonSharp,
-    IoTrashSharp} from 'react-icons/io5';
+import { MdError  } from 'react-icons/md';
 
 const overview = "overview";
-const files = "files";
-const expenses = "expenses";
-
 let URLBuilder = require('url-join');
 
 class PropertiesDashboard extends React.Component {
@@ -71,10 +49,9 @@ class PropertiesDashboard extends React.Component {
             redirect: redirect,
         };
         this.setActiveFileAttributes = this.setActiveFileAttributes.bind(this);
-        this.numberWithCommas = this.numberWithCommas.bind(this);
-        this.removePropertyFromState = this.removePropertyFromState.bind(this);
         this.handleTagsListClick = this.handleTagsListClick.bind(this);
         this.renderProperties = this.renderProperties.bind(this);
+        this.renderNoProperties = this.renderNoProperties.bind(this);
         this.setActiveProperty = this.setActiveProperty.bind(this);
         // this.renderActivePropertyView = this.renderActivePropertyView.bind(this);
         // this.renderActivePropertyFiles = this.renderActivePropertyFiles.bind(this);
@@ -136,8 +113,8 @@ class PropertiesDashboard extends React.Component {
 
             this.setState({
                 propertiesMap: [...propertiesMap],
-                totalNetWorth: this.numberWithCommas(totalNetWorth),
-                totalRent: this.numberWithCommas(totalRent),
+                totalNetWorth: numberWithCommas(totalNetWorth),
+                totalRent: numberWithCommas(totalRent),
                 totalProperties: properties.length,
                 totalEstimateWorth: totalEstimateWorth,
                 totalPurchasePrice: totalPurchasePrice,
@@ -150,98 +127,6 @@ class PropertiesDashboard extends React.Component {
             
         }).catch(error => console.log(error));
 
-    }
-
-    numberWithCommas(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
-    removePropertyFromState(id, propertyType) {
-
-        let elementsMap;
-
-        // let tags = ['SFH', 'Manufactured', 'Condo/Ops', 'Multi-Family', 'Apartment', 'Lot/Land', 'Townhome', 'Commercial'];
-
-        switch (propertyType) {
-            case 'SFH':
-                elementsMap = this.state.sfhProperties;
-                break; 
-            case 'Manufactured':
-                elementsMap = this.state.manufacturedProperties;
-                break;
-            case 'Condo/Ops':
-                elementsMap = this.state.condoOpsProperties;
-                break;
-            case 'Multi-family':
-                elementsMap = this.state.multiFamilyProperties;
-                break;
-            case 'Apartment':
-                elementsMap = this.state.apartmentProperties;
-                break;
-            case 'Lot/Land':
-                elementsMap = this.state.lotLandProperties;
-                break;
-            case 'Townhome':
-                elementsMap = this.state.townhomeProperties;
-                break;
-            case 'Commercial':
-                elementsMap = this.state.commercialProperties;
-                break;
-            default:
-                elementsMap = null;
-        }
-        if (elementsMap !== null ) {
-            for (let i = 0; i < elementsMap.length; i++) {
-                if (id === elementsMap[i].props.children.props.data.state.property_details["id"]){
-                    delete elementsMap[i];
-                    break;
-                }
-            }
-        }
-        switch (propertyType) {
-            case 'SFH':
-                this.setState({
-                    sfhProperties: [...elementsMap]
-                });
-                return; 
-            case 'Manufactured':
-                this.setState({
-                    manufacturedProperties: [...elementsMap]
-                });
-                return;
-            case 'Condo/Ops':
-                this.setState({
-                    condoOpsProperties: [...elementsMap]
-                });
-                return;
-            case 'Multi-family':
-                this.setState({
-                    multiFamilyProperties: [...elementsMap]
-                });
-                return;
-            case 'Apartment':
-                this.setState({
-                    apartmentProperties: [...elementsMap]
-                });
-                return;
-            case 'Lot/Land':
-                this.setState({
-                    lotLandProperties: [...elementsMap]
-                });
-                return;
-            case 'Townhome':
-                this.setState({
-                    townhomeProperties: [...elementsMap]
-                });
-                return;
-            case 'Commercial':
-                this.setState({
-                    commercialProperties: [...elementsMap]
-                });
-                return;
-            default:
-                return;
-        }
     }
 
     handleTagsListClick(e){
@@ -379,9 +264,6 @@ class PropertiesDashboard extends React.Component {
                 let property = propertyArr[i];
                 elements.push(
                     <PropertyCard key={property["name"]}
-                        removePropertyFromState = {
-                            this.removePropertyFromState
-                        }
                         setActiveProperty = {
                             this.setActiveProperty
                         }
@@ -392,25 +274,60 @@ class PropertiesDashboard extends React.Component {
                         }                       
                     }}/>
                 );
-                // elements.push(
-                //     <PropertyCard key={property["name"]}
-                //         removePropertyFromState = {
-                //             this.removePropertyFromState
-                //         }
-                //         setActiveProperty = {
-                //             this.setActiveProperty
-                //         }
-                //         data={{
-                //         state: {
-                //             user: this.state.user,
-                //             isFirstChild: isFirstChild,
-                //             property_details: property
-                //         }                       
-                //     }}/>
-                // );
             }
         });
-        return elements;
+        return (
+            <div style={{
+                height: "76vh",
+                marginTop: "25px",
+                overflow: "scroll",
+            }}>
+                {elements}
+            </div>
+        );
+    }
+
+    renderNoProperties() {
+        return (
+            <div style={{
+                marginTop: "150px",
+                textAlign: "center",
+                width: "100%",
+            }}>
+                <p style={{
+                    textAlign: "center",
+                }}>
+                    No properties
+                </p>
+                <Link to={{
+                    pathname: "/addproperty",
+                    state: {
+                        user: this.state.user,
+                        totalEstimateWorth: this.state.totalEstimateWorth,
+                        missingEstimate: this.state.missingEstimate,
+                        profilePicture: this.state.profilePicture
+                    }
+                }}>
+                    <div 
+                        className="opacity"
+                        style={{
+                            backgroundColor: "#296cf6",
+                            borderRadius: "50px",
+                            boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.10), 0 6px 10px 0 rgba(0, 0, 0, 0.09)",
+                            cursor: "pointer",
+                            display: "inline-block",
+                            marginTop: "15px",
+                            padding: "7.5px 15px 7.5px 15px",
+                        }}>
+                        <p style={{
+                            color: "white",
+                        }}>
+                            Add a Property to Start
+                        </p>
+                    </div>
+                </Link>
+            </div>
+        );
     }
     
     render() {
@@ -447,63 +364,31 @@ class PropertiesDashboard extends React.Component {
                     }}/>
                     {this.state.isLoading ? <div></div> : 
                     <div>
-                        <div className="properties_dashboard_property_type_box">
-                            <div className="properties_dashboard_inner_box">
-                                <div id="properties_dashboard_title_box">
-                                    <p className="properties_dashboard_title_box_title">
+                        <div style={{
+                            backgroundColor: "#F5F5FA",
+                            float: "left",
+                            marginLeft: "220px",
+                            width: "calc(100% - 220px - 375px)",
+                        }}>
+                            <div style={{
+                                marginLeft: "60px",
+                                marginRight: "20px",
+                                marginTop: "80px",
+                                width: "calc((100% - 60px - 20px))",
+                            }}>
+                                <div style={{
+                                }}>
+                                    <p style={{
+                                        float: "left",
+                                        fontSize: "1.6em",
+                                        fontWeight: "bold",
+                                    }}>
                                         Properties
                                     </p>
                                     <input className="search_bar" placeholder="Search...">
                                     </input>
-                                </div>
-                                <div className="clearfix"/>
-                                <div className="properties_dashboard_buttons_box">
-                                    <Link to={{
-                                        pathname: "/addproperty",
-                                        state: {
-                                            user: this.state.user,
-                                            totalEstimateWorth: this.state.totalEstimateWorth,
-                                            missingEstimate: this.state.missingEstimate,
-                                            profilePicture: this.state.profilePicture
-                                        }
-                                    }}>
-                                        <div className="page_button">
-                                            New Property
-                                        </div>
-                                    </Link>
-                                    {this.state.activeProperty ? 
-                                    <div>
-                                        <IoTrashSharp className="properties_dashboard_buttons_box_icon"></IoTrashSharp>
-                                        <MdEdit className="properties_dashboard_buttons_box_icon"></MdEdit>
-                                    </div> : 
-                                    <div></div>}
-                                </div> 
-                                <div className="clearfix"/>
-                                <p style={{
-                                    float: "left",
-                                    fontSize: "1.3em",
-                                }}>
-                                    {this.state.totalProperties}
-                                </p>
-                                <p style={{
-                                    float: "left",
-                                    fontSize: "1.3em",
-                                    marginLeft: "5px",
-                                }}>
-                                    {this.state.totalProperties === 1 ? "Property" : "Properties"}
-                                </p>
-                                {
-                                    this.state.totalProperties === 0 ? 
-                                    <div style={{
-                                        marginTop: "150px",
-                                        textAlign: "center",
-                                        width: "100%",
-                                    }}>
-                                        <p style={{
-                                            textAlign: "center",
-                                        }}>
-                                            No properties
-                                        </p>
+                                    <div className="clearfix"/>
+                                    <div className="properties_dashboard_buttons_box">
                                         <Link to={{
                                             pathname: "/addproperty",
                                             state: {
@@ -513,28 +398,23 @@ class PropertiesDashboard extends React.Component {
                                                 profilePicture: this.state.profilePicture
                                             }
                                         }}>
-                                            <div 
-                                                className="opacity"
-                                                style={{
-                                                    backgroundColor: "#296cf6",
-                                                    borderRadius: "50px",
-                                                    boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.10), 0 6px 10px 0 rgba(0, 0, 0, 0.09)",
-                                                    cursor: "pointer",
-                                                    display: "inline-block",
-                                                    marginTop: "15px",
-                                                    padding: "7.5px 15px 7.5px 15px",
-                                                }}>
-                                                <p style={{
-                                                    color: "white",
-                                                }}>
-                                                    Add a Property to Start
-                                                </p>
+                                            <div className="page_button">
+                                                New Property
                                             </div>
                                         </Link>
-                                    </div> :
-                                    <div className="properties_dashboard_property_inner_box">
-                                        {this.renderProperties()}
-                                    </div>
+                                    </div> 
+                                    <p style={{
+                                        float: "left",
+                                        fontSize: "1.3em",
+                                    }}>
+                                        {this.state.totalProperties} {this.state.totalProperties === 1 ? "Property" : "Properties"}
+                                    </p>
+                                </div>
+                                <div className="clearfix"/>
+                                {
+                                    this.state.totalProperties === 0 ? 
+                                    this.renderNoProperties() :
+                                    this.renderProperties()
                                 }
                                 
                             </div>

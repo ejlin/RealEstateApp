@@ -34,11 +34,9 @@ class NotificationCard extends React.Component {
                     cursor: "pointer",
                     float: "left",
                     marginBottom: "10px",
-                    marginLeft: "5px",
-                    marginRight: "5px",
                     padding: "12.5px 15px 12.5px 15px",
                     position: "relative",
-                    width: "calc(100% - 40px)",
+                    width: "calc(100% - 30px)",
                 }}>
                 <div style={{
                     backgroundColor: !notification["seen"] ? "#296cf6" : "#d3d3d3",

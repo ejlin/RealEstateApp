@@ -406,7 +406,18 @@ class ExpensesTable extends React.Component {
 
     render() {
         return (
-            <div className="expenses_table">
+            <div style={{
+                backgroundColor: "white",
+                boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                borderRadius: "10px",
+                float: "left",
+                height: "calc(74vh)",
+                minHeight: "650px",
+                minWidth: "1000px",
+                overflowX: "scroll",
+                overflowY: "hidden",
+                width: "100%",
+            }}>
                 <div className="expenses_table_title_row">
                     <div className="expenses_table_down_icon_box">
                     </div>

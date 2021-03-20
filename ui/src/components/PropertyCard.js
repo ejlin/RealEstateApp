@@ -28,7 +28,6 @@ class PropertyCard extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.state.property);
         
         let propertyGoogleMapsURL = (this.state.property["address_one"] + (this.state.property["address_two"] ? " " + this.state.property["address_two"] : "")) + "," + this.state.property["city"] + "," + this.state.property["state"];
         propertyGoogleMapsURL = propertyGoogleMapsURL.replace(" ", "+");

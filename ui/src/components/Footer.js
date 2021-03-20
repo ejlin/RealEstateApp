@@ -73,6 +73,7 @@ class Footer extends React.Component {
                         <p className="footer_title">
                             Navigation
                         </p>
+                        <div className="clearfix"/>
                         <Link 
                             style={{
                                 color: "black",
@@ -83,9 +84,11 @@ class Footer extends React.Component {
                                 Pricing
                             </p>
                         </Link>
+                        <div className="clearfix"/>
                         <p className="footer_subtitle opacity">
                             Company
                         </p>
+                        <div className="clearfix"/>
                         <p className="footer_subtitle opacity">
                             FAQ
                         </p>
@@ -109,6 +112,7 @@ class Footer extends React.Component {
                                 About
                             </p>
                         </Link>
+                        <div className="clearfix"/>
                         <Link 
                             style={{
                                 color: "black",
@@ -121,6 +125,7 @@ class Footer extends React.Component {
                                 Contact
                             </p>
                         </Link>
+                        <div className="clearfix"/>
                         <Link 
                             style={{
                                 color: "black",

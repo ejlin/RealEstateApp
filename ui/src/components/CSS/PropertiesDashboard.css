@@ -1,24 +1,3 @@
-.properties_dashboard_property_type_box {
-    background-color: #F5F5FA;
-    float: left;
-    height: 100vh;
-    margin-left: 220px;
-    width: calc(100% - 220px - 375px);
-}
-
-.properties_dashboard_inner_box {
-    margin-left: 60px;
-    margin-right: 20px;
-    margin-top: 80px;
-    width: calc((100% - 60px - 20px));
-}
-
-.properties_dashboard_title_box_title {
-    float: left;
-    font-size: 1.6em;
-    font-weight: bold;
-}
-
 #properties_dashboard_upload_file_icon:hover {
     color: white;
     background-color: #296CF6;
@@ -88,7 +67,7 @@
     width: 100%;   
 }
 
-#properties_dashboard_property_inner_box::-webkit-scrollbar {
+/* #properties_dashboard_property_inner_box::-webkit-scrollbar {
     display: none;
   }
   
@@ -96,7 +75,7 @@
 #properties_dashboard_property_inner_box {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
-  }
+  } */
 
 .properties_dashboard_property_type_icon {
     background-color:  #eee6f9;

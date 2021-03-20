@@ -5,6 +5,8 @@ import axios from 'axios';
 import './CSS/DashboardSidebar.css';
 import './CSS/Style.css';
 
+import logo from './Images/LogoStretch.png';
+
 import { Link, Redirect } from 'react-router-dom';
 
 import { capitalizeName } from '../utility/Util.js'; 
@@ -13,10 +15,11 @@ import { BsFillHouseFill } from 'react-icons/bs';
 import { GoFileDirectory } from 'react-icons/go';
 import { SiGoogleanalytics } from 'react-icons/si';
 import { IoSettingsSharp } from 'react-icons/io5';
-import { MdFeedback, MdDashboard } from 'react-icons/md';
+import { MdFeedback, MdDashboard, MdAdd } from 'react-icons/md';
 import { FiChevronDown } from 'react-icons/fi';
 import { FaMoneyCheck } from 'react-icons/fa';
 import { TiUser } from 'react-icons/ti';
+import { IoAddSharp } from 'react-icons/io5';
 
 class DashboardSidebar extends React.Component {
     
@@ -79,22 +82,40 @@ class DashboardSidebar extends React.Component {
                         height: "100vh",
                         opacity: "0.5",
                         position: "fixed",
-                        width: "220px",
+                        width: "250px",
                         zIndex: "5",
                     }}>
                     </div> : 
                     <div></div>
                 }
                 <div style={{
-                    backgroundColor: "#32384D", 
+                    backgroundColor: "#f5f5fa",
                     display: "block",
                     float: "left",
                     height: "calc(100vh - 50px)",
                     position: "fixed",
                     overflow: "scroll",
-                    width: "220px",
+                    width: "250px",
                 }}>
-                    {
+                    <div style={{
+                        backgroundColor: "white",
+                        borderRadius: "8px",
+                        height: "65px",
+                        marginLeft: "10%",
+                        marginRight: "10%",
+                        marginTop: "50px",
+                        width: "80%",
+                    }}>
+                        <img src={logo}
+                            style={{
+                                height: "27.5px",
+                                marginLeft: "calc((100% - 135px)/2)",
+                                marginTop: "calc((65px - 27.5px)/2)",
+                                width: "135px",
+                            }}
+                        ></img>
+                    </div>
+                    {/* {
                         this.state.profilePicture !== null && this.state.profilePicture !== undefined && this.state.profilePicture !== "" ? 
                         <img 
                             src={this.state.profilePicture}
@@ -116,8 +137,8 @@ class DashboardSidebar extends React.Component {
                             width: "calc(100px - 6px)",
                         }}></TiUser>
                     }
-                    <div className="clearfix"/>
-                    <div
+                    <div className="clearfix"/> */}
+                    {/* <div
                         style={{
                             marginTop: "15px",
                         }}>
@@ -175,25 +196,34 @@ class DashboardSidebar extends React.Component {
                             </div> :
                             <div></div>
                         }
-                    </div>
+                    </div> */}
                     
                     <Link 
                         className="dashboard_new_property_button"
+                        // style={{
+                        //     backgroundColor: "#296CF6",
+                        //     border: "none",
+                        //     borderRadius: "8px",
+                        //     color: "white",
+                        //     cursor: "pointer",
+                        //     float: "left",
+                        //     fontWeight: "bold",
+                        //     height: "45px",
+                        //     lineHeight: "45px",
+                        //     marginLeft: "40px",
+                        //     marginTop: "25px",
+                        //     textAlign: "center",
+                        //     textDecoration: "none",
+                        //     userSelect: "none",
+                        //     width: "calc(100% - 80px)",
+                        // }}
                         style={{
-                            backgroundColor: "#296CF6",
-                            border: "none",
-                            borderRadius: "8px",
-                            color: "white",
-                            cursor: "pointer",
                             float: "left",
-                            fontWeight: "bold",
-                            height: "45px",
-                            lineHeight: "45px",
+                            marginBottom: "25px",
                             marginLeft: "40px",
+                            marginRight: "40px",
                             marginTop: "25px",
-                            textAlign: "center",
                             textDecoration: "none",
-                            userSelect: "none",
                             width: "calc(100% - 80px)",
                         }}
                         to={{
@@ -205,153 +235,181 @@ class DashboardSidebar extends React.Component {
                                 profilePicture: this.state.profilePicture
                             }
                         }}>
-                        <p>New Property</p>
+                        <MdAdd style={{
+                            backgroundColor: "white",
+                            borderRadius: "50%",
+                            color: "#296cf6",
+                            float: "left",
+                            height: "20px",
+                            padding: "10px",
+                            width: "20px",
+                        }}/>
+                        <p style={{
+                            color: "#296cf6",
+                            float: "left",
+                            fontFamily: "'Poppins', sans-serif",
+                            fontWeight: "bold",
+                            lineHeight: "40px",
+                            marginLeft: "10px",
+                        }}>New</p>
                     </Link> 
-                    <div className="clearfix"/>
-                    <div className="dashboard_sidebar_link">
-                        <Link className="dashboard_sidebar_inner_link" to={{
-                            pathname: "/dashboard",
-                            state: {
-                                user: this.state.user,
-                                totalEstimateWorth: this.state.totalEstimateWorth,
-                                missingEstimate: this.state.missingEstimate,
-                                profilePicture: this.state.profilePicture
-                            }
-                        }}>
-                            <MdDashboard 
-                                className={
-                                    this.state.currentPage === "overview" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : 
-                                    "dashboard_sidebar_link_icon"
-                            }/>
-                            <p 
-                                className={
-                                    this.state.currentPage === "overview" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : 
-                                    "dashboard_sidebar_link_text"
-                            }>
-                                Overview
-                            </p>
-                        </Link>
-                    </div>
-                    <div className="clearfix"/>
-                    <div className="dashboard_sidebar_link">
-                        <Link className="dashboard_sidebar_inner_link" to={{
-                            pathname: "/properties",
-                            state: {
-                                user: this.state.user,
-                                totalEstimateWorth: this.state.totalEstimateWorth,
-                                missingEstimate: this.state.missingEstimate,
-                                profilePicture: this.state.profilePicture
-                            }
-                        }}>
-                            <BsFillHouseFill className={this.state.currentPage === "properties" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
-                            <p className={this.state.currentPage === "properties" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
-                                Properties
-                            </p>
-                        </Link>
-                    </div>
-                    <div className="clearfix"/>
-                    <div className="dashboard_sidebar_link">
-                        <Link className="dashboard_sidebar_inner_link" to={{
-                            pathname: "/analysis",
-                            state: {
-                                user: this.state.user,
-                                totalEstimateWorth: this.state.totalEstimateWorth,
-                                missingEstimate: this.state.missingEstimate,
-                                profilePicture: this.state.profilePicture
-                            }
-                        }}>
-                            <SiGoogleanalytics className={this.state.currentPage === "analysis" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
-                            <p className={this.state.currentPage === "analysis" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
-                                Analysis
-                            </p>
-                        </Link>
-                    </div>
-                    <div className="dashboard_sidebar_link">
-                        <Link className="dashboard_sidebar_inner_link" to={{
-                            pathname: "/expenses",
-                            state: {
-                                user: this.state.user,
-                                totalEstimateWorth: this.state.totalEstimateWorth,
-                                missingEstimate: this.state.missingEstimate,
-                                profilePicture: this.state.profilePicture
-                            }
-                        }}>
-                            <FaMoneyCheck className={this.state.currentPage === "expenses" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
-                            <p className={this.state.currentPage === "expenses" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
-                                Expenses
-                            </p>
-                        </Link>
-                    </div>
-                    <div className="clearfix"/>
-                    <div className="dashboard_sidebar_link">
-                        <Link className="dashboard_sidebar_inner_link" to={{
-                            pathname: "/files",
-                            state: {
-                                user: this.state.user,
-                                totalEstimateWorth: this.state.totalEstimateWorth,
-                                missingEstimate: this.state.missingEstimate,
-                                profilePicture: this.state.profilePicture
-                            }
-                        }}>
-                            <GoFileDirectory className={this.state.currentPage === "files" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
-                            <p className={this.state.currentPage === "files" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
-                                Files
-                            </p>
-                        </Link>
-                    </div>
-                    <div className="clearfix"/>
-                    <div className="dashboard_sidebar_link">
-                        <Link className="dashboard_sidebar_inner_link" to={{
-                            pathname: "/settings",
-                            state: {
-                                user: this.state.user,
-                                totalEstimateWorth: this.state.totalEstimateWorth,
-                                missingEstimate: this.state.missingEstimate,
-                                profilePicture: this.state.profilePicture
-                            }
-                        }}>
-                            <IoSettingsSharp className={this.state.currentPage === "settings" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
-                            <p className={this.state.currentPage === "settings" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
-                                Settings
-                            </p>
-                        </Link>
-                    </div>
-                    <div className="clearfix"/>
-                    <div className="dashboard_sidebar_link"
-                        style={{
-                            marginTop: "75px",
-                        }}>
-                        <Link className="dashboard_sidebar_inner_link" to={{
-                            pathname: "/feedback",
-                            state: {
-                                user: this.state.user,
-                                totalEstimateWorth: this.state.totalEstimateWorth,
-                                missingEstimate: this.state.missingEstimate,
-                                profilePicture: this.state.profilePicture
-                            }
-                        }}>
-                            <MdFeedback className={this.state.currentPage === "feedback" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
-                            <p className={this.state.currentPage === "feedback" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
-                                Feedback
-                            </p>
-                        </Link>
-                    </div>
+                    <div style={{
+                        backgroundColor: "#d3d3d3",
+                        float: "left",
+                        height: "1px",
+                        marginLeft: "10%",
+                        marginRight: "10%",
+                        width: "80%",
+                    }}></div>
                     <div className="clearfix"/>
                     <div style={{
-                        backgroundColor: "#32384D",
-                        bottom: "0",
-                        height: "50px",
-                        position: "fixed",
-                        width: "220px",
+                        marginTop: "0px",
                     }}>
-                        <p style={{
-                            color: "white",
-                            lineHeight: "50px",
-                            textAlign: "center",
-                            userSelect: "none",
+                        <div className="dashboard_sidebar_link">
+                            <Link className="dashboard_sidebar_inner_link" to={{
+                                pathname: "/dashboard",
+                                state: {
+                                    user: this.state.user,
+                                    totalEstimateWorth: this.state.totalEstimateWorth,
+                                    missingEstimate: this.state.missingEstimate,
+                                    profilePicture: this.state.profilePicture
+                                }
+                            }}>
+                                <MdDashboard 
+                                    className={
+                                        this.state.currentPage === "overview" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : 
+                                        "dashboard_sidebar_link_icon"
+                                }/>
+                                <p 
+                                    className={
+                                        this.state.currentPage === "overview" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : 
+                                        "dashboard_sidebar_link_text"
+                                }>
+                                    Overview
+                                </p>
+                            </Link>
+                        </div>
+                        <div className="clearfix"/>
+                        <div className="dashboard_sidebar_link">
+                            <Link className="dashboard_sidebar_inner_link" to={{
+                                pathname: "/properties",
+                                state: {
+                                    user: this.state.user,
+                                    totalEstimateWorth: this.state.totalEstimateWorth,
+                                    missingEstimate: this.state.missingEstimate,
+                                    profilePicture: this.state.profilePicture
+                                }
+                            }}>
+                                <BsFillHouseFill className={this.state.currentPage === "properties" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
+                                <p className={this.state.currentPage === "properties" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
+                                    Properties
+                                </p>
+                            </Link>
+                        </div>
+                        <div className="clearfix"/>
+                        <div className="dashboard_sidebar_link">
+                            <Link className="dashboard_sidebar_inner_link" to={{
+                                pathname: "/analysis",
+                                state: {
+                                    user: this.state.user,
+                                    totalEstimateWorth: this.state.totalEstimateWorth,
+                                    missingEstimate: this.state.missingEstimate,
+                                    profilePicture: this.state.profilePicture
+                                }
+                            }}>
+                                <SiGoogleanalytics className={this.state.currentPage === "analysis" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
+                                <p className={this.state.currentPage === "analysis" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
+                                    Analysis
+                                </p>
+                            </Link>
+                        </div>
+                        <div className="dashboard_sidebar_link">
+                            <Link className="dashboard_sidebar_inner_link" to={{
+                                pathname: "/expenses",
+                                state: {
+                                    user: this.state.user,
+                                    totalEstimateWorth: this.state.totalEstimateWorth,
+                                    missingEstimate: this.state.missingEstimate,
+                                    profilePicture: this.state.profilePicture
+                                }
+                            }}>
+                                <FaMoneyCheck className={this.state.currentPage === "expenses" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
+                                <p className={this.state.currentPage === "expenses" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
+                                    Expenses
+                                </p>
+                            </Link>
+                        </div>
+                        <div className="clearfix"/>
+                        <div className="dashboard_sidebar_link">
+                            <Link className="dashboard_sidebar_inner_link" to={{
+                                pathname: "/files",
+                                state: {
+                                    user: this.state.user,
+                                    totalEstimateWorth: this.state.totalEstimateWorth,
+                                    missingEstimate: this.state.missingEstimate,
+                                    profilePicture: this.state.profilePicture
+                                }
+                            }}>
+                                <GoFileDirectory className={this.state.currentPage === "files" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
+                                <p className={this.state.currentPage === "files" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
+                                    Files
+                                </p>
+                            </Link>
+                        </div>
+                        <div className="clearfix"/>
+                        <div className="dashboard_sidebar_link">
+                            <Link className="dashboard_sidebar_inner_link" to={{
+                                pathname: "/settings",
+                                state: {
+                                    user: this.state.user,
+                                    totalEstimateWorth: this.state.totalEstimateWorth,
+                                    missingEstimate: this.state.missingEstimate,
+                                    profilePicture: this.state.profilePicture
+                                }
+                            }}>
+                                <IoSettingsSharp className={this.state.currentPage === "settings" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
+                                <p className={this.state.currentPage === "settings" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
+                                    Settings
+                                </p>
+                            </Link>
+                        </div>
+                        <div className="clearfix"/>
+                        <div className="dashboard_sidebar_link"
+                            style={{
+                                marginTop: "75px",
+                            }}>
+                            <Link className="dashboard_sidebar_inner_link" to={{
+                                pathname: "/feedback",
+                                state: {
+                                    user: this.state.user,
+                                    totalEstimateWorth: this.state.totalEstimateWorth,
+                                    missingEstimate: this.state.missingEstimate,
+                                    profilePicture: this.state.profilePicture
+                                }
+                            }}>
+                                <MdFeedback className={this.state.currentPage === "feedback" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_icon" : "dashboard_sidebar_link_icon"} />
+                                <p className={this.state.currentPage === "feedback" ? "dashboard_sidebar_link_icon_on dashboard_sidebar_link_text" : "dashboard_sidebar_link_text"}>
+                                    Feedback
+                                </p>
+                            </Link>
+                        </div>
+                        <div className="clearfix"/>
+                        <div style={{
+                            backgroundColor: "#f5f5fa",
+                            bottom: "0",
+                            height: "50px",
+                            position: "fixed",
+                            width: "250px",
                         }}>
-                            Beta
-                        </p>
+                            <p style={{
+                                color: "#32384D",
+                                lineHeight: "50px",
+                                textAlign: "center",
+                                userSelect: "none",
+                            }}>
+                                Beta
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

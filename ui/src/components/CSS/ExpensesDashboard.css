@@ -96,19 +96,6 @@
     width: 100%;
 }
 
-.expenses_table {
-    background-color: white;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
-    border-radius: 10px;
-    float: left;
-    height: calc(74vh);
-    min-height: 650px;
-    min-width: 1000px;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    width: 100%;
-}
-
 .expenses_table_body {
     height: calc(73vh - 50px);
     min-height: 600px;

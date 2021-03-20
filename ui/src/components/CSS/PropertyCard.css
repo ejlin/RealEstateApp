@@ -11,10 +11,10 @@
     /* min-width: 276px;   4px for border */
     width: 300px;
 }
-
+/* 
 .property_card_box:nth-child(3){
     margin-right: 0px !important;
-}
+} */
 
 ::-webkit-scrollbar {
     width: 0px;  /* Remove scrollbar space */

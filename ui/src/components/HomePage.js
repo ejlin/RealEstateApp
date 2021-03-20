@@ -70,7 +70,7 @@ class HomePage extends React.Component {
                             <p style={{
                                 color: "grey",
                                 fontFamily: "'Poppins', sans-serif",
-                                fontSize: "1.3em",
+                                fontSize: "1.2em",
                                 marginTop: "15px",
                                 width: "500px",
                             }}>
