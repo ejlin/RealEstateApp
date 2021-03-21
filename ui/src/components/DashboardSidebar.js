@@ -14,7 +14,7 @@ import { capitalizeName } from '../utility/Util.js';
 import { BsFillHouseFill } from 'react-icons/bs';
 import { GoFileDirectory } from 'react-icons/go';
 import { SiGoogleanalytics } from 'react-icons/si';
-import { IoSettingsSharp } from 'react-icons/io5';
+import { IoSettingsSharp, IoEllipsisHorizontal } from 'react-icons/io5';
 import { MdFeedback, MdDashboard, MdAdd } from 'react-icons/md';
 import { FiChevronDown } from 'react-icons/fi';
 import { FaMoneyCheck } from 'react-icons/fa';
@@ -108,12 +108,25 @@ class DashboardSidebar extends React.Component {
                     }}>
                         <img src={logo}
                             style={{
-                                height: "27.5px",
+                                float: "left",
+                                height: "18px",
                                 marginLeft: "calc((100% - 135px)/2)",
-                                marginTop: "calc((65px - 27.5px)/2)",
-                                width: "135px",
+                                marginRight: "10px",
+                                marginTop: "calc((65px - 18px)/2)",
+                                userSelect: "none",
+                                width: "90px",
                             }}
                         ></img>
+                        <IoEllipsisHorizontal 
+                            className="opacity"
+                            style={{
+                                color: "grey",
+                                cursor: "pointer",
+                                float: "left",
+                                height: "25px",
+                                marginTop: "calc((65px - 25px)/2)",
+                                width: "40px",
+                            }}/>
                     </div>
                     {/* {
                         this.state.profilePicture !== null && this.state.profilePicture !== undefined && this.state.profilePicture !== "" ? 

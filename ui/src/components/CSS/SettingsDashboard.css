@@ -1,11 +1,3 @@
-#settings_dashboard_parent_box {
-    background-color: #F5F5FA;
-    float: left;
-    height: 100vh;
-    margin-left: 220px;
-    width: calc(100% - 220px);
-}
-
 #settings_dashboard_title_box {
     margin-left: 60px;
     margin-top: 80px;
@@ -61,13 +53,6 @@
     background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
 
-#settings_dashboard_user_information_box {
-    border-radius: 4px;
-    float: left;
-    height: 675px;
-    width: 275px;
-}
-
 #settings_dashboard_user_information_profile_picture_edit_icon {
     background-color:#d3d3d3;
     border: 2px solid white;
@@ -92,19 +77,6 @@
     margin-left: 40px;
     margin-top: 50px;
     width: calc((100% - 80px));
-}
-
-#settings_dasboard_user_information_inner_box {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
-    float: left;
-    margin-top: 25px;
-    padding-bottom: 25px;
-    padding-left: 25px;
-    padding-right: 25px;
-    padding-top: 15px;
-    width: calc(275px - 50px);
 }
 
 .settings_dashboard_user_information_inner_box_title {
@@ -246,7 +218,7 @@
 .settings_dashboard_right_box_nav_bar_list {
     background-color: white;
     border-radius: 50px 10px 10px 50px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
+    /* box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09); */
     cursor: pointer;
     float: left;
     height: 45px;
@@ -299,7 +271,7 @@
 .right_box_page_inner_box {
     background-color: white;
     border-radius: 10px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
+    /* box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09); */
     float: left;
     height: 600px;
     margin-left: 20px;
@@ -308,7 +280,7 @@
     padding-left: 25px;
     padding-right: 25px;
     padding-top: 20px;
-    width: calc(100% - 250px - 20px - 50px);
+    width: calc(100%);
 }
 
 .right_box_page_title {

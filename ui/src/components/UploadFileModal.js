@@ -222,7 +222,20 @@ class UploadFileModal extends React.Component {
     render() {
         return (
             <div>
-                <div className="upload_file_modal_parent_box">
+                <div style={{
+                    backgroundColor: "white",
+                    borderRadius: "10px",
+                    boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                    float: "left",
+                    minHeight: "450px",
+                    marginLeft: "max(15%, calc((100% - 475px)/2))",
+                    marginRight: "10%",
+                    marginTop: "125px",
+                    maxWidth: "550px",
+                    paddingBottom: "30px",
+                    width: "475px",
+                    zIndex: "11",
+                }}>
                     <div className="create_expense_modal_parent_box_title_box">
                         <IoCloseOutline 
                             onClick={() => {

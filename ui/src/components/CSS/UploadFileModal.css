@@ -1,18 +1,3 @@
-.upload_file_modal_parent_box {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
-    float: left;
-    min-height: 450px;
-    margin-left: max(15%, calc((100% - 550px)/2));
-    margin-right: 10%;
-    margin-top: 125px;
-    max-width: 550px;
-    padding-bottom: 30px;
-    width: 70%; 
-    z-index: 11;
-}
-
 #files_dashboard_upload_file_button_label {
     background-color: #F5f5fa;
     border: 1px solid black;

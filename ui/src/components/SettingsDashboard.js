@@ -5,6 +5,7 @@ import './CSS/SettingsDashboard.css';
 import './CSS/Style.css';
 
 import DashboardSidebar from './DashboardSidebar.js';
+import NotificationSidebar from './NotificationSidebar.js';
 
 import { MdEdit, MdEmail } from 'react-icons/md';
 import { ImUser } from 'react-icons/im';
@@ -766,89 +767,42 @@ class SettingsDashboard extends React.Component {
                 }}/>
                 {this.state.isLoading ? 
                 <div></div> :
-
-                <div id="settings_dashboard_parent_box">
-                    <div id="settings_dashboard_title_box">
-                        <p id="settings_dashboard_title_box_title">
-                            Settings
-                        </p>
-                    </div>
-                    <div className="clearfix"></div>
-                    <div id="settings_dashboard_parent_inner_box">
-                        <div id="settings_dashboard_user_information_box">
-                            
-                            {this.state.profilePicture ? 
-                            <img 
-                                src={this.state.profilePicture} 
-                                alt={"logo"}
-                                style={{
-                                    backgroundColor: "white",
-                                    borderRadius: "50%",
-                                    boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
-                                    float: "left",
-                                    height: "225px",
-                                    marginLeft: "calc((100% - 225px)/2)",
-                                    marginRight: "calc((100% - 225px)/2)",
-                                    width: "225px",
-                                }}/> :
-                            <TiUser style={{
-                                backgroundColor: "white",
-                                borderRadius: "50%",
-                                color:  "#d3d3d3",
-                                float: "left",
-                                height: "175px",
-                                marginLeft: "calc((100% - 225px)/2)",
-                                marginRight: "calc((100% - 225px)/2)",
-                                padding: "25px",
-                                width: "175px",
-                            }}/>}
-
-                            <label htmlFor="settings_dashboard_upload_profile_picture_button">
-                                <MdEdit id="settings_dashboard_user_information_profile_picture_edit_icon"></MdEdit>
-                            </label>
-                            <input 
-                                id="settings_dashboard_upload_profile_picture_button" 
-                                type="file" 
-                                accept=".png,.jpg,.heic"
-                                onChange={this.handleProfilePictureChange}></input>
-
+                <div style={{
+                    backgroundColor: "#F5F5FA",
+                    float: "left",
+                    height: "100vh",
+                    marginLeft: "250px",
+                    width: "calc(100% - 250px - 375px)",
+                }}>
+                    <div className="page-white-background">
+                        <div style={{
+                            float: "left",
+                            paddingBottom: "10px",
+                            paddingTop: "10px",
+                            textAlign: "center",
+                            width: "100%",
+                        }}>
+                            <p style={{
+                                fontFamily: "'Poppins', sans-serif",
+                                fontSize: "1.1em",
+                                height: "50px",
+                                lineHeight: "40px",
+                            }}>
+                                SETTINGS
+                            </p>
                             <div className="clearfix"/>
-                            <div id="settings_dasboard_user_information_inner_box">
-                                <p className="settings_dashboard_user_information_inner_box_title">
-                                    Info
-                                </p>
-                                <div className="settings_dashboard_user_information_bullet_box">
-                                    <ImUser className="settings_dashboard_user_information_icon"></ImUser>
-                                    <p className="settings_dashboard_user_information_inner_box_text">
-                                        {this.capitalizeName(this.state.user["first_name"])} {this.capitalizeName(this.state.user["last_name"])} 
-                                    </p>
-                                </div>
-                                <div className="clearfix"/>
-                                <div className="settings_dashboard_user_information_bullet_box">
-                                    <MdEmail className="settings_dashboard_user_information_icon"></MdEmail>
-                                    <p className="settings_dashboard_user_information_inner_box_text">
-                                        {this.state.user["email"]}
-                                    </p>
-                                </div>
-                                <div className="clearfix"/>
-                                <div className="settings_dashboard_user_information_bullet_box">
-                                    <AiFillClockCircle className="settings_dashboard_user_information_icon"></AiFillClockCircle>
-                                    <p className="settings_dashboard_user_information_inner_box_text">
-                                        Joined on {this.getJoinedAt()}
-                                    </p>
-                                </div>
-                                <div className="clearfix"/>
-                                <div className="settings_dashboard_user_information_bullet_box">
-                                    <BsFillAwardFill className="settings_dashboard_user_information_icon"></BsFillAwardFill>
-                                    <p className="settings_dashboard_user_information_inner_box_text">
-                                        {this.state.user["plan"] ? this.capitalizeName(this.state.user["plan"]) : "Starter"} Plan
-                                    </p>
-                                </div>
-                            </div>
+                            <div className="page-title-bar-divider"></div>
                         </div>
-                        <div id="settings_dashboard_right_box">
-                            <div id="settings_dashboard_right_box_nav_bar">
-                                <li 
+                        <div style={{
+                            display: "inline-block",
+                            marginLeft: "40px",
+                            marginRight: "40px",
+                            marginTop: "15px",
+                            textAlign: "center",
+                            width: "calc((100% - 80px))",
+                        }}>
+                            <div>
+                                <div 
                                     onClick={() => 
                                         this.setState({
                                             toDisplay: general,
@@ -856,25 +810,25 @@ class SettingsDashboard extends React.Component {
                                             editNotifications: false,
                                             editPlan: false
                                         })}
-                                    className={
-                                        this.state.toDisplay === general ? 
-                                        "settings_dashboard_right_box_nav_bar_list settings_dashboard_right_box_nav_bar_active_list" : 
-                                        "settings_dashboard_right_box_nav_bar_list"}>
-                                    <IoSettingsSharp className={
-                                        this.state.toDisplay === general ? 
-                                        "settings_dashboard_right_box_nav_bar_list_icon settings_dashboard_right_box_nav_bar_list_icon_active" :
-                                        "settings_dashboard_right_box_nav_bar_list_icon"
-                                    }></IoSettingsSharp>
-                                    <p className={
-                                        this.state.toDisplay === general ? 
-                                        "settings_dashboard_right_box_nav_bar_list_text settings_dashboard_right_box_nav_bar_list_text_active" :
-                                        "settings_dashboard_right_box_nav_bar_list_text"
-                                    }>
-                                        General
-                                    </p>
-                                </li>
-                                <div className="clearfix"/>
-                                <li 
+                                    style={{
+                                        cursor: "pointer",
+                                        float: "left",
+                                        marginRight: "40px",
+                                    }}>
+                                    <IoSettingsSharp style={{
+                                        color: "grey",
+                                        float: "left",
+                                        height: "25px",
+                                        width: "25px",
+                                    }}/>
+                                    <p style={{
+                                        color: "grey",
+                                        float: "left",
+                                        fontFamily: "'Poppins', sans-serif",
+                                        marginLeft: "5px",
+                                    }}>General</p>
+                                </div>
+                                <div 
                                     onClick={() => 
                                         this.setState({
                                             toDisplay: email,
@@ -883,25 +837,25 @@ class SettingsDashboard extends React.Component {
                                             editProperties: false,
                                             editPlan: false
                                         })}
-                                    className={
-                                        this.state.toDisplay === email ? 
-                                        "settings_dashboard_right_box_nav_bar_list settings_dashboard_right_box_nav_bar_active_list" : 
-                                        "settings_dashboard_right_box_nav_bar_list"}>
-                                    <MdEmail className={
-                                        this.state.toDisplay === email ? 
-                                        "settings_dashboard_right_box_nav_bar_list_icon settings_dashboard_right_box_nav_bar_list_icon_active" :
-                                        "settings_dashboard_right_box_nav_bar_list_icon"
-                                    }></MdEmail>
-                                    <p className={
-                                        this.state.toDisplay === email ? 
-                                        "settings_dashboard_right_box_nav_bar_list_text settings_dashboard_right_box_nav_bar_list_text_active" :
-                                        "settings_dashboard_right_box_nav_bar_list_text"
-                                    }>
-                                        Email
-                                    </p>
-                                </li>
-                                <div className="clearfix"/>
-                                <li 
+                                    style={{
+                                        cursor: "pointer",
+                                        float: "left",
+                                        marginRight: "40px",
+                                    }}>
+                                    <MdEmail style={{
+                                        color: "grey",
+                                        float: "left",
+                                        height: "25px",
+                                        width: "25px",
+                                    }}/>
+                                    <p style={{
+                                        color: "grey",
+                                        float: "left",
+                                        fontFamily: "'Poppins', sans-serif",
+                                        marginLeft: "5px",
+                                    }}>Email</p>
+                                </div>
+                                <div 
                                     onClick={() => 
                                         this.setState({
                                             toDisplay: notifications,
@@ -910,25 +864,25 @@ class SettingsDashboard extends React.Component {
                                             editProperties: false,
                                             editPlan: false
                                         })}
-                                    className={
-                                        this.state.toDisplay === notifications ? 
-                                        "settings_dashboard_right_box_nav_bar_list settings_dashboard_right_box_nav_bar_active_list" : 
-                                        "settings_dashboard_right_box_nav_bar_list"}>
-                                    <IoMdNotifications className={
-                                        this.state.toDisplay === notifications ? 
-                                        "settings_dashboard_right_box_nav_bar_list_icon settings_dashboard_right_box_nav_bar_list_icon_active" :
-                                        "settings_dashboard_right_box_nav_bar_list_icon"
-                                    }></IoMdNotifications>
-                                    <p className={
-                                        this.state.toDisplay === notifications ? 
-                                        "settings_dashboard_right_box_nav_bar_list_text settings_dashboard_right_box_nav_bar_list_text_active" :
-                                        "settings_dashboard_right_box_nav_bar_list_text"
-                                    }>
-                                        Notifications
-                                    </p>
-                                </li>
-                                <div className="clearfix"/>
-                                <li 
+                                    style={{
+                                        cursor: "pointer",
+                                        float: "left",
+                                        marginRight: "40px",
+                                    }}>
+                                    <IoMdNotifications style={{
+                                        color: "grey",
+                                        float: "left",
+                                        height: "25px",
+                                        width: "25px",
+                                    }}/>
+                                    <p style={{
+                                        color: "grey",
+                                        float: "left",
+                                        fontFamily: "'Poppins', sans-serif",
+                                        marginLeft: "5px",
+                                    }}>Notifications</p>
+                                </div>
+                                <div 
                                     onClick={() => 
                                         this.setState({
                                             toDisplay: properties,
@@ -937,25 +891,25 @@ class SettingsDashboard extends React.Component {
                                             editNotifications: false,
                                             editPlan: false
                                         })}
-                                    className={
-                                        this.state.toDisplay === properties ? 
-                                        "settings_dashboard_right_box_nav_bar_list settings_dashboard_right_box_nav_bar_active_list" : 
-                                        "settings_dashboard_right_box_nav_bar_list"}>
-                                    <BsFillHouseFill className={
-                                        this.state.toDisplay === properties ? 
-                                        "settings_dashboard_right_box_nav_bar_list_icon settings_dashboard_right_box_nav_bar_list_icon_active" :
-                                        "settings_dashboard_right_box_nav_bar_list_icon"
-                                    }></BsFillHouseFill>
-                                    <p className={
-                                        this.state.toDisplay === properties ? 
-                                        "settings_dashboard_right_box_nav_bar_list_text settings_dashboard_right_box_nav_bar_list_text_active" :
-                                        "settings_dashboard_right_box_nav_bar_list_text"
-                                    }>
-                                        Properties
-                                    </p>
-                                </li>
-                                <div className="clearfix"/>
-                                <li 
+                                    style={{
+                                        cursor: "pointer",
+                                        float: "left",
+                                        marginRight: "40px",
+                                    }}>
+                                    <BsFillHouseFill style={{
+                                        color: "grey",
+                                        float: "left",
+                                        height: "25px",
+                                        width: "25px",
+                                    }}/>
+                                    <p style={{
+                                        color: "grey",
+                                        float: "left",
+                                        fontFamily: "'Poppins', sans-serif",
+                                        marginLeft: "5px",
+                                    }}>Properties</p>
+                                </div>
+                                <div 
                                     onClick={() => 
                                         this.setState({
                                             toDisplay: plan,
@@ -964,28 +918,121 @@ class SettingsDashboard extends React.Component {
                                             editNotifications: false,
                                             editProperties: false,
                                         })}
-                                    className={
-                                        this.state.toDisplay === plan ? 
-                                        "settings_dashboard_right_box_nav_bar_list settings_dashboard_right_box_nav_bar_active_list" : 
-                                        "settings_dashboard_right_box_nav_bar_list"}>
-                                    <BsFillAwardFill className={
-                                        this.state.toDisplay === plan ? 
-                                        "settings_dashboard_right_box_nav_bar_list_icon settings_dashboard_right_box_nav_bar_list_icon_active" :
-                                        "settings_dashboard_right_box_nav_bar_list_icon"
-                                    }></BsFillAwardFill>
-                                    <p className={
-                                        this.state.toDisplay === plan ? 
-                                        "settings_dashboard_right_box_nav_bar_list_text settings_dashboard_right_box_nav_bar_list_text_active" :
-                                        "settings_dashboard_right_box_nav_bar_list_text"
-                                    }>
-                                        Plan
-                                    </p>
-                                </li>
+                                    style={{
+                                        cursor: "pointer",
+                                        float: "left",
+                                        marginRight: "40px",
+                                    }}>
+                                    <BsFillAwardFill style={{
+                                        color: "grey",
+                                        float: "left",
+                                        height: "25px",
+                                        width: "25px",
+                                    }}/>
+                                    <p style={{
+                                        color: "grey",
+                                        float: "left",
+                                        fontFamily: "'Poppins', sans-serif",
+                                        marginLeft: "5px",
+                                    }}>Plan</p>
+                                </div>
                             </div>
-                            {this.renderRightBoxPage()}
+                        </div>
+                        <div id="settings_dashboard_parent_inner_box">
+                            <div style={{
+                                borderRadius: "4px",
+                                float: "left",
+                                height: "675px",
+                                width: "225px",
+                            }}>
+                                
+                                {this.state.profilePicture ? 
+                                <img 
+                                    src={this.state.profilePicture} 
+                                    alt={"logo"}
+                                    style={{
+                                        backgroundColor: "white",
+                                        borderRadius: "50%",
+                                        boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                                        float: "left",
+                                        height: "225px",
+                                        marginLeft: "calc((100% - 225px)/2)",
+                                        marginRight: "calc((100% - 225px)/2)",
+                                        width: "225px",
+                                    }}/> :
+                                <TiUser style={{
+                                    backgroundColor: "white",
+                                    borderRadius: "50%",
+                                    color:  "#d3d3d3",
+                                    float: "left",
+                                    height: "175px",
+                                    marginLeft: "calc((100% - 225px)/2)",
+                                    marginRight: "calc((100% - 225px)/2)",
+                                    padding: "25px",
+                                    width: "175px",
+                                }}/>}
+
+                                <label htmlFor="settings_dashboard_upload_profile_picture_button">
+                                    <MdEdit id="settings_dashboard_user_information_profile_picture_edit_icon"></MdEdit>
+                                </label>
+                                <input 
+                                    id="settings_dashboard_upload_profile_picture_button" 
+                                    type="file" 
+                                    accept=".png,.jpg,.heic"
+                                    onChange={this.handleProfilePictureChange}></input>
+                                <div className="clearfix"/>
+                                <div style={{
+                                    backgroundColor: "white",
+                                    float: "left",
+                                    marginTop: "40px",
+                                    width: "225px",
+                                }}>
+                                    <p className="settings_dashboard_user_information_inner_box_title">
+                                        Info
+                                    </p>
+                                    <div className="settings_dashboard_user_information_bullet_box">
+                                        <ImUser className="settings_dashboard_user_information_icon"></ImUser>
+                                        <p className="settings_dashboard_user_information_inner_box_text">
+                                            {this.capitalizeName(this.state.user["first_name"])} {this.capitalizeName(this.state.user["last_name"])} 
+                                        </p>
+                                    </div>
+                                    <div className="clearfix"/>
+                                    <div className="settings_dashboard_user_information_bullet_box">
+                                        <MdEmail className="settings_dashboard_user_information_icon"></MdEmail>
+                                        <p className="settings_dashboard_user_information_inner_box_text">
+                                            {this.state.user["email"]}
+                                        </p>
+                                    </div>
+                                    <div className="clearfix"/>
+                                    <div className="settings_dashboard_user_information_bullet_box">
+                                        <AiFillClockCircle className="settings_dashboard_user_information_icon"></AiFillClockCircle>
+                                        <p className="settings_dashboard_user_information_inner_box_text">
+                                            Joined on {this.getJoinedAt()}
+                                        </p>
+                                    </div>
+                                    <div className="clearfix"/>
+                                    <div className="settings_dashboard_user_information_bullet_box">
+                                        <BsFillAwardFill className="settings_dashboard_user_information_icon"></BsFillAwardFill>
+                                        <p className="settings_dashboard_user_information_inner_box_text">
+                                            {this.state.user["plan"] ? this.capitalizeName(this.state.user["plan"]) : "Starter"} Plan
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="settings_dashboard_right_box">
+                                {this.renderRightBoxPage()}
+                            </div>
                         </div>
                     </div>
-                </div>}
+                </div>
+                }
+                <NotificationSidebar data={{
+                    state: {
+                        user: this.state.user,
+                        totalEstimateWorth: this.state.totalEstimateWorth,
+                        missingEstimate: this.state.missingEstimate 
+                    }
+                }}/>
             </div>
         )
     }

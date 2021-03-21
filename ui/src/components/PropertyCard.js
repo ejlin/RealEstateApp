@@ -95,9 +95,10 @@ class PropertyCard extends React.Component {
                         fontWeight: "bold",
                         marginLeft: "20px",
                     }}>
-                        {this.state.property["address_one"]} {this.state.property["address_two"]} 
+                        {this.state.property["address_one"] ? this.state.property["address_one"] : "N/A"} {this.state.property["address_two"] ? this.state.property["address_two"] : ""} 
                     </p>
                     <div className="clearfix"/>
+                    
                     <p style={{
                         fontSize: "1.05em",
                         fontWeight: "bold",
@@ -105,7 +106,11 @@ class PropertyCard extends React.Component {
                         marginTop: "5px",
                         width: "calc(100% - 60px)",
                     }}>
-                        {this.state.property["city"]}, {this.state.property["state"]} {this.state.property["zip_code"]}
+                        {
+                            this.state.property["city"] || this.state.property["state"] || this.state.property["zip_code"] ?
+                            this.state.property["city"] + ", " + this.state.property["state"] + " " + this.state.property["zip_code"] :
+                            "n/a"
+                        }
                     </p>              
                 </div>
                 <p style={{
@@ -117,7 +122,7 @@ class PropertyCard extends React.Component {
                     marginLeft: "20px",
                     userSelect: "none",
                 }}>
-                    ${this.state.property["estimate"] ? numberWithCommas(this.state.property["estimate"]) : numberWithCommas(this.state.property["price_bought"])}
+                    ${this.state.property["estimate"] ? numberWithCommas(this.state.property["estimate"]) : (this.state.property["price_bought"] ? numberWithCommas(this.state.property["price_bought"]) : "-")}
                 </p>
                 <div className="clearfix"/>
                 {

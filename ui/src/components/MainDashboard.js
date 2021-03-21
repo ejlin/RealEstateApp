@@ -185,8 +185,6 @@ class MainDashboard extends React.Component {
         } 
         return "Great DTI";
     }        
-    
-
 
     renderRentCollected() {
         return (
@@ -384,7 +382,6 @@ class MainDashboard extends React.Component {
                                         borderRadius: "10px",
                                         float: "left",
                                         marginBottom: "30px",
-                                        marginTop: "25px",
                                         minWidth: "calc(250px + 35px)",
                                         width: "calc(100%)",
                                     }}>
