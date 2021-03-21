@@ -25,12 +25,12 @@ body {
 
 .search_bar {
     border: none;
-    border-radius: 50px;
-    box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
-    float: right;
+    /* border-radius: 50px; */
+    /* box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09); */
+    float: left;
     font-size: 1.1em;
-    padding: 10px 15px 10px 15px;
-    width: 40%;
+    padding: 10px 15px 10px 25px;
+    width: calc(50% - 100px);
 }
 
 .search_bar:focus, .generic_search_bar:focus {
@@ -45,13 +45,12 @@ body {
     background-color: #296CF6;
     border: 2px solid #296CF6;
     border-radius: 50px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.10), 0 6px 10px 0 rgba(0, 0, 0, 0.09);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.10), 0 6px 10px 0 rgba(0, 0, 0, 0.09); */
     color: white;
     cursor: pointer;
     float: right;
     font-weight: bold;
     height: 20px;
-    line-height: 20px;
     margin-left: 10px;
     padding: 7.5px 15px 7.5px 15px;
     text-align: center;
@@ -86,4 +85,19 @@ body {
 
 .no-outline-focus:focus {
     outline: none;
+}
+
+.page-white-background { 
+    background-color: white;
+    border-radius: 8px 8px 0px 0px;
+    float: left;
+    height: calc(100vh - 50px);
+    margin-top: 50px;
+    width: 100%;
+}
+
+.page-title-bar-divider {
+    background-color: #d3d3d3;
+    height: 1px;
+    width: 100%;
 }

@@ -57,9 +57,9 @@
 }
 
 .form_title {
-    border-bottom: 5px solid #296CF6;
     float: left;
-    font-size: 1.4em;
+    font-Family: 'Poppins', sans-serif;
+    font-size: 1.0em;
     font-weight: bold;
     padding-bottom: 5px;
 }
@@ -68,10 +68,6 @@
     background-color: #F6F7F9;
     float: left;
     width: 100%;
-}
-
-input {
-    margin-bottom: 15px;
 }
 
 input::placeholder {
@@ -106,14 +102,16 @@ input::placeholder {
     border: 1px solid #d3d3d3;
     border-radius: 4px;
     font-size: 1.1em;
+    margin-bottom: 15px;
     margin-top: 10px;
     padding: 10px 15px 10px 15px;
 }
 
 .form_inner_box_subtitle {
-    font-size: 1.1em;
-    font-weight: bold;
-    margin-top: 25px;
+    color: grey;
+    float: left;
+    font-Family: 'Poppins', sans-serif;
+    font-size: 1.0em;
 }
 
 .form_select_input {
@@ -140,6 +138,8 @@ input::placeholder {
 }
 
 .new_property_form_input_label {
+    float: left;
+    font-Family: 'Poppins', sans-serif;
 }
 
 .new_property_form_input_triple {
@@ -155,11 +155,12 @@ input::placeholder {
 }
 
 .form_continue_button {
-    background-color: #296CF6;
-    border-radius: 50px;
-    color: white;
+    background-color: #f5f5fa;
+    border-radius: 4px;
+    color: #32384D;
     cursor: pointer;
     float: right;
+    font-Family: 'Poppins', sans-serif;
     font-weight: bold;
     margin-left: 25px;
     padding: 10px 15px 10px 15px;
@@ -167,10 +168,16 @@ input::placeholder {
     user-select: none;
 }
 
+.form_continue_button:hover {
+    background-color: #32384D;
+    color: #f5f5fa;
+}
+
 .form_back_button {
     color: black;
     cursor: pointer;
     float: right;
+    font-Family: 'Poppins', sans-serif;
     padding: 10px;
     transition: 0.5s;
 }
@@ -276,7 +283,8 @@ input::placeholder {
 }
 
 .form_box {
+    float: left;
     margin-top: 25px;
     padding-bottom: 15px;
-    width: calc(100%);
+    width: 100%;
 }

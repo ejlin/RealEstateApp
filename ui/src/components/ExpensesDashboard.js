@@ -13,6 +13,7 @@ import ExpensesTable from './ExpensesTable.js';
 
 import { BsArrowUp } from 'react-icons/bs';
 import { RiErrorWarningFill } from 'react-icons/ri';
+import { MdAdd } from 'react-icons/md';
 
 export function convertDate(date){
 
@@ -561,42 +562,88 @@ class ExpensesDashboard extends React.Component {
                     backgroundColor: "#F5F5FA",
                     float: "left",
                     height: "100vh",
-                    marginLeft: "220px",
-                    width: "calc(100% - 220px - 375px)",
+                    marginLeft: "250px",
+                    width: "calc(100% - 250px - 375px)",
                 }}>
-                    <div className="expenses_dashboard_parent_inner_box">
-                        <div className="expenses_dashboard_title_box">
-                            <div className="expenses_dashboard_parent_inner_box_title">
-                                Expenses
-                            </div>
+                    <div className="page-white-background">
+                        <div style={{
+                            float: "left",
+                            paddingBottom: "10px",
+                            paddingTop: "10px",
+                            width: "100%",
+                        }}>
                             <input id="expenses_dashboard_search_bar" className="search_bar" placeholder="Search..." onChange={this.handleSearchBar}>
                             </input>
-                        </div>
-                        <div className="expenses_dashboard_body_box">
-                            <div className="expenses_dashboard_buttons_box">
-                                <div 
-                                    onMouseDown={() => this.displayAddExpense()}
-                                    className="page_button">
-                                    Add Expense
-                                </div>
+                            <p
+                                style={{
+                                    float: "left",
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "1.1em",
+                                    lineHeight: "40px",
+                                    width: "200px",
+                                }}>
+                                EXPENSES
+                            </p>
+                            <div 
+                                className="opacity"
+                                onMouseDown={() => this.displayAddExpense()}
+                                style={{
+                                    cursor: "pointer",
+                                    float: "right",
+                                    marginRight: "25px",
+                                }}>
+                                <MdAdd style={{
+                                    backgroundColor: "#f5f5fa",
+                                    borderRadius: "50%",
+                                    color: "#296cf6",
+                                    float: "left",
+                                    height: "20px",
+                                    padding: "10px",
+                                    width: "20px",
+                                }}/>
+                                <p
+                                    style={{
+                                        color: "#296cf6",
+                                        float: "left",
+                                        fontFamily: "'Poppins', sans-serif",
+                                        fontWeight: "bold",
+                                        lineHeight: "40px",
+                                        marginLeft: "10px",
+                                        textDecoration: "none",
+                                        userSelect: "none",
+                                    }}>
+                                    New
+                                </p>
                             </div>
+                        </div>
+                        <div className="clearfix"/>
+                        <div className="page-title-bar-divider"></div>
+                        <div className="expenses_dashboard_body_box">
+                                
                             {this.state.isLoading ? 
                             this.renderPageLoadingView() : 
-                            <div className="expenses_dashboard_body_inner_box">
-                                <div className="expenses_dashboard_body_inner_box_most_recent_box">
-                                    <ExpensesTable data={{
-                                        state:{
-                                            user: this.state.user,
-                                            expenses: this.state.expenses,
-                                            expensesMap: this.state.expensesMap,
-                                            propertiesMap: this.state.propertiesMap,
-                                            isSpecificProperty: false,
-                                            specificPropertyAddress: null,
-                                            displayAddExpense: this.displayAddExpense,
-                                            setActiveExpandedExpenseCard: this.setActiveExpandedExpenseCard,
-                                        }
-                                    }}/>
-                                </div>
+                            <div style={{
+                                float: "left",
+                                height: "calc(100vh - 50px - 50px - 50px)",
+                                marginLeft: "40px",
+                                marginRight: "40px",
+                                overflow: "hidden",
+                                // marginTop: "25px",
+                                width: "calc(100% - 80px)",
+                            }}>
+                                <ExpensesTable data={{
+
+                                    state:{
+                                        user: this.state.user,
+                                        expenses: this.state.expenses,
+                                        expensesMap: this.state.expensesMap,
+                                        propertiesMap: this.state.propertiesMap,
+                                        isSpecificProperty: false,
+                                        specificPropertyAddress: null,
+                                        displayAddExpense: this.displayAddExpense,
+                                        setActiveExpandedExpenseCard: this.setActiveExpandedExpenseCard,
+                                    }
+                                }}/>
                             </div>}
                         </div>
                     </div>

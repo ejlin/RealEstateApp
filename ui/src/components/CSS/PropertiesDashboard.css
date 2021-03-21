@@ -1,3 +1,7 @@
+body {
+    background-color: #f5f5fa;
+}
+
 #properties_dashboard_upload_file_icon:hover {
     color: white;
     background-color: #296CF6;

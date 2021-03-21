@@ -408,12 +408,12 @@ class ExpensesTable extends React.Component {
         return (
             <div style={{
                 backgroundColor: "white",
-                boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                // boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                 borderRadius: "10px",
                 float: "left",
-                height: "calc(74vh)",
                 minHeight: "650px",
                 minWidth: "1000px",
+                paddingBottom: "25px",
                 overflowX: "scroll",
                 overflowY: "hidden",
                 width: "100%",

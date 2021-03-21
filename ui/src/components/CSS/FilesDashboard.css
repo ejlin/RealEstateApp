@@ -1,11 +1,11 @@
 #files_dashboard_parent_box {
     background-color: #F5F5FA;
     height: 100vh;
-    margin-left: 220px;
+    margin-left: 250px;
     min-width: 700px;
     overflow: scroll;
     position: absolute;
-    width: calc(100% - 220px - 375px);
+    width: calc(100% - 250px - 375px);
 }
 
 #files_dashboard_welcome_box {
@@ -13,12 +13,6 @@
     margin-left: 60px;
     margin-top: 80px;
     width: calc(100% - 60px - 20px);
-}
-
-#files_dashboard_welcome_box_title {
-    float: left;
-    font-size: 1.6em;
-    font-weight: bold;
 }
 
 .files_dashboard_filter_and_sort_box {
@@ -212,13 +206,6 @@
     color: white;
     background-color: #296CF6;
     transform: rotate(-180deg);
-}
-
-#files_dashboard_files_box {
-    margin-left: 60px;
-    margin-right: 20px;
-    margin-top: 15px;
-    width: calc(100% - 60px - 20px);
 }
 
 #files_dashboard_upload_file_box {

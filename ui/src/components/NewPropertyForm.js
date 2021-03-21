@@ -5,6 +5,7 @@ import { Redirect } from "react-router-dom";
 import './CSS/NewPropertyForm.css';
 
 import DashboardSidebar from './DashboardSidebar.js';
+import NotificationSidebar from './NotificationSidebar.js';
 
 import { BsFillHouseFill } from 'react-icons/bs';
 import { AiTwotonePushpin } from 'react-icons/ai';
@@ -39,6 +40,8 @@ class NewPropertyForm extends React.Component {
         this.handleFieldChange = this.handleFieldChange.bind(this);
         this.propertyTypeOnChange = this.propertyTypeOnChange.bind(this);
         this.purchaseTypeOnChange = this.purchaseTypeOnChange.bind(this);
+
+        this.renderSuggestedAddress = this.renderSuggestedAddress.bind(this);
 
         this.isEqualAddress = this.isEqualAddress.bind(this);
         this.validatePropertyWithLob = this.validatePropertyWithLob.bind(this);
@@ -170,6 +173,7 @@ class NewPropertyForm extends React.Component {
                         <p className="form_inner_box_subtitle">
                             Please input your property's general information
                         </p>
+                        <div className="clearfix"/>
                         <div className="form_box">
                             <label className="new_property_form_input_label">
                                 ADDRESS LINE 1
@@ -197,7 +201,7 @@ class NewPropertyForm extends React.Component {
                                     </label>
                                     <input 
                                         // placeholder="City" 
-                                        className="new_property_form_input_triple" 
+                                        className="new_property_form_input new_property_form_input_triple" 
                                         type="text" 
                                         name="city" 
                                         onChange={this.handleFieldChange} />
@@ -288,6 +292,7 @@ class NewPropertyForm extends React.Component {
                             </div>
                             <div style={{
                                 float: "left",
+                                marginTop: "25px",
                                 paddingBottom: "25px",
                                 width: "100%",
                             }}>
@@ -313,71 +318,69 @@ class NewPropertyForm extends React.Component {
                             Please input information on how you purchased this property.
                         </p>
                         <div className="form_box">
-                            <div className="">
+                            <label className="new_property_form_input_label">
+                                PURCHASE PRICE
+                            </label>
+                            <input 
+                                // placeholder="$ Purchase Price" 
+                                className="new_property_form_input new_property_form_input_triple" 
+                                type="number" 
+                                name="purchase_price" 
+                                onChange={this.handleFieldChange} />
+                            <div className="clearfix"/>
+                            <div style={{
+                                float: "left",
+                                width: "calc(50% - 12.5px)",
+                            }}>
                                 <label className="new_property_form_input_label">
-                                    PURCHASE PRICE
+                                    PURCHASE DATE: MM/YY
                                 </label>
                                 <input 
-                                    // placeholder="$ Purchase Price" 
+                                    // placeholder="Purchase Date: MM / YY" 
                                     className="new_property_form_input_triple" 
-                                    type="number" 
-                                    name="purchase_price" 
+                                    type="text" 
+                                    name="purchase_date" 
                                     onChange={this.handleFieldChange} />
-                                <div className="clearfix"/>
-                                <div style={{
-                                    float: "left",
-                                    width: "calc(50% - 12.5px)",
-                                }}>
-                                    <label className="new_property_form_input_label">
-                                        PURCHASE DATE: MM/YY
-                                    </label>
-                                    <input 
-                                        // placeholder="Purchase Date: MM / YY" 
-                                        className="new_property_form_input_triple" 
-                                        type="text" 
-                                        name="purchase_date" 
-                                        onChange={this.handleFieldChange} />
-                                </div>
-                                <div style={{
-                                    float: "right",
-                                    width: "calc(50% - 12.5px)",
-                                }}>
-                                    <label className="new_property_form_input_label">
-                                        PURCHASE TYPE
-                                    </label>
-                                    <select id="form_select_input_purchase_type" className="form_select_input" onChange={this.purchaseTypeOnChange}>
-                                        <option name="mortgage" value="mortgage">
-                                            Mortgage
-                                        </option>
-                                        <option name="cash" value="cash">
-                                            Cash
-                                        </option>
-                                        <option name="hard_money_loan" value="hard_money_loan">
-                                            Hard Money Loan
-                                        </option>
-                                        <option name="hard_money_loan" value="hard_money_loan">
-                                            Lease Option
-                                        </option>
-                                        <option name="hard_money_loan" value="hard_money_loan">
-                                            Seller Finance
-                                        </option>
-                                        <option name="hard_money_loan" value="hard_money_loan">
-                                            Loan
-                                        </option>
-                                        <option name="gift" value="gift">
-                                            Gift/Inheritance
-                                        </option>
-                                        <option name="other" value="other">
-                                            Other
-                                        </option>
-                                    </select>
-                                </div>
+                            </div>
+                            <div style={{
+                                float: "right",
+                                width: "calc(50% - 12.5px)",
+                            }}>
+                                <label className="new_property_form_input_label">
+                                    PURCHASE TYPE
+                                </label>
+                                <select id="form_select_input_purchase_type" className="form_select_input" onChange={this.purchaseTypeOnChange}>
+                                    <option name="mortgage" value="mortgage">
+                                        Mortgage
+                                    </option>
+                                    <option name="cash" value="cash">
+                                        Cash
+                                    </option>
+                                    <option name="hard_money_loan" value="hard_money_loan">
+                                        Hard Money Loan
+                                    </option>
+                                    <option name="hard_money_loan" value="hard_money_loan">
+                                        Lease Option
+                                    </option>
+                                    <option name="hard_money_loan" value="hard_money_loan">
+                                        Seller Finance
+                                    </option>
+                                    <option name="hard_money_loan" value="hard_money_loan">
+                                        Loan
+                                    </option>
+                                    <option name="gift" value="gift">
+                                        Gift/Inheritance
+                                    </option>
+                                    <option name="other" value="other">
+                                        Other
+                                    </option>
+                                </select>
                             </div>
                             <div className="clearfix"/>
                             <div className="form_footer_box">
                                 <div style={{
                                     float: "left",
-                                    marginTop: "10px",
+                                    marginTop: "25px",
                                     paddingBottom: "25px",
                                     width: "100%",
                                 }}>
@@ -417,7 +420,7 @@ class NewPropertyForm extends React.Component {
                                 </label>
                                 <input 
                                     // placeholder="$ Monthly Rent" 
-                                    className="new_property_form_input_triple" 
+                                    className="new_property_form_input new_property_form_input_triple" 
                                     type="number" 
                                     name="monthly_rent" 
                                     onChange={this.handleFieldChange} />
@@ -427,7 +430,7 @@ class NewPropertyForm extends React.Component {
                                 </label>
                                 <input 
                                     // placeholder="Purchase Date: MM / YY" 
-                                    className="new_property_form_input_triple" 
+                                    className="new_property_form_input new_property_form_input_triple" 
                                     type="text" 
                                     name="state" 
                                     onChange={this.handleFieldChange} />
@@ -471,6 +474,10 @@ class NewPropertyForm extends React.Component {
                                     width: "100%",
                                 }}>
                                     <div 
+                                        style={{
+                                            backgroundColor: "#296cf6",
+                                            color: "white",
+                                        }}
                                         onClick={() => {
                                             this.validatePropertyWithLob()
                                         }}
@@ -494,6 +501,140 @@ class NewPropertyForm extends React.Component {
         }
     }
 
+    renderSuggestedAddress() {
+        return (
+            <div className="full-background-tint">
+                <div style={{
+                    backgroundColor: "#f5f5fa",
+                    borderRadius: "10px",
+                    boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                    marginLeft: "calc((100% - 330px - 700px)/2 - 25px)",
+                    marginRight: "calc((100% - 330px - 700px)/2 + 25px)",
+                    marginTop: "200px",
+                    position: "absolute",
+                    width: "700px",
+                }}>
+                    <div style={{
+                        marginBottom: "25px",
+                        marginLeft: "7.5%",
+                        marginTop: "25px",
+                        width: "85%",
+                    }}>
+                        <p style={{
+                            fontWeight: "bold",
+                            fontSize: "1.1em",
+                        }}>
+                            Your Address
+                        </p>
+                        <div 
+                            onMouseDown={() => {
+                                this.setState({
+                                    addressToUse: Custom,
+                                })
+                            }}
+                            style={{
+                                backgroundColor: "#f5f5fa",
+                                border: this.state.addressToUse === Custom ? "2px solid #296CF6" : "2px solid #f5f5fa",
+                                borderRadius: "8px",
+                                marginTop: "15px",
+                                paddingBottom: "15px",
+                                paddingLeft: "25px",
+                                paddingRight: "25px",
+                                paddingTop: "15px",
+                            }}>
+                            {/* {this.state.address_one} */}
+                            <p style={{
+                                fontSize: "1.1em",
+                            }}>{this.state.address_one}</p>
+                            <p style={{
+                                fontSize: "1.1em",
+                            }}>{this.state.address_two}</p>
+                            <p style={{
+                                fontSize: "1.1em",
+                            }}>
+                            {this.state.city}, {this.state.state} {this.state.zip_code}
+                            </p>
+                        </div>
+                    </div>
+                    <div style={{
+                        backgroundColor: "grey",
+                        float: "left",
+                        height: "1px",
+                        marginBottom: "7.5px",
+                        marginLeft: "5%",
+                        marginRight: "5%",
+                        marginTop: "7.5px",
+                        width: "90%"
+                    }}>
+                    </div>
+                    <div style={{
+                        float: "left",
+                        marginBottom: "24px",
+                        marginLeft: "7.5%",
+                        marginTop: "15px",
+                        width: "85%",
+                    }}>
+                        <p style={{
+                            fontWeight: "bold",
+                            fontSize: "1.1em",
+                        }}>
+                            Suggested Address
+                        </p>
+                        <div 
+                            onMouseDown={() => {
+                                this.setState({
+                                    addressToUse: Lob,
+                                })
+                            }}
+                            style={{
+                                backgroundColor: "#f5f5fa",
+                                border: this.state.addressToUse === Lob ? "2px solid #296CF6" : "2px solid #f5f5fa",
+                                borderRadius: "8px",
+                                marginTop: "15px",
+                                paddingBottom: "15px",
+                                paddingLeft: "25px",
+                                paddingRight: "25px",
+                                paddingTop: "15px",
+                            }}>
+                            {/* {this.state.address_one} */}
+                            <p style={{
+                                fontSize: "1.1em",
+                            }}>{this.state.lobVerfiedAddress["address_line1"]}</p>
+                            <p style={{
+                                fontSize: "1.1em",
+                            }}>{this.state.lobVerfiedAddress["address_line2"]}</p>
+                            <p style={{
+                                fontSize: "1.1em",
+                            }}>
+                            {this.state.lobVerfiedAddress["address_city"]}, {this.state.lobVerfiedAddress["address_state"]} {this.state.lobVerfiedAddress["address_zip"]}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="clearfix"/>
+                    <div 
+                        onMouseDown={() => {
+                            this.addProperty()
+                        }}
+                        style={{
+                            backgroundColor: "#296CF6",
+                            borderRadius: "8px",
+                            color: "white",
+                            cursor: "pointer",
+                            float: "right",
+                            fontWeight: "bold",
+                            marginBottom: "25px",
+                            marginRight: "7.5%",
+                            padding: "10px 15px 10px 15px",
+                            textAlign: "center",
+                            userSelect: "none",
+                        }}>
+                        Continue
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     render() {
         if (this.state.redirect) {
             return <Redirect to={{
@@ -511,163 +652,94 @@ class NewPropertyForm extends React.Component {
                         profilePicture: this.state.profilePicture
                     }
                 }}/>
+                
                 <div style={{
+                    backgroundColor: "#f5f5fa",
                     float: "left",
-                    marginLeft: "220px",
-                    width: "calc(100% - 220px)",
+                    height: "100vh",
+                    marginLeft: "250px",
+                    width: "calc(100% - 250px - 375px)",
                 }}>
-                    { this.state.displayAddressVerificationBox ? 
-                    <div
-                        className="full-background-tint"
-                    >
-                        <div style={{
-                            backgroundColor: "white",
-                            borderRadius: "10px",
-                            boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
-                            marginLeft: "calc((100% - 330px - 500px)/2 - 25px)",
-                            marginRight: "calc((100% - 330px - 500px)/2 + 25px)",
-                            marginTop: "200px",
-                            position: "absolute",
-                            width: "500px",
-                        }}>
-                            <div style={{
-                                marginBottom: "25px",
-                                marginLeft: "7.5%",
-                                marginTop: "25px",
-                                width: "85%",
-                            }}>
-                                <p style={{
-                                    fontWeight: "bold",
-                                    fontSize: "1.1em",
-                                }}>
-                                    Your Address
-                                </p>
-                                <div 
-                                    onMouseDown={() => {
-                                        this.setState({
-                                            addressToUse: Custom,
-                                        })
-                                    }}
-                                    style={{
-                                        backgroundColor: "#f5f5fa",
-                                        border: this.state.addressToUse === Custom ? "2px solid #296CF6" : "2px solid #f5f5fa",
-                                        borderRadius: "8px",
-                                        marginTop: "15px",
-                                        paddingBottom: "15px",
-                                        paddingLeft: "25px",
-                                        paddingRight: "25px",
-                                        paddingTop: "15px",
-                                    }}>
-                                    {/* {this.state.address_one} */}
-                                    <p style={{
-                                        fontSize: "1.1em",
-                                    }}>{this.state.address_one}</p>
-                                    <p style={{
-                                        fontSize: "1.1em",
-                                    }}>{this.state.address_two}</p>
-                                    <p style={{
-                                        fontSize: "1.1em",
-                                    }}>
-                                    {this.state.city}, {this.state.state} {this.state.zip_code}
-                                    </p>
-                                </div>
-                            </div>
-                            <div style={{
-                                backgroundColor: "grey",
-                                float: "left",
-                                height: "1px",
-                                marginBottom: "7.5px",
-                                marginLeft: "5%",
-                                marginRight: "5%",
-                                marginTop: "7.5px",
-                                width: "90%"
-                            }}>
-                            </div>
-                            <div style={{
-                                float: "left",
-                                marginBottom: "24px",
-                                marginLeft: "7.5%",
-                                marginTop: "15px",
-                                width: "85%",
-                            }}>
-                                <p style={{
-                                    fontWeight: "bold",
-                                    fontSize: "1.1em",
-                                }}>
-                                    Suggested Address
-                                </p>
-                                <div 
-                                    onMouseDown={() => {
-                                        this.setState({
-                                            addressToUse: Lob,
-                                        })
-                                    }}
-                                    style={{
-                                        backgroundColor: "#f5f5fa",
-                                        border: this.state.addressToUse === Lob ? "2px solid #296CF6" : "2px solid #f5f5fa",
-                                        borderRadius: "8px",
-                                        marginTop: "15px",
-                                        paddingBottom: "15px",
-                                        paddingLeft: "25px",
-                                        paddingRight: "25px",
-                                        paddingTop: "15px",
-                                    }}>
-                                    {/* {this.state.address_one} */}
-                                    <p style={{
-                                        fontSize: "1.1em",
-                                    }}>{this.state.lobVerfiedAddress["address_line1"]}</p>
-                                    <p style={{
-                                        fontSize: "1.1em",
-                                    }}>{this.state.lobVerfiedAddress["address_line2"]}</p>
-                                    <p style={{
-                                        fontSize: "1.1em",
-                                    }}>
-                                    {this.state.lobVerfiedAddress["address_city"]}, {this.state.lobVerfiedAddress["address_state"]} {this.state.lobVerfiedAddress["address_zip"]}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="clearfix"/>
-                            <div 
-                                onMouseDown={() => {
-                                    this.addProperty()
-                                }}
-                                style={{
-                                    backgroundColor: "#296CF6",
-                                    borderRadius: "8px",
-                                    color: "white",
-                                    cursor: "pointer",
-                                    float: "right",
-                                    fontWeight: "bold",
-                                    marginBottom: "25px",
-                                    marginRight: "7.5%",
-                                    padding: "10px 15px 10px 15px",
-                                    textAlign: "center",
-                                    userSelect: "none",
-                                }}>
-                                Continue
-                            </div>
-                        </div>
-                    </div> :
-                    <div></div>}
-                    <div style={{
-                        borderRadius: "4px",
-                        float: "left",
-                        marginLeft: "60px",
-                        marginTop: "80px",
-                        width: "calc((100% - 120px))",
-                    }}>
-                        <p style={{
-                            fontSize: "1.6em",
-                            fontWeight: "bold",
-                        }}>
-                            New Property
-                        </p>
+                    <div className="page-white-background">
                         <div style={{
                             float: "left",
-                            marginTop: "40px",
+                            paddingBottom: "10px",
+                            paddingTop: "10px",
+                            textAlign: "center",
                             width: "100%",
                         }}>
+                            <p style={{
+                                fontFamily: "'Poppins', sans-serif",
+                                fontSize: "1.1em",
+                                height: "50px",
+                                lineHeight: "40px",
+                            }}>
+                                NEW PROPERTY
+                            </p>
+                            <div className="clearfix"/>
+                            <div className="page-title-bar-divider"></div>
+                        </div>
+                        { this.state.displayAddressVerificationBox ? 
+                            this.renderSuggestedAddress() :
+                        <div></div>}
+                        <div style={{
+                            display: "inline-block",
+                            marginLeft: "40px",
+                            marginRight: "40px",
+                            marginTop: "40px",
+                            textAlign: "center",
+                            width: "calc((100% - 80px))",
+                        }}>
+                            <div>
+                                <BsFillHouseFill style={{
+                                    border: "3px solid #296cf6",
+                                    borderRadius: "50%",
+                                    color: "#296cf6",
+                                    display: "inline-block",
+                                    height: "35px",
+                                    padding: "10px",
+                                    width: "35px",
+                                }}/>
+                                <div style={{
+                                    backgroundColor: this.state.toDisplay === purchaseInformation || this.state.toDisplay === incomeInformation ? "#296cf6" : "#d3d3d3",
+                                    display: "inline-block",
+                                    height: "5px",
+                                    marginBottom: "25px",
+                                    width: "65px",
+                                }}></div>
+                                <AiTwotonePushpin style={{
+                                    border: this.state.toDisplay === purchaseInformation || this.state.toDisplay === incomeInformation ? "3px solid #296cf6" : "3px solid #d3d3d3",
+                                    borderRadius: "50%",
+                                    color: this.state.toDisplay === purchaseInformation || this.state.toDisplay === incomeInformation ? "#296cf6" : "#d3d3d3",
+                                    display: "inline-block",
+                                    height: "35px",
+                                    padding: "10px",
+                                    width: "35px",
+                                }}/>
+                                <div style={{
+                                    backgroundColor: this.state.toDisplay === incomeInformation ? "#296cf6" : "#d3d3d3",
+                                    display: "inline-block",
+                                    height: "5px",
+                                    marginBottom: "25px",
+                                    width: "65px",
+                                }}></div>
+                                <FaDollarSign style={{
+                                    border: this.state.toDisplay === incomeInformation ? "3px solid #296cf6" : "3px solid #d3d3d3",
+                                    borderRadius: "50%",
+                                    color: this.state.toDisplay === incomeInformation ? "#296cf6" : "#d3d3d3",
+                                    display: "inline-block",
+                                    height: "35px",
+                                    padding: "10px",
+                                    width: "35px",
+                                }}/>
+                            </div>
+                            <div className="clearfix"></div>
                             <div style={{
+                                marginLeft: "40px",
+                                marginRight: "40px",
+                                width: "calc(100% - 80px)",
+                            }}></div>
+                            {/* <div style={{
                                 float: "left",
                                 width: "250px",
                             }}>
@@ -732,19 +804,24 @@ class NewPropertyForm extends React.Component {
                                         Income Info
                                     </p>
                                 </li>
-                            </div>
+                            </div> */}
+                            <div className="clearfix"/>
                             <div style={{
-                                backgroundColor: "white",
-                                borderRadius: "10px",
-                                boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                                 float: "left",
-                                width: "calc(100% - 250px - 250px)",
+                                width: "100%",
                             }}>
                                 {this.renderFormParts()}
                             </div>
                         </div>
                     </div>
                 </div>
+                <NotificationSidebar data={{
+                    state: {
+                        user: this.state.user,
+                        totalEstimateWorth: this.state.totalEstimateWorth,
+                        missingEstimate: this.state.missingEstimate 
+                    }
+                }}/>
             </div>
         )
     }

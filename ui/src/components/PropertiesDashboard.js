@@ -14,7 +14,8 @@ import { getDaysUntil } from './MainDashboard.js';
 import { mapFileTypeToIcon, openSignedURL, numberWithCommas } from '../utility/Util.js';
 
 import { Link, Redirect } from 'react-router-dom';
-import { MdError  } from 'react-icons/md';
+import { MdError, MdAdd  } from 'react-icons/md';
+import { IoSearchOutline } from 'react-icons/io5';
 
 const overview = "overview";
 let URLBuilder = require('url-join');
@@ -278,7 +279,7 @@ class PropertiesDashboard extends React.Component {
         });
         return (
             <div style={{
-                height: "76vh",
+                height: "calc(100vh - 50px - 50px - 50px)", /* 50px margin top header, 50px search bar header, 50px margin top and bottom */
                 marginTop: "25px",
                 overflow: "scroll",
             }}>
@@ -362,34 +363,41 @@ class PropertiesDashboard extends React.Component {
                             currentPage: "properties",
                         }
                     }}/>
-                    {this.state.isLoading ? <div></div> : 
+                    {this.state.isLoading ? <div style={{
+                        backgroundColor: "#f5f5fa",
+                    }}></div> : 
                     <div>
                         <div style={{
                             backgroundColor: "#F5F5FA",
                             float: "left",
-                            marginLeft: "220px",
-                            width: "calc(100% - 220px - 375px)",
+                            marginLeft: "250px",
+                            width: "calc(100% - 250px - 375px)",
                         }}>
-                            <div style={{
-                                marginLeft: "60px",
-                                marginRight: "20px",
-                                marginTop: "80px",
-                                width: "calc((100% - 60px - 20px))",
-                            }}>
+                            <div className="page-white-background">
                                 <div style={{
+                                    float: "left",
+                                    paddingBottom: "10px",
+                                    paddingTop: "10px",
+                                    width: "100%",
                                 }}>
-                                    <p style={{
-                                        float: "left",
-                                        fontSize: "1.6em",
-                                        fontWeight: "bold",
-                                    }}>
-                                        Properties
-                                    </p>
                                     <input className="search_bar" placeholder="Search...">
                                     </input>
-                                    <div className="clearfix"/>
-                                    <div className="properties_dashboard_buttons_box">
-                                        <Link to={{
+                                    <p style={{
+                                        float: "left",
+                                        fontFamily: "'Poppins', sans-serif",
+                                        fontSize: "1.1em",
+                                        lineHeight: "40px",
+                                        width: "200px",
+                                    }}>
+                                        PROPERTIES
+                                    </p>
+                                    <Link 
+                                        className="opacity"
+                                        style={{
+                                            float: "right",
+                                            marginRight: "25px",
+                                        }}
+                                        to={{
                                             pathname: "/addproperty",
                                             state: {
                                                 user: this.state.user,
@@ -398,25 +406,50 @@ class PropertiesDashboard extends React.Component {
                                                 profilePicture: this.state.profilePicture
                                             }
                                         }}>
-                                            <div className="page_button">
-                                                New Property
-                                            </div>
-                                        </Link>
-                                    </div> 
-                                    <p style={{
-                                        float: "left",
-                                        fontSize: "1.3em",
-                                    }}>
-                                        {this.state.totalProperties} {this.state.totalProperties === 1 ? "Property" : "Properties"}
-                                    </p>
+                                        <MdAdd style={{
+                                            backgroundColor: "#f5f5fa",
+                                            borderRadius: "50%",
+                                            color: "#296cf6",
+                                            float: "left",
+                                            height: "20px",
+                                            padding: "10px",
+                                            width: "20px",
+                                        }}/>
+                                        <p style={{
+                                            color: "#296cf6",
+                                            float: "left",
+                                            fontFamily: "'Poppins', sans-serif",
+                                            fontWeight: "bold",
+                                            lineHeight: "40px",
+                                            marginLeft: "10px",
+                                            textDecoration: "none",
+                                            userSelect: "none",
+                                        }}>
+                                            New
+                                        </p>
+                                    </Link>
                                 </div>
-                                <div className="clearfix"/>
-                                {
-                                    this.state.totalProperties === 0 ? 
-                                    this.renderNoProperties() :
-                                    this.renderProperties()
-                                }
                                 
+                                {/* {/* <p style={{
+                                    float: "left",
+                                    fontSize: "1.3em",
+                                }}>
+                                    {this.state.totalProperties} {this.state.totalProperties === 1 ? "Property" : "Properties"}
+                                </p> */}
+                                <div className="clearfix"/>
+                                <div className="page-title-bar-divider"></div>
+                                <div className="clearfix"/>
+                                <div style={{
+                                    marginLeft: "40px",
+                                    marginRight: "40px",
+                                    width: "calc(100% - 80px)",
+                                }}>
+                                    {
+                                        this.state.totalProperties === 0 ? 
+                                        this.renderNoProperties() :
+                                        this.renderProperties()
+                                    }
+                                </div>
                             </div>
                         </div>
                         <NotificationSidebar data={{

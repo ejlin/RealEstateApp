@@ -357,14 +357,7 @@ class MainDashboard extends React.Component {
                             width: "calc(100% - 250px - 375px)",
                             zIndex: "-1",
                         }}>
-                            <div style={{
-                                backgroundColor: "white",
-                                borderRadius: "8px 8px 0px 0px",
-                                float: "left",
-                                height: "calc(100vh - 50px)",
-                                marginTop: "50px",
-                                width: "100%",
-                            }}>
+                            <div className="page-white-background">
                                 <div style={{
                                     display: "inline-block",
                                     marginLeft: "40px",
@@ -379,7 +372,11 @@ class MainDashboard extends React.Component {
                                         <p id="main_dashboard_welcome_box_date">
                                             {this.getDate()}
                                         </p>
-                                        <p id="main_dashboard_welcome_box_name">
+                                        <p style={{
+                                            fontFamily: "'Poppins', sans-serif",
+                                            fontSize: "1.6em",
+                                            fontWeight: "bold",
+                                        }}>
                                             Welcome, {capitalizeName(this.state.user["first_name"])}
                                         </p>
                                     </div>
