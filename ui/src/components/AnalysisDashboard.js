@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 import './CSS/AnalysisDashboard.css';
 import './CSS/Style.css';
@@ -13,14 +13,21 @@ import BarChart from '../charts/BarChart.js';
 import { numberWithCommas, 
         getHistoricalAnalysisData } from '../utility/Util.js';
 
+import { IoSettingsSharp, IoEllipsisHorizontal } from 'react-icons/io5';
 import { AiFillQuestionCircle } from 'react-icons/ai';
 import { BsFillHouseFill } from 'react-icons/bs';
 import { FaCaretDown, FaMapMarkerAlt } from 'react-icons/fa';
 import { RiBuildingFill } from 'react-icons/ri';
 import { IoBedSharp, IoClose } from 'react-icons/io5';
+import { MdAdd } from 'react-icons/md';
+import { MdArrowDropDown } from 'react-icons/md';
+import { BiDollar } from 'react-icons/bi';
 
 const general = "general";
 const advanced = "advanced";
+
+const monthly = "Monthly";
+const annually = "Annually";
 
 let URLBuilder = require('url-join');
 
@@ -53,6 +60,7 @@ class AnalysisDashboard extends React.Component {
             host: window.location.protocol + "//" + window.location.host,
             activePropertySearchBar: false,
             activeSelectProperties: new Map(),
+            rentTimeCycle: monthly,
             redirect: redirect,
             isLoading: true
         };
@@ -557,44 +565,160 @@ class AnalysisDashboard extends React.Component {
                         currentPage: "analysis"
                     }
                 }}/>
-                <div id="analysis_dashboard_parent_box">
-                    <div id="analysis_dashboard_parent_inner_box">
-                        <div className="analysis_dashboard_parent_inner_box_title">
-                            <p className="analysis_dashboard_parent_inner_box_title_text">
-                                Analysis
-                            </p>
-                        </div>
-                        {this.state.isLoading ? <div></div> : 
-                        <div>
-                            <div className="clearfix"/>
+                <div>
+                    {this.state.isLoading ? 
+                    <div style={{
+                        backgroundColor: "#f5f5fa",
+                        float: "left",
+                        height: "100vh",
+                        width: "100%",
+                    }}></div> : 
+                    <div style={{
+                        backgroundColor: "#F5F5FA",
+                        float: "left",
+                        marginLeft: "250px",
+                        width: "calc(100% - 250px - 375px)",
+                    }}>
+                        <div className="page-white-background">
                             <div style={{
-                                marginTop: "25px",
+                                float: "left",
+                                paddingBottom: "10px",
+                                paddingTop: "10px",
+                                width: "100%",
                             }}>
                                 <input 
                                     name="select_property_search_bar"
                                     onMouseDown={this.renderPropertiesList}
                                     onChange={this.handleSelectPropertyBar}
                                     placeholder="Select Property..."
-                                    className="generic_search_bar"
-                                    style={{
-                                        border: "0px",
-                                        borderRadius: this.state.activePropertySearchBar ? "20px 20px 0px 0px" : "50px",
-                                        boxShadow: "2px 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
-                                        height: "20px",
-                                        fontSize: "1.1em",
-                                        padding: "10px 15px 10px 20px",
-                                        width: "350px",
-                                        float: "left",
-                                    }}></input>
+                                    className="generic_search_bar search_bar">
+                                </input>
+                                <p style={{
+                                    float: "left",
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "1.1em",
+                                    lineHeight: "40px",
+                                    width: "200px",
+                                }}>
+                                    ANALYSIS
+                                </p>
+                            </div>
+                            <div className="clearfix"/>
+                            <div className="page-title-bar-divider"></div>
+                            <div style={{
+                                float: "left",
+                                height: "calc(100vh - 50px - 50px)",
+                                marginLeft: "40px",
+                                marginRight: "40px",
+                                marginTop: "25px",
+                                width: "calc(100% - 80px)",
+                            }}>
+                                <div style={{
+                                    backgroundColor: "#E9EDF6",
+                                    borderRadius: "8px",
+                                    float: "left",
+                                    height: "175px",
+                                    padding: "15px",
+                                    width: "calc(50% - 20px)",
+                                }}>
+                                    <div 
+                                        className="opacity"
+                                        style={{
+                                            backgroundColor: "#f9fafc",
+                                            borderRadius: "6px",
+                                            cursor: "pointer",
+                                            float: "left",
+                                            marginBottom: "15px",
+                                            padding: "6.5px 10px 6.5px 12.5px",
+                                        }}>
+                                        <p style={{
+                                            color: "#296cf6",
+                                            float: "left",
+                                            fontSize: "0.9em",
+                                        }}>
+                                            {this.state.rentTimeCycle}
+                                        </p>
+                                        <MdArrowDropDown style={{
+                                            color: "#296cf6",
+                                            float: "left",
+                                        }}/>
+                                    </div>
+                                    <IoEllipsisHorizontal style={{
+                                        color: "#296cf6",
+                                        float: "right",
+                                        height: "25px",
+                                        marginRight: "25px",
+                                        marginTop: "7.5px",
+                                    }}/>
+                                    <div className="clearfix"/>
+                                    <div style={{
+                                        backgroundColor: "#d3d3d3",
+                                        height: "1px",
+                                        width: "100%",
+                                    }}></div>
+                                    <div style={{
+                                        marginTop: "25px",
+                                        textAlign: "center",
+                                    }}>
+                                        <div>
+                                            <BiDollar style={{
+                                                // backgroundColor: "black",
+                                                display: "inline-block",
+                                                height: "40px",
+                                                width: "20px",
+                                            }}/>
+                                            <p style={{
+                                                display: "inline-block",
+                                                fontSize: "2.8em",
+                                                textAlign: "center",
+                                            }}>
+                                                {this.state.propertiesSummary["total_rent"] ? numberWithCommas(this.state.propertiesSummary["total_rent"]) : "-"}
+                                            </p>
+                                        </div>
+                                        <p style={{
+                                            fontSize: "0.9em",
+                                            marginTop: "10px",
+                                            textAlign: "center",
+                                        }}>
+                                            {this.state.rentTimeCycle === monthly ? "/mo." : "/yr"} {"total income"}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div style={{
+                                    backgroundColor: "white",
+                                    borderRadius: "8px",
+                                    float: "right",
+                                    height: "175px",
+                                    width: "calc(50% - 20px)",
+                                }}></div>
+                                <div style={{
+                                    float: "left",
+                                    marginTop: "40px",
+                                    width: "100%",
+                                }}>
+                                    <BarChart 
+                                        height={"400"}
+                                        width={"calc(100%)"}
+                                        yAxisFontSize={"0.8em"}
+                                        xAxisFontSize={"0.8em"}
+                                        xAxisColor={"grey"}
+                                        yAxisColor={"grey"}
+                                        barColor={"#296CF6"}
+                                        capitalizeXAxis={true}
+                                        displayTooltip={true}
+                                        data={getHistoricalAnalysisData(this.state.historicalAnalysis)}/>
+                                </div>
+                            </div>
+                            <div style={{
+                                marginTop: "25px",
+                            }}>
                                 {this.state.activePropertySearchBar ? 
                                 <div style={{
                                     backgroundColor: "white",
                                     borderRadius: "0px 0px 20px 20px",
                                     borderTop: "1px solid #d3d3d3",
                                     boxShadow: "2px 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
-                                    marginTop: "40px",
                                     paddingBottom: "15px",
-                                    paddingTop: "7.5px",
                                     position: "absolute",
                                     width: "385px",
                                     zIndex: "25",
@@ -604,7 +728,7 @@ class AnalysisDashboard extends React.Component {
                                     </div>
                                 </div>:
                                 <div></div>}
-                                <div className="analysis_dashboard_view_selection_box">
+                                {/* <div className="analysis_dashboard_view_selection_box">
                                     <div
                                         onClick={() => this.setState({
                                             viewToDisplay: general
@@ -625,7 +749,7 @@ class AnalysisDashboard extends React.Component {
                                             "analysis_dashboard_view_selection_box_element"}>
                                         Advanced
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="clearfix"/>
                             <div>
@@ -638,8 +762,8 @@ class AnalysisDashboard extends React.Component {
                                 <div className="analysis_dashboard_inner_box_ratios_box">
                                 </div>
                             </div>
-                        </div>}
-                    </div>
+                        </div>
+                    </div>}
                 </div>
                 <NotificationSidebar data={{
                     state: {

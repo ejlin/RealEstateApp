@@ -363,8 +363,12 @@ class PropertiesDashboard extends React.Component {
                             currentPage: "properties",
                         }
                     }}/>
-                    {this.state.isLoading ? <div style={{
+                    {this.state.isLoading ? 
+                    <div style={{
                         backgroundColor: "#f5f5fa",
+                        float: "left",
+                        height: "100vh",
+                        width: "100%",
                     }}></div> : 
                     <div>
                         <div style={{

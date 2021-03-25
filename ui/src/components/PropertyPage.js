@@ -209,7 +209,7 @@ class PropertyPage extends React.Component {
             url: deletePropertyURL,
         }).then(response => {
             this.setState({
-                redirectToPropertiesPage: true,
+                redirectToPropertiesPage: '/properties',
             })
         }).catch(error => {
             console.log(error)

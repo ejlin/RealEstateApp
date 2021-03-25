@@ -372,8 +372,8 @@ class MainDashboard extends React.Component {
                                         </p>
                                         <p style={{
                                             fontFamily: "'Poppins', sans-serif",
-                                            fontSize: "1.6em",
-                                            fontWeight: "bold",
+                                            fontSize: "1.4em",
+                                            // fontWeight: "bold",
                                         }}>
                                             Welcome, {capitalizeName(this.state.user["first_name"])}
                                         </p>
