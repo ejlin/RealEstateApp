@@ -442,7 +442,13 @@ class FilesDashboard extends React.Component {
                 ></FolderCard>
             )
         })
-        return folders;
+        return (
+            <div style={{
+                marginTop: "25px",
+            }}>
+                {folders}
+            </div>
+        );
     }
 
     render() {
@@ -501,7 +507,7 @@ class FilesDashboard extends React.Component {
                                     lineHeight: "40px",
                                     width: "200px",
                                 }}>
-                                FILES
+                                FOLDERS
                             </p>
                             <div 
                                 className="opacity"
@@ -549,7 +555,6 @@ class FilesDashboard extends React.Component {
                                 (this.state.isLoading ? 
                                     <div></div> : 
                                     <div>
-                                        <p className="files_dashboard_page_to_display_title">Folders</p>
                                         {this.renderFolders()}
                                     </div>
                                 ): (

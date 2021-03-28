@@ -607,7 +607,7 @@ class AnalysisDashboard extends React.Component {
                             <div className="page-title-bar-divider"></div>
                             <div style={{
                                 float: "left",
-                                height: "calc(100vh - 50px - 50px)",
+                                height: "calc(100vh - 50px - 50px - 50px)",
                                 marginLeft: "40px",
                                 marginRight: "40px",
                                 marginTop: "25px",
@@ -618,42 +618,58 @@ class AnalysisDashboard extends React.Component {
                                     borderRadius: "8px",
                                     float: "left",
                                     height: "175px",
+                                    marginBottom: "15px",
                                     padding: "15px",
-                                    width: "calc(50% - 20px)",
+                                    position: "relative",
+                                    width: "calc(50% - 10px - 30px)",
                                 }}>
-                                    <div 
-                                        className="opacity"
-                                        style={{
-                                            backgroundColor: "#f9fafc",
-                                            borderRadius: "6px",
-                                            cursor: "pointer",
-                                            float: "left",
-                                            marginBottom: "15px",
-                                            padding: "6.5px 10px 6.5px 12.5px",
-                                        }}>
+                                    <div style={{
+                                        float: "left",
+                                        marginBottom: "15px",
+                                        width: "100%",
+                                    }}>
+                                        <div 
+                                            className="opacity"
+                                            style={{
+                                                backgroundColor: "#f9fafc",
+                                                borderRadius: "6px",
+                                                cursor: "pointer",
+                                                float: "left",
+                                                padding: "6.5px 10px 6.5px 12.5px",
+                                                position: "absolute",
+                                            }}>
+                                            <p style={{
+                                                color: "#296cf6",
+                                                float: "left",
+                                                fontSize: "0.9em",
+                                            }}>
+                                                {this.state.rentTimeCycle}
+                                            </p>
+                                            <MdArrowDropDown style={{
+                                                color: "#296cf6",
+                                                float: "left",
+                                            }}/>
+                                        </div>
                                         <p style={{
-                                            color: "#296cf6",
-                                            float: "left",
-                                            fontSize: "0.9em",
+                                            marginTop: "7.5px",
+                                            textAlign: "center",
                                         }}>
-                                            {this.state.rentTimeCycle}
+                                            {this.state.propertiesSummary["total_properties"]} properties
                                         </p>
-                                        <MdArrowDropDown style={{
+                                        <IoEllipsisHorizontal style={{
                                             color: "#296cf6",
-                                            float: "left",
+                                            height: "25px",
+                                            marginRight: "25px",
+                                            position: "absolute",
+                                            right: "0",
+                                            top: "20px",
                                         }}/>
                                     </div>
-                                    <IoEllipsisHorizontal style={{
-                                        color: "#296cf6",
-                                        float: "right",
-                                        height: "25px",
-                                        marginRight: "25px",
-                                        marginTop: "7.5px",
-                                    }}/>
                                     <div className="clearfix"/>
                                     <div style={{
                                         backgroundColor: "#d3d3d3",
                                         height: "1px",
+                                        marginTop: "0px",
                                         width: "100%",
                                     }}></div>
                                     <div style={{
@@ -685,12 +701,91 @@ class AnalysisDashboard extends React.Component {
                                     </div>
                                 </div>
                                 <div style={{
-                                    backgroundColor: "white",
+                                    backgroundColor: "#f5f5fa",
                                     borderRadius: "8px",
                                     float: "right",
                                     height: "175px",
-                                    width: "calc(50% - 20px)",
-                                }}></div>
+                                    padding: "15px",
+                                    position: "relative",
+                                    width: "calc(50% - 10px - 30px)",
+                                }}>
+                                   <div style={{
+                                        float: "left",
+                                        marginBottom: "15px",
+                                        width: "100%",
+                                    }}>
+                                        <div 
+                                            className="opacity"
+                                            style={{
+                                                backgroundColor: "white",
+                                                borderRadius: "6px",
+                                                cursor: "pointer",
+                                                float: "left",
+                                                padding: "6.5px 10px 6.5px 12.5px",
+                                                position: "absolute",
+                                            }}>
+                                            <p style={{
+                                                color: "#296cf6",
+                                                float: "left",
+                                                fontSize: "0.9em",
+                                            }}>
+                                                {this.state.rentTimeCycle}
+                                            </p>
+                                            <MdArrowDropDown style={{
+                                                color: "#296cf6",
+                                                float: "left",
+                                            }}/>
+                                        </div>
+                                        <p style={{
+                                            marginTop: "7.5px",
+                                            textAlign: "center",
+                                        }}>
+                                            {this.state.propertiesSummary["total_properties"]} propertiess
+                                        </p>
+                                        <IoEllipsisHorizontal style={{
+                                            color: "#296cf6",
+                                            height: "25px",
+                                            marginRight: "25px",
+                                            position: "absolute",
+                                            right: "0",
+                                            top: "20px",
+                                        }}/>
+                                    </div>
+                                    <div className="clearfix"/>
+                                    <div style={{
+                                        backgroundColor: "#d3d3d3",
+                                        height: "1px",
+                                        marginTop: "0px",
+                                        width: "100%",
+                                    }}></div> 
+                                    <div style={{
+                                        marginTop: "25px",
+                                        textAlign: "center",
+                                    }}>
+                                        <div>
+                                            <BiDollar style={{
+                                                // backgroundColor: "black",
+                                                display: "inline-block",
+                                                height: "40px",
+                                                width: "20px",
+                                            }}/>
+                                            <p style={{
+                                                display: "inline-block",
+                                                fontSize: "2.8em",
+                                                textAlign: "center",
+                                            }}>
+                                                {this.state.propertiesSummary["total_mortgage_payment"] ? numberWithCommas(this.state.propertiesSummary["total_mortgage_payment"]) : "-"}
+                                            </p>
+                                        </div>
+                                        <p style={{
+                                            fontSize: "0.9em",
+                                            marginTop: "10px",
+                                            textAlign: "center",
+                                        }}>
+                                            {this.state.rentTimeCycle === monthly ? "/mo." : "/yr"} {"loan payback"}
+                                        </p>
+                                    </div>
+                                </div>
                                 <div style={{
                                     float: "left",
                                     marginTop: "40px",
@@ -756,12 +851,12 @@ class AnalysisDashboard extends React.Component {
                                 {this.renderSelectedProperties()}
                             </div>
                             <div className="clearfix"/>
-                            <div className="analysis_dashboard_inner_box">
+                            {/* <div className="analysis_dashboard_inner_box">
                                 {this.renderViewBox()}
                                 <div className="clearfix"/>
                                 <div className="analysis_dashboard_inner_box_ratios_box">
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>}
                 </div>

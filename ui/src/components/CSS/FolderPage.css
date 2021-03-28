@@ -1,11 +1,11 @@
 #folder_page_parent_box {
     background-color: #F5F5FA;
     height: 100vh;
-    margin-left: 220px;
+    margin-left: 250px;
     min-width: 700px;
     overflow: scroll;
     position: absolute;
-    width: calc(100% - 220px - 350px);
+    width: calc(100% - 250px - 375px);
 }
 
 .folder_page_delete_loader_box {

@@ -17,7 +17,7 @@ import { trimTrailingName, mapFileTypeToIcon, openSignedURL } from '../utility/U
 
 import ProgressBar from './../utility/ProgressBar.js';
 
-import { MdFileDownload, MdEdit } from 'react-icons/md';
+import { MdFileDownload, MdEdit, MdAdd } from 'react-icons/md';
 import { IoTrashSharp, IoCaretBackOutline } from 'react-icons/io5';
 import { RiErrorWarningFill } from 'react-icons/ri';
 
@@ -505,48 +505,102 @@ class FolderPage extends React.Component {
                                 }}/>
                         </div> :
                     <div></div>}
-                    <div id="files_dashboard_welcome_box">
-                        <p id="files_dashboard_welcome_box_title">
-                            Files
-                        </p>
-                        <input id="files_dashboard_search_bar" className="search_bar" placeholder="Search..." onChange={this.handleSearchBar}>
-                        </input>
-                    </div>
-                    <div className="clearfix"/>
-                    <div id="files_dashboard_icons_box">
-                        <div
-                            className="page_button" 
-                            onMouseDown={() => this.setState({
-                                displayUploadFileBox: true
-                                })}>Add File</div>
-                        {this.state.activeFiles.size >= 1 ?
-                            (this.state.isDeleting ? 
-                            <div className="folder_page_delete_loader_box">
-                                <Loader data={{
-                                    state: {
-                                        class: "folder_page_delete_loader",
+                    <div style={{
+                        height: "30px",
+                        width: "100%",
+                    }}>
+                        <div className="page-white-background">
+                            <div style={{
+                                float: "left",
+                                paddingBottom: "10px",
+                                paddingTop: "10px",
+                                width: "100%",
+                            }}>
+                                <input id="files_dashboard_search_bar" className="search_bar" placeholder="Search..." onChange={this.handleSearchBar}>
+                                </input>
+                                <p
+                                    style={{
+                                        float: "left",
+                                        fontFamily: "'Poppins', sans-serif",
+                                        fontSize: "1.1em",
+                                        lineHeight: "40px",
+                                        width: "200px",
+                                    }}>
+                                    FILES
+                                </p>
+                                <div 
+                                    className="opacity"
+                                    onMouseDown={
+                                        () => this.setState({
+                                            displayUploadFileBox: true
+                                    })}                                
+                                    style={{
+                                        cursor: "pointer",
+                                        float: "right",
+                                        marginRight: "25px",
+                                    }}>
+                                    <MdAdd style={{
+                                        backgroundColor: "#f5f5fa",
+                                        borderRadius: "50%",
+                                        color: "#296cf6",
+                                        float: "left",
+                                        height: "20px",
+                                        padding: "10px",
+                                        width: "20px",
+                                    }}/>
+                                    <p
+                                        style={{
+                                            color: "#296cf6",
+                                            float: "left",
+                                            fontFamily: "'Poppins', sans-serif",
+                                            fontWeight: "bold",
+                                            lineHeight: "40px",
+                                            marginLeft: "10px",
+                                            textDecoration: "none",
+                                            userSelect: "none",
+                                        }}>
+                                        New
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="clearfix"/>
+                            <div className="page-title-bar-divider"/>
+                            <div style={{
+                                margin: "15px 40px 0px 40px",
+                                width: "calc(100% - 80px)",
+                            }}>
+                                <div id="files_dashboard_icons_box">
+                                    {this.state.activeFiles.size >= 1 ?
+                                        (this.state.isDeleting ? 
+                                        <div className="folder_page_delete_loader_box">
+                                            <Loader data={{
+                                                state: {
+                                                    class: "folder_page_delete_loader",
+                                                }
+                                            }}></Loader> 
+                                        </div>:
+                                        <IoTrashSharp className="files_dashboard_icons" onClick={() => this.deleteActiveFiles()}></IoTrashSharp>) : 
+                                        <div></div>}
+                                    {this.state.activeFiles.size >= 1 ? 
+                                        <MdFileDownload className="files_dashboard_icons" onClick={() => this.downloadActiveFiles()}></MdFileDownload> : 
+                                        <div></div>
                                     }
-                                }}></Loader> 
-                            </div>:
-                            <IoTrashSharp className="files_dashboard_icons" onClick={() => this.deleteActiveFiles()}></IoTrashSharp>) : 
-                            <div></div>}
-                        {this.state.activeFiles.size >= 1 ? 
-                            <MdFileDownload className="files_dashboard_icons" onClick={() => this.downloadActiveFiles()}></MdFileDownload> : 
-                            <div></div>
-                        }
-                        {this.state.activeFiles.size === 1 ? 
-                            <MdEdit className="files_dashboard_icons"></MdEdit> : 
-                            <div></div>
-                        }
-                    </div>
-                    <div className="clearfix"/>
-                    {
-                        this.state.isLoading ? 
-                        <div></div> :
-                        <div id="files_dashboard_files_box">
-                            {this.renderActiveFolderFiles()}
+                                    {this.state.activeFiles.size === 1 ? 
+                                        <MdEdit className="files_dashboard_icons"></MdEdit> : 
+                                        <div></div>
+                                    }
+                                    <div className="clearfix"/>
+                                    {
+                                        this.state.isLoading ? 
+                                        <div></div> :
+                                        <div id="files_dashboard_files_box">
+                                            {this.renderActiveFolderFiles()}
+                                        </div>
+                                    }
+                                </div>
+                            </div>
                         </div>
-                    }
+                    </div>
                 </div>
                 <NotificationSidebar data={{
                     state: {

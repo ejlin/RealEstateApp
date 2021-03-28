@@ -52,10 +52,8 @@
 }
 
 #files_dashboard_icons_box {
-    margin-left: 60px;
-    margin-right: 20px;
     margin-top: 10px;
-    width: calc(100% - 60px - 20px);
+    width: 100%;
 }
 
 .files_dashboard_upload_file_text_button {

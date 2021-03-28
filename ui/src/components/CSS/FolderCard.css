@@ -6,12 +6,8 @@
     float: left;
     height: 50px;
     margin-bottom: 25px;
-    margin-right: max(15px, calc((100% - 1050px)/4));
+    margin-right: max(20px, calc((100% - 1050px)/4));
     width: 210px;
-}
-
-.files_dashboard_folder_card:nth-child(5) {
-    margin-right: 0px;
 }
 
 .files_dashboard_folder_card_icon {

@@ -41,7 +41,7 @@ class SettingsDashboard extends React.Component {
             user: this.props.location.state.user,
             totalEstimateWorth: this.props.location.state.totalEstimateWorth,
             missingEstimate: this.props.location.state.missingEstimate,
-            profilePicture: this.props.location.state.profilePicture,
+            // profilePicture: this.props.location.state.profilePicture,
             toDisplay: general,
             editGeneral: false,
             checkboxStates: new Map(
@@ -116,15 +116,15 @@ class SettingsDashboard extends React.Component {
             });
         });
 
-        // axios({
-        //     method: 'get',
-        //     url: '/api/user/settings/profile/picture/' + this.state.user["id"],
-        // }).then(response => {
-        //     var src = response.data;
-        //     this.setState({
-        //         profilePicture: src
-        //     })
-        // }).catch(error => console.log(error))
+        axios({
+            method: 'get',
+            url: '/api/user/settings/profile/picture/' + this.state.user["id"],
+        }).then(response => {
+            var src = response.data;
+            this.setState({
+                profilePicture: src
+            })
+        }).catch(error => console.log(error))
     }
 
     updateUserSettingsProfile() {
@@ -746,6 +746,7 @@ class SettingsDashboard extends React.Component {
     }
 
     render() {
+        console.log(this.state.profilePicture);
         return (
             // <LoadingScreen data={{
             //     state: {
@@ -766,7 +767,9 @@ class SettingsDashboard extends React.Component {
                     }
                 }}/>
                 {this.state.isLoading ? 
-                <div></div> :
+                <div style={{
+                    backgroundColor: "#f5f5fa",
+                }}></div> :
                 <div style={{
                     backgroundColor: "#F5F5FA",
                     float: "left",
@@ -949,7 +952,7 @@ class SettingsDashboard extends React.Component {
                                 {this.state.profilePicture ? 
                                 <img 
                                     src={this.state.profilePicture} 
-                                    alt={"logo"}
+                                    alt={"profile picture"}
                                     style={{
                                         backgroundColor: "white",
                                         borderRadius: "50%",
