@@ -70,9 +70,11 @@ class NavigationBar extends React.Component {
                     <li className="navigation_bar_subparent_list">
                         FAQ
                     </li>
-                    <li className="navigation_bar_subparent_list">
-                        Company
-                    </li>
+                    <Link to="/company">
+                        <li className="navigation_bar_subparent_list">
+                            Company
+                        </li>
+                    </Link>
                     <Link to="/pricing">
                         <li className="navigation_bar_subparent_list">
                             Pricing

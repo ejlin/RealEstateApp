@@ -85,9 +85,16 @@ class Footer extends React.Component {
                             </p>
                         </Link>
                         <div className="clearfix"/>
-                        <p className="footer_subtitle opacity">
-                            Company
-                        </p>
+                        <Link 
+                            style={{
+                                color: "black",
+                                textDecoration: "none",
+                            }}
+                            to="/company">
+                            <p className="footer_subtitle opacity">
+                                Company
+                            </p>
+                        </Link>
                         <div className="clearfix"/>
                         <p className="footer_subtitle opacity">
                             FAQ

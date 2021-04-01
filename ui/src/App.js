@@ -16,6 +16,7 @@ import SettingsDashboard from './components/SettingsDashboard.js';
 import FeedbackForm from './components/FeedbackForm.js';
 import ContactPage from './components/ContactPage.js';
 import OverviewPage from './components/OverviewPage.js';
+import CompanyPage from './components/CompanyPage.js';
 import AboutPage from './components/AboutPage.js';
 import TermsAndAgreementPage from './components/TermsAndAgreementPage.js';
 
@@ -59,6 +60,7 @@ function App() {
           <Route path="/contact" render={(props) => <ContactPage {...props}/>}/>
           <Route path="/about" render={(props) => <AboutPage {...props}/>}/>
           <Route path="/signup" render={(props) => <SignUpPage {...props}/>}/>
+          <Route path="/company" render={(props) => <CompanyPage {...props}/>}/>
           <Route path="/termsandagreements" render={(props) => <TermsAndAgreementPage {...props}/>}/>
           <Route path="/">
             <HomePage/>

@@ -87,8 +87,6 @@ class AnalysisDashboard extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.state.totalEstimateWorth);
-
         document.addEventListener('mousedown', this.handleClickOutside);
 
         let userID = this.state.user["id"];
@@ -131,6 +129,7 @@ class AnalysisDashboard extends React.Component {
                 propertySearchBarProperties: propertiesMap,
                 isLoading: false
             });
+            console.log(propertiesSummary);
         })).catch(errors => {
             console.log(errors);
         });
@@ -607,7 +606,7 @@ class AnalysisDashboard extends React.Component {
                             <div className="page-title-bar-divider"></div>
                             <div style={{
                                 float: "left",
-                                height: "calc(100vh - 50px - 50px - 50px)",
+                                height: "calc(100vh - 50px - 50px)",
                                 marginLeft: "40px",
                                 marginRight: "40px",
                                 marginTop: "25px",
@@ -617,7 +616,7 @@ class AnalysisDashboard extends React.Component {
                                     backgroundColor: "#E9EDF6",
                                     borderRadius: "8px",
                                     float: "left",
-                                    height: "175px",
+                                    height: "150px",
                                     marginBottom: "15px",
                                     padding: "15px",
                                     position: "relative",
@@ -673,7 +672,7 @@ class AnalysisDashboard extends React.Component {
                                         width: "100%",
                                     }}></div>
                                     <div style={{
-                                        marginTop: "25px",
+                                        marginTop: "15px",
                                         textAlign: "center",
                                     }}>
                                         <div>
@@ -704,7 +703,7 @@ class AnalysisDashboard extends React.Component {
                                     backgroundColor: "#f5f5fa",
                                     borderRadius: "8px",
                                     float: "right",
-                                    height: "175px",
+                                    height: "150px",
                                     padding: "15px",
                                     position: "relative",
                                     width: "calc(50% - 10px - 30px)",
@@ -736,12 +735,13 @@ class AnalysisDashboard extends React.Component {
                                                 float: "left",
                                             }}/>
                                         </div>
-                                        <p style={{
+                                        <div style={{
+                                            height: "20px",
                                             marginTop: "7.5px",
                                             textAlign: "center",
                                         }}>
-                                            {this.state.propertiesSummary["total_properties"]} propertiess
-                                        </p>
+                                            {/* {this.state.propertiesSummary["total_properties"]} properties */}
+                                        </div>
                                         <IoEllipsisHorizontal style={{
                                             color: "#296cf6",
                                             height: "25px",
@@ -759,7 +759,7 @@ class AnalysisDashboard extends React.Component {
                                         width: "100%",
                                     }}></div> 
                                     <div style={{
-                                        marginTop: "25px",
+                                        marginTop: "15px",
                                         textAlign: "center",
                                     }}>
                                         <div>
@@ -788,12 +788,14 @@ class AnalysisDashboard extends React.Component {
                                 </div>
                                 <div style={{
                                     float: "left",
-                                    marginTop: "40px",
+                                    marginTop: "0px",
                                     width: "100%",
                                 }}>
                                     <BarChart 
+                                        backgroundColor={"#f5f5fa"}
                                         height={"400"}
-                                        width={"calc(100%)"}
+                                        width={"calc(100% - 60px)"}
+                                        // barWidth={"50px"}
                                         yAxisFontSize={"0.8em"}
                                         xAxisFontSize={"0.8em"}
                                         xAxisColor={"grey"}
@@ -801,9 +803,106 @@ class AnalysisDashboard extends React.Component {
                                         barColor={"#296CF6"}
                                         capitalizeXAxis={true}
                                         displayTooltip={true}
+                                        padding={"30px 30px 15px 30px"}
                                         data={getHistoricalAnalysisData(this.state.historicalAnalysis)}/>
                                 </div>
+                                <div style={{
+                                    float: "left",
+                                    marginTop: "15px",
+                                    width: "100%",
+                                }}>
+                                    <div style={{
+                                        backgroundColor: "#e9f0fe",
+                                        borderRadius: "4px",
+                                        height: "80px",
+                                        textAlign: "center",
+                                        width: "275px",
+                                    }}>
+                                        <p style={{
+                                            color: "#296cf6",
+                                            display: "inline-block",
+                                            fontFamily: "'Poppins', sans-serif",
+                                            fontSize: "1.7em",
+                                            lineHeight: "80px",
+                                            verticalAlign: "top",
+                                        }}>
+                                            {this.state.propertiesSummary["average_dti"] ?
+                                            Number(this.state.propertiesSummary["average_dti"].toFixed(2)) :
+                                            0.0}%
+                                        </p>
+                                        <p style={{
+                                            color: "#296cf6",
+                                            display: "inline-block",
+                                            fontSize: "0.85em",
+                                            lineHeight: "80px",
+                                            marginLeft: "10px",
+                                        }}>
+                                            Debt to Income Ratio
+                                        </p>
+                                    </div>
+                                    <div style={{
+                                        backgroundColor: "#E9EDF6",
+                                        borderRadius: "4px",
+                                        height: "80px",
+                                        marginTop: "15px",
+                                        textAlign: "center",
+                                        width: "275px",
+                                    }}>
+                                        <p style={{
+                                            color: "black",
+                                            display: "inline-block",
+                                            fontFamily: "'Poppins', sans-serif",
+                                            fontSize: "1.7em",
+                                            lineHeight: "80px",
+                                            verticalAlign: "top",
+                                        }}>
+                                            {this.state.propertiesSummary["average_ltv"] ?
+                                            Number(this.state.propertiesSummary["average_ltv"].toFixed(2)) :
+                                            0.0}%
+                                        </p>
+                                        <p style={{
+                                            color: "black",
+                                            display: "inline-block",
+                                            fontSize: "0.85em",
+                                            lineHeight: "80px",
+                                            marginLeft: "10px",
+                                        }}>
+                                            Loan to Value Ratio
+                                        </p>
+                                    </div>
+                                    <div style={{
+                                        backgroundColor: "#E9EDF6",
+                                        borderRadius: "4px",
+                                        height: "80px",
+                                        marginTop: "15px",
+                                        textAlign: "center",
+                                        width: "275px",
+                                    }}>
+                                        <p style={{
+                                            color: "black",
+                                            display: "inline-block",
+                                            fontFamily: "'Poppins', sans-serif",
+                                            fontSize: "1.7em",
+                                            lineHeight: "80px",
+                                            verticalAlign: "top",
+                                        }}>
+                                            {this.state.propertiesSummary["annual_rate_of_return"] ?
+                                            Number(this.state.propertiesSummary["annual_rate_of_return"].toFixed(2)) :
+                                            0.0}%
+                                        </p>
+                                        <p style={{
+                                            color: "black",
+                                            display: "inline-block",
+                                            fontSize: "0.85em",
+                                            lineHeight: "80px",
+                                            marginLeft: "10px",
+                                        }}>
+                                            Annual Rate of Return
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
+                            
                             <div style={{
                                 marginTop: "25px",
                             }}>

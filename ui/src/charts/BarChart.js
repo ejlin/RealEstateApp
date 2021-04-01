@@ -13,6 +13,7 @@ class BarChart extends React.Component {
         this.state = {
             height: this.props.height, // in px
             width: this.props.width, // in px
+            barWidth: this.props.barWidth,
             xAxisFontSize: this.props.xAxisFontSize,
             yAxisFontSize: this.props.yAxisFontSize,
             displayTooltip: this.props.displayTooltip,
@@ -24,6 +25,7 @@ class BarChart extends React.Component {
             capitalizeXAxis: this.props.capitalizeXAxis,
             barColor: this.props.barColor,
             data: this.props.data,
+            padding: this.props.padding,
             mouseActiveTooltip: null,
         };
 
@@ -91,6 +93,7 @@ class BarChart extends React.Component {
                 <div style={{
                     height: (height - 35) / 2,  // 35 because minBuffer is 10, maxBuffer is 10, and there is 15 padding-bottom.
                     fontSize: this.state.yAxisFontSize,
+                    fontWeight: "bold",
                     color: this.state.yAxisColor
                 }}>
                     {   maxYAxisValue >= 1000000000 ? 
@@ -106,6 +109,7 @@ class BarChart extends React.Component {
                 <div style={{
                     height: (height - 35)/ 2,
                     fontSize: this.state.yAxisFontSize,
+                    fontWeight: "bold",
                     color: this.state.yAxisColor
                 }}>
                     { 
@@ -122,6 +126,7 @@ class BarChart extends React.Component {
                 <div style={{
                     height: "20px",
                     fontSize: this.state.yAxisFontSize,
+                    fontWeight: "bold",
                     color: this.state.yAxisColor
                 }}>
                     {
@@ -174,12 +179,15 @@ class BarChart extends React.Component {
             height = height + minBuffer + minYAxisValue; // Add our minBuffer back as the baseline.
             elements.push(
                 <li 
-                    className="bar_chart_x_axis_element">
+                    style={{
+                        float: "left",
+                        width: this.state.width / data.length,
+                    }}>
                     <div
                         style={{
                             backgroundColor: "transparent",
                             height: barHeight - height,
-                            width: "20px"
+                            width: this.state.barWidth ? this.state.barWidth : "20px"
                         }}
                     >
                     </div>
@@ -206,8 +214,9 @@ class BarChart extends React.Component {
                         style={{
                             color: this.state.xAxisColor,
                             fontSize: this.state.xAxisFontSize,
-                        }}
-                        className="bar_chart_x_axis_element_text">
+                            fontWeight: "bold",
+                            marginTop: "10px",
+                        }}>
                         {this.state.capitalizeXAxis ? dataPoint["x"].toUpperCase() : dataPoint["x"]}
                     </p>
                 </li>
@@ -249,6 +258,7 @@ class BarChart extends React.Component {
                 borderRadius: "10px",
                 marginLeft: this.state.marginLeft,
                 marginTop: this.state.marginTop + "px",
+                padding: this.state.padding,
                 width: this.state.width,
             }}>
                 {this.renderXAxis()}

@@ -379,7 +379,7 @@ class MainDashboard extends React.Component {
                                         </p>
                                     </div>
                                     <div style={{
-                                        borderRadius: "10px",
+                                        borderRadius: "2px",
                                         float: "left",
                                         marginBottom: "30px",
                                         minWidth: "calc(250px + 35px)",
@@ -408,17 +408,6 @@ class MainDashboard extends React.Component {
                                             </div>
                                         </div>
                                         <div className="main_dashboard_summary_cards">
-                                            <RiPercentFill className="main_dashboard_summary_cards_icon"></RiPercentFill>
-                                            <div className="main_dashboard_summary_cards_text_box">
-                                                <p className="main_dashboard_summary_cards_title">
-                                                    {this.state.annualRateOfReturn ? this.state.annualRateOfReturn : 0.00}%
-                                                </p>   
-                                                <p className="main_dashboard_summary_cards_subtitle">
-                                                    annual rate of return
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="main_dashboard_summary_cards">
                                             <AiTwotonePushpin className="main_dashboard_summary_cards_icon"></AiTwotonePushpin>
                                             <div className="main_dashboard_summary_cards_text_box">
                                                 <p className="main_dashboard_summary_cards_title">
@@ -429,13 +418,24 @@ class MainDashboard extends React.Component {
                                                 </p>
                                             </div>
                                         </div>
+                                        <div className="main_dashboard_summary_cards">
+                                            <RiPercentFill className="main_dashboard_summary_cards_icon"></RiPercentFill>
+                                            <div className="main_dashboard_summary_cards_text_box">
+                                                <p className="main_dashboard_summary_cards_title">
+                                                    {this.state.annualRateOfReturn ? this.state.annualRateOfReturn : 0.00}%
+                                                </p>   
+                                                <p className="main_dashboard_summary_cards_subtitle">
+                                                    annual rate of return
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div id="main_dashboard_bottom_box">
                                         <div id="main_dashboard_bottom_left_box">
                                             <div style={{
                                                 // backgroundColor: "white",
                                                 border: "1px solid #d3d3d3",
-                                                borderRadius: "10px",
+                                                borderRadius: "2px",
                                                 // boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                                                 height: "385px",
                                                 paddingLeft: "20px",
@@ -545,7 +545,7 @@ class MainDashboard extends React.Component {
                                             <div style={{
                                                 // backgroundColor: "white",
                                                 border: "1px solid #d3d3d3", 
-                                                borderRadius: "10px",
+                                                borderRadius: "2px",
                                                 // boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                                                 height: "287px",
                                                 overflow: "hidden",

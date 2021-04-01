@@ -8,7 +8,7 @@
 .main_dashboard_title_cards {
     background-color: white;
     border: 1px solid #E0E2e4;
-    border-radius: 10px;;
+    border-radius: 2px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     float: left;
     height: 130px;
@@ -163,7 +163,7 @@
 }
 
 #main_dashboard_occupied_box {
-    border-radius: 10px;;
+    border-radius: 2px;
     /* box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.09), 0 12px 40px 0 rgba(0, 0, 0, 0.09); */
     float: right;
     min-width: 350px;
@@ -228,7 +228,7 @@
 .main_dashboard_bottom_left_box_bottom_inner_box {
     /* background-color: white; */
     border: 1px solid #d3d3d3;
-    border-radius: 8px;
+    border-radius: 2px;
     /* box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09); */
     float: left;
     height: 135px;
@@ -262,7 +262,7 @@
 }
 
 .main_dashboard_bottom_left_box_bottom_inner_box_text_box_title_two {
-    font-size: 1.7em;
+    font-size: 2em;
     font-weight: bold;
     margin-top: 10px;
     text-align: center;
@@ -279,6 +279,7 @@
 }
 
 .main_dashboard_bottom_left_box_bottom_inner_box_text_box_subtitle_two {
+    font-size: 0.8em;
     margin-top: 5px;
     text-align: center;
     width: calc((100%));
@@ -292,7 +293,7 @@
 
 #main_dashboard_yoy_growth_box {
     background-color: #296CF6;
-    border-radius: 10px;;
+    border-radius: 2px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     height: 195px;
     margin-top: 40px;
@@ -312,7 +313,7 @@
 .main_dashboard_yoy_growth_toggle_element {
     background-color: white;
     border: 1px solid white;
-    border-radius: 10px;;
+    border-radius: 2px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     color: #296CF6;
     cursor: pointer;
@@ -370,11 +371,13 @@
 .main_dashboard_box_title {
     color: black;
     float: left;
-    font-size: 1.1em;
+    font-size: 1.0em;
     font-weight: bold;
+    margin-left: 40px;
     /* margin-bottom: 25px; */
-    margin-left: 20px;
-    margin-top: 20px;
+    margin-top: 15px;
+    text-align: center;
+    width: calc(100% - 80px);
 }
 
 .main_dashboard_box_icon {
@@ -383,7 +386,7 @@
     float: right;
     height: 20px;
     margin-right: 20px;
-    margin-top: 20px;
+    margin-top: 15px;
     transition: 0.5s;
     width: 20px;
 }
@@ -420,7 +423,7 @@
 
 .rent_schedule_bullet_point {
     background-color: #296CF6;
-    border-radius: 10px;;
+    border-radius: 10px;
     float: left;
     height: 10px;
     margin-left: 20px;
