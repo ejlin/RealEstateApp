@@ -263,7 +263,7 @@ class AnalysisDashboard extends React.Component {
             elements.push(
                 <div style={{
                     backgroundColor: "#32384D",
-                    borderRadius: "10px",
+                    borderRadius: "6px",
                     boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                     float: "left",
                     marginRight: "15px",
@@ -297,8 +297,8 @@ class AnalysisDashboard extends React.Component {
         return (
             <div style={{
                 float: "left",
-                marginBottom: "10px",
-                marginTop: "10px",
+                marginBottom: "15px",
+                marginTop: "15px",
                 width: "100%",
             }}>
                 {elements}
@@ -578,7 +578,11 @@ class AnalysisDashboard extends React.Component {
                         marginLeft: "250px",
                         width: "calc(100% - 250px - 375px)",
                     }}>
-                        <div className="page-white-background">
+                        <div 
+                            style={{
+                                minWidth: "875px",
+                            }}
+                            className="page-white-background">
                             <div style={{
                                 float: "left",
                                 paddingBottom: "10px",
@@ -609,9 +613,9 @@ class AnalysisDashboard extends React.Component {
                                 height: "calc(100vh - 50px - 50px)",
                                 marginLeft: "40px",
                                 marginRight: "40px",
-                                marginTop: "25px",
                                 width: "calc(100% - 80px)",
                             }}>
+                                {this.renderSelectedProperties()}
                                 <div style={{
                                     backgroundColor: "#E9EDF6",
                                     borderRadius: "8px",
@@ -685,6 +689,7 @@ class AnalysisDashboard extends React.Component {
                                             <p style={{
                                                 display: "inline-block",
                                                 fontSize: "2.8em",
+                                                fontWeight: "bold",
                                                 textAlign: "center",
                                             }}>
                                                 {this.state.propertiesSummary["total_rent"] ? numberWithCommas(this.state.propertiesSummary["total_rent"]) : "-"}
@@ -772,6 +777,7 @@ class AnalysisDashboard extends React.Component {
                                             <p style={{
                                                 display: "inline-block",
                                                 fontSize: "2.8em",
+                                                fontWeight: "bold",
                                                 textAlign: "center",
                                             }}>
                                                 {this.state.propertiesSummary["total_mortgage_payment"] ? numberWithCommas(this.state.propertiesSummary["total_mortgage_payment"]) : "-"}
@@ -791,35 +797,17 @@ class AnalysisDashboard extends React.Component {
                                     marginTop: "0px",
                                     width: "100%",
                                 }}>
-                                    <BarChart 
-                                        backgroundColor={"#f5f5fa"}
-                                        height={"400"}
-                                        width={"calc(100% - 60px)"}
-                                        // barWidth={"50px"}
-                                        yAxisFontSize={"0.8em"}
-                                        xAxisFontSize={"0.8em"}
-                                        xAxisColor={"grey"}
-                                        yAxisColor={"grey"}
-                                        barColor={"#296CF6"}
-                                        capitalizeXAxis={true}
-                                        displayTooltip={true}
-                                        padding={"30px 30px 15px 30px"}
-                                        data={getHistoricalAnalysisData(this.state.historicalAnalysis)}/>
-                                </div>
-                                <div style={{
-                                    float: "left",
-                                    marginTop: "15px",
-                                    width: "100%",
-                                }}>
                                     <div style={{
-                                        backgroundColor: "#e9f0fe",
+                                        backgroundColor: "#f5f5fa",
                                         borderRadius: "4px",
+                                        display: "inline-block",
                                         height: "80px",
+                                        marginRight: "20px",
                                         textAlign: "center",
-                                        width: "275px",
+                                        width: "calc((100% - 40px)/3)",
                                     }}>
                                         <p style={{
-                                            color: "#296cf6",
+                                            color: "black",
                                             display: "inline-block",
                                             fontFamily: "'Poppins', sans-serif",
                                             fontSize: "1.7em",
@@ -831,7 +819,7 @@ class AnalysisDashboard extends React.Component {
                                             0.0}%
                                         </p>
                                         <p style={{
-                                            color: "#296cf6",
+                                            color: "black",
                                             display: "inline-block",
                                             fontSize: "0.85em",
                                             lineHeight: "80px",
@@ -841,12 +829,15 @@ class AnalysisDashboard extends React.Component {
                                         </p>
                                     </div>
                                     <div style={{
-                                        backgroundColor: "#E9EDF6",
+                                        backgroundColor: "#f5f5fa",
+                                        // backgroundColor: "#E9EDF6",
+                                        // backgroundColor: "#e9f0fe",
                                         borderRadius: "4px",
+                                        display: "inline-block",
                                         height: "80px",
-                                        marginTop: "15px",
+                                        marginRight: "20px",
                                         textAlign: "center",
-                                        width: "275px",
+                                        width: "calc((100% - 40px)/3)",
                                     }}>
                                         <p style={{
                                             color: "black",
@@ -871,12 +862,12 @@ class AnalysisDashboard extends React.Component {
                                         </p>
                                     </div>
                                     <div style={{
-                                        backgroundColor: "#E9EDF6",
+                                        backgroundColor: "#f5f5fa",
                                         borderRadius: "4px",
+                                        display: "inline-block",
                                         height: "80px",
-                                        marginTop: "15px",
                                         textAlign: "center",
-                                        width: "275px",
+                                        width: "calc((100% - 40px)/3)",
                                     }}>
                                         <p style={{
                                             color: "black",
@@ -900,6 +891,26 @@ class AnalysisDashboard extends React.Component {
                                             Annual Rate of Return
                                         </p>
                                     </div>
+                                    <div style={{
+                                        float: "left",
+                                        marginTop: "15px",
+                                        width: "100%",
+                                    }}>
+                                        <BarChart 
+                                            backgroundColor={"#f5f5fa"}
+                                            height={"400"}
+                                            width={"calc(100% - 60px)"}
+                                            // barWidth={"50px"}
+                                            yAxisFontSize={"0.8em"}
+                                            xAxisFontSize={"0.8em"}
+                                            xAxisColor={"grey"}
+                                            yAxisColor={"grey"}
+                                            barColor={"#296CF6"}
+                                            capitalizeXAxis={true}
+                                            displayTooltip={true}
+                                            padding={"30px 30px 15px 30px"}
+                                            data={getHistoricalAnalysisData(this.state.historicalAnalysis)}/>
+                                    </div>
                                 </div>
                             </div>
                             
@@ -909,9 +920,10 @@ class AnalysisDashboard extends React.Component {
                                 {this.state.activePropertySearchBar ? 
                                 <div style={{
                                     backgroundColor: "white",
-                                    borderRadius: "0px 0px 20px 20px",
-                                    borderTop: "1px solid #d3d3d3",
-                                    boxShadow: "2px 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                                    borderRadius: "0px 0px 4px 4px",
+                                    border: "1px solid #d3d3d3",
+                                    // boxShadow: "2px 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                                    marginTop: "-25px",
                                     paddingBottom: "15px",
                                     position: "absolute",
                                     width: "385px",
@@ -944,10 +956,6 @@ class AnalysisDashboard extends React.Component {
                                         Advanced
                                     </div>
                                 </div> */}
-                            </div>
-                            <div className="clearfix"/>
-                            <div>
-                                {this.renderSelectedProperties()}
                             </div>
                             <div className="clearfix"/>
                             {/* <div className="analysis_dashboard_inner_box">

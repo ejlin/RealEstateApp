@@ -70,7 +70,6 @@ class NotificationSidebar extends React.Component {
         });
 
         if (this.state.profilePicture === "" || this.state.profilePicture === undefined || this.state.profilePicture === null) {
-            console.log("here");
             axios({
                 method: 'get',
                 url: '/api/user/settings/profile/picture/' + this.state.user["id"],
