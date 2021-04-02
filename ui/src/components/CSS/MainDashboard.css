@@ -59,7 +59,7 @@
 }
 
 .main_dashboard_summary_cards {
-    border-right: 1px solid #d3d3d3;
+    /* border-right: 1px solid #d3d3d3; */
     float: left;
     height: 100px;
     padding-left: 35px;
@@ -69,7 +69,7 @@
 }
 
 .main_dashboard_summary_cards:first-child {
-    border-left: 1px solid #d3d3d3;
+    /* border-left: 1px solid #d3d3d3; */
 }
 
 .main_dashboard_summary_cards_icon {
@@ -221,20 +221,18 @@
 }
 
 .main_dashboard_bottom_left_box_bottom {
-    margin-top: 25px;
-    width: 1005;
+    margin-top: 21px;
+    width: 100%;
 }
 
 .main_dashboard_bottom_left_box_bottom_inner_box {
-    /* background-color: white; */
-    border: 1px solid #d3d3d3;
-    border-radius: 2px;
-    /* box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09); */
+    background-color: #f5f5fa;
+    border-radius: 4px;
     float: left;
     height: 135px;
     margin-bottom: 25px;
-    margin-right: 30px;
-    width: calc((100% - 60px - 6px)/3);
+    margin-right: 15px;
+    width: calc((100% - 30px)/3);
 }
 
 .main_dashboard_bottom_left_box_bottom_inner_box:last-child {
@@ -293,10 +291,10 @@
 
 #main_dashboard_yoy_growth_box {
     background-color: #296CF6;
-    border-radius: 2px;
+    border-radius: 6px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     height: 195px;
-    margin-top: 40px;
+    margin-top: 15px;
     padding-bottom: 25px;
     width: 100%;
 }
@@ -364,7 +362,7 @@
     color: white;
     font-size: 1.0em;
     margin-left: 25px;
-    margin-top: 7.5px;
+    margin-top: 15px;
     width: calc(100% - 50px);
 }
 

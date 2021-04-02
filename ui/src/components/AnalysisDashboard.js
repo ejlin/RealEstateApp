@@ -129,6 +129,7 @@ class AnalysisDashboard extends React.Component {
                 propertySearchBarProperties: propertiesMap,
                 isLoading: false
             });
+            console.log(expensesSummary);
             console.log(propertiesSummary);
         })).catch(errors => {
             console.log(errors);
@@ -136,7 +137,7 @@ class AnalysisDashboard extends React.Component {
     }
 
     renderPropertiesList() {
-        let propertySearchBarProperties = this.state.propertySearchBarProperties;
+        let propertySearchBarProperties = this.state.propertiesMap;
         let activeSelectProperties = this.state.activeSelectProperties;
         let newPropertySearchBarProperties = new Map();
         propertySearchBarProperties.forEach((value, key, map) => {
@@ -158,6 +159,7 @@ class AnalysisDashboard extends React.Component {
     // which properties to display according to the search.
     handleSelectPropertyBar(e) {
         // replace will strip out empty spaces
+        console.log(this.state.propertiesMap);
         let searchValue = e.target.value.toLowerCase().replace(/\s/g, "");
         if (searchValue === "") {
             this.setState({
@@ -610,7 +612,7 @@ class AnalysisDashboard extends React.Component {
                             <div className="page-title-bar-divider"></div>
                             <div style={{
                                 float: "left",
-                                height: "calc(100vh - 50px - 50px)",
+                                height: "calc(100vh - 50px - 50px - 50px)",
                                 marginLeft: "40px",
                                 marginRight: "40px",
                                 width: "calc(100% - 80px)",
@@ -692,7 +694,7 @@ class AnalysisDashboard extends React.Component {
                                                 fontWeight: "bold",
                                                 textAlign: "center",
                                             }}>
-                                                {this.state.propertiesSummary["total_rent"] ? numberWithCommas(this.state.propertiesSummary["total_rent"]) : "-"}
+                                                {this.state.propertiesSummary["total_rent"] ? numberWithCommas(Number(this.state.propertiesSummary["total_rent"]).toFixed(2)) : "-"}
                                             </p>
                                         </div>
                                         <p style={{
@@ -799,9 +801,9 @@ class AnalysisDashboard extends React.Component {
                                 }}>
                                     <div style={{
                                         backgroundColor: "#f5f5fa",
-                                        borderRadius: "4px",
+                                        borderRadius: "6px",
                                         display: "inline-block",
-                                        height: "80px",
+                                        height: "70px",
                                         marginRight: "20px",
                                         textAlign: "center",
                                         width: "calc((100% - 40px)/3)",
@@ -811,7 +813,7 @@ class AnalysisDashboard extends React.Component {
                                             display: "inline-block",
                                             fontFamily: "'Poppins', sans-serif",
                                             fontSize: "1.7em",
-                                            lineHeight: "80px",
+                                            lineHeight: "70px",
                                             verticalAlign: "top",
                                         }}>
                                             {this.state.propertiesSummary["average_dti"] ?
@@ -822,7 +824,7 @@ class AnalysisDashboard extends React.Component {
                                             color: "black",
                                             display: "inline-block",
                                             fontSize: "0.85em",
-                                            lineHeight: "80px",
+                                            lineHeight: "70px",
                                             marginLeft: "10px",
                                         }}>
                                             Debt to Income Ratio
@@ -832,9 +834,9 @@ class AnalysisDashboard extends React.Component {
                                         backgroundColor: "#f5f5fa",
                                         // backgroundColor: "#E9EDF6",
                                         // backgroundColor: "#e9f0fe",
-                                        borderRadius: "4px",
+                                        borderRadius: "6px",
                                         display: "inline-block",
-                                        height: "80px",
+                                        height: "70px",
                                         marginRight: "20px",
                                         textAlign: "center",
                                         width: "calc((100% - 40px)/3)",
@@ -844,7 +846,7 @@ class AnalysisDashboard extends React.Component {
                                             display: "inline-block",
                                             fontFamily: "'Poppins', sans-serif",
                                             fontSize: "1.7em",
-                                            lineHeight: "80px",
+                                            lineHeight: "70px",
                                             verticalAlign: "top",
                                         }}>
                                             {this.state.propertiesSummary["average_ltv"] ?
@@ -855,7 +857,7 @@ class AnalysisDashboard extends React.Component {
                                             color: "black",
                                             display: "inline-block",
                                             fontSize: "0.85em",
-                                            lineHeight: "80px",
+                                            lineHeight: "70px",
                                             marginLeft: "10px",
                                         }}>
                                             Loan to Value Ratio
@@ -863,9 +865,9 @@ class AnalysisDashboard extends React.Component {
                                     </div>
                                     <div style={{
                                         backgroundColor: "#f5f5fa",
-                                        borderRadius: "4px",
+                                        borderRadius: "6px",
                                         display: "inline-block",
-                                        height: "80px",
+                                        height: "70px",
                                         textAlign: "center",
                                         width: "calc((100% - 40px)/3)",
                                     }}>
@@ -874,7 +876,7 @@ class AnalysisDashboard extends React.Component {
                                             display: "inline-block",
                                             fontFamily: "'Poppins', sans-serif",
                                             fontSize: "1.7em",
-                                            lineHeight: "80px",
+                                            lineHeight: "70px",
                                             verticalAlign: "top",
                                         }}>
                                             {this.state.propertiesSummary["annual_rate_of_return"] ?
@@ -885,7 +887,7 @@ class AnalysisDashboard extends React.Component {
                                             color: "black",
                                             display: "inline-block",
                                             fontSize: "0.85em",
-                                            lineHeight: "80px",
+                                            lineHeight: "70px",
                                             marginLeft: "10px",
                                         }}>
                                             Annual Rate of Return
@@ -911,6 +913,90 @@ class AnalysisDashboard extends React.Component {
                                             padding={"30px 30px 15px 30px"}
                                             data={getHistoricalAnalysisData(this.state.historicalAnalysis)}/>
                                     </div>
+                                    <div style={{
+                                        float: "left",
+                                        marginTop: "15px",
+                                        width: "100%",
+                                    }}>
+                                        <div style={{
+                                            backgroundColor: "#E9EDF6",
+                                            borderRadius: "4px",
+                                            float: "left",
+                                            height: "150px",
+                                            width: "300px",
+                                        }}> 
+                                            <p>
+                                                ${numberWithCommas(Number(this.state.expensesSummary["total_expenses"]).toFixed(2))}
+                                            </p>
+                                        </div>
+                                        <div style={{
+                                            float: "right",
+                                            width: "calc(100% - 300px - 20px)",
+                                        }}>
+                                            <div style={{
+                                                display: "inline-block",
+                                                width: "calc((100% - 50px)/3)",
+                                            }}>
+                                                <p style={{
+                                                    color: "grey",
+                                                    fontFamily: "'Poppins', sans-serif",
+                                                    fontWeight: "bold",
+                                                    textAlign: "center",
+                                                }}>
+                                                    TOTAL BEDROOMS
+                                                </p>
+                                                <div className="clearfix"/>
+                                                <p style={{
+                                                    marginTop: "5px",
+                                                    textAlign: "center",
+                                                }}>
+                                                    {this.state.propertiesSummary["total_bedrooms"]}
+                                                </p>
+                                            </div>
+                                            <div style={{
+                                                display: "inline-block",
+                                                marginLeft: "25px",
+                                                width: "calc((100% - 50px)/3)",
+                                            }}>
+                                                <p style={{
+                                                    color: "grey",
+                                                    fontFamily: "'Poppins', sans-serif",
+                                                    fontWeight: "bold",
+                                                    textAlign: "center",
+                                                }}>
+                                                    TOTAL BATHROOMS
+                                                </p>
+                                                <div className="clearfix"/>
+                                                <p style={{
+                                                    marginTop: "5px",
+                                                    textAlign: "center",
+                                                }}>
+                                                    {this.state.propertiesSummary["total_bathrooms"]}
+                                                </p>
+                                            </div>
+                                            <div style={{
+                                                display: "inline-block",
+                                                marginLeft: "25px",
+                                                width: "calc((100% - 50px)/3)",
+                                            }}>
+                                                <p style={{
+                                                    color: "grey",
+                                                    fontFamily: "'Poppins', sans-serif",
+                                                    fontWeight: "bold",
+                                                    textAlign: "center",
+                                                }}>
+                                                    TOTAL SQUARE FT.
+                                                </p>
+                                                <div className="clearfix"/>
+                                                <p style={{
+                                                    marginTop: "5px",
+                                                    textAlign: "center",
+                                                }}>
+                                                    {numberWithCommas(this.state.propertiesSummary["total_square_footage"])}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             
@@ -922,16 +1008,12 @@ class AnalysisDashboard extends React.Component {
                                     backgroundColor: "white",
                                     borderRadius: "0px 0px 4px 4px",
                                     border: "1px solid #d3d3d3",
-                                    // boxShadow: "2px 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                                     marginTop: "-25px",
-                                    paddingBottom: "15px",
                                     position: "absolute",
                                     width: "385px",
                                     zIndex: "25",
                                 }}>
-                                    <div>
-                                        {this.renderPropertySearchBarElements()}
-                                    </div>
+                                    {this.renderPropertySearchBarElements()}
                                 </div>:
                                 <div></div>}
                                 {/* <div className="analysis_dashboard_view_selection_box">

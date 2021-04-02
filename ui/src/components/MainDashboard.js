@@ -379,9 +379,11 @@ class MainDashboard extends React.Component {
                                         </p>
                                     </div>
                                     <div style={{
-                                        borderRadius: "2px",
+                                        backgroundColor: "#E9EDF6",
+                                        borderRadius: "6px",
                                         float: "left",
-                                        marginBottom: "30px",
+                                        marginBottom: "15px",
+                                        marginTop: "15px",
                                         minWidth: "calc(250px + 35px)",
                                         width: "calc(100%)",
                                     }}>
@@ -433,14 +435,12 @@ class MainDashboard extends React.Component {
                                     <div id="main_dashboard_bottom_box">
                                         <div id="main_dashboard_bottom_left_box">
                                             <div style={{
-                                                // backgroundColor: "white",
-                                                border: "1px solid #d3d3d3",
-                                                borderRadius: "2px",
-                                                // boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                                                backgroundColor: "#f5f5fa",
+                                                borderRadius: "4px",
                                                 height: "385px",
                                                 paddingLeft: "20px",
                                                 paddingRight: "20px",
-                                                width: "calc(100% - 40px - 2px",
+                                                width: "calc(100% - 15px)",
                                             }}>
                                                 <p className="main_dashboard_box_title">
                                                     Portfolio Growth
@@ -543,9 +543,9 @@ class MainDashboard extends React.Component {
                                         </div>
                                         <div id="main_dashboard_bottom_right_box">
                                             <div style={{
-                                                // backgroundColor: "white",
-                                                border: "1px solid #d3d3d3", 
-                                                borderRadius: "2px",
+                                                backgroundColor: "#f5f5fa",
+                                                // border: "1px solid #d3d3d3", 
+                                                borderRadius: "4px",
                                                 // boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                                                 height: "287px",
                                                 overflow: "hidden",
@@ -632,7 +632,7 @@ class MainDashboard extends React.Component {
                                                 </p>
                                                 <div className="clearfix"/>
                                                 <p className="main_dashboard_yoy_subtitle">
-                                                    Your portfolio {this.state.totalEstimateWorth >= this.state.yearAgoTotalEstimateWorth ? "grew" : "decreased"} from {numberWithCommas(this.state.yearAgoTotalEstimateWorth)} to {numberWithCommas(this.state.totalEstimateWorth)} year over year
+                                                    Your portfolio {this.state.totalEstimateWorth >= this.state.yearAgoTotalEstimateWorth ? "grew" : "decreased"} from ${numberWithCommas(this.state.yearAgoTotalEstimateWorth)} to ${numberWithCommas(this.state.totalEstimateWorth)} year over year
                                                 </p>
                                             </div>
                                             
