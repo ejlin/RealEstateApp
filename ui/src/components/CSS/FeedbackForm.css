@@ -4,71 +4,34 @@
     background-color: #F5F5FA;
     float: left;
     height: 100vh;
-    margin-left: 220px;
-    width: calc(100% - 220px);
-}
-
-#feedback_form_inner_box {
-    height: 100vh;
-    margin-left: 60px;
-    margin-top: 80px;
-    width: calc((100% - 120px));
-}
- 
-.feedback_form_inner_box_title { 
-    font-size: 1.6em;
-    font-weight: bold;
-}
-
-.feedback_form_inner_box_subtitle {
-    font-size: 1.1em;
-    font-weight: bold;
-    margin-top: 25px;
-}
-
-#feedback_form_inner_lower_box {
-    float: left;
-    margin-top: 40px;
-    width: 100%;
-}
-
-#feedback_form_inner_lower_box_nav_bar {
-    float: left;
-    width: 250px;
+    margin-left: 250px;
+    width: calc(100% - 250px - 375px);
 }
 
 .feedback_form_inner_lower_box_nav_bar_list {
-    background-color: white;
-    border-radius: 50px 10px 10px 50px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     color: #32384D;
     cursor: pointer;
-    float: left;
+    display: inline-block;
     font-weight: bold;
-    height: 45px;
-    margin-bottom: 15px;
-    margin-right: 10%;
-    transition: 0.5s;
-    width: 90%;
+    margin-right: 25px;
 }
 
-.feedback_form_inner_lower_box_nav_bar_list:hover, .feedback_form_inner_lower_box_nav_bar_list_active {
+/* .feedback_form_inner_lower_box_nav_bar_list:hover {
     background-color:  #296CF6;
 }
 
-.feedback_form_inner_lower_box_nav_bar_list:hover .feedback_form_inner_lower_box_nav_bar_list_icon{
+.feedback_form_inner_lower_box_nav_bar_list:hover{
     color: white;
 }
 
 .feedback_form_inner_lower_box_nav_bar_list:hover .feedback_form_inner_lower_box_nav_bar_list_title{
     color: white;
-}
+} */
 
 .feedback_form_inner_lower_box_nav_bar_list_title {
     color:  black;
     float: left;
     font-size: 1.0em;
-    line-height: 45px;
     margin-left: 10px;
 }
 
@@ -76,47 +39,21 @@
     color: #32384D;
     float: left;
     height: 20px;
-    margin-left: 25px;
-    margin-top: calc((45px - 20px)/2);
     width: 20px;
 }
 
-#feedback_form_inner_lower_box_right_box {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
-    float: left;
-    margin-left: 20px;
-    width: calc((100% - 250px - 250px));
-}
 
 .feedback_form_actual_form_box {
     border-radius: 4px;
     float: left;
-    margin-left: 40px;
-    margin-right: 40px;
     margin-top: 25px;
-    width: calc((100% - 80px));
+    width: 100%;
 }
 
 .feedback_form_actual_form_title_border_bottom {
     background-color: #296CF6;
     height: 5px;
     margin-top: 5px;
-}
-
-.feedback_form_actual_form_title {
-    border-bottom: 5px solid #296CF6;
-    float: left;
-    font-size: 1.4em;
-    font-weight: bold;
-    padding-bottom: 5px;
-}
-
-.feedback_form_actual_form_subtitle {
-    font-size: 1em;
-    font-weight: bold;
-    margin-top: 15px;
 }
 
 .feedback_form_actual_form_title_input:focus, .feedback_form_select_input:focus {
@@ -128,7 +65,6 @@
     border: 1px solid #d3d3d3;
     border-radius: 4px;
     font-size: 1.1em;
-    margin-top: 25px;
     padding: 7.5px 15px 7.5px 15px;
     width: calc(100% - 30px);
 }
@@ -154,16 +90,22 @@
 }
 
 .feedback_form_actual_form_submit_button {
-    background-color: #296cf6;
-    border-radius: 50px;
-    color: white;
+    background-color: #f5f5fa;
+    border-radius: 4px;
+    color: #32384D;
     cursor: pointer;
     float: right;
+    font-Family: 'Poppins', sans-serif;
+    font-weight: bold;
+    margin-left: 25px;
     padding: 10px 15px 10px 15px;
+    transition: 0.5s;
+    user-select: none;
 }
 
 .feedback_form_actual_form_submit_button:hover {
-    opacity: 0.9;
+    background-color: #296cf6;
+    color: white;
 }
 
 .feedback_form_actual_form_checkbox {
@@ -195,11 +137,6 @@
 
 .feedback_form_actual_form_checkbox_inner_box_active {
     background-color: #296CF6;
-}
-
-.feedback_form_inner_lower_box_nav_bar_list_icon_active, .feedback_form_inner_lower_box_nav_bar_list_title_active{
-    color: white;
-    font-weight: bold;
 }
 
 .feedback_form_select_input {

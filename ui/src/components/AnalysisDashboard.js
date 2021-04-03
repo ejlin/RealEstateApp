@@ -920,13 +920,25 @@ class AnalysisDashboard extends React.Component {
                                     }}>
                                         <div style={{
                                             backgroundColor: "#E9EDF6",
-                                            borderRadius: "4px",
+                                            borderRadius: "6px",
                                             float: "left",
-                                            height: "150px",
+                                            paddingBottom: "20px",
+                                            paddingTop: "20px",
                                             width: "300px",
                                         }}> 
-                                            <p>
+                                            <p style={{
+                                                fontSize: "1.7em",
+                                                fontWeight: "bold",
+                                                textAlign: "center",
+                                            }}>
                                                 ${numberWithCommas(Number(this.state.expensesSummary["total_expenses"]).toFixed(2))}
+                                            </p>
+                                            <p style={{
+                                                fontSize: "0.8em",
+                                                marginTop: "5px",
+                                                textAlign: "center",
+                                            }}>
+                                                in expenses
                                             </p>
                                         </div>
                                         <div style={{

@@ -1,6 +1,6 @@
 .files_dashboard_folder_card {
     background-color: white;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.12), 0 5px 10px 4px rgba(0, 0, 0, 0.12);
     /* border: 1px solid grey; */
     border-radius: 10px;
     float: left;

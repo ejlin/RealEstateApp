@@ -5,6 +5,7 @@ import { Redirect } from "react-router-dom";
 import './CSS/FeedbackForm.css';
 
 import DashboardSidebar from './DashboardSidebar.js';
+import NotificationSidebar from './NotificationSidebar.js';
 
 import { BsFillHouseFill } from 'react-icons/bs';
 import { RiFileWarningFill, RiVipCrown2Fill } from 'react-icons/ri';
@@ -74,13 +75,6 @@ class FeedbackForm extends React.Component {
             case general:
                 return (
                     <div className="feedback_form_actual_form_box">
-                        <p className="feedback_form_actual_form_title">
-                            General Feedback
-                        </p>
-                        <div className="clearfix"/>
-                        <p className="feedback_form_actual_form_subtitle">
-                            You are submitting this form as {this.state.user["first_name"]} {this.state.user["last_name"]}, {this.state.user["email"]}
-                        </p>
                         <input type="text" placeholder="Title" className="feedback_form_actual_form_title_input"></input>
                         <div className="clearfix"/>
                         <textarea 
@@ -97,13 +91,6 @@ class FeedbackForm extends React.Component {
             case featureRequest:
                 return (
                     <div className="feedback_form_actual_form_box">
-                        <p className="feedback_form_actual_form_title">
-                            Feature Request
-                        </p>
-                        <div className="clearfix"/>
-                        <p className="feedback_form_actual_form_subtitle">
-                            You are submitting this form as {this.state.user["first_name"]} {this.state.user["last_name"]}, {this.state.user["email"]}
-                        </p>
                         <input type="text" placeholder="Title" className="feedback_form_actual_form_title_input"></input>
                         <div className="clearfix"/>
                         <textarea 
@@ -140,13 +127,6 @@ class FeedbackForm extends React.Component {
             case bugReport:
                 return (
                     <div className="feedback_form_actual_form_box">
-                        <p className="feedback_form_actual_form_title">
-                            Bug Report
-                        </p>
-                        <div className="clearfix"/>
-                        <p className="feedback_form_actual_form_subtitle">
-                            You are submitting this form as {this.state.user["first_name"]} {this.state.user["last_name"]}, {this.state.user["email"]}
-                        </p>
                         <input type="text" placeholder="Title" className="feedback_form_actual_form_title_input"></input>
                         <div className="clearfix"/>
                         <textarea 
@@ -171,13 +151,6 @@ class FeedbackForm extends React.Component {
             case securityIssue:
                 return (
                     <div className="feedback_form_actual_form_box">
-                        <p className="feedback_form_actual_form_title">
-                            Security Issue
-                        </p>
-                        <div className="clearfix"/>
-                        <p className="feedback_form_actual_form_subtitle">
-                            You are submitting this form as {this.state.user["first_name"]} {this.state.user["last_name"]}, {this.state.user["email"]}
-                        </p>
                         <input type="text" placeholder="Title" className="feedback_form_actual_form_title_input"></input>
                         <div className="clearfix"/>
                         <textarea 
@@ -202,13 +175,6 @@ class FeedbackForm extends React.Component {
             case accountIssue:
                 return (
                     <div className="feedback_form_actual_form_box">
-                        <p className="feedback_form_actual_form_title">
-                            Account Issue
-                        </p>
-                        <div className="clearfix"/>
-                        <p className="feedback_form_actual_form_subtitle">
-                            You are submitting this form as {this.state.user["first_name"]} {this.state.user["last_name"]}, {this.state.user["email"]}
-                        </p>
                         <input type="text" placeholder="Title" className="feedback_form_actual_form_title_input"></input>
                         <div className="clearfix"/>
                         <textarea 
@@ -252,127 +218,169 @@ class FeedbackForm extends React.Component {
                     }
                 }}/>
                 <div id="feedback_form_box">
-                    <div id="feedback_form_inner_box">
-                        <p className="feedback_form_inner_box_title">
-                            Feedback
-                        </p>
-                        <p className="feedback_form_inner_box_subtitle">
-                            Your feedback matters! Please use this form to report any issues you have encountered while using this website and/or any features you would love to see as we work to constantly improve our product. Thank you for your continued support!
-                        </p>
-                        <div id="feedback_form_inner_lower_box">
-                            <div id="feedback_form_inner_lower_box_nav_bar">
-                                <li 
-                                    onClick={() => this.setState({
-                                        toDisplay: general,
-                                    })}
-                                    className={
-                                        this.state.toDisplay === general ? 
-                                        "feedback_form_inner_lower_box_nav_bar_list feedback_form_inner_lower_box_nav_bar_list_active" : 
-                                        "feedback_form_inner_lower_box_nav_bar_list"}>
-                                    <BsFillHouseFill className={
-                                        this.state.toDisplay === general ? 
-                                        "feedback_form_inner_lower_box_nav_bar_list_icon feedback_form_inner_lower_box_nav_bar_list_icon_active" :
-                                        "feedback_form_inner_lower_box_nav_bar_list_icon"
-                                    }></BsFillHouseFill>
-                                    <p className={
-                                        this.state.toDisplay === general ?
-                                        "feedback_form_inner_lower_box_nav_bar_list_title feedback_form_inner_lower_box_nav_bar_list_title_active" :
-                                        "feedback_form_inner_lower_box_nav_bar_list_title"
-                                    }>
-                                        General
-                                    </p>
-                                </li>
-                                <li 
-                                    onClick={() => this.setState({
-                                        toDisplay: featureRequest,
-                                    })}
-                                    className={
-                                        this.state.toDisplay === featureRequest ? 
-                                        "feedback_form_inner_lower_box_nav_bar_list feedback_form_inner_lower_box_nav_bar_list_active" : 
-                                        "feedback_form_inner_lower_box_nav_bar_list"}>
-                                    <RiVipCrown2Fill className={
-                                        this.state.toDisplay === featureRequest ? 
-                                        "feedback_form_inner_lower_box_nav_bar_list_icon feedback_form_inner_lower_box_nav_bar_list_icon_active" :
-                                        "feedback_form_inner_lower_box_nav_bar_list_icon"
-                                    }></RiVipCrown2Fill>
-                                    <p className={
-                                        this.state.toDisplay === featureRequest ?
-                                        "feedback_form_inner_lower_box_nav_bar_list_title feedback_form_inner_lower_box_nav_bar_list_title_active" :
-                                        "feedback_form_inner_lower_box_nav_bar_list_title"
-                                    }>
-                                        Feature Request
-                                    </p>
-                                </li>
-                                <li 
-                                    onClick={() => this.setState({
-                                        toDisplay: bugReport,
-                                    })}
-                                    className={
-                                        this.state.toDisplay === bugReport ? 
-                                        "feedback_form_inner_lower_box_nav_bar_list feedback_form_inner_lower_box_nav_bar_list_active" : 
-                                        "feedback_form_inner_lower_box_nav_bar_list"}>
-                                    <RiFileWarningFill className={
-                                        this.state.toDisplay === bugReport ? 
-                                        "feedback_form_inner_lower_box_nav_bar_list_icon feedback_form_inner_lower_box_nav_bar_list_icon_active" :
-                                        "feedback_form_inner_lower_box_nav_bar_list_icon"
-                                    }></RiFileWarningFill>
-                                    <p className={
-                                        this.state.toDisplay === bugReport ?
-                                        "feedback_form_inner_lower_box_nav_bar_list_title feedback_form_inner_lower_box_nav_bar_list_title_active" :
-                                        "feedback_form_inner_lower_box_nav_bar_list_title"
-                                    }>
-                                        Bug Report
-                                    </p>
-                                </li>
-                                <li 
-                                    onClick={() => this.setState({
-                                        toDisplay: securityIssue,
-                                    })}
-                                    className={
-                                        this.state.toDisplay === securityIssue ? 
-                                        "feedback_form_inner_lower_box_nav_bar_list feedback_form_inner_lower_box_nav_bar_list_active" : 
-                                        "feedback_form_inner_lower_box_nav_bar_list"}>
-                                    <AiTwotoneSecurityScan className={
-                                        this.state.toDisplay === securityIssue ? 
-                                        "feedback_form_inner_lower_box_nav_bar_list_icon feedback_form_inner_lower_box_nav_bar_list_icon_active" :
-                                        "feedback_form_inner_lower_box_nav_bar_list_icon"
-                                    }></AiTwotoneSecurityScan>
-                                    <p className={
-                                        this.state.toDisplay === securityIssue ?
-                                        "feedback_form_inner_lower_box_nav_bar_list_title feedback_form_inner_lower_box_nav_bar_list_title_active" :
-                                        "feedback_form_inner_lower_box_nav_bar_list_title"
-                                    }>
-                                        Security Issue
-                                    </p>
-                                </li>
-                                <li 
-                                    onClick={() => this.setState({
-                                        toDisplay: accountIssue,
-                                    })}
-                                    className={
-                                        this.state.toDisplay === accountIssue ? 
-                                        "feedback_form_inner_lower_box_nav_bar_list feedback_form_inner_lower_box_nav_bar_list_active" : 
-                                        "feedback_form_inner_lower_box_nav_bar_list"}>
-                                    <MdAccountCircle className={
-                                        this.state.toDisplay === accountIssue ? 
-                                        "feedback_form_inner_lower_box_nav_bar_list_icon feedback_form_inner_lower_box_nav_bar_list_icon_active" :
-                                        "feedback_form_inner_lower_box_nav_bar_list_icon"
-                                    }></MdAccountCircle>
-                                    <p className={
-                                        this.state.toDisplay === accountIssue ?
-                                        "feedback_form_inner_lower_box_nav_bar_list_title feedback_form_inner_lower_box_nav_bar_list_title_active" :
-                                        "feedback_form_inner_lower_box_nav_bar_list_title"
-                                    }>
-                                        Account Issue
-                                    </p>
-                                </li>
-                            </div>
-                            <div id="feedback_form_inner_lower_box_right_box">
+                    <div className="page-white-background">
+                        <div style={{
+                            float: "left",
+                            paddingBottom: "10px",
+                            paddingTop: "10px",
+                            width: "100%",
+                        }}>
+                            <p style={{
+                                float: "left",
+                                fontFamily: "'Poppins', sans-serif",
+                                fontSize: "1.1em",
+                                lineHeight: "40px",
+                                marginLeft: "calc((100% - 200px)/2)",
+                                width: "200px",
+                            }}>
+                                FEEDBACK
+                            </p>
+                        </div>
+                        <div className="clearfix"/>
+                        <div className="page-title-bar-divider"></div>
+                        <div style={{
+                            float: "left",
+                            height: "calc(100vh - 50px - 50px - 50px)",
+                            marginLeft: "40px",
+                            marginRight: "40px",
+                            width: "calc(100% - 80px)",
+                        }}>
+                            <p style={{
+                                fontFamily: "'Poppins', sans-serif",
+                                fontSize: "1.0em",
+                                marginTop: "25px",
+                            }}>
+                                Your feedback matters! Please use this form to report any issues you have encountered while using this website and/or any features you would love to see as we work to constantly improve our product. Thank you for your continued support!
+                            </p>
+                            <p style={{
+                                marginTop: "15px",
+                            }}>
+                                You are submitting this form as {this.state.user["first_name"]} {this.state.user["last_name"]}, {this.state.user["email"]}
+                            </p>
+                            <div style={{
+                                float: "left",
+                                marginTop: "25px",
+                                width: "100%",
+                            }}>
+                                <div>
+                                    <li 
+                                        onClick={() => this.setState({
+                                            toDisplay: general,
+                                        })}
+                                        className={
+                                            this.state.toDisplay === general ? 
+                                            "feedback_form_inner_lower_box_nav_bar_list feedback_form_inner_lower_box_nav_bar_list_active" : 
+                                            "feedback_form_inner_lower_box_nav_bar_list"}>
+                                        <BsFillHouseFill className={
+                                            this.state.toDisplay === general ? 
+                                            "feedback_form_inner_lower_box_nav_bar_list_icon feedback_form_inner_lower_box_nav_bar_list_icon_active" :
+                                            "feedback_form_inner_lower_box_nav_bar_list_icon"
+                                        }></BsFillHouseFill>
+                                        <p className={
+                                            this.state.toDisplay === general ?
+                                            "feedback_form_inner_lower_box_nav_bar_list_title feedback_form_inner_lower_box_nav_bar_list_title_active" :
+                                            "feedback_form_inner_lower_box_nav_bar_list_title"
+                                        }>
+                                            General
+                                        </p>
+                                    </li>
+                                    <li 
+                                        onClick={() => this.setState({
+                                            toDisplay: featureRequest,
+                                        })}
+                                        className={
+                                            this.state.toDisplay === featureRequest ? 
+                                            "feedback_form_inner_lower_box_nav_bar_list feedback_form_inner_lower_box_nav_bar_list_active" : 
+                                            "feedback_form_inner_lower_box_nav_bar_list"}>
+                                        <RiVipCrown2Fill className={
+                                            this.state.toDisplay === featureRequest ? 
+                                            "feedback_form_inner_lower_box_nav_bar_list_icon feedback_form_inner_lower_box_nav_bar_list_icon_active" :
+                                            "feedback_form_inner_lower_box_nav_bar_list_icon"
+                                        }></RiVipCrown2Fill>
+                                        <p className={
+                                            this.state.toDisplay === featureRequest ?
+                                            "feedback_form_inner_lower_box_nav_bar_list_title feedback_form_inner_lower_box_nav_bar_list_title_active" :
+                                            "feedback_form_inner_lower_box_nav_bar_list_title"
+                                        }>
+                                            Feature Request
+                                        </p>
+                                    </li>
+                                    <li 
+                                        onClick={() => this.setState({
+                                            toDisplay: bugReport,
+                                        })}
+                                        className={
+                                            this.state.toDisplay === bugReport ? 
+                                            "feedback_form_inner_lower_box_nav_bar_list feedback_form_inner_lower_box_nav_bar_list_active" : 
+                                            "feedback_form_inner_lower_box_nav_bar_list"}>
+                                        <RiFileWarningFill className={
+                                            this.state.toDisplay === bugReport ? 
+                                            "feedback_form_inner_lower_box_nav_bar_list_icon feedback_form_inner_lower_box_nav_bar_list_icon_active" :
+                                            "feedback_form_inner_lower_box_nav_bar_list_icon"
+                                        }></RiFileWarningFill>
+                                        <p className={
+                                            this.state.toDisplay === bugReport ?
+                                            "feedback_form_inner_lower_box_nav_bar_list_title feedback_form_inner_lower_box_nav_bar_list_title_active" :
+                                            "feedback_form_inner_lower_box_nav_bar_list_title"
+                                        }>
+                                            Bug Report
+                                        </p>
+                                    </li>
+                                    <li 
+                                        onClick={() => this.setState({
+                                            toDisplay: securityIssue,
+                                        })}
+                                        className={
+                                            this.state.toDisplay === securityIssue ? 
+                                            "feedback_form_inner_lower_box_nav_bar_list feedback_form_inner_lower_box_nav_bar_list_active" : 
+                                            "feedback_form_inner_lower_box_nav_bar_list"}>
+                                        <AiTwotoneSecurityScan className={
+                                            this.state.toDisplay === securityIssue ? 
+                                            "feedback_form_inner_lower_box_nav_bar_list_icon feedback_form_inner_lower_box_nav_bar_list_icon_active" :
+                                            "feedback_form_inner_lower_box_nav_bar_list_icon"
+                                        }></AiTwotoneSecurityScan>
+                                        <p className={
+                                            this.state.toDisplay === securityIssue ?
+                                            "feedback_form_inner_lower_box_nav_bar_list_title feedback_form_inner_lower_box_nav_bar_list_title_active" :
+                                            "feedback_form_inner_lower_box_nav_bar_list_title"
+                                        }>
+                                            Security Issue
+                                        </p>
+                                    </li>
+                                    <li 
+                                        onClick={() => this.setState({
+                                            toDisplay: accountIssue,
+                                        })}
+                                        className={
+                                            this.state.toDisplay === accountIssue ? 
+                                            "feedback_form_inner_lower_box_nav_bar_list feedback_form_inner_lower_box_nav_bar_list_active" : 
+                                            "feedback_form_inner_lower_box_nav_bar_list"}>
+                                        <MdAccountCircle className={
+                                            this.state.toDisplay === accountIssue ? 
+                                            "feedback_form_inner_lower_box_nav_bar_list_icon feedback_form_inner_lower_box_nav_bar_list_icon_active" :
+                                            "feedback_form_inner_lower_box_nav_bar_list_icon"
+                                        }></MdAccountCircle>
+                                        <p className={
+                                            this.state.toDisplay === accountIssue ?
+                                            "feedback_form_inner_lower_box_nav_bar_list_title feedback_form_inner_lower_box_nav_bar_list_title_active" :
+                                            "feedback_form_inner_lower_box_nav_bar_list_title"
+                                        }>
+                                            Account Issue
+                                        </p>
+                                    </li>
+                                </div>
                                 {this.renderForms()}
                             </div>
                         </div>
                     </div>
                 </div>
+                <NotificationSidebar data={{
+                    state: {
+                        user: this.state.user,
+                        totalEstimateWorth: this.state.totalEstimateWorth,
+                        missingEstimate: this.state.missingEstimate 
+                    }
+                }}/>
             </div>
         )
     }
