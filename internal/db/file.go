@@ -21,6 +21,8 @@ type File struct {
 	Type FileType `json:"type,omitempty",sql:"type:ENUM('mortgage', 'contracting', 'property', 'receipts', 'repairs', 'taxes', 'other')"`
 	Year int      `json:"year,omitempty",sql:"type:integer"`
 
+	SizeKB int `json:"size_kb,omitempty",sql:"type:integer"`
+
 	// Path is the path to our file within our GCS bucket.
 	Path string `json:"path,omitempty",sql:"varchar(255)"`
 
@@ -99,6 +101,27 @@ func (handle *Handle) GetFileById(userID, fileID string) (*File, error) {
 	}
 
 	return &file, nil
+}
+
+type FilesSummary struct {
+	TotalFiles int `json:"total_files,omitempty",sql:"type:integer"`
+	FilesTotalSize int `json:"files_total_size,omitempty",sql:"type:integer"`
+}
+
+// GetFilesSummaryByUserID will return a summary of a user's currently uploaded
+// files. This is so we can display to users what their current file usage is.
+func (handle *Handle) GetFilesSummaryByUserID(userID string) (*FilesSummary, error) {
+
+	_, err := uuid.Parse(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	var filesSummary FilesSummary
+	if err := handle.DB.Select("COUNT(*) AS total_files, SUM(size_kb) AS files_total_size").Where("user_id = ?", userID).Table("files").Find(&filesSummary).Error; err != nil {
+		return nil, err
+	}
+	return &filesSummary, nil
 }
 
 // GetAllFiles will return all files for a user.

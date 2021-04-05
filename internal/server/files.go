@@ -116,7 +116,32 @@ func (s *Server) getStoreFileSignedURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write([]byte(url))
+	RespondToRequest(w, url)
+	return
+}
+
+func (s *Server) getFilesSummary(w http.ResponseWriter, r *http.Request) {
+
+	// ctx := r.Context()
+	vars := mux.Vars(r)
+
+	userID, ok := vars["id"]
+	if !ok {
+		log.Info().Msg("missing user id")
+		http.Error(w, "missing user id", http.StatusBadRequest)
+		return
+	}
+
+	ll := log.With().Str("user_id", userID).Logger()
+
+	fileSummary, err := s.DBHandle.GetFilesSummaryByUserID(userID)
+	if err != nil {
+		ll.Error().Err(err).Msg("unable to fetch files summary")
+		http.Error(w, "unable to fetch files summary", http.StatusInternalServerError)
+		return
+	}
+
+	RespondToRequest(w, fileSummary)
 	return
 }
 
@@ -225,7 +250,6 @@ func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
 	ll.Info().Msg("successfully created file")
 	RespondToRequest(w, file)
 	return
-
 }
 
 // getFile either downloads an individual file or returns a signed URl.

@@ -29,14 +29,14 @@
 } */
 
 .feedback_form_inner_lower_box_nav_bar_list_title {
-    color:  black;
+    color: grey;
     float: left;
     font-size: 1.0em;
     margin-left: 10px;
 }
 
 .feedback_form_inner_lower_box_nav_bar_list_icon {
-    color: #32384D;
+    color: grey;
     float: left;
     height: 20px;
     width: 20px;

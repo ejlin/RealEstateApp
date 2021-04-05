@@ -12,7 +12,7 @@ import UploadFileModal from './UploadFileModal.js';
 import FolderCard from './FolderCard.js';
 import FolderPage from './FolderPage.js';
 
-import { trimTrailingName, mapFileTypeToIcon, openSignedURL } from '../utility/Util.js';
+import { trimTrailingName, mapFileTypeToIcon, openSignedURL, bytesToSize } from '../utility/Util.js';
 
 import ProgressBar from './../utility/ProgressBar.js';
 
@@ -52,8 +52,19 @@ class FilesDashboard extends React.Component {
     constructor(props) {
         super(props);
 
+        let redirect;
+        let user;
+        const loggedInUser = localStorage.getItem("user");
+        if (loggedInUser) {
+            user = JSON.parse(loggedInUser);
+            redirect = null;
+        } else {
+            user = null;
+            redirect = "/";
+        }
+
         this.state = {
-            user: this.props.location.state.user,
+            user: user,
             totalEstimateWorth: this.props.location.state.totalEstimateWorth,
             missingEstimate: this.props.location.state.missingEstimate,
             profilePicture: this.props.location.state.profilePicture,
@@ -77,6 +88,7 @@ class FilesDashboard extends React.Component {
             isLoading: true,
             pageToDisplay: folders,
             activeFolderPropertyID: null,
+            redirect: redirect,
         };
 
         this.setActiveFileAttributes = this.setActiveFileAttributes.bind(this);
@@ -90,19 +102,25 @@ class FilesDashboard extends React.Component {
         this.setActiveFolder = this.setActiveFolder.bind(this);
         this.renderActiveFolderFiles = this.renderActiveFolderFiles.bind(this);
         this.setRecentlyUploadedFile = this.setRecentlyUploadedFile.bind(this);
+        this.getFileStorageUsage = this.getFileStorageUsage.bind(this);
     }
 
     componentDidMount() {
-        // Load our properties list.
 
         let userID = this.state.user["id"];
+                
+        // Load our properties list.
         let getPropertiesURL = URLBuilder("api/user/property", userID);
+        let getFilesSummaryURL = URLBuilder("api/user/files/summary", userID);
 
-        axios({
-            method: 'get',
-            url:  getPropertiesURL,
-        }).then(response => {
-            let propertiesList = response.data;
+        const getPropertiesRequest = axios.get(getPropertiesURL);
+        const getFilesSummaryRequest = axios.get(getFilesSummaryURL);
+
+        axios.all(
+            [getPropertiesRequest, getFilesSummaryRequest]
+        ).then(axios.spread((...responses) => {
+            const propertiesRequestReponse = responses[0];
+            let propertiesList = propertiesRequestReponse.data;
             // sort them according to last_modified_at.
             let propertiesMap = new Map();
             for (let i = 0; i < propertiesList.length; i++) {
@@ -111,11 +129,19 @@ class FilesDashboard extends React.Component {
                 let propertyAddress = property["address_one"] + (property["address_two"] ? " " + property["address_two"] : "");
                 propertiesMap.set(propertyID, propertyAddress);
             }
+
+            const filesSummaryRequestResponse = responses[1];
+            let filesSummary = filesSummaryRequestResponse.data;
+
+            console.log(filesSummary);
+
             this.setState({
                 propertiesMap: propertiesMap,
+                filesSummary: filesSummary,
                 isLoading: false
             });
-        }).catch(error => {
+        })).catch(error => {
+            console.log(error);
             this.setState({
                 isLoading: false
             })
@@ -443,12 +469,73 @@ class FilesDashboard extends React.Component {
             )
         })
         return (
-            <div style={{
-                marginTop: "25px",
-            }}>
+            <div>
                 {folders}
             </div>
         );
+    }
+
+    getFileStorageUsage() {
+        let filesSummary = this.state.filesSummary;
+        if (!filesSummary || filesSummary === undefined) {
+            return (
+                <div></div>
+            );
+        }
+        let filesTotalSize = filesSummary["files_total_size"];
+
+        let user = this.state.user;
+
+        let plan = user["plan"];
+        let maximumSizeBytes;
+        let maximumSize;
+
+        switch (plan) {
+            case "starter":
+                maximumSizeBytes = 3221225472;
+                maximumSize = "3 GB";
+            case "professional":
+                maximumSizeBytes = 53687091200;
+                maximumSize = "50 GB";
+            case "enterprise":
+                maximumSizeBytes = 322122547200;
+                maximumSize = "300 GB";
+        }
+
+        maximumSizeBytes = filesTotalSize >= 322122547200 ? bytesToSize(filesTotalSize) : maximumSize;
+        maximumSize = filesTotalSize >= 322122547200 ? bytesToSize(filesTotalSize) : maximumSize;
+
+        let width = filesTotalSize / maximumSizeBytes * 100.0;
+
+        return (
+            <div>
+                
+                {/* TODO:  TOOLTIP: "need more storage? upgrade" */}
+                <div style={{
+                    backgroundColor: "#E9EDF6",
+                    borderRadius: "50px",
+                    float: "right",
+                    height: "10px",
+                    width: "175px",
+                }}>
+                    <div style={{
+                        backgroundColor: "#296cf6",
+                        borderRadius: width === 100 ? "50px" : "50px 0px 0px 50px",
+                        float: "left",
+                        height: "10px",
+                        width: width + "%",
+                    }}>
+                    </div>
+                </div>
+                <div className="clearfix"/>
+                <p style={{
+                    float: "right",
+                    marginTop: "7.5px",
+                }}>
+                    {bytesToSize(filesTotalSize)} used of {maximumSize}
+                </p>
+            </div>
+        )
     }
 
     render() {
@@ -464,6 +551,11 @@ class FilesDashboard extends React.Component {
                     profilePicture: this.state.profilePicture
                 }
             }} />
+        }
+        if (this.state.isLoading) {
+            return (
+                <div></div>
+            );
         }
         return (
             <div>
@@ -497,8 +589,7 @@ class FilesDashboard extends React.Component {
                                 paddingTop: "10px",
                                 width: "100%",
                             }}>
-                            <input id="files_dashboard_search_bar" className="search_bar" placeholder="Search..." onChange={this.handleSearchBar}>
-                            </input>
+                            <input id="files_dashboard_search_bar" className="search_bar" placeholder="Search..." onChange={this.handleSearchBar}/>
                             <p
                                 style={{
                                     float: "left",
@@ -547,24 +638,71 @@ class FilesDashboard extends React.Component {
                         <div className="clearfix"/>
                         <div className="page-title-bar-divider"/>
                         <div style={{
-                            margin: "15px 40px 0px 40px",
+                            margin: "20px 40px 0px 40px",
                             width: "calc(100% - 80px)",
                         }}>
-                            {
-                                this.state.pageToDisplay === folders ?
-                                (this.state.isLoading ? 
-                                    <div></div> : 
-                                    <div>
-                                        {this.renderFolders()}
-                                    </div>
-                                ): (
-                                    this.state.pageToDisplay === files ?
-                                    <div>
-                                        {this.renderActiveFolderFiles()}
-                                    </div>:
-                                    <div></div>
-                                )
-                            }
+                            <div style={{
+                                float: "left",
+                                width: "100%",
+                            }}>
+                                <div style={{
+                                    backgroundColor: "#32384D",
+                                    borderRadius: "6px",
+                                    boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                                    float: "left",
+                                    marginRight: "15px",
+                                    padding: "7.5px 15px 7.5px 15px",
+                                    userSelect: "none",
+                                }}>
+                                    <p style={{
+                                        color: "white",
+                                        display: "inline-block",
+                                        fontSize: "0.9em",
+                                        fontWeight: "bold",
+                                    }}>
+                                        {this.state.filesSummary["total_files"]}
+                                    </p>
+                                    <p style={{
+                                        color: "white",
+                                        display: "inline-block",
+                                        fontWeight: "bold",
+                                        fontSize: "0.9em",
+                                        marginLeft: "5px",
+                                    }}>
+                                        Files
+                                    </p>
+                                </div>
+                                <div style={{ 
+                                    float: "right",
+                                }}>
+                                    <p style={{
+                                        fontSize: "0.9em",
+                                    }}>
+                                        {this.getFileStorageUsage()}
+                                    </p>
+                                </div>
+                            </div>
+                            <div style={{
+                                float: "left",
+                                marginTop: "20px",
+                                width: "100%",
+                            }}>
+                                {
+                                    this.state.pageToDisplay === folders ?
+                                    (this.state.isLoading ? 
+                                        <div></div> : 
+                                        <div>
+                                            {this.renderFolders()}
+                                        </div>
+                                    ): (
+                                        this.state.pageToDisplay === files ?
+                                        <div>
+                                            {this.renderActiveFolderFiles()}
+                                        </div>:
+                                        <div></div>
+                                    )
+                                }
+                            </div>
                         </div>
                     </div>
                     <div className="clearfix"/>
