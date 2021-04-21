@@ -593,12 +593,10 @@ class ExpensesDashboard extends React.Component {
                                     marginRight: "25px",
                                 }}>
                                 <MdAdd style={{
-                                    backgroundColor: "#f5f5fa",
-                                    borderRadius: "50%",
                                     color: "#296cf6",
                                     float: "left",
                                     height: "20px",
-                                    padding: "10px",
+                                    marginTop: "10px",
                                     width: "20px",
                                 }}/>
                                 <p
@@ -618,21 +616,19 @@ class ExpensesDashboard extends React.Component {
                         </div>
                         <div className="clearfix"/>
                         <div className="page-title-bar-divider"></div>
-                        <div className="expenses_dashboard_body_box">
-                                
+                        <div style={{
+                            float: "left",
+                            width: "100%",
+                        }}>
                             {this.state.isLoading ? 
                             this.renderPageLoadingView() : 
                             <div style={{
                                 float: "left",
                                 height: "calc(100vh - 50px - 50px - 50px)",
-                                marginLeft: "40px",
-                                marginRight: "40px",
                                 overflow: "hidden",
-                                // marginTop: "25px",
-                                width: "calc(100% - 80px)",
+                                width: "calc(100%)",
                             }}>
                                 <ExpensesTable data={{
-
                                     state:{
                                         user: this.state.user,
                                         expenses: this.state.expenses,

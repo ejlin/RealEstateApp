@@ -1,14 +1,14 @@
 .file_card_individual_file {
     background-color: white;
     border-radius: 4px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.20), 0 6px 20px 0 rgba(0, 0, 0, 0.20);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     float: left;
-    height: 200px;
+    height: 190px;
     margin-bottom: 5px;
     margin-top: 15px;
     position: relative;
-    margin-right: 15px;
-    width: calc((100% - 60px)/5);
+    margin-right: 20px;
+    width: 180px;
 }
 
 .file_card_individual_file_small {

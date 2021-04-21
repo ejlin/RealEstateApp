@@ -169,7 +169,8 @@ input::placeholder {
 }
 
 .form_continue_button:hover {
-    background-color: #32384D;
+    background-color: #296cf6;
+/* #32384D; */
     color: #f5f5fa;
 }
 

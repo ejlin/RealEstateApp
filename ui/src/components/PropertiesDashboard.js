@@ -11,7 +11,7 @@ import NotificationSidebar from './NotificationSidebar.js';
 
 import { getDaysUntil } from './MainDashboard.js';
 
-import { mapFileTypeToIcon, openSignedURL, numberWithCommas } from '../utility/Util.js';
+import { mapFileTypeToIcon, openSignedURL, numberWithCommas, capitalizeName, getDate } from '../utility/Util.js';
 
 import { Link, Redirect } from 'react-router-dom';
 import { MdError, MdAdd  } from 'react-icons/md';
@@ -280,7 +280,7 @@ class PropertiesDashboard extends React.Component {
         return (
             <div style={{
                 height: "calc(100vh - 50px - 50px - 50px)", /* 50px margin top header, 50px search bar header, 50px margin top and bottom */
-                marginTop: "25px",
+                marginTop: "15px",
                 overflow: "scroll",
             }}>
                 {elements}
@@ -411,12 +411,10 @@ class PropertiesDashboard extends React.Component {
                                             }
                                         }}>
                                         <MdAdd style={{
-                                            backgroundColor: "#f5f5fa",
-                                            borderRadius: "50%",
                                             color: "#296cf6",
                                             float: "left",
                                             height: "20px",
-                                            padding: "10px",
+                                            marginTop: "10px",
                                             width: "20px",
                                         }}/>
                                         <p style={{
@@ -444,10 +442,28 @@ class PropertiesDashboard extends React.Component {
                                 <div className="page-title-bar-divider"></div>
                                 <div className="clearfix"/>
                                 <div style={{
-                                    marginLeft: "40px",
-                                    marginRight: "40px",
-                                    width: "calc(100% - 80px)",
+                                    float: "left",
+                                    marginBottom: "15px",
+                                    marginLeft: "30px",
+                                    marginRight: "30px",
+                                    width: "calc(100% - 60px)",
                                 }}>
+                                    {/* <div style={{
+                                        marginTop: "15px",
+                                        // height: "60px",
+                                        width: "calc(100% - 120px)",
+                                    }}>
+                                        <p id="main_dashboard_welcome_box_date">
+                                            {getDate()}
+                                        </p>
+                                        <p style={{
+                                            fontFamily: "'Poppins', sans-serif",
+                                            fontSize: "1.4em",
+                                            // fontWeight: "bold",
+                                        }}>
+                                            Welcome, {capitalizeName(this.state.user["first_name"])}
+                                        </p>
+                                    </div> */}
                                     {
                                         this.state.totalProperties === 0 ? 
                                         this.renderNoProperties() :

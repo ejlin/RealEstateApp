@@ -919,14 +919,16 @@ class AnalysisDashboard extends React.Component {
                                         width: "100%",
                                     }}>
                                         <div style={{
-                                            backgroundColor: "#E9EDF6",
+                                            backgroundColor: "#32384D",
+                                            // backgroundColor: "#E9EDF6",
                                             borderRadius: "6px",
                                             float: "left",
                                             paddingBottom: "20px",
                                             paddingTop: "20px",
-                                            width: "300px",
+                                            width: "275px",
                                         }}> 
                                             <p style={{
+                                                color: "white",
                                                 fontSize: "1.7em",
                                                 fontWeight: "bold",
                                                 textAlign: "center",
@@ -934,8 +936,8 @@ class AnalysisDashboard extends React.Component {
                                                 ${numberWithCommas(Number(this.state.expensesSummary["total_expenses"]).toFixed(2))}
                                             </p>
                                             <p style={{
-                                                fontSize: "0.8em",
-                                                marginTop: "5px",
+                                                color: "white",
+                                                fontSize: "0.85em",
                                                 textAlign: "center",
                                             }}>
                                                 in expenses
@@ -943,7 +945,7 @@ class AnalysisDashboard extends React.Component {
                                         </div>
                                         <div style={{
                                             float: "right",
-                                            width: "calc(100% - 300px - 20px)",
+                                            width: "calc(100% - 275px - 20px)",
                                         }}>
                                             <div style={{
                                                 display: "inline-block",

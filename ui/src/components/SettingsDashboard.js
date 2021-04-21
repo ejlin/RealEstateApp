@@ -316,433 +316,535 @@ class SettingsDashboard extends React.Component {
         // Depending on the current user's plans and the plan they have selected, we want to display different warning texts. 
     }
     
-    renderRightBoxPage() {
-        switch(this.state.toDisplay) {
-            case general:
-                return (
-                    <div className="right_box_page_inner_box">
-                        <p className="right_box_page_title">
-                            General Settings
-                        </p>
-                        <p 
-                            className="right_box_page_edit_button"
-                            onClick={() => this.setState({editGeneral: !this.state.editGeneral})}>
-                            {this.state.editGeneral ? "Cancel" : "Edit"}
-                        </p>
-                        <div className="right_box_page_content_inner_box">
-                            <div className="right_box_page_content_inner_box_list">
-                                <p className="right_box_page_content_inner_box_list_text">
+    renderBottomBoxPage() {
+        return (
+            <div>
+                <div className="right_box_page_inner_box">
+                    <p className="right_box_page_title">
+                        General
+                    </p>
+                    <div className="clearfix"/>
+                    <div className="right_box_page_content_inner_box">
+                        <div style={{
+                            width: "100%",
+                        }}>
+                            <div style={{
+                                float: "left",
+                                width: "calc(50% - 10px)",
+                            }}>
+                                <p style={{
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "0.9em",
+                                    // fontWeight: "bold",
+                                }}>
                                     First Name
                                 </p>
-                                <p className="right_box_page_content_inner_box_list_value_text">
-                                    {this.state.editGeneral ? 
-                                    <input
-                                        id="edit_first_name_input"
-                                        className="right_box_page_content_inner_box_list_input"
-                                        placeholder={this.capitalizeName(this.state.user["first_name"])}></input>: 
-                                    this.capitalizeName(this.state.user["first_name"])}
-                                </p>
+                                <input 
+                                    className="settings_input"
+                                    placeholder={this.capitalizeName(this.state.user["first_name"])}
+                                    style={{
+                                        backgroundColor: "#f5f5fa",
+                                    }}/>
                             </div>
-                            <div className="clearfix"/>
-                            <div className="right_box_page_content_inner_box_list">
-                                <p className="right_box_page_content_inner_box_list_text">
+                            <div style={{
+                                float: "right",
+                                width: "calc(50% - 10px)",
+                            }}>
+                                <p style={{
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "0.9em",
+                                    // fontWeight: "bold",
+                                }}>
                                     Last Name
                                 </p>
-                                <p className="right_box_page_content_inner_box_list_value_text">
-                                    {this.state.editGeneral && this.state.toDisplay === general ? 
-                                    <input
-                                        id="edit_last_name_input"
-                                        className="right_box_page_content_inner_box_list_input"
-                                        placeholder={this.capitalizeName(this.state.user["last_name"])}></input>: 
-                                    this.capitalizeName(this.state.user["last_name"])}
-                                </p>
+                                <input 
+                                    className="settings_input"
+                                    placeholder={this.capitalizeName(this.state.user["last_name"])}
+                                    style={{
+                                        backgroundColor: "#f5f5fa",
+                                    }}/>
                             </div>
-                            <div className="clearfix"/>
-                            <div className="right_box_page_content_inner_box_list">
-                                <p className="right_box_page_content_inner_box_list_text">
+                        </div>
+                        <div className="clearfix"/>
+                        <div style={{
+                            marginTop: "15px",
+                            width: "100%",
+                        }}>
+                            <div style={{
+                                float: "left",
+                                width: "calc(50% - 10px)",
+                            }}>
+                                <p style={{
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "0.9em",
+                                    // fontWeight: "bold",
+                                }}>
                                     Email
                                 </p>
-                                <p className="right_box_page_content_inner_box_list_value_text">
-                                    {this.state.editGeneral ? 
-                                    <input
-                                        id="edit_email_input"
-                                        className="right_box_page_content_inner_box_list_input"
-                                        placeholder={this.state.user["email"]}></input>: 
-                                        this.state.user["email"]}
-                                </p>
+                                <input 
+                                    className="settings_input"
+                                    placeholder={this.state.user["email"]}
+                                    style={{
+                                        backgroundColor: "#f5f5fa",
+                                    }}/>
                             </div>
-                            <div className="clearfix"/>
-                            {/* <div className="right_box_page_content_inner_box_list">
-                                <p className="right_box_page_content_inner_box_list_text">
+                            <div style={{
+                                float: "right",
+                                width: "calc(50% - 10px)",
+                            }}>
+                                <p style={{
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "0.9em",
+                                    // fontWeight: "bold",
+                                }}>
                                     Phone Number
                                 </p>
-                                <p className="right_box_page_content_inner_box_list_value_text">
-                                    {this.state.editGeneral ? 
-                                    <input
-                                        id="edit_phone_number_input"
-                                        type="number"
-                                        className="right_box_page_content_inner_box_list_input"
-                                        placeholder={this.state.phoneNumber ? this.state.phoneNumber : "(XXX) XXX - XXXX"}></input>:
-                                    (this.state.phoneNumber ? this.state.phoneNumber : "(XXX) XXX - XXXX")}
-                                </p>
-                            </div> */}
-                            <div className="right_box_page_content_inner_box_list">
-                                <p className="right_box_page_content_inner_box_list_text">
+                                <input 
+                                    className="settings_input"
+                                    placeholder={this.state.user["phone_number"] ? this.capitalizeName(this.state.user["phone_number"]) : "1 (XXX) XXX - XXXX"}
+                                    style={{
+                                        backgroundColor: "#f5f5fa",
+                                    }}/>
+                            </div>
+                        </div>
+                        <div className="clearfix"/>
+                        <div style={{
+                            marginTop: "15px",
+                            width: "100%",
+                        }}>
+                            <div style={{
+                                float: "left",
+                                width: "calc(50% - 10px)",
+                            }}>
+                                <p style={{
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontSize: "0.9em",
+                                    // fontWeight: "bold",
+                                }}>
                                     Password
                                 </p>
-                                <p className="right_box_page_content_inner_box_list_value_text">
-                                    {this.state.editGeneral ? 
-                                    <input
-                                        id="edit_password_input"
-                                        type="password"
-                                        className="right_box_page_content_inner_box_list_input"
-                                        placeholder={"********"}></input>:
-                                    "********"}
-                                </p>
+                                <input 
+                                    className="settings_input"
+                                    placeholder="********"
+                                    style={{
+                                        backgroundColor: "#f5f5fa",
+                                    }}/>
                             </div>
-                            <div className="clearfix"/>
-                            {this.state.editGeneral ? 
-                            <div 
-                                onClick={this.updateUserSettingsProfile}
-                                className="right_box_page_content_save_edits_button">
-                                Save
-                            </div> :
-                            <div></div>}
                         </div>
-                    </div>
-                );
-            case email:
-                return (
-                    <div className="right_box_page_inner_box">
-                        <p className="right_box_page_title">
-                            Email Settings
-                        </p>
-                        <p 
-                            className="right_box_page_edit_button"
-                            onClick={() => {
-                                if (this.state.editEmail) {
-                                    this.setState({
-                                        checkboxStates: this.deepCopyMap(this.state.originalCheckboxStates)
-                                    })
-                                }
-                                this.setState({
-                                    editEmail: !this.state.editEmail,
-                                })}}>
-                            {this.state.editEmail ? "Cancel" : "Edit"}
-                        </p>
-                        {this.state.editEmail ?
-                        <p className="right_box_page_title_unsubscribe_all_button">Unsubscribe from All</p> : <p></p>}
+                        {/* <p className="right_box_page_content_inner_box_list_value_text">
+                                {this.state.editGeneral ? 
+                            <input
+                                id="edit_first_name_input"
+                                className="right_box_page_content_inner_box_list_input"
+                                placeholder={this.capitalizeName(this.state.user["first_name"])}></input>
+                                : 
+                            this.capitalizeName(this.state.user["first_name"])}
+                        </p> */}
+
+                        {/* <div className="right_box_page_content_inner_box_list">
+                            <p className="right_box_page_content_inner_box_list_text">
+                                First Name
+                            </p>
+                            <p className="right_box_page_content_inner_box_list_value_text">
+                                {this.state.editGeneral ? 
+                                <input
+                                    id="edit_first_name_input"
+                                    className="right_box_page_content_inner_box_list_input"
+                                    placeholder={this.capitalizeName(this.state.user["first_name"])}></input>: 
+                                this.capitalizeName(this.state.user["first_name"])}
+                            </p>
+                        </div>
                         <div className="clearfix"/>
-                        <p id="email_fyi_text">
-                            You will always receive emails about important account information
-                        </p>
-                        <div className="right_box_page_content_inner_box">
-                            <div className="right_box_page_content_inner_box_list">
-                                <p className="right_box_page_content_inner_box_list_text">
-                                    Digest Emails
-                                </p>
-                                <p className="right_box_page_content_inner_box_list_value_text">
-                                    {this.state.editEmail ? 
-                                    <label className="switch">
-                                        <input 
-                                            type="checkbox"
-                                            name="receive_digest"
-                                            checked={this.state.checkboxStates.get('receive_digest')}
-                                            onChange={this.handleCheckboxChange}/>
-                                        <span className="slider round"></span>
-                                    </label> : (this.state.checkboxStates.get('receive_digest') ? "Yes" : "No")}
-                                </p>
-                            </div>
-                            <div className="right_box_page_content_inner_box_list">
-                                <p className="right_box_page_content_inner_box_list_text">
-                                    Newsletter Emails
-                                </p>
-                                <p className="right_box_page_content_inner_box_list_value_text">
-                                    {this.state.editEmail ? 
-                                    <label className="switch">
-                                        <input 
-                                            type="checkbox"
-                                            name="receive_newsletter"
-                                            checked={this.state.checkboxStates.get('receive_newsletter')}
-                                            onChange={this.handleCheckboxChange}/>
-                                        <span className="slider round"></span>
-                                    </label>: 
-                                    (this.state.checkboxStates.get('receive_newsletter') ? "Yes" : "No")}
-                                </p>
-                            </div>
-                            <div className="right_box_page_content_inner_box_list">
-                                <p className="right_box_page_content_inner_box_list_text">
-                                    Marketing Emails
-                                </p>
-                                <p className="right_box_page_content_inner_box_list_value_text">
-                                    {this.state.editEmail ? 
-                                    <label className="switch">
-                                        <input 
-                                            type="checkbox"
-                                            name="receive_marketing"
-                                            checked={this.state.checkboxStates.get('receive_marketing')}
-                                            onChange={this.handleCheckboxChange}/>
-                                        <span className="slider round"></span>
-                                    </label>: 
-                                    (this.state.checkboxStates.get('receive_marketing') ? "Yes" : "No")}
-                                </p>
-                            </div>
-                            <div className="clearfix"/>
-                            {this.state.editEmail ? 
-                            <div 
-                                onClick={this.updateUserSettingsPreferences}
-                                className="right_box_page_content_save_edits_button">
-                                Save
-                            </div> :
-                            <div></div>}
+                        <div className="right_box_page_content_inner_box_list">
+                            <p className="right_box_page_content_inner_box_list_text">
+                                Last Name
+                            </p>
+                            <p className="right_box_page_content_inner_box_list_value_text">
+                                {this.state.editGeneral && this.state.toDisplay === general ? 
+                                <input
+                                    id="edit_last_name_input"
+                                    className="right_box_page_content_inner_box_list_input"
+                                    placeholder={this.capitalizeName(this.state.user["last_name"])}></input>: 
+                                this.capitalizeName(this.state.user["last_name"])}
+                            </p>
                         </div>
+                        <div className="clearfix"/>
+                        <div className="right_box_page_content_inner_box_list">
+                            <p className="right_box_page_content_inner_box_list_text">
+                                Email
+                            </p>
+                            <p className="right_box_page_content_inner_box_list_value_text">
+                                {this.state.editGeneral ? 
+                                <input
+                                    id="edit_email_input"
+                                    className="right_box_page_content_inner_box_list_input"
+                                    placeholder={this.state.user["email"]}></input>: 
+                                    this.state.user["email"]}
+                            </p>
+                        </div>
+                        <div className="clearfix"/> */}
+                        {/* <div className="right_box_page_content_inner_box_list">
+                            <p className="right_box_page_content_inner_box_list_text">
+                                Phone Number
+                            </p>
+                            <p className="right_box_page_content_inner_box_list_value_text">
+                                {this.state.editGeneral ? 
+                                <input
+                                    id="edit_phone_number_input"
+                                    type="number"
+                                    className="right_box_page_content_inner_box_list_input"
+                                    placeholder={this.state.phoneNumber ? this.state.phoneNumber : "(XXX) XXX - XXXX"}></input>:
+                                (this.state.phoneNumber ? this.state.phoneNumber : "(XXX) XXX - XXXX")}
+                            </p>
+                        </div> */}
+                        {/* <div className="right_box_page_content_inner_box_list">
+                            <p className="right_box_page_content_inner_box_list_text">
+                                Password
+                            </p>
+                            <p className="right_box_page_content_inner_box_list_value_text">
+                                {this.state.editGeneral ? 
+                                <input
+                                    id="edit_password_input"
+                                    type="password"
+                                    className="right_box_page_content_inner_box_list_input"
+                                    placeholder={"********"}></input>:
+                                "********"}
+                            </p>
+                        </div> */}
+                        {/* <div className="clearfix"/>
+                        {this.state.editGeneral ? 
+                        <div 
+                            onClick={this.updateUserSettingsProfile}
+                            className="right_box_page_content_save_edits_button">
+                            Save
+                        </div> :
+                        <div></div>} */}
                     </div>
-                );
-            case notifications:
-                return (
-                    <div className="right_box_page_inner_box">
-                        <p className="right_box_page_title">
-                            Notifications Settings
-                        </p>
-                        <p 
-                            className="right_box_page_edit_button"
-                            onClick={() => {
-                                if (this.state.editNotifications) {
-                                    this.setState({
-                                        checkboxStates: this.deepCopyMap(this.state.originalCheckboxStates)
-                                    })
-                                }
+                    <div className="clearfix"/>
+                    <p  
+                        style={{
+                            marginTop: "15px",
+                        }}
+                        className="right_box_page_title">
+                        Email
+                    </p>
+                    {/* <p 
+                        className="right_box_page_edit_button"
+                        onClick={() => {
+                            if (this.state.editEmail) {
                                 this.setState({
-                                    editNotifications: !this.state.editNotifications,
-                                })}}>
-                            {this.state.editNotifications ? "Cancel" : "Edit"}
-                        </p>
-                        <div className="right_box_page_content_inner_box">
-                            <div className="right_box_page_content_inner_box_list">
-                                <p className="right_box_page_content_inner_box_list_text">
-                                    Rent Pay date
-                                </p>
-                                <p className="right_box_page_content_inner_box_list_value_text">
-                                    {this.state.editNotifications ? 
-                                    <label className="switch">
-                                        <input
+                                    checkboxStates: this.deepCopyMap(this.state.originalCheckboxStates)
+                                })
+                            }
+                            this.setState({
+                                editEmail: !this.state.editEmail,
+                            })}}>
+                        {this.state.editEmail ? "Cancel" : "Edit"}
+                    </p> */}
+                    {this.state.editEmail ?
+                    <p className="right_box_page_title_unsubscribe_all_button">Unsubscribe from All</p> : <p></p>}
+                    <div className="clearfix"/>
+                    <p style={{
+                        color: "red",
+                        marginTop: "5px",
+                    }}>
+                        You will always receive emails about important account information
+                    </p>
+                    <div className="right_box_page_content_inner_box">
+                        <div className="right_box_page_content_inner_box_list">
+                            <p className="right_box_page_content_inner_box_list_text">
+                                Digest Emails
+                            </p>
+                            <p className="right_box_page_content_inner_box_list_value_text">
+                                {this.state.editEmail ? 
+                                <label className="switch">
+                                    <input 
                                         type="checkbox"
-                                        name="rent_pay_date"
-                                        checked={this.state.checkboxStates.get('rent_pay_date')}
-                                        onChange={this.handleCheckboxChange}></input>
-                                        <span className="slider round"></span>
-                                    </label>: 
-                                    (this.state.checkboxStates.get('rent_pay_date') ? "Yes" : "No")}
-                                </p>
-                            </div>
-                            <div className="right_box_page_content_inner_box_list">
-                                <p className="right_box_page_content_inner_box_list_text">
-                                    Mortgage
-                                </p>
-                                <p className="right_box_page_content_inner_box_list_value_text">
-                                    {this.state.editNotifications ? 
-                                    <label className="switch">
-                                        <input 
-                                            type="checkbox"
-                                            name="mortgage_pay_date"
-                                            checked={this.state.checkboxStates.get('mortgage_pay_date')}
-                                            onChange={this.handleCheckboxChange}/>
-                                        <span className="slider round"></span>
-                                    </label>: 
-                                    (this.state.checkboxStates.get('mortgage_pay_date') ? "Yes" : "No")}
-                                </p>
-                            </div>
-                            <div className="right_box_page_content_inner_box_list">
-                                <p className="right_box_page_content_inner_box_list_text">
-                                    Property Values
-                                </p>
-                                <p className="right_box_page_content_inner_box_list_value_text">
-                                    {this.state.editNotifications ? 
-                                    <label className="switch">
-                                        <input 
-                                            type="checkbox"
-                                            name="property_value"
-                                            checked={this.state.checkboxStates.get('property_value')}
-                                            onChange={this.handleCheckboxChange}/>
-                                        <span className="slider round"></span>
-                                    </label>: 
-                                    (this.state.checkboxStates.get('property_value') ? "Yes" : "No")}
-                                </p>
-                            </div>
-                            <div className="clearfix"/>
+                                        name="receive_digest"
+                                        checked={this.state.checkboxStates.get('receive_digest')}
+                                        onChange={this.handleCheckboxChange}/>
+                                    <span className="slider round"></span>
+                                </label> : (this.state.checkboxStates.get('receive_digest') ? "Yes" : "No")}
+                            </p>
+                        </div>
+                        <div className="right_box_page_content_inner_box_list">
+                            <p className="right_box_page_content_inner_box_list_text">
+                                Newsletter Emails
+                            </p>
+                            <p className="right_box_page_content_inner_box_list_value_text">
+                                {this.state.editEmail ? 
+                                <label className="switch">
+                                    <input 
+                                        type="checkbox"
+                                        name="receive_newsletter"
+                                        checked={this.state.checkboxStates.get('receive_newsletter')}
+                                        onChange={this.handleCheckboxChange}/>
+                                    <span className="slider round"></span>
+                                </label>: 
+                                (this.state.checkboxStates.get('receive_newsletter') ? "Yes" : "No")}
+                            </p>
+                        </div>
+                        <div className="right_box_page_content_inner_box_list">
+                            <p className="right_box_page_content_inner_box_list_text">
+                                Marketing Emails
+                            </p>
+                            <p className="right_box_page_content_inner_box_list_value_text">
+                                {this.state.editEmail ? 
+                                <label className="switch">
+                                    <input 
+                                        type="checkbox"
+                                        name="receive_marketing"
+                                        checked={this.state.checkboxStates.get('receive_marketing')}
+                                        onChange={this.handleCheckboxChange}/>
+                                    <span className="slider round"></span>
+                                </label>: 
+                                (this.state.checkboxStates.get('receive_marketing') ? "Yes" : "No")}
+                            </p>
+                        </div>
+                        <div className="clearfix"/>
+                        {this.state.editEmail ? 
+                        <div 
+                            onClick={this.updateUserSettingsPreferences}
+                            className="right_box_page_content_save_edits_button">
+                            Save
+                        </div> :
+                        <div></div>}
+                    </div>
+                    <div className="clearfix"/>
+                    <p 
+                        style={{
+                            marginTop: "15px",
+                        }}
+                        className="right_box_page_title">
+                        Notifications
+                    </p>
+                    {/* <p 
+                        className="right_box_page_edit_button"
+                        onClick={() => {
+                            if (this.state.editNotifications) {
+                                this.setState({
+                                    checkboxStates: this.deepCopyMap(this.state.originalCheckboxStates)
+                                })
+                            }
+                            this.setState({
+                                editNotifications: !this.state.editNotifications,
+                            })}}>
+                        {this.state.editNotifications ? "Cancel" : "Edit"}
+                    </p> */}
+                    <div className="clearfix"/>
+                    <div className="right_box_page_content_inner_box_list">
+                        <p className="right_box_page_content_inner_box_list_text">
+                            Rent Pay date
+                        </p>
+                        <p className="right_box_page_content_inner_box_list_value_text">
                             {this.state.editNotifications ? 
-                            <div 
-                                onClick={this.updateUserSettingsPreferences}
-                                className="right_box_page_content_save_edits_button">
-                                Save
-                            </div> :
-                            <div></div>}
-                        </div>
-                    </div>
-                );
-            case properties:
-                return (
-                    <div className="right_box_page_inner_box">
-                        <p className="right_box_page_title">
-                            Property Settings
+                            <label className="switch">
+                                <input
+                                type="checkbox"
+                                name="rent_pay_date"
+                                checked={this.state.checkboxStates.get('rent_pay_date')}
+                                onChange={this.handleCheckboxChange}></input>
+                                <span className="slider round"></span>
+                            </label>: 
+                            (this.state.checkboxStates.get('rent_pay_date') ? "Yes" : "No")}
                         </p>
-                        <p 
-                            className="right_box_page_edit_button"
-                            onClick={() => {
-                                if (this.state.editProperties) {
-                                    this.setState({
-                                        checkboxStates: this.deepCopyMap(this.state.originalCheckboxStates)
-                                    })
-                                }
+                    </div>
+                    <div className="right_box_page_content_inner_box_list">
+                        <p className="right_box_page_content_inner_box_list_text">
+                            Mortgage
+                        </p>
+                        <p className="right_box_page_content_inner_box_list_value_text">
+                            {this.state.editNotifications ? 
+                            <label className="switch">
+                                <input 
+                                    type="checkbox"
+                                    name="mortgage_pay_date"
+                                    checked={this.state.checkboxStates.get('mortgage_pay_date')}
+                                    onChange={this.handleCheckboxChange}/>
+                                <span className="slider round"></span>
+                            </label>: 
+                            (this.state.checkboxStates.get('mortgage_pay_date') ? "Yes" : "No")}
+                        </p>
+                    </div>
+                    <div className="right_box_page_content_inner_box_list">
+                        <p className="right_box_page_content_inner_box_list_text">
+                            Property Values
+                        </p>
+                        <p className="right_box_page_content_inner_box_list_value_text">
+                            {this.state.editNotifications ? 
+                            <label className="switch">
+                                <input 
+                                    type="checkbox"
+                                    name="property_value"
+                                    checked={this.state.checkboxStates.get('property_value')}
+                                    onChange={this.handleCheckboxChange}/>
+                                <span className="slider round"></span>
+                            </label>: 
+                            (this.state.checkboxStates.get('property_value') ? "Yes" : "No")}
+                        </p>
+                    </div>
+                    <div className="clearfix"/>
+                    {this.state.editNotifications ? 
+                    <div 
+                        onClick={this.updateUserSettingsPreferences}
+                        className="right_box_page_content_save_edits_button">
+                        Save
+                    </div> :
+                    <div></div>}
+                    <p className="right_box_page_title">
+                        Property Settings
+                    </p>
+                    <p 
+                        className="right_box_page_edit_button"
+                        onClick={() => {
+                            if (this.state.editProperties) {
                                 this.setState({
-                                    editProperties: !this.state.editProperties,
-                                })}}>
-                            {this.state.editProperties ? "Cancel" : "Edit"}
-                        </p>
-                        <div className="right_box_page_content_inner_box">
-                            <div className="right_box_page_content_inner_box_list">
-                                <p className="right_box_page_content_inner_box_list_text">
-                                    Automatically Estimate property values
-                                </p>
-                                <p className="right_box_page_content_inner_box_list_value_text">
-                                    {this.state.editProperties ? 
-                                    <label className="switch">
-                                        <input
-                                        type="checkbox"
-                                        name="rent_pay_date"
-                                        checked={this.state.checkboxStates.get('automatically_estimate_property_values')}
-                                        onChange={this.handleCheckboxChange}></input>
-                                        <span className="slider round"></span>
-                                    </label>: 
-                                    (this.state.checkboxStates.get('automatically_estimate_property_values') ? "Yes" : "No")}
-                                </p>
-                            </div>
+                                    checkboxStates: this.deepCopyMap(this.state.originalCheckboxStates)
+                                })
+                            }
+                            this.setState({
+                                editProperties: !this.state.editProperties,
+                            })}}>
+                        {this.state.editProperties ? "Cancel" : "Edit"}
+                    </p>
+                    <div className="right_box_page_content_inner_box">
+                        <div className="right_box_page_content_inner_box_list">
+                            <p className="right_box_page_content_inner_box_list_text">
+                                Automatically Estimate property values
+                            </p>
+                            <p className="right_box_page_content_inner_box_list_value_text">
+                                {this.state.editProperties ? 
+                                <label className="switch">
+                                    <input
+                                    type="checkbox"
+                                    name="rent_pay_date"
+                                    checked={this.state.checkboxStates.get('automatically_estimate_property_values')}
+                                    onChange={this.handleCheckboxChange}></input>
+                                    <span className="slider round"></span>
+                                </label>: 
+                                (this.state.checkboxStates.get('automatically_estimate_property_values') ? "Yes" : "No")}
+                            </p>
+                        </div>
+                        <div className="clearfix"/>
+                        {this.state.editProperties ? 
+                        <div 
+                            onClick={this.updateUserSettingsPreferences}
+                            className="right_box_page_content_save_edits_button">
+                            Save
+                        </div> :
+                        <div></div>}
+                    </div>
+                    <p className="right_box_page_title">
+                        Plan Settings
+                    </p>
+                    <p 
+                        className="right_box_page_edit_button"
+                        onClick={() => this.setState({editPlan: !this.state.editPlan})}>
+                        {this.state.editPlan ? "Cancel" : "Change"}
+                    </p>
+                    <div className="right_box_page_content_inner_box">
+                        <div 
+                            className={
+                                this.state.editPlan ? 
+                                "edit_plan_class right_box_page_content_inner_box_list" : 
+                                "right_box_page_content_inner_box_list"
+                            }>
+                            <p className="right_box_page_content_inner_box_list_text">
+                                Plan
+                            </p>
+                            <p className="right_box_page_content_inner_box_list_value_text">
+                                {this.state.user["plan"] ? this.capitalizeName(this.state.user["plan"]) : "Starter"}
+                            </p>
                             <div className="clearfix"/>
-                            {this.state.editProperties ? 
-                            <div 
-                                onClick={this.updateUserSettingsPreferences}
-                                className="right_box_page_content_save_edits_button">
-                                Save
-                            </div> :
-                            <div></div>}
-                        </div>
-                    </div>
-                );
-            case plan:
-                return (
-                    <div className="right_box_page_inner_box">
-                        <p className="right_box_page_title">
-                            Plan Settings
-                        </p>
-                        <p 
-                            className="right_box_page_edit_button"
-                            onClick={() => this.setState({editPlan: !this.state.editPlan})}>
-                            {this.state.editPlan ? "Cancel" : "Change"}
-                        </p>
-                        <div className="right_box_page_content_inner_box">
-                            <div 
-                                className={
-                                    this.state.editPlan ? 
-                                    "edit_plan_class right_box_page_content_inner_box_list" : 
-                                    "right_box_page_content_inner_box_list"
-                                }>
-                                <p className="right_box_page_content_inner_box_list_text">
-                                    Plan
-                                </p>
-                                <p className="right_box_page_content_inner_box_list_value_text">
-                                    {this.state.user["plan"] ? this.capitalizeName(this.state.user["plan"]) : "Starter"}
-                                </p>
-                                <div className="clearfix"/>
-                                {this.state.editPlan ? 
-                                    <div className="edit_plan_class_inside_box">
-                                        <div 
-                                            onClick={() => {
-                                                this.setState({
-                                                    starterPlanActive: !this.state.starterPlanActive,
-                                                    professionalPlanActive: false,
-                                                    enterprisePlanActive: false,
-                                                })
-                                            }}
-                                            className={
-                                                this.state.user["plan"] === "starter" ? 
-                                                "edit_plan_class_inside_box_card edit_plan_class_inside_box_card_active" :
-                                                (this.state.starterPlanActive ? "edit_plan_class_inside_box_card edit_plan_class_inside_box_card_selected" : 
-                                                "edit_plan_class_inside_box_card")}>
-                                            <IoIosSend className={
-                                                this.state.user["plan"] === "starter" ? 
-                                                "edit_plan_class_inside_box_card_icon edit_plan_class_inside_box_card_icon_active" :
-                                                "edit_plan_class_inside_box_card_icon"}></IoIosSend>
-                                            <p className="edit_plan_class_inside_box_card_title">
-                                                Starter
-                                            </p>
-                                        </div>
-                                        <div 
-                                            onClick={() => {
-                                                this.setState({
-                                                    starterPlanActive: false,
-                                                    professionalPlanActive: !this.state.professionalPlanActive,
-                                                    enterprisePlanActive: false,
-                                                })
-                                            }}
-                                            className={
+                            {this.state.editPlan ? 
+                                <div className="edit_plan_class_inside_box">
+                                    <div 
+                                        onClick={() => {
+                                            this.setState({
+                                                starterPlanActive: !this.state.starterPlanActive,
+                                                professionalPlanActive: false,
+                                                enterprisePlanActive: false,
+                                            })
+                                        }}
+                                        className={
+                                            this.state.user["plan"] === "starter" ? 
+                                            "edit_plan_class_inside_box_card edit_plan_class_inside_box_card_active" :
+                                            (this.state.starterPlanActive ? "edit_plan_class_inside_box_card edit_plan_class_inside_box_card_selected" : 
+                                            "edit_plan_class_inside_box_card")}>
+                                        <IoIosSend className={
+                                            this.state.user["plan"] === "starter" ? 
+                                            "edit_plan_class_inside_box_card_icon edit_plan_class_inside_box_card_icon_active" :
+                                            "edit_plan_class_inside_box_card_icon"}></IoIosSend>
+                                        <p className="edit_plan_class_inside_box_card_title">
+                                            Starter
+                                        </p>
+                                    </div>
+                                    <div 
+                                        onClick={() => {
+                                            this.setState({
+                                                starterPlanActive: false,
+                                                professionalPlanActive: !this.state.professionalPlanActive,
+                                                enterprisePlanActive: false,
+                                            })
+                                        }}
+                                        className={
+                                            this.state.user["plan"] === "professional" ? 
+                                            "edit_plan_class_inside_box_card edit_plan_class_inside_box_card_active" :
+                                            (this.state.professionalPlanActive ? "edit_plan_class_inside_box_card edit_plan_class_inside_box_card_selected" :
+                                            "edit_plan_class_inside_box_card")}>
+                                            <FaUserTie 
+                                                className={
                                                 this.state.user["plan"] === "professional" ? 
-                                                "edit_plan_class_inside_box_card edit_plan_class_inside_box_card_active" :
-                                                (this.state.professionalPlanActive ? "edit_plan_class_inside_box_card edit_plan_class_inside_box_card_selected" :
-                                                "edit_plan_class_inside_box_card")}>
-                                                <FaUserTie 
-                                                    className={
-                                                    this.state.user["plan"] === "professional" ? 
-                                                    "edit_plan_class_inside_box_card_icon edit_plan_class_inside_box_card_icon_active" :
-                                                    "edit_plan_class_inside_box_card_icon"}></FaUserTie>
-                                                <p className="edit_plan_class_inside_box_card_title">
-                                                    Professional
-                                                </p>
-                                        </div>
-                                        <div 
-                                            onClick={() => {
-                                                this.setState({
-                                                    starterPlanActive: false,
-                                                    professionalPlanActive: false,
-                                                    enterprisePlanActive: !this.state.enterprisePlanActive,
-                                                })
-                                            }}
-                                            className={
+                                                "edit_plan_class_inside_box_card_icon edit_plan_class_inside_box_card_icon_active" :
+                                                "edit_plan_class_inside_box_card_icon"}></FaUserTie>
+                                            <p className="edit_plan_class_inside_box_card_title">
+                                                Professional
+                                            </p>
+                                    </div>
+                                    <div 
+                                        onClick={() => {
+                                            this.setState({
+                                                starterPlanActive: false,
+                                                professionalPlanActive: false,
+                                                enterprisePlanActive: !this.state.enterprisePlanActive,
+                                            })
+                                        }}
+                                        className={
+                                            this.state.user["plan"] === "enterprise" ? 
+                                            "edit_plan_class_inside_box_card edit_plan_class_inside_box_card_active" :
+                                            "edit_plan_class_inside_box_card"}>
+                                            <FaBuilding 
+                                                className={
                                                 this.state.user["plan"] === "enterprise" ? 
-                                                "edit_plan_class_inside_box_card edit_plan_class_inside_box_card_active" :
-                                                "edit_plan_class_inside_box_card"}>
-                                                <FaBuilding 
-                                                    className={
-                                                    this.state.user["plan"] === "enterprise" ? 
-                                                    "edit_plan_class_inside_box_card_icon edit_plan_class_inside_box_card_icon_active" :
-                                                    "edit_plan_class_inside_box_card_icon"}></FaBuilding>
-                                                <p className={
-                                                    this.state.user["plan"] === "enterprise" ?
-                                                    "edit_plan_class_inside_box_card_title edit_plan_class_inside_box_card_title_active" : 
-                                                    "edit_plan_class_inside_box_card_title"}>
-                                                    Enterprise
-                                                </p>
-                                        </div>
-                                        <div className="clearfix"/>
-                                        {this.state.initialChangeButtonPressed ? 
-                                        this.renderChangePlanWarningText() : 
-                                        <div>
-                                        </div>}
-                                        <div 
-                                            onClick={() => this.setState({
-                                                initialChangeButtonPressed: true
-                                            })}
-                                            className="edit_plan_submit_button">
-                                            Change
-                                        </div>
-                                    </div> :
-                                    <div></div>
-                                }
-                            </div>
+                                                "edit_plan_class_inside_box_card_icon edit_plan_class_inside_box_card_icon_active" :
+                                                "edit_plan_class_inside_box_card_icon"}></FaBuilding>
+                                            <p className={
+                                                this.state.user["plan"] === "enterprise" ?
+                                                "edit_plan_class_inside_box_card_title edit_plan_class_inside_box_card_title_active" : 
+                                                "edit_plan_class_inside_box_card_title"}>
+                                                Enterprise
+                                            </p>
+                                    </div>
+                                    <div className="clearfix"/>
+                                    {this.state.initialChangeButtonPressed ? 
+                                    this.renderChangePlanWarningText() : 
+                                    <div>
+                                    </div>}
+                                    <div 
+                                        onClick={() => this.setState({
+                                            initialChangeButtonPressed: true
+                                        })}
+                                        className="edit_plan_submit_button">
+                                        Change
+                                    </div>
+                                </div> :
+                                <div></div>
+                            }
                         </div>
-                        
                     </div>
-                );
-        }
+                </div>
+            </div>
+        );
     }
 
     render() {
@@ -811,6 +913,7 @@ class SettingsDashboard extends React.Component {
                                             toDisplay: general,
                                             editEmail: false,
                                             editNotifications: false,
+                                            editProperties: false,
                                             editPlan: false
                                         })}
                                     style={{
@@ -819,13 +922,13 @@ class SettingsDashboard extends React.Component {
                                         marginRight: "40px",
                                     }}>
                                     <IoSettingsSharp style={{
-                                        color: "grey",
+                                        color: this.state.toDisplay === general ? "#296cf6" : "grey",
                                         float: "left",
                                         height: "25px",
                                         width: "25px",
                                     }}/>
                                     <p style={{
-                                        color: "grey",
+                                        color: this.state.toDisplay === general ? "#296cf6" : "grey",
                                         float: "left",
                                         fontFamily: "'Poppins', sans-serif",
                                         marginLeft: "5px",
@@ -846,13 +949,13 @@ class SettingsDashboard extends React.Component {
                                         marginRight: "40px",
                                     }}>
                                     <MdEmail style={{
-                                        color: "grey",
+                                        color: this.state.toDisplay === email ? "#296cf6" : "grey",
                                         float: "left",
                                         height: "25px",
                                         width: "25px",
                                     }}/>
                                     <p style={{
-                                        color: "grey",
+                                        color: this.state.toDisplay === email ? "#296cf6" : "grey",
                                         float: "left",
                                         fontFamily: "'Poppins', sans-serif",
                                         marginLeft: "5px",
@@ -873,13 +976,13 @@ class SettingsDashboard extends React.Component {
                                         marginRight: "40px",
                                     }}>
                                     <IoMdNotifications style={{
-                                        color: "grey",
+                                        color: this.state.toDisplay === notifications ? "#296cf6" : "grey",
                                         float: "left",
                                         height: "25px",
                                         width: "25px",
                                     }}/>
                                     <p style={{
-                                        color: "grey",
+                                        color: this.state.toDisplay === notifications ? "#296cf6" : "grey",
                                         float: "left",
                                         fontFamily: "'Poppins', sans-serif",
                                         marginLeft: "5px",
@@ -900,13 +1003,13 @@ class SettingsDashboard extends React.Component {
                                         marginRight: "40px",
                                     }}>
                                     <BsFillHouseFill style={{
-                                        color: "grey",
+                                        color: this.state.toDisplay === properties ? "#296cf6" : "grey",
                                         float: "left",
                                         height: "25px",
                                         width: "25px",
                                     }}/>
                                     <p style={{
-                                        color: "grey",
+                                        color: this.state.toDisplay === properties ? "#296cf6" : "grey",
                                         float: "left",
                                         fontFamily: "'Poppins', sans-serif",
                                         marginLeft: "5px",
@@ -927,13 +1030,13 @@ class SettingsDashboard extends React.Component {
                                         marginRight: "40px",
                                     }}>
                                     <BsFillAwardFill style={{
-                                        color: "grey",
+                                        color: this.state.toDisplay === plan ? "#296cf6" : "grey",
                                         float: "left",
                                         height: "25px",
                                         width: "25px",
                                     }}/>
                                     <p style={{
-                                        color: "grey",
+                                        color: this.state.toDisplay === plan ? "#296cf6" : "grey",
                                         float: "left",
                                         fontFamily: "'Poppins', sans-serif",
                                         marginLeft: "5px",
@@ -941,11 +1044,15 @@ class SettingsDashboard extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <div id="settings_dashboard_parent_inner_box">
+                        <div style={{
+                            borderRadius: "4px",
+                            float: "left",
+                            margin: "30px 40px 0px 40px",
+                            width: "calc(100% - 80px)",
+                        }}>
                             <div style={{
                                 borderRadius: "4px",
                                 float: "left",
-                                height: "675px",
                                 width: "225px",
                             }}>
                                 
@@ -984,46 +1091,67 @@ class SettingsDashboard extends React.Component {
                                     accept=".png,.jpg,.heic"
                                     onChange={this.handleProfilePictureChange}></input>
                                 <div className="clearfix"/>
+                            </div>
+                            <div style={{
+                                float: "right",
+                                marginLeft: "40px",
+                                width: "calc(100% - 225px - 40px)",
+                            }}>
                                 <div style={{
-                                    backgroundColor: "white",
+                                    backgroundColor: "#f5f5fa", 
+                                    borderRadius: "15px",
                                     float: "left",
-                                    marginTop: "40px",
-                                    width: "225px",
+                                    padding: "5px 25px 5px 25px",
+                                    width: "calc(100% - 50px)",
                                 }}>
-                                    <p className="settings_dashboard_user_information_inner_box_title">
-                                        Info
+                                    <div style={{
+                                        backgroundColor: "#85bb65",
+                                        borderRadius: "50px",
+                                        float: "right",
+                                        marginTop: "15px",
+                                        padding: "10px 15px 10px 15px",
+                                    }}>
+                                        {/* <BsFillAwardFill className="settings_dashboard_user_information_icon"></BsFillAwardFill> */}
+                                        <p className="settings_dashboard_user_information_inner_box_text"
+                                            style={{
+                                                color: "white",
+                                                fontWeight: "bold",
+                                            }}>
+                                            {this.state.user["plan"] ? this.capitalizeName(this.state.user["plan"]) : "Starter"} Plan
+                                        </p>
+                                    </div>
+                                    <div className="clearfix"/>
+                                    <p  style={{
+                                        marginTop: "10px",
+                                        }}
+                                        className="settings_dashboard_user_information_inner_box_text">
+                                        Joined on {this.getJoinedAt()}
                                     </p>
-                                    <div className="settings_dashboard_user_information_bullet_box">
-                                        <ImUser className="settings_dashboard_user_information_icon"></ImUser>
-                                        <p className="settings_dashboard_user_information_inner_box_text">
+                                    {this.renderBottomBoxPage()}
+
+                                    {/* <div className="settings_dashboard_user_information_bullet_box">
+                                        {/* <ImUser className="settings_dashboard_user_information_icon"></ImUser> */}
+                                        {/* <p className="settings_dashboard_user_information_inner_box_text">
                                             {this.capitalizeName(this.state.user["first_name"])} {this.capitalizeName(this.state.user["last_name"])} 
                                         </p>
                                     </div>
                                     <div className="clearfix"/>
-                                    <div className="settings_dashboard_user_information_bullet_box">
-                                        <MdEmail className="settings_dashboard_user_information_icon"></MdEmail>
-                                        <p className="settings_dashboard_user_information_inner_box_text">
+                                    <div className="settings_dashboard_user_information_bullet_box"> */}
+                                        {/* <MdEmail className="settings_dashboard_user_information_icon"></MdEmail> */}
+                                        {/* <p className="settings_dashboard_user_information_inner_box_text">
                                             {this.state.user["email"]}
                                         </p>
-                                    </div>
-                                    <div className="clearfix"/>
+                                    </div>  */}
+                                    {/* <div className="clearfix"/>
                                     <div className="settings_dashboard_user_information_bullet_box">
-                                        <AiFillClockCircle className="settings_dashboard_user_information_icon"></AiFillClockCircle>
-                                        <p className="settings_dashboard_user_information_inner_box_text">
+                                        {/* <AiFillClockCircle className="settings_dashboard_user_information_icon"></AiFillClockCircle> */}
+                                        {/* <p className="settings_dashboard_user_information_inner_box_text">
                                             Joined on {this.getJoinedAt()}
                                         </p>
                                     </div>
-                                    <div className="clearfix"/>
-                                    <div className="settings_dashboard_user_information_bullet_box">
-                                        <BsFillAwardFill className="settings_dashboard_user_information_icon"></BsFillAwardFill>
-                                        <p className="settings_dashboard_user_information_inner_box_text">
-                                            {this.state.user["plan"] ? this.capitalizeName(this.state.user["plan"]) : "Starter"} Plan
-                                        </p>
-                                    </div>
+                                    <div className="clearfix"/> */}
+                                    
                                 </div>
-                            </div>
-                            <div id="settings_dashboard_right_box">
-                                {this.renderRightBoxPage()}
                             </div>
                         </div>
                     </div>

@@ -37,8 +37,8 @@ button:focus {
 
 .dashboard_sidebar_link_icon {
     background-color:transparent !important;
-    color: #a7aec7;
-    /* color:grey; */
+    /* color: #a7aec7; */
+    color:grey;
     float: left;
     height: 22.5px;
     margin-left: 40px;
@@ -48,8 +48,8 @@ button:focus {
 
 .dashboard_sidebar_link_text {   
     background-color: transparent !important;
-    color: #9299ae;
-    /* color: grey; */
+    /* color: #9299ae; */
+    color: grey;
     float: left;
     font-family: 'Poppins', sans-serif;
     font-size: 0.9em;

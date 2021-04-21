@@ -189,11 +189,11 @@ func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
 		metadataFileType = "unknown"
 	}
 
-	metadataFileSizeBytesVal := r.FormValue("metadata_file_size_bytes")
+	fileSizeBytesVal := r.FormValue("metadata_file_size_bytes")
 
-	metadataFileSizeBytes, err := strconv.Atoi(metadataFileSizeBytesVal)
+	fileSizeBytes, err := strconv.Atoi(fileSizeBytesVal)
 	if err != nil {
-		metadataFileSizeBytes = -1
+		fileSizeBytes = 0
 	}
 
 	year := r.FormValue("year")
@@ -213,7 +213,6 @@ func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
 	now := time.Now()
 	metadata := map[string]interface{}{
 		"type":       metadataFileType,
-		"size_bytes": metadataFileSizeBytes,
 	}
 
 	marshalledMetadata, err := json.Marshal(metadata)
@@ -231,6 +230,7 @@ func (s *Server) uploadFileByUser(w http.ResponseWriter, r *http.Request) {
 		Type:           db.FileType(fileType),
 		Year:           util.GetYear(year),
 		Path:           filePath,
+		SizeKB: fileSizeBytes,
 		Metadata:       json.RawMessage(marshalledMetadata),
 	}
 

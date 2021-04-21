@@ -11,13 +11,6 @@
     outline: none;
 }
 
-.expenses_dashboard_body_box {
-    float: left;
-    margin-top: 10px;
-    width: 100%;
-}
-
-
 .expenses_dashboard_body_inner_box_title {
     font-size: 1.2em;
     font-weight: bold;

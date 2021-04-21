@@ -11,6 +11,7 @@ import { BsFillHouseFill } from 'react-icons/bs';
 import { RiFileWarningFill, RiVipCrown2Fill } from 'react-icons/ri';
 import { AiTwotoneSecurityScan } from 'react-icons/ai';
 import { MdAccountCircle } from 'react-icons/md';
+import { ImHistory } from 'react-icons/im';
 
 const general = "general";
 const featureRequest = "feature_request";
@@ -235,6 +236,24 @@ class FeedbackForm extends React.Component {
                             }}>
                                 FEEDBACK
                             </p>
+                            <div style={{
+                                cursor: "pointer",
+                                float: "right",
+                                marginRight: "25px",
+                            }}>
+                                <ImHistory style={{
+                                    float: "left",
+                                    height: "20px",
+                                    padding: "10px",
+                                    width: "20px",
+                                }}/>
+                                <p style={{
+                                    float: "left",
+                                    lineHeight: "40px",
+                                }}>
+                                    History
+                                </p>
+                            </div>
                         </div>
                         <div className="clearfix"/>
                         <div className="page-title-bar-divider"></div>

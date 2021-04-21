@@ -19,6 +19,9 @@ import ProgressBar from './../utility/ProgressBar.js';
 import { MdFileDownload, MdEdit, MdAdd } from 'react-icons/md';
 import { IoTrashSharp, IoCaretBackOutline } from 'react-icons/io5';
 import { RiErrorWarningFill } from 'react-icons/ri';
+import { AiFillQuestionCircle } from 'react-icons/ai';
+
+import MouseTooltip from 'react-sticky-mouse-tooltip';
 
 let URLBuilder = require('url-join');
 
@@ -89,6 +92,7 @@ class FilesDashboard extends React.Component {
             pageToDisplay: folders,
             activeFolderPropertyID: null,
             redirect: redirect,
+            displayFileStorageTooltip: this.props.displayFileStorageTooltip,
         };
 
         this.setActiveFileAttributes = this.setActiveFileAttributes.bind(this);
@@ -328,8 +332,14 @@ class FilesDashboard extends React.Component {
             newActiveFolderFilesMap = activeFolderFilesMap;
         }
 
+        let filesSummary = this.state.filesSummary;
+        filesSummary["total_files"] += 1;
+        filesSummary["files_total_size"] += file["size_kb"];
+
+        console.log(filesSummary);
         this.setState({
             activeFolderFilesMap: newActiveFolderFilesMap,
+            filesSummary: filesSummary,
         })
     }
 
@@ -477,6 +487,8 @@ class FilesDashboard extends React.Component {
 
     getFileStorageUsage() {
         let filesSummary = this.state.filesSummary;
+
+        console.log(filesSummary);
         if (!filesSummary || filesSummary === undefined) {
             return (
                 <div></div>
@@ -528,12 +540,24 @@ class FilesDashboard extends React.Component {
                     </div>
                 </div>
                 <div className="clearfix"/>
-                <p style={{
+                <div style={{
                     float: "right",
                     marginTop: "7.5px",
                 }}>
-                    {bytesToSize(filesTotalSize)} used of {maximumSize}
-                </p>
+                    <p style={{
+                        float: "left",
+                        lineHeight: "17.5px",
+                        marginRight: "7.5px",
+                    }}>
+                        {bytesToSize(filesTotalSize)} used of {maximumSize}
+                    </p>
+                    <AiFillQuestionCircle style={{
+                        float: "left",
+                        height: "17.5px",
+                        marginTop: "-1.25px",
+                        width: "17.5px",
+                    }}/>
+                </div>
             </div>
         )
     }
@@ -612,12 +636,13 @@ class FilesDashboard extends React.Component {
                                     marginRight: "25px",
                                 }}>
                                 <MdAdd style={{
-                                    backgroundColor: "#f5f5fa",
+                                    // backgroundColor: "#f5f5fa",
                                     borderRadius: "50%",
                                     color: "#296cf6",
                                     float: "left",
                                     height: "20px",
-                                    padding: "10px",
+                                    marginTop: "10px",
+                                    // padding: "7.5px",
                                     width: "20px",
                                 }}/>
                                 <p

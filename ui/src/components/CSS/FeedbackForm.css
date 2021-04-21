@@ -16,17 +16,9 @@
     margin-right: 25px;
 }
 
-/* .feedback_form_inner_lower_box_nav_bar_list:hover {
-    background-color:  #296CF6;
+.feedback_form_inner_lower_box_nav_bar_list_icon_active, .feedback_form_inner_lower_box_nav_bar_list_title_active {
+    color: #296cf6 !important;
 }
-
-.feedback_form_inner_lower_box_nav_bar_list:hover{
-    color: white;
-}
-
-.feedback_form_inner_lower_box_nav_bar_list:hover .feedback_form_inner_lower_box_nav_bar_list_title{
-    color: white;
-} */
 
 .feedback_form_inner_lower_box_nav_bar_list_title {
     color: grey;

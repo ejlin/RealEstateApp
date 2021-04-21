@@ -32,6 +32,16 @@ export function capitalizeName(x) {
     return x.charAt(0).toUpperCase() + x.slice(1);
 }
 
+export function getDate() {
+    let monthArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = today.getMonth();
+    let yyyy = today.getFullYear();
+
+    return monthArr[mm] + ' ' + dd + ', ' + yyyy;
+}
+
 export function getByValue(map, searchValue){
     for (let [key, value] of map.entries()) {
       if (value === searchValue)
@@ -107,9 +117,16 @@ export function getDateSuffix(date) {
         classNames += isActive? " card_white" : " card_blue";
         return (
             <div>
-                <AiFillFileImage 
+                <p style={{
+                    color: "black",
+                    fontSize: "3.0em",
+                    fontWeight: "bold",
+                }}>
+                    Image
+                </p>
+                {/* <AiFillFileImage 
                     className={classNames}>
-                </AiFillFileImage>
+                </AiFillFileImage> */}
             </div>
         );
     } else if (imageType.includes("pdf")) {

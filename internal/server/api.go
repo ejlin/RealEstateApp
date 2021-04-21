@@ -85,6 +85,11 @@ func (s *Server) HandleRoutes() {
 
 	r.HandleFunc("/api/property/{property_id}", s.getProperty).Methods("GET")
 
+	// Handle our feedback forms
+	r.HandleFunc("/api/feedback/user/{user_id}", s.addFeedbackByUser).Methods("POST")
+	r.HandleFunc("/api/feedback/user/{user_id}", s.getFeedbackByUser).Methods("GET")
+	r.HandleFunc("/api/feedback/{id}", s.getFeedback).Methods("GET")
+
 	http.Handle("/", r)
 }
 
