@@ -323,48 +323,48 @@ class SettingsDashboard extends React.Component {
                     <p className="right_box_page_title">
                         General
                     </p>
-                    <div className="clearfix"/>
-                    <div className="right_box_page_content_inner_box">
+                    <div style={{
+                        float: "left",
+                        marginTop: "15px",
+                        width: "100%",
+                    }}>
                         <div style={{
-                            width: "100%",
+                            float: "left",
+                            width: "calc(50% - 10px)",
                         }}>
-                            <div style={{
-                                float: "left",
-                                width: "calc(50% - 10px)",
+                            <p style={{
+                                fontFamily: "'Poppins', sans-serif",
+                                fontSize: "0.9em",
+                                // fontWeight: "bold",
                             }}>
-                                <p style={{
-                                    fontFamily: "'Poppins', sans-serif",
-                                    fontSize: "0.9em",
-                                    // fontWeight: "bold",
-                                }}>
-                                    First Name
-                                </p>
-                                <input 
-                                    className="settings_input"
-                                    placeholder={this.capitalizeName(this.state.user["first_name"])}
-                                    style={{
-                                        backgroundColor: "#f5f5fa",
-                                    }}/>
-                            </div>
-                            <div style={{
-                                float: "right",
-                                width: "calc(50% - 10px)",
-                            }}>
-                                <p style={{
-                                    fontFamily: "'Poppins', sans-serif",
-                                    fontSize: "0.9em",
-                                    // fontWeight: "bold",
-                                }}>
-                                    Last Name
-                                </p>
-                                <input 
-                                    className="settings_input"
-                                    placeholder={this.capitalizeName(this.state.user["last_name"])}
-                                    style={{
-                                        backgroundColor: "#f5f5fa",
-                                    }}/>
-                            </div>
+                                First Name
+                            </p>
+                            <input 
+                                className="settings_input"
+                                placeholder={this.capitalizeName(this.state.user["first_name"])}
+                                style={{
+                                    backgroundColor: "#f5f5fa",
+                                }}/>
                         </div>
+                        <div style={{
+                            float: "right",
+                            width: "calc(50% - 10px)",
+                        }}>
+                            <p style={{
+                                fontFamily: "'Poppins', sans-serif",
+                                fontSize: "0.9em",
+                                // fontWeight: "bold",
+                            }}>
+                                Last Name
+                            </p>
+                            <input 
+                                className="settings_input"
+                                placeholder={this.capitalizeName(this.state.user["last_name"])}
+                                style={{
+                                    backgroundColor: "#f5f5fa",
+                                }}/>
+                        </div>
+                    </div>
                         <div className="clearfix"/>
                         <div style={{
                             marginTop: "15px",
@@ -523,7 +523,7 @@ class SettingsDashboard extends React.Component {
                     <div className="clearfix"/>
                     <p  
                         style={{
-                            marginTop: "15px",
+                            marginTop: "30px",
                         }}
                         className="right_box_page_title">
                         Email
@@ -551,11 +551,24 @@ class SettingsDashboard extends React.Component {
                         You will always receive emails about important account information
                     </p>
                     <div className="right_box_page_content_inner_box">
-                        <div className="right_box_page_content_inner_box_list">
+                        
+                        {/* <div className="clearfix"/> */}
+                        <div style={{
+                            float: "left",
+                            width: "100%",
+                        }}>
+                            <input 
+                                style={{
+                                    float: "left",
+                                    height: "20px",
+                                    width: "20px",
+                                }}
+                                type="checkbox"/>
                             <p className="right_box_page_content_inner_box_list_text">
                                 Digest Emails
                             </p>
-                            <p className="right_box_page_content_inner_box_list_value_text">
+                        </div>
+                            {/* <p className="right_box_page_content_inner_box_list_value_text">
                                 {this.state.editEmail ? 
                                 <label className="switch">
                                     <input 
@@ -565,59 +578,131 @@ class SettingsDashboard extends React.Component {
                                         onChange={this.handleCheckboxChange}/>
                                     <span className="slider round"></span>
                                 </label> : (this.state.checkboxStates.get('receive_digest') ? "Yes" : "No")}
-                            </p>
-                        </div>
-                        <div className="right_box_page_content_inner_box_list">
+                            </p> */}
+                        <div style={{
+                            float: "left",
+                            marginTop: "10px",
+                            width: "100%",
+                        }}>
+                            <input 
+                                style={{
+                                    float: "left",
+                                    height: "20px",
+                                    width: "20px",
+                                }}
+                                type="checkbox"/>
                             <p className="right_box_page_content_inner_box_list_text">
                                 Newsletter Emails
                             </p>
-                            <p className="right_box_page_content_inner_box_list_value_text">
-                                {this.state.editEmail ? 
-                                <label className="switch">
-                                    <input 
-                                        type="checkbox"
-                                        name="receive_newsletter"
-                                        checked={this.state.checkboxStates.get('receive_newsletter')}
-                                        onChange={this.handleCheckboxChange}/>
-                                    <span className="slider round"></span>
-                                </label>: 
-                                (this.state.checkboxStates.get('receive_newsletter') ? "Yes" : "No")}
-                            </p>
                         </div>
-                        <div className="right_box_page_content_inner_box_list">
+                        <div style={{
+                            float: "left",
+                            marginTop: "10px",
+                            width: "100%",
+                        }}>
+                            <input 
+                                style={{
+                                    float: "left",
+                                    height: "20px",
+                                    width: "20px",
+                                }}
+                                type="checkbox"/>
                             <p className="right_box_page_content_inner_box_list_text">
                                 Marketing Emails
                             </p>
-                            <p className="right_box_page_content_inner_box_list_value_text">
-                                {this.state.editEmail ? 
-                                <label className="switch">
-                                    <input 
-                                        type="checkbox"
-                                        name="receive_marketing"
-                                        checked={this.state.checkboxStates.get('receive_marketing')}
-                                        onChange={this.handleCheckboxChange}/>
-                                    <span className="slider round"></span>
-                                </label>: 
-                                (this.state.checkboxStates.get('receive_marketing') ? "Yes" : "No")}
-                            </p>
                         </div>
-                        <div className="clearfix"/>
+                        {/* <p className="right_box_page_content_inner_box_list_value_text">
+                            {this.state.editEmail ? 
+                            <label className="switch">
+                                <input 
+                                    type="checkbox"
+                                    name="receive_newsletter"
+                                    checked={this.state.checkboxStates.get('receive_newsletter')}
+                                    onChange={this.handleCheckboxChange}/>
+                                <span className="slider round"></span>
+                            </label>: 
+                            (this.state.checkboxStates.get('receive_newsletter') ? "Yes" : "No")}
+                        </p>
+                        <p className="right_box_page_content_inner_box_list_text">
+                            Marketing Emails
+                        </p> */}
+                        {/* <p className="right_box_page_content_inner_box_list_value_text">
+                            {this.state.editEmail ? 
+                            <label className="switch">
+                                <input 
+                                    type="checkbox"
+                                    name="receive_marketing"
+                                    checked={this.state.checkboxStates.get('receive_marketing')}
+                                    onChange={this.handleCheckboxChange}/>
+                                <span className="slider round"></span>
+                            </label>: 
+                            (this.state.checkboxStates.get('receive_marketing') ? "Yes" : "No")}
+                        </p> */}
+                        {/* <div className="clearfix"/>
                         {this.state.editEmail ? 
                         <div 
                             onClick={this.updateUserSettingsPreferences}
                             className="right_box_page_content_save_edits_button">
                             Save
                         </div> :
-                        <div></div>}
+                        <div></div>} */}
                     </div>
                     <div className="clearfix"/>
                     <p 
                         style={{
-                            marginTop: "15px",
+                            marginTop: "30px",
                         }}
                         className="right_box_page_title">
                         Notifications
                     </p>
+                    <div style={{
+                        float: "left",
+                        marginTop: "10px",
+                        width: "100%",
+                    }}>
+                        <input 
+                            style={{
+                                float: "left",
+                                height: "20px",
+                                width: "20px",
+                            }}
+                            type="checkbox"/>
+                        <p className="right_box_page_content_inner_box_list_text">
+                            Rent Pay Date
+                        </p>
+                    </div>
+                    <div style={{
+                        float: "left",
+                        marginTop: "10px",
+                        width: "100%",
+                    }}>
+                        <input 
+                            style={{
+                                float: "left",
+                                height: "20px",
+                                width: "20px",
+                            }}
+                            type="checkbox"/>
+                        <p className="right_box_page_content_inner_box_list_text">
+                            Mortgage
+                        </p>
+                    </div>
+                    <div style={{
+                        float: "left",
+                        marginTop: "10px",
+                        width: "100%",
+                    }}>
+                        <input 
+                            style={{
+                                float: "left",
+                                height: "20px",
+                                width: "20px",
+                            }}
+                            type="checkbox"/>
+                        <p className="right_box_page_content_inner_box_list_text">
+                            Property Values
+                        </p>
+                    </div>
                     {/* <p 
                         className="right_box_page_edit_button"
                         onClick={() => {
@@ -631,7 +716,7 @@ class SettingsDashboard extends React.Component {
                             })}}>
                         {this.state.editNotifications ? "Cancel" : "Edit"}
                     </p> */}
-                    <div className="clearfix"/>
+                    {/* <div className="clearfix"/>
                     <div className="right_box_page_content_inner_box_list">
                         <p className="right_box_page_content_inner_box_list_text">
                             Rent Pay date
@@ -682,19 +767,39 @@ class SettingsDashboard extends React.Component {
                             </label>: 
                             (this.state.checkboxStates.get('property_value') ? "Yes" : "No")}
                         </p>
-                    </div>
+                    </div> */}
                     <div className="clearfix"/>
-                    {this.state.editNotifications ? 
+                    {/* {this.state.editNotifications ? 
                     <div 
                         onClick={this.updateUserSettingsPreferences}
                         className="right_box_page_content_save_edits_button">
                         Save
                     </div> :
-                    <div></div>}
-                    <p className="right_box_page_title">
-                        Property Settings
-                    </p>
+                    <div></div>} */}
                     <p 
+                        style={{
+                            marginTop: "30px",
+                        }}
+                        className="right_box_page_title">
+                        Property
+                    </p>
+                    <div style={{
+                        float: "left",
+                        marginTop: "10px",
+                        width: "100%",
+                    }}>
+                        <input 
+                            style={{
+                                float: "left",
+                                height: "20px",
+                                width: "20px",
+                            }}
+                            type="checkbox"/>
+                        <p className="right_box_page_content_inner_box_list_text">
+                            Automatically Estimate property values
+                        </p>
+                    </div>
+                    {/* <p 
                         className="right_box_page_edit_button"
                         onClick={() => {
                             if (this.state.editProperties) {
@@ -706,9 +811,9 @@ class SettingsDashboard extends React.Component {
                                 editProperties: !this.state.editProperties,
                             })}}>
                         {this.state.editProperties ? "Cancel" : "Edit"}
-                    </p>
+                    </p> */}
                     <div className="right_box_page_content_inner_box">
-                        <div className="right_box_page_content_inner_box_list">
+                        {/* <div className="right_box_page_content_inner_box_list">
                             <p className="right_box_page_content_inner_box_list_text">
                                 Automatically Estimate property values
                             </p>
@@ -724,25 +829,90 @@ class SettingsDashboard extends React.Component {
                                 </label>: 
                                 (this.state.checkboxStates.get('automatically_estimate_property_values') ? "Yes" : "No")}
                             </p>
-                        </div>
-                        <div className="clearfix"/>
+                        </div> */}
+                        {/* <div className="clearfix"/>
                         {this.state.editProperties ? 
                         <div 
                             onClick={this.updateUserSettingsPreferences}
                             className="right_box_page_content_save_edits_button">
                             Save
                         </div> :
-                        <div></div>}
+                        <div></div>} */}
                     </div>
-                    <p className="right_box_page_title">
-                        Plan Settings
+                    <div className="clearfix"/>
+                    <p style={{
+                        float: "left",
+                        marginTop: "30px",
+                        width: "100%",
+                    }}
+                    className="right_box_page_title">
+                        Plan
                     </p>
-                    <p 
-                        className="right_box_page_edit_button"
-                        onClick={() => this.setState({editPlan: !this.state.editPlan})}>
-                        {this.state.editPlan ? "Cancel" : "Change"}
-                    </p>
-                    <div className="right_box_page_content_inner_box">
+                    <div className="clearfix"/>
+                    <div style={{
+                        float: "left",
+                        marginTop: "15px",
+                        width: "100%",
+                    }}>
+                        <div style={{
+                            float: "left",
+                            width: "calc(50% - 10px)",
+                        }}>
+                            <p style={{
+                                fontFamily: "'Poppins', sans-serif",
+                                fontSize: "0.9em",
+                                // fontWeight: "bold",
+                            }}>
+                                Plan
+                            </p>
+                            <input 
+                                className="settings_input"
+                                placeholder={this.capitalizeName(this.state.user["plan"])}
+                                style={{
+                                    backgroundColor: "#f5f5fa",
+                                }}/>
+                        </div>
+                    </div>
+                    <div style={{
+                        float: "left",
+                        marginTop: "15px",
+                        paddingBottom: "20px",
+                        width: "100%",
+                    }}>
+                        <div style={{
+                            float: "right",
+                        }}>
+                            <div style={{
+                                cursor: "pointer",
+                                float: "left",
+                            }}>
+                                <p style={{
+                                    lineHeight: "40px",
+                                    marginRight: "20px",
+                                }}>
+                                    Discard
+                                </p>
+                            </div>
+                            <div style={{
+                                backgroundColor: "#296cf6",
+                                borderRadius: "50px",
+                                cursor: "pointer",
+                                float: "right",
+                                lineHeight: "40px",
+                                height: "40px",
+                                paddingLeft: "17.5px",
+                                paddingRight: "17.5px",
+                            }}>
+                                <p style={{
+                                    color: "white",
+                                    fontWeight: "bold",
+                                }}>
+                                    Save Changes
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {/* <div className="right_box_page_content_inner_box">
                         <div 
                             className={
                                 this.state.editPlan ? 
@@ -839,10 +1009,9 @@ class SettingsDashboard extends React.Component {
                                     </div>
                                 </div> :
                                 <div></div>
-                            }
+                            } 
                         </div>
-                    </div>
-                </div>
+                        </div> */}
             </div>
         );
     }
@@ -899,159 +1068,12 @@ class SettingsDashboard extends React.Component {
                             <div className="page-title-bar-divider"></div>
                         </div>
                         <div style={{
-                            display: "inline-block",
-                            marginLeft: "40px",
-                            marginRight: "40px",
-                            marginTop: "15px",
-                            textAlign: "center",
-                            width: "calc((100% - 80px))",
-                        }}>
-                            <div>
-                                <div 
-                                    onClick={() => 
-                                        this.setState({
-                                            toDisplay: general,
-                                            editEmail: false,
-                                            editNotifications: false,
-                                            editProperties: false,
-                                            editPlan: false
-                                        })}
-                                    style={{
-                                        cursor: "pointer",
-                                        float: "left",
-                                        marginRight: "40px",
-                                    }}>
-                                    <IoSettingsSharp style={{
-                                        color: this.state.toDisplay === general ? "#296cf6" : "grey",
-                                        float: "left",
-                                        height: "25px",
-                                        width: "25px",
-                                    }}/>
-                                    <p style={{
-                                        color: this.state.toDisplay === general ? "#296cf6" : "grey",
-                                        float: "left",
-                                        fontFamily: "'Poppins', sans-serif",
-                                        marginLeft: "5px",
-                                    }}>General</p>
-                                </div>
-                                <div 
-                                    onClick={() => 
-                                        this.setState({
-                                            toDisplay: email,
-                                            editGeneral: false,
-                                            editNotifications: false,
-                                            editProperties: false,
-                                            editPlan: false
-                                        })}
-                                    style={{
-                                        cursor: "pointer",
-                                        float: "left",
-                                        marginRight: "40px",
-                                    }}>
-                                    <MdEmail style={{
-                                        color: this.state.toDisplay === email ? "#296cf6" : "grey",
-                                        float: "left",
-                                        height: "25px",
-                                        width: "25px",
-                                    }}/>
-                                    <p style={{
-                                        color: this.state.toDisplay === email ? "#296cf6" : "grey",
-                                        float: "left",
-                                        fontFamily: "'Poppins', sans-serif",
-                                        marginLeft: "5px",
-                                    }}>Email</p>
-                                </div>
-                                <div 
-                                    onClick={() => 
-                                        this.setState({
-                                            toDisplay: notifications,
-                                            editGeneral: false,
-                                            editEmail: false,
-                                            editProperties: false,
-                                            editPlan: false
-                                        })}
-                                    style={{
-                                        cursor: "pointer",
-                                        float: "left",
-                                        marginRight: "40px",
-                                    }}>
-                                    <IoMdNotifications style={{
-                                        color: this.state.toDisplay === notifications ? "#296cf6" : "grey",
-                                        float: "left",
-                                        height: "25px",
-                                        width: "25px",
-                                    }}/>
-                                    <p style={{
-                                        color: this.state.toDisplay === notifications ? "#296cf6" : "grey",
-                                        float: "left",
-                                        fontFamily: "'Poppins', sans-serif",
-                                        marginLeft: "5px",
-                                    }}>Notifications</p>
-                                </div>
-                                <div 
-                                    onClick={() => 
-                                        this.setState({
-                                            toDisplay: properties,
-                                            editGeneral: false,
-                                            editEmail: false,
-                                            editNotifications: false,
-                                            editPlan: false
-                                        })}
-                                    style={{
-                                        cursor: "pointer",
-                                        float: "left",
-                                        marginRight: "40px",
-                                    }}>
-                                    <BsFillHouseFill style={{
-                                        color: this.state.toDisplay === properties ? "#296cf6" : "grey",
-                                        float: "left",
-                                        height: "25px",
-                                        width: "25px",
-                                    }}/>
-                                    <p style={{
-                                        color: this.state.toDisplay === properties ? "#296cf6" : "grey",
-                                        float: "left",
-                                        fontFamily: "'Poppins', sans-serif",
-                                        marginLeft: "5px",
-                                    }}>Properties</p>
-                                </div>
-                                <div 
-                                    onClick={() => 
-                                        this.setState({
-                                            toDisplay: plan,
-                                            editGeneral: false,
-                                            editEmail: false,
-                                            editNotifications: false,
-                                            editProperties: false,
-                                        })}
-                                    style={{
-                                        cursor: "pointer",
-                                        float: "left",
-                                        marginRight: "40px",
-                                    }}>
-                                    <BsFillAwardFill style={{
-                                        color: this.state.toDisplay === plan ? "#296cf6" : "grey",
-                                        float: "left",
-                                        height: "25px",
-                                        width: "25px",
-                                    }}/>
-                                    <p style={{
-                                        color: this.state.toDisplay === plan ? "#296cf6" : "grey",
-                                        float: "left",
-                                        fontFamily: "'Poppins', sans-serif",
-                                        marginLeft: "5px",
-                                    }}>Plan</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div style={{
                             borderRadius: "4px",
                             float: "left",
                             margin: "30px 40px 0px 40px",
                             width: "calc(100% - 80px)",
                         }}>
                             <div style={{
-                                borderRadius: "4px",
                                 float: "left",
                                 width: "225px",
                             }}>
@@ -1091,42 +1113,60 @@ class SettingsDashboard extends React.Component {
                                     accept=".png,.jpg,.heic"
                                     onChange={this.handleProfilePictureChange}></input>
                                 <div className="clearfix"/>
+                                <div style={{
+                                    marginTop: "15px",
+                                    width: "100%",
+                                }}>
+                                    <p style={{
+                                        fontFamily: "'Poppins', sans-serif",
+                                        fontSize: "1.5em",
+                                        fontWeight: "bold",
+                                        textAlign: "center",
+                                    }}>
+                                        {this.state.user["first_name"]} {this.state.user["last_name"]}
+                                    </p>
+                                    <p style={{
+                                        fontFamily: "'Poppins', sans-serif",
+                                        textAlign: "center",
+                                    }}>
+                                        Joined on <b>{this.getJoinedAt()}</b>
+                                    </p>
+                                    <div style={{
+                                        marginTop: "10px",
+                                        textAlign: "center",
+                                    }}>
+                                        <div style={{
+                                            backgroundColor: "#85bb65",
+                                            borderRadius: "50px",
+                                            display: "inline-block",
+                                            padding: "10px 15px 10px 15px",
+                                        }}>
+                                            {/* <BsFillAwardFill className="settings_dashboard_user_information_icon"></BsFillAwardFill> */}
+                                            <p className="settings_dashboard_user_information_inner_box_text"
+                                                style={{
+                                                    color: "white",
+                                                    fontWeight: "bold",
+                                                }}>
+                                                {this.state.user["plan"] ? this.capitalizeName(this.state.user["plan"]) : "Starter"} Plan
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div style={{
                                 float: "right",
                                 marginLeft: "40px",
+                                paddingBottom: "50px",
                                 width: "calc(100% - 225px - 40px)",
                             }}>
                                 <div style={{
                                     backgroundColor: "#f5f5fa", 
                                     borderRadius: "15px",
-                                    float: "left",
+                                    float: "right",
                                     padding: "5px 25px 5px 25px",
                                     width: "calc(100% - 50px)",
                                 }}>
-                                    <div style={{
-                                        backgroundColor: "#85bb65",
-                                        borderRadius: "50px",
-                                        float: "right",
-                                        marginTop: "15px",
-                                        padding: "10px 15px 10px 15px",
-                                    }}>
-                                        {/* <BsFillAwardFill className="settings_dashboard_user_information_icon"></BsFillAwardFill> */}
-                                        <p className="settings_dashboard_user_information_inner_box_text"
-                                            style={{
-                                                color: "white",
-                                                fontWeight: "bold",
-                                            }}>
-                                            {this.state.user["plan"] ? this.capitalizeName(this.state.user["plan"]) : "Starter"} Plan
-                                        </p>
-                                    </div>
                                     <div className="clearfix"/>
-                                    <p  style={{
-                                        marginTop: "10px",
-                                        }}
-                                        className="settings_dashboard_user_information_inner_box_text">
-                                        Joined on {this.getJoinedAt()}
-                                    </p>
                                     {this.renderBottomBoxPage()}
 
                                     {/* <div className="settings_dashboard_user_information_bullet_box">
@@ -1141,16 +1181,7 @@ class SettingsDashboard extends React.Component {
                                         {/* <p className="settings_dashboard_user_information_inner_box_text">
                                             {this.state.user["email"]}
                                         </p>
-                                    </div>  */}
-                                    {/* <div className="clearfix"/>
-                                    <div className="settings_dashboard_user_information_bullet_box">
-                                        {/* <AiFillClockCircle className="settings_dashboard_user_information_icon"></AiFillClockCircle> */}
-                                        {/* <p className="settings_dashboard_user_information_inner_box_text">
-                                            Joined on {this.getJoinedAt()}
-                                        </p>
-                                    </div>
-                                    <div className="clearfix"/> */}
-                                    
+                                    </div>  */}                                    
                                 </div>
                             </div>
                         </div>

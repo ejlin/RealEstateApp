@@ -102,7 +102,7 @@
     bottom: 0;
     color: #32384D;
     float: right;
-    font-family: 'Poppins', sans-serif;
+    /* font-family: 'Poppins', sans-serif; */
     font-size: 1em;
     line-height: 20px;
     word-break: break-all;
@@ -297,8 +297,8 @@
     float: left;
     font-family: 'Poppins', sans-serif;
     font-size: 1.0em;
-    font-weight: bold;
-    line-height: 50px;
+    line-height: 20px;
+    margin-left: 10px;
 }
 
 .right_box_page_content_inner_box_list_value_text {
