@@ -621,12 +621,13 @@ class AnalysisDashboard extends React.Component {
                                 <div style={{
                                     backgroundColor: "#E9EDF6",
                                     borderRadius: "8px",
+                                    boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                                     float: "left",
                                     height: "150px",
                                     marginBottom: "15px",
                                     padding: "15px",
                                     position: "relative",
-                                    width: "calc(50% - 10px - 30px)",
+                                    width: "calc(50% - 10px - 30px - 5px)",
                                 }}>
                                     <div style={{
                                         float: "left",
@@ -709,11 +710,12 @@ class AnalysisDashboard extends React.Component {
                                 <div style={{
                                     backgroundColor: "#f5f5fa",
                                     borderRadius: "8px",
+                                    boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                                     float: "right",
                                     height: "150px",
                                     padding: "15px",
                                     position: "relative",
-                                    width: "calc(50% - 10px - 30px)",
+                                    width: "calc(50% - 10px - 30px - 5px)",
                                 }}>
                                    <div style={{
                                         float: "left",
@@ -796,17 +798,18 @@ class AnalysisDashboard extends React.Component {
                                 </div>
                                 <div style={{
                                     float: "left",
-                                    marginTop: "0px",
+                                    marginTop: "10px",
                                     width: "100%",
                                 }}>
                                     <div style={{
                                         backgroundColor: "#f5f5fa",
                                         borderRadius: "6px",
+                                        boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                                         display: "inline-block",
                                         height: "70px",
-                                        marginRight: "20px",
+                                        marginRight: "25px",
                                         textAlign: "center",
-                                        width: "calc((100% - 40px)/3)",
+                                        width: "calc((100% - 40px - 10px)/3)",
                                     }}>
                                         <p style={{
                                             color: "black",
@@ -835,11 +838,12 @@ class AnalysisDashboard extends React.Component {
                                         // backgroundColor: "#E9EDF6",
                                         // backgroundColor: "#e9f0fe",
                                         borderRadius: "6px",
+                                        boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                                         display: "inline-block",
                                         height: "70px",
-                                        marginRight: "20px",
+                                        marginRight: "25px",
                                         textAlign: "center",
-                                        width: "calc((100% - 40px)/3)",
+                                        width: "calc((100% - 40px - 10px)/3)",
                                     }}>
                                         <p style={{
                                             color: "black",
@@ -866,10 +870,11 @@ class AnalysisDashboard extends React.Component {
                                     <div style={{
                                         backgroundColor: "#f5f5fa",
                                         borderRadius: "6px",
+                                        boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                                         display: "inline-block",
                                         height: "70px",
                                         textAlign: "center",
-                                        width: "calc((100% - 40px)/3)",
+                                        width: "calc((100% - 40px - 10px)/3)",
                                     }}>
                                         <p style={{
                                             color: "black",
@@ -894,8 +899,10 @@ class AnalysisDashboard extends React.Component {
                                         </p>
                                     </div>
                                     <div style={{
+                                        borderRadius: "6px",
+                                        boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                                         float: "left",
-                                        marginTop: "15px",
+                                        marginTop: "25px",
                                         width: "100%",
                                     }}>
                                         <BarChart 
@@ -915,13 +922,14 @@ class AnalysisDashboard extends React.Component {
                                     </div>
                                     <div style={{
                                         float: "left",
-                                        marginTop: "15px",
+                                        marginTop: "25px",
                                         width: "100%",
                                     }}>
                                         <div style={{
                                             backgroundColor: "#32384D",
                                             // backgroundColor: "#E9EDF6",
                                             borderRadius: "6px",
+                                            boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                                             float: "left",
                                             paddingBottom: "20px",
                                             paddingTop: "20px",

@@ -278,7 +278,7 @@ class DashboardSidebar extends React.Component {
                     <div style={{
                         marginTop: "0px",
                     }}>
-                        <div className="dashboard_sidebar_link">
+                        {/* <div className="dashboard_sidebar_link">
                             <Link className="dashboard_sidebar_inner_link" to={{
                                 pathname: "/dashboard",
                                 state: {
@@ -302,7 +302,7 @@ class DashboardSidebar extends React.Component {
                                 </p>
                             </Link>
                         </div>
-                        <div className="clearfix"/>
+                        <div className="clearfix"/> */}
                         <div className="dashboard_sidebar_link">
                             <Link className="dashboard_sidebar_inner_link" to={{
                                 pathname: "/properties",

@@ -283,7 +283,12 @@ class PropertiesDashboard extends React.Component {
                 marginTop: "15px",
                 overflow: "scroll",
             }}>
-                {elements}
+                <div style={{
+                    marginLeft: "5px",
+                    width: "calc(100% - 10px)",
+                }}>
+                    {elements}
+                </div>
             </div>
         );
     }

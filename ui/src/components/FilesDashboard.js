@@ -672,11 +672,11 @@ class FilesDashboard extends React.Component {
                             }}>
                                 <div style={{
                                     backgroundColor: "#32384D",
-                                    borderRadius: "6px",
+                                    borderRadius: "50px",
                                     boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                                     float: "left",
                                     marginRight: "15px",
-                                    padding: "7.5px 15px 7.5px 15px",
+                                    padding: "7.5px 17.5px 7.5px 17.5px",
                                     userSelect: "none",
                                 }}>
                                     <p style={{

@@ -253,13 +253,6 @@
     margin-left: 10px;
 }
 
-.right_box_page_inner_box {
-    float: left;
-    margin-top: 15px;
-    min-width: 400px;
-    width: 100%;
-}
-
 .right_box_page_title {
     float: left;
     font-family: 'Poppins', sans-serif;
@@ -296,7 +289,7 @@
 .right_box_page_content_inner_box_list_text {
     float: left;
     font-family: 'Poppins', sans-serif;
-    font-size: 1.0em;
+    font-size: 0.9em;
     line-height: 20px;
     margin-left: 10px;
 }
@@ -505,11 +498,15 @@ input:checked + .slider:before {
 }
 
 .settings_input {
-    background-color: white !important;
-    border: 2px solid #d3d3d3;
-    border-radius: 6px !important;
+    background-color: #f5f5fa !important;
+    border: 1px solid #d3d3d3;
+    border-radius: 4px !important;
     font-size: 1.0em;
     margin-top: 2.5px;
     padding: 7.5px 10px 7.5px 10px;
     width: calc(100% - 20px - 4px);
+}
+
+.settings_input:focus {
+    outline: none;
 }

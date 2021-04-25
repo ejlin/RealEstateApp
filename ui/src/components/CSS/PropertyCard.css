@@ -1,7 +1,7 @@
 .property_card_box {
     background-color: white;
-    border: 1px solid #d3d3d3;
-    /* box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09); */
+    /* border: 1px solid #d3d3d3; */
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09);
     border-radius: 4px;
     border-top: 7.5px solid #296CF6;
     float: left;

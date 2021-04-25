@@ -319,7 +319,11 @@ class SettingsDashboard extends React.Component {
     renderBottomBoxPage() {
         return (
             <div>
-                <div className="right_box_page_inner_box">
+                <div style={{
+                    float: "left",
+                    minWidth: "400px",
+                    width: "100%",
+                }}>
                     <p className="right_box_page_title">
                         General
                     </p>
@@ -337,7 +341,7 @@ class SettingsDashboard extends React.Component {
                                 fontSize: "0.9em",
                                 // fontWeight: "bold",
                             }}>
-                                First Name
+                                FIRST NAME
                             </p>
                             <input 
                                 className="settings_input"
@@ -355,7 +359,7 @@ class SettingsDashboard extends React.Component {
                                 fontSize: "0.9em",
                                 // fontWeight: "bold",
                             }}>
-                                Last Name
+                                LAST NAME
                             </p>
                             <input 
                                 className="settings_input"
@@ -379,7 +383,7 @@ class SettingsDashboard extends React.Component {
                                     fontSize: "0.9em",
                                     // fontWeight: "bold",
                                 }}>
-                                    Email
+                                    EMAIL
                                 </p>
                                 <input 
                                     className="settings_input"
@@ -397,7 +401,7 @@ class SettingsDashboard extends React.Component {
                                     fontSize: "0.9em",
                                     // fontWeight: "bold",
                                 }}>
-                                    Phone Number
+                                    PHONE NUMBER
                                 </p>
                                 <input 
                                     className="settings_input"
@@ -421,7 +425,7 @@ class SettingsDashboard extends React.Component {
                                     fontSize: "0.9em",
                                     // fontWeight: "bold",
                                 }}>
-                                    Password
+                                    PASSWORD
                                 </p>
                                 <input 
                                     className="settings_input"
@@ -563,36 +567,12 @@ class SettingsDashboard extends React.Component {
                                     height: "20px",
                                     width: "20px",
                                 }}
+                                checked={this.state.checkboxStates.get('receive_digest')}
+                                name="receive_digest"
+                                onChange={this.handleCheckboxChange}
                                 type="checkbox"/>
                             <p className="right_box_page_content_inner_box_list_text">
-                                Digest Emails
-                            </p>
-                        </div>
-                            {/* <p className="right_box_page_content_inner_box_list_value_text">
-                                {this.state.editEmail ? 
-                                <label className="switch">
-                                    <input 
-                                        type="checkbox"
-                                        name="receive_digest"
-                                        checked={this.state.checkboxStates.get('receive_digest')}
-                                        onChange={this.handleCheckboxChange}/>
-                                    <span className="slider round"></span>
-                                </label> : (this.state.checkboxStates.get('receive_digest') ? "Yes" : "No")}
-                            </p> */}
-                        <div style={{
-                            float: "left",
-                            marginTop: "10px",
-                            width: "100%",
-                        }}>
-                            <input 
-                                style={{
-                                    float: "left",
-                                    height: "20px",
-                                    width: "20px",
-                                }}
-                                type="checkbox"/>
-                            <p className="right_box_page_content_inner_box_list_text">
-                                Newsletter Emails
+                                DIGEST EMAILS
                             </p>
                         </div>
                         <div style={{
@@ -606,38 +586,33 @@ class SettingsDashboard extends React.Component {
                                     height: "20px",
                                     width: "20px",
                                 }}
+                                checked={this.state.checkboxStates.get('receive_newsletter')}
+                                name="receive_newsletter"
+                                onChange={this.handleCheckboxChange}
                                 type="checkbox"/>
                             <p className="right_box_page_content_inner_box_list_text">
-                                Marketing Emails
+                                NEWSLETTER EMAILS
                             </p>
                         </div>
-                        {/* <p className="right_box_page_content_inner_box_list_value_text">
-                            {this.state.editEmail ? 
-                            <label className="switch">
-                                <input 
-                                    type="checkbox"
-                                    name="receive_newsletter"
-                                    checked={this.state.checkboxStates.get('receive_newsletter')}
-                                    onChange={this.handleCheckboxChange}/>
-                                <span className="slider round"></span>
-                            </label>: 
-                            (this.state.checkboxStates.get('receive_newsletter') ? "Yes" : "No")}
-                        </p>
-                        <p className="right_box_page_content_inner_box_list_text">
-                            Marketing Emails
-                        </p> */}
-                        {/* <p className="right_box_page_content_inner_box_list_value_text">
-                            {this.state.editEmail ? 
-                            <label className="switch">
-                                <input 
-                                    type="checkbox"
-                                    name="receive_marketing"
-                                    checked={this.state.checkboxStates.get('receive_marketing')}
-                                    onChange={this.handleCheckboxChange}/>
-                                <span className="slider round"></span>
-                            </label>: 
-                            (this.state.checkboxStates.get('receive_marketing') ? "Yes" : "No")}
-                        </p> */}
+                        <div style={{
+                            float: "left",
+                            marginTop: "10px",
+                            width: "100%",
+                        }}>
+                            <input 
+                                style={{
+                                    float: "left",
+                                    height: "20px",
+                                    width: "20px",
+                                }}
+                                checked={this.state.checkboxStates.get('receive_marketing')}
+                                name="receive_marketing"
+                                onChange={this.handleCheckboxChange}
+                                type="checkbox"/>
+                            <p className="right_box_page_content_inner_box_list_text">
+                                MARKETING EMAILS
+                            </p>
+                        </div>
                         {/* <div className="clearfix"/>
                         {this.state.editEmail ? 
                         <div 
@@ -666,9 +641,12 @@ class SettingsDashboard extends React.Component {
                                 height: "20px",
                                 width: "20px",
                             }}
+                            checked={this.state.checkboxStates.get('rent_pay_date')}
+                            name="rent_pay_date"
+                            onChange={this.handleCheckboxChange}
                             type="checkbox"/>
                         <p className="right_box_page_content_inner_box_list_text">
-                            Rent Pay Date
+                            RENT PAY DATE
                         </p>
                     </div>
                     <div style={{
@@ -682,9 +660,12 @@ class SettingsDashboard extends React.Component {
                                 height: "20px",
                                 width: "20px",
                             }}
+                            checked={this.state.checkboxStates.get('mortgage_pay_date')}
+                            name="mortgage_pay_date"
+                            onChange={this.handleCheckboxChange}
                             type="checkbox"/>
                         <p className="right_box_page_content_inner_box_list_text">
-                            Mortgage
+                            MORTGAGE/LOANS PAY DATE
                         </p>
                     </div>
                     <div style={{
@@ -698,9 +679,12 @@ class SettingsDashboard extends React.Component {
                                 height: "20px",
                                 width: "20px",
                             }}
+                            checked={this.state.checkboxStates.get('property_value')}
+                            name="property_value"
+                            onChange={this.handleCheckboxChange}
                             type="checkbox"/>
                         <p className="right_box_page_content_inner_box_list_text">
-                            Property Values
+                            PROPERTY VALUES
                         </p>
                     </div>
                     {/* <p 
@@ -794,9 +778,12 @@ class SettingsDashboard extends React.Component {
                                 height: "20px",
                                 width: "20px",
                             }}
+                            name="automatically_estimate_property_values"
+                            checked={this.state.checkboxStates.get('automatically_estimate_property_values')}
+                            onChange={this.handleCheckboxChange}
                             type="checkbox"/>
                         <p className="right_box_page_content_inner_box_list_text">
-                            Automatically Estimate property values
+                            AUTOMATICALLY ESTIMATE PROPERTY VALUES
                         </p>
                     </div>
                     {/* <p 
@@ -863,7 +850,7 @@ class SettingsDashboard extends React.Component {
                                 fontSize: "0.9em",
                                 // fontWeight: "bold",
                             }}>
-                                Plan
+                                PLAN
                             </p>
                             <input 
                                 className="settings_input"
@@ -887,6 +874,7 @@ class SettingsDashboard extends React.Component {
                                 float: "left",
                             }}>
                                 <p style={{
+                                    fontFamily: "'Poppins', sans-serif",
                                     lineHeight: "40px",
                                     marginRight: "20px",
                                 }}>
@@ -898,6 +886,7 @@ class SettingsDashboard extends React.Component {
                                 borderRadius: "50px",
                                 cursor: "pointer",
                                 float: "right",
+                                fontWeight: "bold",
                                 lineHeight: "40px",
                                 height: "40px",
                                 paddingLeft: "17.5px",
@@ -905,6 +894,7 @@ class SettingsDashboard extends React.Component {
                             }}>
                                 <p style={{
                                     color: "white",
+                                    fontFamily: "'Poppins', sans-serif",
                                     fontWeight: "bold",
                                 }}>
                                     Save Changes
@@ -1160,7 +1150,7 @@ class SettingsDashboard extends React.Component {
                                 width: "calc(100% - 225px - 40px)",
                             }}>
                                 <div style={{
-                                    backgroundColor: "#f5f5fa", 
+                                    // backgroundColor: "#f5f5fa", 
                                     borderRadius: "15px",
                                     float: "right",
                                     padding: "5px 25px 5px 25px",
