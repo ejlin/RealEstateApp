@@ -548,8 +548,9 @@ class FilesDashboard extends React.Component {
                         float: "left",
                         lineHeight: "17.5px",
                         marginRight: "7.5px",
+                        userSelect: "none",
                     }}>
-                        {bytesToSize(filesTotalSize)} used of {maximumSize}
+                        {filesTotalSize ? bytesToSize(filesTotalSize) : "0B"} used of {maximumSize}
                     </p>
                     <AiFillQuestionCircle style={{
                         float: "left",
@@ -576,11 +577,6 @@ class FilesDashboard extends React.Component {
                 }
             }} />
         }
-        if (this.state.isLoading) {
-            return (
-                <div></div>
-            );
-        }
         return (
             <div>
                 <DashboardSidebar data={{
@@ -592,176 +588,180 @@ class FilesDashboard extends React.Component {
                         currentPage: "files"
                     }
                 }}/>
-                <div id="files_dashboard_parent_box">
-                    {this.state.displayUploadFileBox ? 
-                        <div className="files_dashboard_display_add_file_box">
-                            <UploadFileModal
-                                data={{
-                                    state: {
-                                        user: this.state.user,
-                                        propertiesMap: this.state.propertiesMap,
-                                        closeUploadFileModal: this.closeUploadFileModal,
-                                        setRecentlyUploadedFile: this.setRecentlyUploadedFile,
-                                    }                       
-                                }}/>
-                        </div> :
-                    <div></div>}
-                    <div className="page-white-background">
-                        <div style={{
-                                float: "left",
-                                paddingBottom: "10px",
-                                paddingTop: "10px",
-                                width: "100%",
-                            }}>
-                            <input id="files_dashboard_search_bar" className="search_bar" placeholder="Search..." onChange={this.handleSearchBar}/>
-                            <p
-                                style={{
+                {
+                    this.state.isLoading ? 
+                    <div></div> :
+                    <div id="files_dashboard_parent_box">
+                        {this.state.displayUploadFileBox ? 
+                            <div className="files_dashboard_display_add_file_box">
+                                <UploadFileModal
+                                    data={{
+                                        state: {
+                                            user: this.state.user,
+                                            propertiesMap: this.state.propertiesMap,
+                                            closeUploadFileModal: this.closeUploadFileModal,
+                                            setRecentlyUploadedFile: this.setRecentlyUploadedFile,
+                                        }                       
+                                    }}/>
+                            </div> :
+                        <div></div>}
+                        <div className="page-white-background">
+                            <div style={{
                                     float: "left",
-                                    fontFamily: "'Poppins', sans-serif",
-                                    fontSize: "1.1em",
-                                    lineHeight: "40px",
-                                    width: "200px",
+                                    paddingBottom: "10px",
+                                    paddingTop: "10px",
+                                    width: "100%",
                                 }}>
-                                FOLDERS
-                            </p>
-                            <div 
-                                className="opacity"
-                                onMouseDown={
-                                    () => this.setState({
-                                        displayUploadFileBox: true
-                                })}                                
-                                style={{
-                                    cursor: "pointer",
-                                    float: "right",
-                                    marginRight: "25px",
-                                }}>
-                                <MdAdd style={{
-                                    // backgroundColor: "#f5f5fa",
-                                    borderRadius: "50%",
-                                    color: "#296cf6",
-                                    float: "left",
-                                    height: "20px",
-                                    marginTop: "10px",
-                                    // padding: "7.5px",
-                                    width: "20px",
-                                }}/>
+                                <input id="files_dashboard_search_bar" className="search_bar" placeholder="Search..." onChange={this.handleSearchBar}/>
                                 <p
                                     style={{
-                                        color: "#296cf6",
                                         float: "left",
                                         fontFamily: "'Poppins', sans-serif",
-                                        fontWeight: "bold",
+                                        fontSize: "1.1em",
                                         lineHeight: "40px",
-                                        marginLeft: "10px",
-                                        textDecoration: "none",
-                                        userSelect: "none",
+                                        width: "200px",
                                     }}>
-                                    New
+                                    FOLDERS
                                 </p>
+                                <div 
+                                    className="opacity"
+                                    onMouseDown={
+                                        () => this.setState({
+                                            displayUploadFileBox: true
+                                    })}                                
+                                    style={{
+                                        cursor: "pointer",
+                                        float: "right",
+                                        marginRight: "25px",
+                                    }}>
+                                    <MdAdd style={{
+                                        // backgroundColor: "#f5f5fa",
+                                        borderRadius: "50%",
+                                        color: "#296cf6",
+                                        float: "left",
+                                        height: "20px",
+                                        marginTop: "10px",
+                                        // padding: "7.5px",
+                                        width: "20px",
+                                    }}/>
+                                    <p
+                                        style={{
+                                            color: "#296cf6",
+                                            float: "left",
+                                            fontFamily: "'Poppins', sans-serif",
+                                            fontWeight: "bold",
+                                            lineHeight: "40px",
+                                            marginLeft: "10px",
+                                            textDecoration: "none",
+                                            userSelect: "none",
+                                        }}>
+                                        New
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div className="clearfix"/>
-                        <div className="page-title-bar-divider"/>
-                        <div style={{
-                            margin: "20px 40px 0px 40px",
-                            width: "calc(100% - 80px)",
-                        }}>
+                            <div className="clearfix"/>
+                            <div className="page-title-bar-divider"/>
                             <div style={{
-                                float: "left",
-                                width: "100%",
+                                margin: "20px 40px 0px 40px",
+                                width: "calc(100% - 80px)",
                             }}>
                                 <div style={{
-                                    backgroundColor: "#32384D",
-                                    borderRadius: "50px",
-                                    boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                                     float: "left",
-                                    marginRight: "15px",
-                                    padding: "7.5px 17.5px 7.5px 17.5px",
-                                    userSelect: "none",
+                                    width: "100%",
                                 }}>
-                                    <p style={{
-                                        color: "white",
-                                        display: "inline-block",
-                                        fontSize: "0.9em",
-                                        fontWeight: "bold",
+                                    <div style={{
+                                        backgroundColor: "#32384D",
+                                        borderRadius: "50px",
+                                        boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                                        float: "left",
+                                        marginRight: "15px",
+                                        padding: "7.5px 17.5px 7.5px 17.5px",
+                                        userSelect: "none",
                                     }}>
-                                        {this.state.filesSummary["total_files"]}
-                                    </p>
-                                    <p style={{
-                                        color: "white",
-                                        display: "inline-block",
-                                        fontWeight: "bold",
-                                        fontSize: "0.9em",
-                                        marginLeft: "5px",
+                                        <p style={{
+                                            color: "white",
+                                            display: "inline-block",
+                                            fontSize: "0.9em",
+                                            fontWeight: "bold",
+                                        }}>
+                                            {this.state.filesSummary["total_files"] ? this.state.filesSummary["total_files"] : 0}
+                                        </p>
+                                        <p style={{
+                                            color: "white",
+                                            display: "inline-block",
+                                            fontWeight: "bold",
+                                            fontSize: "0.9em",
+                                            marginLeft: "5px",
+                                        }}>
+                                            {this.state.filesSummary["total_files"] === 1 ? "File" : "Files"}
+                                        </p>
+                                    </div>
+                                    <div style={{ 
+                                        float: "right",
                                     }}>
-                                        Files
-                                    </p>
+                                        <p style={{
+                                            fontSize: "0.9em",
+                                        }}>
+                                            {this.getFileStorageUsage()}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div style={{ 
-                                    float: "right",
+                                <div style={{
+                                    float: "left",
+                                    marginTop: "20px",
+                                    width: "100%",
                                 }}>
-                                    <p style={{
-                                        fontSize: "0.9em",
-                                    }}>
-                                        {this.getFileStorageUsage()}
-                                    </p>
+                                    {
+                                        this.state.pageToDisplay === folders ?
+                                        (this.state.isLoading ? 
+                                            <div></div> : 
+                                            <div>
+                                                {this.renderFolders()}
+                                            </div>
+                                        ): (
+                                            this.state.pageToDisplay === files ?
+                                            <div>
+                                                {this.renderActiveFolderFiles()}
+                                            </div>:
+                                            <div></div>
+                                        )
+                                    }
                                 </div>
-                            </div>
-                            <div style={{
-                                float: "left",
-                                marginTop: "20px",
-                                width: "100%",
-                            }}>
-                                {
-                                    this.state.pageToDisplay === folders ?
-                                    (this.state.isLoading ? 
-                                        <div></div> : 
-                                        <div>
-                                            {this.renderFolders()}
-                                        </div>
-                                    ): (
-                                        this.state.pageToDisplay === files ?
-                                        <div>
-                                            {this.renderActiveFolderFiles()}
-                                        </div>:
-                                        <div></div>
-                                    )
-                                }
                             </div>
                         </div>
-                    </div>
-                    <div className="clearfix"/>
-                    {this.state.isLoading ? <div></div> : 
-                    <div>
-                        <div id="files_dashboard_icons_box">
-                            {/* <div
-                                className="page_button" 
-                                onMouseDown={() => this.setState({
-                                    displayUploadFileBox: true
-                                    })}>Add File</div> */}
-                            {this.state.activeFiles.size >= 1 ?
-                                <IoTrashSharp className="files_dashboard_icons" onMouseDown={() => this.deleteActiveFiles()}></IoTrashSharp> : 
-                                <div></div>}
-                            {this.state.activeFiles.size >= 1 ? 
-                                <MdFileDownload className="files_dashboard_icons" onMouseDown={() => this.downloadActiveFiles()}></MdFileDownload> : 
-                                <div></div>
-                            }
-                            {this.state.activeFiles.size === 1 ? 
-                                <MdEdit className="files_dashboard_icons"></MdEdit> : 
-                                <div></div>
-                            }
-                        </div>                        
                         <div className="clearfix"/>
-                        
-                    </div>}
-                    <NotificationSidebar data={{
-                        state: {
-                            user: this.state.user,
-                            totalEstimateWorth: this.state.totalEstimateWorth,
-                            missingEstimate: this.state.missingEstimate 
-                        }
-                    }}/>
-                </div>
+                        {this.state.isLoading ? <div></div> : 
+                        <div>
+                            <div id="files_dashboard_icons_box">
+                                {/* <div
+                                    className="page_button" 
+                                    onMouseDown={() => this.setState({
+                                        displayUploadFileBox: true
+                                        })}>Add File</div> */}
+                                {this.state.activeFiles.size >= 1 ?
+                                    <IoTrashSharp className="files_dashboard_icons" onMouseDown={() => this.deleteActiveFiles()}></IoTrashSharp> : 
+                                    <div></div>}
+                                {this.state.activeFiles.size >= 1 ? 
+                                    <MdFileDownload className="files_dashboard_icons" onMouseDown={() => this.downloadActiveFiles()}></MdFileDownload> : 
+                                    <div></div>
+                                }
+                                {this.state.activeFiles.size === 1 ? 
+                                    <MdEdit className="files_dashboard_icons"></MdEdit> : 
+                                    <div></div>
+                                }
+                            </div>                        
+                            <div className="clearfix"/>
+                            
+                        </div>}
+                        <NotificationSidebar data={{
+                            state: {
+                                user: this.state.user,
+                                totalEstimateWorth: this.state.totalEstimateWorth,
+                                missingEstimate: this.state.missingEstimate 
+                            }
+                        }}/>
+                    </div>
+                }
             </div>
         )
     }

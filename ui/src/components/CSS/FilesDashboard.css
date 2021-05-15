@@ -51,11 +51,6 @@
     transform: rotate(180deg);
 }
 
-#files_dashboard_icons_box {
-    margin-top: 10px;
-    width: 100%;
-}
-
 .files_dashboard_upload_file_text_button {
     background-color:#296CF6;
     /* background-color: #F1F1F1; */
@@ -366,32 +361,6 @@ input[type=number] {
     margin-top: 20px;
     user-select: none;
     width: 100%;
-}
-
-.files_dashboard_back_to_folders_button {
-    cursor: pointer;
-    float: left;
-    margin-bottom: 10px;
-    margin-top: 2.5px;
-    transition: 0.5s;
-}
-
-.files_dashboard_back_to_folders_button:hover {
-    opacity: 0.8;
-}
-
-.files_dashboard_back_to_folders_button_icon {
-    float: left;
-    height: 20px;
-    width: 20px;
-}
-
-.files_dashboard_back_to_folders_button_text {
-    float: left;
-    font-weight: bold;
-    line-height: 20px;
-    margin-left: 2.5px;
-    user-select: none;
 }
 
 .files_dashboard_folder_name_title {

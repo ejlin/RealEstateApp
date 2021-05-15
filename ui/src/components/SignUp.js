@@ -117,8 +117,8 @@ class SignUp extends React.Component {
                     <p style={{
                         color: "grey",
                         float: "left",
-                        marginLeft: "15px",
-                        width: "calc(100% - 15px - 15px - 4px)",
+                        marginLeft: "10px",
+                        width: "calc(100% - 15px - 15px)",
                         textAlign: "left",
                         userSelect: "none",
                     }}>

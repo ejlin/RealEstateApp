@@ -1,12 +1,12 @@
 #files_dashboard_upload_file_button_label {
     background-color: #F5f5fa;
-    border: 1px solid black;
-    border-radius: 2px;
-    border-style: dashed;
+    border: 1px solid #d3d3d3;
+    border-radius: 6px;
+    /* border-style: dashed; */
     cursor: pointer;
     float: left;
     height: 100px;
-    margin-top: 15px;
+    margin-top: 5px;
     position: relative;
     transition: 0.5s;
     width: 100%;
@@ -38,11 +38,12 @@
 
 .upload_file_input {
     background-color: #F5F5FA;
-    border: none;
+    border: 1px solid #d3d3d3;
     border-radius: 4px;
     font-size: 1.0em;
     height: 22.5px;
     margin-bottom: 15px;
+    margin-top: 5px;
     padding: 7.5px 15px 7.5px 15px;
     width: calc((100% - 30px));
 }
@@ -61,12 +62,6 @@
     width: calc(30% - 20px);
 }
 
-.files_dashboard_upload_file_right_box {
-    float: left;
-    margin-top: 25px;
-    width: 100%;
-}
-
 .upload_files_dashboard_inner_parent_box {
     margin-top: 10px;
 }
@@ -81,25 +76,23 @@
     transform: scale(1.05);
 }
 
-.files_dashboard_upload_file_final_button:hover{
-    opacity: 0.8;
-}
-
-.files_dashboard_upload_file_final_button {
-    background-color:#296CF6;
-    border: 2px solid #296CF6;
+.upload_file_final_button {
+    background-color: #296cf6;
     border-radius: 50px;
-    color:   white;
+    color: #f5f5fa;
     cursor: pointer;
     float: right;
-    font-size: "1.0em";
+    font-Family: 'Poppins', sans-serif;
+    font-size: 0.9em;
     font-weight: bold;
-    height: 35px;
-    line-height: 35px;
-    margin-top: 10px;
-    text-align: center;
-    transition: 0.5s;
-    width: 100px;
+    margin-top: 20px;
+    padding: 7.5px 17.5px 7.5px 17.5px;
+    transition: 0.2s;
+    user-select: none;
+}
+
+.upload_file_final_button:hover {
+    opacity: 0.8;
 }
 
 .files_dashboard_title {
@@ -117,13 +110,14 @@
 
 .files_dashboard_associated_properties_input {
     background-color: #F5F5FA;
-    border: none;
+    border: 1px solid #d3d3d3;
     border-radius: 4px;
     font-size: 1.0em;
     height: 22.5px;
     margin-bottom: 15px;
+    margin-top: 5px;
     padding: 7.5px 15px 7.5px 15px;
-    width: calc((100% - 30px - 4px));
+    width: calc((100% - 30px - 2px));
 }
 
 .files_dashboard_upload_file_right_box_right_box {
@@ -135,10 +129,11 @@
 
 .files_dashboard_file_type {
     background-color: #F5F5FA;
-    border: none;
+    border: 1px solid #d3d3d3;
     border-radius: 4px;
     font-size: 1.0em;
     margin-bottom: 10px;
+    margin-top: 5px;
     padding: 7.5px 15px 7.5px 15px;
     width: 100%;
 }

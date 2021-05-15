@@ -53,32 +53,34 @@
 
 .create_expense_modal_parent_box_title_input {
     background-color: #F5F5FA;
-    border: none;
-    border-radius: 4px;
+    border: 1px solid #d3d3d3;
+    border-radius: 6px;
     font-size: 1.0em;
-    padding: 7.5px 15px 7.5px 15px;
-    width: calc((100% - 4px - 30px));
+    margin-bottom: 15px;
+    margin-top: 5px;
+    padding: 7.5px 10px 7.5px 10px;
+    width: calc((100% - 4px - 20px));
 }
 
 .create_expense_modal_parent_box_title_input:focus, 
 .create_expense_modal_parent_box_inner_box_right_box_date_input:focus, 
 .create_expense_modal_parent_box_title_textarea:focus,
 .create_expense_modal_parent_box_inner_box_right_box_amount_input:focus,
-.create_expense_modal_associated_properties_input:focus,
 .create_expense_modal_parent_box_inner_box_right_box_date_select:focus {
     outline: none;
 }
 
 .create_expense_modal_parent_box_title_textarea {
     background-color: #F5F5FA;
-    border: none;
-    border-radius: 4px;
+    border: 1px solid #d3d3d3;
+    border-radius: 6px;
     font-size: 1.0em;
     height: 125px;
-    margin-top: 0px;
-    padding: 7.5px 15px 7.5px 15px;
+    margin-bottom: 15px;
+    margin-top: 5px;
+    padding: 7.5px 10px 7.5px 10px;
     resize: none;
-    width: calc(100% - 4px - 30px);
+    width: calc(100% - 4px - 20px);
 }
 
 .create_expense_modal_parent_box_inner_box_left_box {
@@ -105,20 +107,20 @@
 
 .create_expense_modal_parent_box_inner_box_right_box_date_input {
     background-color: #F5F5FA;
-    border: none;
+    border: 1px solid #d3d3d3;
     border-radius: 4px;
     font-size: 1.0em;
-    margin-top: 10px;
+    margin-top: 5px;
     padding: 7.5px 15px 7.5px 15px;
     width: calc(100% - 4px - 30px - 25px);
 }
 
 .create_expense_modal_parent_box_inner_box_right_box_amount_input {
     background-color: #F5F5FA;
-    border: none;
+    border: 1px solid #d3d3d3;
     border-radius: 4px;
     font-size: 1.0em;
-    margin-top: 10px;
+    margin-top: 5px;
     padding: 7.5px 15px 7.5px 15px;
     width: calc(100% - 4px - 30px);
 }
@@ -131,10 +133,10 @@
 
 .create_expense_modal_parent_box_inner_box_right_box_date_select {
     background-color: #F5F5FA;
-    border: none;
+    border: 1px solid #d3d3d3;
     border-radius: 4px;
     font-size: 1.0em;
-    margin-top: 10px;
+    margin-top: 5px;
     padding: 7.5px 15px 7.5px 15px;
     width: calc(100% );
 }
@@ -162,66 +164,6 @@
     opacity: 0.7;
 }
 
-.create_expense_modal_associated_properties_input {
-    background-color: #F5F5FA;
-    border: none;
-    border-radius: 4px;
-    float: left;
-    font-size: 1.0em;
-    margin-top: 10px;
-    padding: 7.5px 14px 7.5px 15px;
-    width: calc(100% - 30px);
-}
-
-.create_expense_modal_associated_properties_filtered_properties_box {
-    background-color: white;
-    border: 2px solid grey;
-    border-radius: 4px 4px 4px 4px;
-    margin-top: -14px;
-    position: absolute;
-    width: calc((100% - 4px));
-    z-index: 11 !important;
-}
-
-.associated_properties_dropdown_elements {
-    color: black;
-    cursor: pointer;
-    font-size: 1.0em;
-    padding: 7.5px 15px 7.5px 15px;
-}
-
-.associated_properties_dropdown_elements:hover {
-    background-color: #d3d3d3;
-}
-
-
-
-.associated_properties_selected_parent_box {
-    border-radius: 4px;
-    margin-top: 10px;
-}
-
-.current_selected_associated_properties_text {
-    float: left;
-    font-weight: bold;
-    margin-left: 15px;
-}
-
-.current_selected_associated_properties_icon {
-    color: #296CF6;
-    cursor: pointer;
-    float: right;
-    height: 25px;
-    margin-right: 10px;
-    margin-top: 7.5px;
-    transition: 0.5s;
-    width: 25px;
-}
-
-.current_selected_associated_properties_icon:hover {
-    opacity: 0.7;
-}
-
 .create_expense_modal_padding_bottom {
     float: left;
     height: 75px;
@@ -234,7 +176,7 @@
 }
 
 .create_expense_modal_bottom_box {
-    margin-top: 30px;
+    margin-top: 50px;
     width: 100%;
 }
 
@@ -280,6 +222,8 @@
 
 .create_expense_modal_info_text_box_text {
     float: left;
+    font-size: 0.8em;
+    margin-bottom: 10px;
 }
 
 #create_expense_modal_upload_file_button {
@@ -303,14 +247,13 @@
 
 .create_expense_modal_upload_file_button_label {
     background-color: #F5F5FA;
-    border: 1px solid black;
-    border-radius: 2px;
-    border-style: dashed;
+    border: 1px solid #d3d3d3;
+    border-radius: 6px;
     cursor: pointer;
     float: left;
     height: 100px;
     margin-bottom: 10px;
-    margin-top: 15px;
+    margin-top: 5px;
     position: relative;
     transition: 0.5s;
     width: calc(100% - 2px);
@@ -370,4 +313,23 @@
     margin-right: calc((100% - 40px)/2);
     margin-top: 40px;
     width: 40px;
+}
+
+.create_expense_final_button {
+    background-color: #296cf6;
+    border-radius: 50px;
+    color: #f5f5fa;
+    cursor: pointer;
+    float: right;
+    font-Family: 'Poppins', sans-serif;
+    font-size: 0.9em;
+    font-weight: bold;
+    margin-top: 20px;
+    padding: 7.5px 17.5px 7.5px 17.5px;
+    transition: 0.2s;
+    user-select: none;
+}
+
+.create_expense_final_button:hover {
+    opacity: 0.8;
 }

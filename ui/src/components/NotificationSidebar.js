@@ -205,6 +205,7 @@ class NotificationSidebar extends React.Component {
                                             }
                                             className="dashboard_sidebar_tooltip"
                                             style={{
+                                                boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
                                                 cursor: "pointer",
                                                 padding: "7.5px 15px 7.5px 15px",
                                                 textAlign: "center",

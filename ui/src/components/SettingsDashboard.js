@@ -71,12 +71,12 @@ class SettingsDashboard extends React.Component {
     }
 
     componentDidMount() {
-        var url = '/api/user/settings/preferences/' + this.state.user["id"];
+        let url = '/api/user/settings/preferences/' + this.state.user["id"];
         axios({
             method: 'get',
             url: url,
         }).then(response => {
-            var data = response.data;
+            let data = response.data;
 
             // data is a map in the format.
             // map[string]map[string]interface{}
@@ -91,7 +91,7 @@ class SettingsDashboard extends React.Component {
             //      }
             // }
 
-            var checkboxMap = new Map();
+            let checkboxMap = new Map();
             checkboxMap.set('receive_digest', data["emails"]["receive_digest"]);
             checkboxMap.set('receive_marketing', data["emails"]["receive_marketing"]);
             checkboxMap.set('receive_newsletter', data["emails"]["receive_newsletter"]);
@@ -102,7 +102,7 @@ class SettingsDashboard extends React.Component {
             // originalCheckboxMap gives us a reference to what is loaded for the user, since user
             // actions will modify checkboxStates directly. When we "save" their changes, we need to
             // make sure we update this map as well or it will override their changes until a page reload.
-            var originalCheckboxMap = this.deepCopyMap(checkboxMap);
+            let originalCheckboxMap = this.deepCopyMap(checkboxMap);
 
             this.setState({
                 checkboxStates: checkboxMap,
@@ -120,7 +120,7 @@ class SettingsDashboard extends React.Component {
             method: 'get',
             url: '/api/user/settings/profile/picture/' + this.state.user["id"],
         }).then(response => {
-            var src = response.data;
+            let src = response.data;
             this.setState({
                 profilePicture: src
             })
@@ -129,15 +129,15 @@ class SettingsDashboard extends React.Component {
 
     updateUserSettingsProfile() {
 
-        var editFirstNameInput = document.getElementById("edit_first_name_input")
-        var editLastNameInput = document.getElementById("edit_last_name_input")
-        var editEmailInput = document.getElementById("edit_email_input")
-        var editPasswordInput = document.getElementById("edit_password_input")
+        let editFirstNameInput = document.getElementById("edit_first_name_input")
+        let editLastNameInput = document.getElementById("edit_last_name_input")
+        let editEmailInput = document.getElementById("edit_email_input")
+        let editPasswordInput = document.getElementById("edit_password_input")
 
-        var editFirstNameInputValue = editFirstNameInput.value;
-        var editLastNameInputValue = editLastNameInput.value;
-        var editEmailInputValue = editEmailInput.value;
-        var editPasswordInputValue = editPasswordInput.value;
+        let editFirstNameInputValue = editFirstNameInput.value;
+        let editLastNameInputValue = editLastNameInput.value;
+        let editEmailInputValue = editEmailInput.value;
+        let editPasswordInputValue = editPasswordInput.value;
 
         let formData = new FormData();
         
@@ -154,7 +154,7 @@ class SettingsDashboard extends React.Component {
             formData.append("password", editPasswordInputValue)
         }
 
-        var url = 'api/user/settings/profile/' + this.state.user["id"];
+        let url = 'api/user/settings/profile/' + this.state.user["id"];
         axios({
             method: 'put',
             url: url,
@@ -164,8 +164,8 @@ class SettingsDashboard extends React.Component {
             if (response.status === 200) {
                 // response.data contains the fields which were successfully changed.
 
-                var editedFields = response.data;
-                var user = this.mergeUser(this.state.user, editedFields);
+                let editedFields = response.data;
+                let user = this.mergeUser(this.state.user, editedFields);
                 
                 this.setState({
                     user: user,
@@ -198,10 +198,10 @@ class SettingsDashboard extends React.Component {
 
         let formData = new FormData();
 
-        var checkboxStatesObject = this.convertCheckboxMapToObject(this.state.checkboxStates);
+        let checkboxStatesObject = this.convertCheckboxMapToObject(this.state.checkboxStates);
         formData.append('settings', JSON.stringify(checkboxStatesObject));
 
-        var url = 'api/user/settings/preferences/' + this.state.user["id"];
+        let url = 'api/user/settings/preferences/' + this.state.user["id"];
         axios({
             method: 'put',
             url: url,
@@ -219,12 +219,12 @@ class SettingsDashboard extends React.Component {
     }
 
     mapsAreEqual(map1, map2) {
-        var testVal;
+        let testVal;
         if (map1.size !== map2.size) {
             return false;
         }
 
-        for (var [key, val] of map1) {
+        for (let [key, val] of map1) {
             testVal = map2.get(key);
             // in cases of an undefined value, make sure the key
             // actually exists on the object so there are no false positives
@@ -239,7 +239,7 @@ class SettingsDashboard extends React.Component {
 
         // TODO: el (do we need to convert our response to a map, then back to object? Maybe we can just keep it as an
         // object).
-        var obj = {
+        let obj = {
             "emails": {
                 "receive_digest": checkboxMap.get("receive_digest"),
                 "receive_marketing": checkboxMap.get("receive_marketing"),
@@ -256,7 +256,7 @@ class SettingsDashboard extends React.Component {
 
     // deepCopyMap will create a deep copy of the input map.
     deepCopyMap(originalMap) {
-        var newMap = new Map();
+        let newMap = new Map();
         originalMap.forEach((value, key, map) => {
             newMap.set(key, value);
         })
@@ -264,8 +264,8 @@ class SettingsDashboard extends React.Component {
     }
 
     handleProfilePictureChange(e) {
-        var file = e.target.files[0];
-        var url = '/api/user/settings/profile/picture/' + this.state.user["id"];
+        let file = e.target.files[0];
+        let url = '/api/user/settings/profile/picture/' + this.state.user["id"];
         let formData = new FormData();
         formData.append('file', file);
 
@@ -275,7 +275,7 @@ class SettingsDashboard extends React.Component {
             data: formData
         }).then(response => {
             if (response.status === 200) {
-                var src = URL.createObjectURL(file);
+                let src = URL.createObjectURL(file);
                 console.log(src);
                 this.setState({
                     profilePicture: src
@@ -296,16 +296,16 @@ class SettingsDashboard extends React.Component {
     }
 
     getJoinedAt() {
-        var joined = this.state.user["created_at"];
+        let joined = this.state.user["created_at"];
         if (joined === null || joined === undefined) {
             return "01/01/0001";
         }
-        var date = new Date(joined);
+        let date = new Date(joined);
         return date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear();
     }
 
     handleCheckboxChange(e) {
-        var checkboxMap = this.state.checkboxStates;
+        let checkboxMap = this.state.checkboxStates;
         checkboxMap.set(e.target.name, !checkboxMap.get(e.target.name));
         this.setState({ 
             checkboxStates: checkboxMap
@@ -322,6 +322,7 @@ class SettingsDashboard extends React.Component {
                 <div style={{
                     float: "left",
                     minWidth: "400px",
+                    overflow: "scroll",
                     width: "100%",
                 }}>
                     <p className="right_box_page_title">
@@ -838,26 +839,94 @@ class SettingsDashboard extends React.Component {
                     <div className="clearfix"/>
                     <div style={{
                         float: "left",
-                        marginTop: "15px",
+                        marginTop: "5px",
                         width: "100%",
                     }}>
                         <div style={{
                             float: "left",
-                            width: "calc(50% - 10px)",
+                            width: "100%",
                         }}>
-                            <p style={{
+                            {/* <p style={{
                                 fontFamily: "'Poppins', sans-serif",
                                 fontSize: "0.9em",
                                 // fontWeight: "bold",
                             }}>
                                 PLAN
-                            </p>
-                            <input 
+                            </p> */}
+                            <div 
+                                onMouseDown={() => {
+                                    this.setState({
+                                        displayPlanChange: !this.state.displayPlanChange,
+                                    })
+                                }}
+                                className="plan_button"
+                                style={{
+                                    backgroundColor: "#296cf6",
+                                    border: "2px solid #296cf6",
+                                    borderRadius: "50px",
+                                    cursor: "pointer",
+                                    float: "left",
+                                    userSelect: "none",
+                                }}>
+                                <p style={{
+                                    color: "white",
+                                    fontWeight: "bold",
+                                    padding: "7.5px 25px 7.5px 25px",
+                                    textAlign: "center",
+                                }}>
+                                    {this.capitalizeName(this.state.user["plan"])}
+                                </p>
+                            </div>
+                            {this.state.displayPlanChange ? 
+                                <div style={{
+                                    float: "left",
+                                    width: "100%",
+                                }}>
+                                    <div style={{
+                                        border: "2px solid #296cf6",
+                                        borderRadius: "6px",
+                                        marginTop: "15px",
+                                        padding: "10px 20px 10px 20px",
+                                        width: "calc(100% - 40px)",
+                                    }}>
+                                        <p>
+                                            Starter Plan
+                                        </p>
+                                    </div>
+                                    <div style={{
+                                        border: "2px solid #296cf6",
+                                        borderRadius: "6px",
+                                        marginTop: "15px",
+                                        padding: "10px 20px 10px 20px",
+                                        width: "calc(100% - 40px)",
+                                    }}>
+                                        <p>
+                                            Professional Plan
+                                        </p>
+                                    </div>
+                                    <div style={{
+                                        border: "2px solid #296cf6",
+                                        borderRadius: "6px",
+                                        marginTop: "15px",
+                                        padding: "10px 20px 10px 20px",
+                                        width: "calc(100% - 40px)",
+                                    }}>
+                                        <p>
+                                            Enterprise Plan
+                                        </p>
+                                    </div>
+                                </div>:
+                                <div/>
+                            }
+                            {/* <MdEdit style={{
+                                padding: "7.5px 25px 7.5px 25px",
+                            }}/> */}
+                            {/* <input 
                                 className="settings_input"
                                 placeholder={this.capitalizeName(this.state.user["plan"])}
                                 style={{
                                     backgroundColor: "#f5f5fa",
-                                }}/>
+                                }}/> */}
                         </div>
                     </div>
                     <div style={{
@@ -1034,7 +1103,6 @@ class SettingsDashboard extends React.Component {
                 <div style={{
                     backgroundColor: "#F5F5FA",
                     float: "left",
-                    height: "100vh",
                     marginLeft: "250px",
                     width: "calc(100% - 250px - 375px)",
                 }}>
@@ -1129,7 +1197,7 @@ class SettingsDashboard extends React.Component {
                                             backgroundColor: "#85bb65",
                                             borderRadius: "50px",
                                             display: "inline-block",
-                                            padding: "10px 15px 10px 15px",
+                                            padding: "10px 25px 10px 25px",
                                         }}>
                                             {/* <BsFillAwardFill className="settings_dashboard_user_information_icon"></BsFillAwardFill> */}
                                             <p className="settings_dashboard_user_information_inner_box_text"

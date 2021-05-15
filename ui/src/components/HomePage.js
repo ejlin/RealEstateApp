@@ -89,10 +89,10 @@ class HomePage extends React.Component {
                                     cursor: "pointer",
                                     float: "left",
                                     fontFamily: "'Poppins', sans-serif",
-                                    fontSize: "1.15em",
+                                    fontSize: "1.10em",
                                     fontWeight: "bold",
                                     marginTop: "15px",
-                                    padding: "12.5px 35px 12.5px 35px",
+                                    padding: "12px 30px 12px 30px",
                                     transition: "0.5s",
                                 }}>
                                 Create Account
@@ -133,6 +133,7 @@ class HomePage extends React.Component {
                                         <SignUp/>
                                         <div style={{
                                             paddingBottom: "15px",
+                                            paddingTop: "15px",
                                         }}>
                                             <p  
                                                 className="home_page_have_account_link opacity"

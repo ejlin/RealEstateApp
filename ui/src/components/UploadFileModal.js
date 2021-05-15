@@ -232,7 +232,7 @@ class UploadFileModal extends React.Component {
                     marginRight: "10%",
                     marginTop: "125px",
                     maxWidth: "550px",
-                    paddingBottom: "30px",
+                    paddingBottom: "25px",
                     width: "475px",
                     zIndex: "11",
                 }}>
@@ -244,19 +244,33 @@ class UploadFileModal extends React.Component {
                             className="create_expense_modal_parent_box_title_box_close_icon"></IoCloseOutline>
                     </div>
                     <div className="upload_file_modal_parent_box_inner_box">
-                        <p className="create_expense_modal_parent_box_title">
+                        {/* <p className="create_expense_modal_parent_box_title">
                             Add a File 
                         </p>
-                        <div className="clearfix"/>
-                        <div className="files_dashboard_upload_file_right_box">
+                        <div className="clearfix"/> */}
+                        <div style={{
+                            float: "left",
+                            width: "100%",
+                        }}>
+                            <label style={{
+                                fontFamily: "'Poppins', sans-serif",
+                                fontSize: "0.9em",
+                            }}>
+                                FILE NAME
+                            </label>
                             <input 
                                 id="files_dashboard_upload_file_name_input"
-                                placeholder={this.state.fileToUpload && this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : "File Name"} 
+                                placeholder={this.state.fileToUpload && this.state.fileToUpload["name"] ? this.state.fileToUpload["name"] : ""} 
                                 className={this.state.fileToUpload && this.state.fileToUpload["name"] ? "upload_file_input dark_placeholder" : "upload_file_input"}>
                             </input>
 
                             <div className="clearfix"/>
-                            <p className="files_dashboard_upload_file_title">Attach a File</p>
+                            <label style={{
+                                fontFamily: "'Poppins', sans-serif",
+                                fontSize: "0.9em",
+                            }}>
+                                ATTACH A FILE
+                            </label>
                             <div className="clearfix"/>
 
                             <label htmlFor="files_dashboard_upload_file_button" id="files_dashboard_upload_file_button_label">
@@ -280,9 +294,12 @@ class UploadFileModal extends React.Component {
                             <div className="clearfix"/>
                             <div className="upload_files_dashboard_inner_parent_box">
                                 <div className="files_dashboard_left_box">
-                                    <p className="files_dashboard_title">
-                                        File Type
-                                    </p>
+                                    <label style={{
+                                        fontFamily: "'Poppins', sans-serif",
+                                        fontSize: "0.9em",
+                                    }}>
+                                        FILE TYPE
+                                    </label>
                                     <select id="upload_file_modal_category_select" className="files_dashboard_file_type">
                                         <option value="" disabled selected>File Type</option>
                                         <option name="mortgage" value="mortgage">Mortgage</option>
@@ -296,9 +313,12 @@ class UploadFileModal extends React.Component {
                                     
                                 </div>
                                 <div className="files_dashboard_right_box">
-                                    <p className="files_dashboard_title">
-                                        Year
-                                    </p>
+                                    <label style={{
+                                        fontFamily: "'Poppins', sans-serif",
+                                        fontSize: "0.9em",
+                                    }}>
+                                        YEAR
+                                    </label>
                                     <input 
                                         id="upload_file_modal_year_input"
                                         type="number" 
@@ -310,9 +330,12 @@ class UploadFileModal extends React.Component {
                                 </div>
                             </div>
                             <div className="clearfix"/>
-                            <p className="files_dashboard_title">
-                                Associated Properties
-                            </p>
+                            <label style={{
+                                fontFamily: "'Poppins', sans-serif",
+                                fontSize: "0.9em",
+                            }}>
+                                ASSOCIATED PROPERTIES
+                            </label>
                             <DropdownSelect data={{
                                 state: {
                                     inputMap: this.state.properties,
@@ -334,11 +357,7 @@ class UploadFileModal extends React.Component {
                             
                             <div className="clearfix"></div>
                             {/* <ProgressBar id="upload_file_progress_bar" bgColor="#296CF6" completed={this.state.fileUploadProgressBar}></ProgressBar> */}
-                            <div className={
-                                    this.state.loadUpload ? 
-                                    "files_dashboard_upload_file_final_button loading_button" :
-                                    "files_dashboard_upload_file_final_button"
-                                }
+                            <div className={"upload_file_final_button " + (this.state.loadUpload ? "loading_button" : "")}
                                 onClick={this.handleFileUpload}>
                                 {this.state.loadUpload ? 
                                 <Loader data={{

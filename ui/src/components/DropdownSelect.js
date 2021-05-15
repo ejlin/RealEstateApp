@@ -42,18 +42,18 @@ class DropdownSelect extends React.Component {
 
     displayPotentialElements(e) {
 
-        var selectedPropertyInput = document.getElementById("associated_properties_input");
+        let selectedPropertyInput = document.getElementById("associated_properties_input");
 
-        var elements = [];
-        var value = e.target.value;
-        var currSelectedListElements = this.state.currSelectedListElements;
+        let elements = [];
+        let value = e.target.value;
+        let currSelectedListElements = this.state.currSelectedListElements;
 
-        var allIndex = currSelectedListElements.indexOf(All);
+        let allIndex = currSelectedListElements.indexOf(All);
         if (allIndex < 0){
             elements.push(
                 <div 
                     onClick={() => {
-                        var currSelectedListElements = this.state.currSelectedListElements;
+                        let currSelectedListElements = this.state.currSelectedListElements;
                         currSelectedListElements.push(All);
                         // Remove None from our list if we add a non-None element.
                         let index = currSelectedListElements.indexOf(None);
@@ -74,12 +74,12 @@ class DropdownSelect extends React.Component {
             );
         }
         
-        var noneIndex = currSelectedListElements.indexOf(None);
+        let noneIndex = currSelectedListElements.indexOf(None);
         if (noneIndex < 0){
             elements.push(
                 <div 
                     onClick={() => {
-                        var currSelectedListElements = this.state.currSelectedListElements;
+                        let currSelectedListElements = this.state.currSelectedListElements;
                         currSelectedListElements = [None];
                         // reset the search bar to empty.
                         selectedPropertyInput.value = "";
@@ -95,20 +95,20 @@ class DropdownSelect extends React.Component {
             );
         }
 
-        var inputList = this.state.inputList;
-        var filteredInputList = inputList.filter(address => address.startsWith(value));
-        for (var i = 0; i < filteredInputList.length; i++) {
+        let inputList = this.state.inputList;
+        let filteredInputList = inputList.filter(address => address.startsWith(value));
+        for (let i = 0; i < filteredInputList.length; i++) {
             let filteredInput = filteredInputList[i];
             if (filteredInput === None || filteredInput === All) {
                 continue;
             }
-            var index = currSelectedListElements.indexOf(filteredInput);
+            let index = currSelectedListElements.indexOf(filteredInput);
             // Only show properties that are not currently selected.
             if (index < 0){
                 elements.push(
                     <div 
                         onClick={() => {
-                            var currSelectedListElements = this.state.currSelectedListElements;
+                            let currSelectedListElements = this.state.currSelectedListElements;
                             currSelectedListElements.push(filteredInput);
                             // Remove None from our list if we add a non-None element.
                             let index = currSelectedListElements.indexOf(None);
@@ -135,8 +135,8 @@ class DropdownSelect extends React.Component {
     }
 
     removeSelectedElement(addressToRemove) {
-        var currSelectedListElements = this.state.currSelectedListElements;
-        var index = currSelectedListElements.indexOf(addressToRemove);
+        let currSelectedListElements = this.state.currSelectedListElements;
+        let index = currSelectedListElements.indexOf(addressToRemove);
         currSelectedListElements.splice(index, 1);
         this.state.setParentList(currSelectedListElements);
         this.setState({
@@ -146,15 +146,29 @@ class DropdownSelect extends React.Component {
 
     renderElements() {
 
-        var elements = [];
+        let elements = [];
 
-        var currSelectedListElements = this.state.currSelectedListElements;
-        for (var i = 0; i < currSelectedListElements.length; i++) {
-            
+        let currSelectedListElements = this.state.currSelectedListElements;
+        for (let i = 0; i < currSelectedListElements.length; i++) {
             let currSelectedElement = currSelectedListElements[i];
             elements.push(
-                <div className="current_selected_associated_properties">
-                    <p className="current_selected_associated_properties_text">
+                <div style={{
+                    backgroundColor: "#32384D",
+                    borderRadius: "6px",
+                    fontSize: "1.0em",
+                    height: "35px",
+                    lineHeight: "35px",
+                    marginBottom: "10px",
+                    padding: "2px",
+                    width: "calc((100% - 4px))",
+                }}>
+                    <p style={{
+                        color: "white",
+                        float: "left",
+                        fontFamily: "'Poppins', sans-serif",
+                        fontSize: "0.9em",
+                        marginLeft: "15px",
+                    }}>
                         {currSelectedElement}
                     </p>
                     <IoTrashSharp 
@@ -164,11 +178,14 @@ class DropdownSelect extends React.Component {
             );
         }
 
-        var wrappedElements = [];
+        let wrappedElements = [];
 
         if (elements.length > 0) {
             wrappedElements.push(
-                <div className="associated_properties_selected_parent_box">
+                <div style={{
+                    borderRadius: "6px",
+                    marginTop: "10px",
+                }}>
                     {elements}
                 </div>
             );
@@ -187,7 +204,14 @@ class DropdownSelect extends React.Component {
                     className="create_expense_modal_associated_properties_input"></input>
                 <div className="clearfix"/>
                 {this.state.filteredListElements && this.state.filteredListElements.length > 0 ?
-                <div className="create_expense_modal_associated_properties_filtered_properties_box">
+                <div style={{
+                    backgroundColor: "#f5f5fa",
+                    border: "1px solid #d3d3d3",
+                    borderRadius: "0px 0px 4px 4px",
+                    position: "absolute",
+                    width: "calc(100% - 2px)",
+                    zIndex: "11 !important",
+                }}>
                     {this.state.filteredListElements}
                 </div>:
                 <div></div>}

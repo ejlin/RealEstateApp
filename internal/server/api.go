@@ -161,6 +161,8 @@ func (s *Server) addUser(w http.ResponseWriter, r *http.Request) {
 	defaultSettings := createDefaultSettings()
 	user.Settings = &defaultSettings
 
+	user.Email = strings.ToLower(user.Email)
+
 	if err := s.DBHandle.AddUser(&user); err != nil {
 		log.Error().Err(err).Msg("error creating user")
 		http.Error(w, fmt.Sprintf("error creating user: %s", err.Error()), http.StatusBadRequest)
@@ -214,7 +216,10 @@ func (s *Server) loginUserByEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := s.DBHandle.GetUserByEmail(eLogin.Email, eLogin.Password)
+	// Use lower case as postgres is case sensitive. 
+	email := strings.ToLower(eLogin.Email)
+
+	user, err := s.DBHandle.GetUserByEmail(email, eLogin.Password)
 	if err != nil {
 		log.Warn().Err(err).Str("email", eLogin.Email).Msg("unable to log in user by email")
 		http.Error(w, fmt.Sprintf("unable to log in user by email: %s", eLogin.Email), http.StatusBadRequest)

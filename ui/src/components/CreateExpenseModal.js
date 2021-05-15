@@ -163,63 +163,98 @@ class CreateExpenseModal extends React.Component {
     renderViewBox() {
         return (
             <div>
+                <label style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: "0.9em",
+                }}>
+                    NAME (MAX 30 CHAR.)
+                </label>
                 <input 
                     onChange={this.handleFieldChange} 
                     name="title" 
                     maxLength="30"
-                    placeholder="Name (max 30 char.)" 
                     className="create_expense_modal_parent_box_title_input">
                 </input>
+                <label style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: "0.9em",
+                }}>
+                    DESCRIPTION (MAX 300 CHAR.)
+                </label>
                 <textarea 
                     onChange={this.handleFieldChange} 
                     name="description"
                     maxLength="300" 
-                    placeholder="Description (max 300 char.)" 
                     className="create_expense_modal_parent_box_title_textarea">
                 </textarea>
-                <div className="create_expense_modal_parent_box_inner_box_input_box">
-                    <p className="create_expense_modal_parent_box_inner_box_right_box_title">
-                        Date
-                    </p>
-                    <input 
-                        onChange={this.handleFieldChange} 
-                        name="date"
-                        type="date" 
-                        className="create_expense_modal_parent_box_inner_box_right_box_date_input">
-                    </input>
-                </div>
-                <div className="create_expense_modal_parent_box_inner_box_input_box">
-                    <p className="create_expense_modal_parent_box_inner_box_right_box_title">
-                        Frequency
-                    </p>
-                    <select 
-                        onChange={this.handleFieldChange} 
-                        name="frequency"
-                        className="create_expense_modal_parent_box_inner_box_right_box_date_select">
-                        {this.renderFrequencyOptions()}
-                    </select>
-                </div>
-                <div className="create_expense_modal_parent_box_inner_box_small_input_box">
-                    <p className="create_expense_modal_parent_box_inner_box_right_box_title">
-                        Amount
-                    </p>
-                    <input 
-                        onChange={this.handleFieldChange} 
-                        name="amount"
-                        type="text" 
-                        placeholder="$" 
-                        className="create_expense_modal_parent_box_inner_box_right_box_amount_input">
-                    </input>
+                <div style={{
+                    float: "left",
+                    marginBottom: "10px",
+                }}>
+                    <div className="create_expense_modal_parent_box_inner_box_input_box">
+                        <label style={{
+                            fontFamily: "'Poppins', sans-serif",
+                            fontSize: "0.9em",
+                        }}>
+                            DATE
+                        </label>
+                        <input 
+                            onChange={this.handleFieldChange} 
+                            name="date"
+                            type="date" 
+                            className="create_expense_modal_parent_box_inner_box_right_box_date_input">
+                        </input>
+                    </div>
+                    <div className="create_expense_modal_parent_box_inner_box_input_box">
+                        <label style={{
+                            fontFamily: "'Poppins', sans-serif",
+                            fontSize: "0.9em",
+                        }}>
+                            FREQUENCY
+                        </label>
+                        <select 
+                            onChange={this.handleFieldChange} 
+                            name="frequency"
+                            className="create_expense_modal_parent_box_inner_box_right_box_date_select">
+                            {this.renderFrequencyOptions()}
+                        </select>
+                    </div>
+                    <div className="create_expense_modal_parent_box_inner_box_small_input_box">
+                        <label style={{
+                            fontFamily: "'Poppins', sans-serif",
+                            fontSize: "0.9em",
+                        }}>
+                            AMOUNT
+                        </label>
+                        <input 
+                            onChange={this.handleFieldChange} 
+                            name="amount"
+                            type="text" 
+                            placeholder="$" 
+                            className="create_expense_modal_parent_box_inner_box_right_box_amount_input">
+                        </input>
+                    </div>
                 </div>
                 <div className="create_expense_modal_info_text_box">
-                    <p className="create_expense_modal_info_text_box_text">
+                    <label style={{
+                        float: "left",
+                        fontSize: "0.8em",
+                        marginBottom: "10px",
+                    }}>
+                        <AiFillQuestionCircle className="create_expense_modal_info_text_box_icon"></AiFillQuestionCircle>
+                        (OPTIONAL) UPLOAD ANY FILE ASSOCIATED WITH THIS EXPENSE. EG: RECEIPT, INVOICE, PROOF OF FUNDS, ETC.
+                    </label>
+                    {/* <p className="create_expense_modal_info_text_box_text">
                         <AiFillQuestionCircle className="create_expense_modal_info_text_box_icon"></AiFillQuestionCircle>
                         (Optional) Upload any file associated with this expense. Eg: Receipt, Invoice, Proof of Funds, etc.
-                    </p>
+                    </p> */}
                     <div className="clearfix"/>
-                    <p className="create_expense_modal_parent_box_inner_box_right_box_title">
-                        Attach a File
-                    </p>
+                    <label style={{
+                        fontFamily: "'Poppins', sans-serif",
+                        fontSize: "0.9em",
+                    }}>
+                        ATTACH A FILE
+                    </label>
                 </div>                        
                 <label htmlFor="create_expense_modal_upload_file_button" className="create_expense_modal_upload_file_button_label">
                     {this.state.fileToUpload ? 
@@ -242,12 +277,15 @@ class CreateExpenseModal extends React.Component {
                 <div className="create_expense_modal_info_text_box">
                     <p className="create_expense_modal_info_text_box_text">
                         <AiFillQuestionCircle className="create_expense_modal_info_text_box_icon"></AiFillQuestionCircle>
-                        (Optional) Add properties that this expense pertains to. This allows for even distribution of expenses across multiple properties and better overall calculations. 
+                        (OPTIONAL) ADD PROPERTIES FOR THIS EXPENSE. ALLOWS FOR DISTRIBUTION OF EXPENSE ACROSS PROPERTIES AND BETTER CALCULATIONS.
                     </p>
                     <div className="clearfix"/>
-                    <p className="create_expense_modal_parent_box_inner_box_right_box_title">
-                        Associated Properties
-                    </p>
+                    <label style={{
+                        fontFamily: "'Poppins', sans-serif",
+                        fontSize: "0.9em",
+                    }}>
+                        ASSOCIATED PROPERTIES
+                    </label>
                 </div>                        
                 <DropdownSelect 
                     data={{
@@ -264,25 +302,25 @@ class CreateExpenseModal extends React.Component {
                 />
                 <div
                     onClick={() => this.verifyAndAddExpense()}
-                    className={ this.state.loadAddExpense ? "loading_button" : ""}
-                    style={{
-                        backgroundColor: "#296CF6",
-                        borderRadius: "50px",
-                        color: "white",
-                        cursor: "pointer",
-                        float: "right",
-                        fontSize: "1.0em",
-                        fontWeight: "bold",
-                        height: "40px",
-                        lineHeight: "40px",
-                        marginTop: "10px",
-                        paddingLeft: "15px",
-                        paddingRight: "15px",
-                        textAlign: "center",
-                        transition: "0.5s",
-                        userSelect: "none",
-                        width: "90px",
-                    }}
+                    className={ this.state.loadAddExpense ? "loading_button" : "create_expense_final_button"}
+                    // style={{
+                    //     backgroundColor: "#296CF6",
+                    //     borderRadius: "50px",
+                    //     color: "white",
+                    //     cursor: "pointer",
+                    //     float: "right",
+                    //     fontSize: "1.0em",
+                    //     fontWeight: "bold",
+                    //     height: "40px",
+                    //     lineHeight: "40px",
+                    //     marginTop: "10px",
+                    //     paddingLeft: "15px",
+                    //     paddingRight: "15px",
+                    //     textAlign: "center",
+                    //     transition: "0.5s",
+                    //     userSelect: "none",
+                    //     width: "90px",
+                    // }}
                     >
                     {this.state.loadAddExpense ? 
                     <Loader data={{
@@ -290,7 +328,7 @@ class CreateExpenseModal extends React.Component {
                             class: "",
                         }
                     }}/> :
-                    "Add"}
+                    "Add Expense"}
                 </div>
             </div>
         );
@@ -308,10 +346,10 @@ class CreateExpenseModal extends React.Component {
                             className="create_expense_modal_parent_box_title_box_close_icon"></IoCloseOutline>
                     </div>
                     <div className="create_expense_modal_parent_box_inner_box">
-                        <p className="create_expense_modal_parent_box_title">
+                        {/* <p className="create_expense_modal_parent_box_title">
                             Add an Expense 
                         </p>
-                        <div className="clearfix"/>
+                        <div className="clearfix"/> */}
                         <div className="create_expense_modal_bottom_box">
                             {this.renderViewBox()}
                         </div>

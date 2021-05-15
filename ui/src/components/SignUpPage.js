@@ -76,6 +76,7 @@ class SignUpPage extends React.Component {
                             <div style={{
                                 backgroundColor: "white",
                                 borderRadius: "8px",
+                                paddingTop: "15px",
                                 paddingBottom: "15px",
                             }}>
                                 <Link 

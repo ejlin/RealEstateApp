@@ -51,12 +51,12 @@ class NavigationBar extends React.Component {
                                 className="opacity"
                                 style={{
                                     backgroundColor: "#296cf6",
-                                    borderRadius: "50px",
+                                    borderRadius: "6px",
                                     color: "white",
                                     cursor: "pointer",
                                     fontFamily: "'Poppins', sans-serif",
                                     float: "left",
-                                    fontSize: "1.0em",
+                                    fontSize: "0.9em",
                                     height: "40px",
                                     lineHeight: "40px",
                                     paddingLeft: "20px",

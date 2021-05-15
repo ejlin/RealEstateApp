@@ -156,9 +156,11 @@ input::placeholder {
 }
 
 .form_continue_button {
-    background-color: #f5f5fa;
+    background-color: #296cf6; 
+     /* #f5f5fa; */
     border-radius: 50px;
-    color: #32384D;
+    color: white !important;
+    /* #32384D; */
     cursor: pointer;
     float: right;
     font-Family: 'Poppins', sans-serif;
@@ -172,7 +174,7 @@ input::placeholder {
 .form_continue_button:hover {
     background-color: #296cf6;
 /* #32384D; */
-    color: #f5f5fa;
+    /* color: #f5f5fa; */
 }
 
 .form_back_button {

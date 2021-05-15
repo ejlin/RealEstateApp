@@ -52,7 +52,7 @@ class Login extends React.Component {
                 if (user["plan"] === "inactivated") {
                     redirect = "/selectpricingplan"
                 } else {
-                    redirect = "/dashboard"
+                    redirect = "/properties"
                 }
                 localStorage.setItem('user', JSON.stringify(user));
                 this.setState({

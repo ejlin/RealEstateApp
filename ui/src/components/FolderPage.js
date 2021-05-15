@@ -17,8 +17,8 @@ import { trimTrailingName, mapFileTypeToIcon, openSignedURL } from '../utility/U
 
 import ProgressBar from './../utility/ProgressBar.js';
 
-import { MdFileDownload, MdEdit, MdAdd } from 'react-icons/md';
-import { IoTrashSharp, IoCaretBackOutline } from 'react-icons/io5';
+import { MdFileDownload, MdEdit, MdAdd, MdKeyboardBackspace } from 'react-icons/md';
+import { IoTrashSharp, IoCaretBackOutline, IoArrowBackCircle, IoArrowBackCircleSharp } from 'react-icons/io5';
 import { RiErrorWarningFill } from 'react-icons/ri';
 
 let URLBuilder = require('url-join');
@@ -165,10 +165,11 @@ class FolderPage extends React.Component {
                         cursor: "pointer",
                         display: "inline-block",
                         marginTop: "15px",
-                        padding: "7.5px 15px 7.5px 15px",
+                        padding: "5px 15px 5px 15px",
                     }}>
                     <p style={{
                         color: "white",
+                        fontFamily: "'Poppins', sans-serif",
                     }}>
                         Add a File to Start
                     </p>
@@ -446,19 +447,70 @@ class FolderPage extends React.Component {
 
         let fileElements = this.renderFileElements(this.state.activeFolderFilesMap);
         return (
-            
             <div>
-                <div 
-                    onClick={() => {
-                        this.setState({
-                            redirectToFoldersParent: "/files",
-                        })
-                    }}
-                    className="files_dashboard_back_to_folders_button">
-                    <IoCaretBackOutline className="files_dashboard_back_to_folders_button_icon"></IoCaretBackOutline>
-                    <p className="files_dashboard_back_to_folders_button_text">Folders</p>
+                <div style={{
+                    float: "left",
+                }}>
+                    <MdKeyboardBackspace
+                        onMouseDown={() => {
+                            this.setState({
+                                redirectToFoldersParent: "/files",
+                            })
+                        }}
+                        style={{
+                            borderRadius: "50px",
+                            boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                            backgroundColor: "#32384D",
+                            color: "white",
+                            cursor: "pointer",
+                            float: "left",
+                            height: "25px",
+                            marginTop: "5px",
+                            padding: "5px",
+                            width: "25px",
+                        }}/>
+                    <div style={{
+                        backgroundColor: "#296cf6",
+                        borderRadius: "50px",
+                        boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09), 0 3px 10px 0 rgba(0, 0, 0, 0.09)",
+                        float: "left",
+                        marginLeft: "15px",
+                        marginTop: "5px",
+                        padding: "5px 25px 5px 25px",
+                    }}>
+                        <p style={{
+                            color: "white",
+                            fontFamily: "'Poppins', sans-serif",
+                            fontSize: "1.0em",
+                            textAlign: "center",
+                        }}>
+                            {this.state.folderName}
+                        </p>
+                    </div>
                 </div>
-                <p className="files_dashboard_folder_name_title">{this.state.folderName}</p>
+                <div style={{
+                    float: "right",
+                }}>
+                    {this.state.activeFiles.size >= 1 ?
+                        (this.state.isDeleting ? 
+                        <div className="folder_page_delete_loader_box">
+                            <Loader data={{
+                                state: {
+                                    class: "folder_page_delete_loader",
+                                }
+                            }}></Loader> 
+                        </div>:
+                        <IoTrashSharp className="files_dashboard_icons" onClick={() => this.deleteActiveFiles()}></IoTrashSharp>) : 
+                        <div></div>}
+                    {this.state.activeFiles.size >= 1 ? 
+                        <MdFileDownload className="files_dashboard_icons" onClick={() => this.downloadActiveFiles()}></MdFileDownload> : 
+                        <div></div>
+                    }
+                    {this.state.activeFiles.size === 1 ? 
+                        <MdEdit className="files_dashboard_icons"></MdEdit> : 
+                        <div></div>
+                    }
+                </div>
                 <div className="clearfix"/>
                 <div>
                     {fileElements.length > 0 ? fileElements : <p>No Files</p>}
@@ -540,12 +592,13 @@ class FolderPage extends React.Component {
                                         marginRight: "25px",
                                     }}>
                                     <MdAdd style={{
-                                        backgroundColor: "#f5f5fa",
+                                        // backgroundColor: "#f5f5fa",
                                         borderRadius: "50%",
                                         color: "#296cf6",
                                         float: "left",
                                         height: "20px",
-                                        padding: "10px",
+                                        marginTop: "10px",
+                                        // padding: "7.5px",
                                         width: "20px",
                                     }}/>
                                     <p
@@ -569,8 +622,11 @@ class FolderPage extends React.Component {
                                 margin: "15px 40px 0px 40px",
                                 width: "calc(100% - 80px)",
                             }}>
-                                <div id="files_dashboard_icons_box">
-                                    {this.state.activeFiles.size >= 1 ?
+                                <div style={{
+                                    marginTop: "10px",
+                                    width: "100%",
+                                }}>
+                                    {/* {this.state.activeFiles.size >= 1 ?
                                         (this.state.isDeleting ? 
                                         <div className="folder_page_delete_loader_box">
                                             <Loader data={{
@@ -590,13 +646,14 @@ class FolderPage extends React.Component {
                                         <div></div>
                                     }
                                     <div className="clearfix"/>
+                                */}
                                     {
                                         this.state.isLoading ? 
                                         <div></div> :
-                                        <div id="files_dashboard_files_box">
+                                        <div>
                                             {this.renderActiveFolderFiles()}
                                         </div>
-                                    }
+                                    } 
                                 </div>
                             </div>
                         </div>
