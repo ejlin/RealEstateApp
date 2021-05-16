@@ -216,13 +216,19 @@ func (s *Server) loginUserByEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if !IsValidEmail(eLogin.Email) {
+		log.Warn().Str("email", eLogin.Email).Msg("not an email")
+		http.Error(w, fmt.Sprintf("not an email: %s", eLogin.Email), http.StatusBadRequest)
+		return 
+	}
+
 	// Use lower case as postgres is case sensitive. 
 	email := strings.ToLower(eLogin.Email)
 
 	user, err := s.DBHandle.GetUserByEmail(email, eLogin.Password)
 	if err != nil {
-		log.Warn().Err(err).Str("email", eLogin.Email).Msg("unable to log in user by email")
-		http.Error(w, fmt.Sprintf("unable to log in user by email: %s", eLogin.Email), http.StatusBadRequest)
+		log.Warn().Err(err).Str("email", email).Msg("unable to log in user by email")
+		http.Error(w, fmt.Sprintf("unable to log in user by email: %s", email), http.StatusNotFound)
 		return
 	}
 
@@ -231,7 +237,7 @@ func (s *Server) loginUserByEmail(w http.ResponseWriter, r *http.Request) {
 	mUser, err := json.Marshal(rUser)
 	if err != nil {
 		log.Warn().Err(err).Str("email", eLogin.Email).Msg("unable to marshal user returned by email")
-		http.Error(w, fmt.Sprintf("unable to marshal user returned by email: %s", eLogin.Email), http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf("unable to marshal user returned by email: %s", eLogin.Email), http.StatusInternalServerError)
 		return
 	}
 

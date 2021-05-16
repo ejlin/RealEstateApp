@@ -50,6 +50,7 @@
 
 #login_forgot_password_text {
     cursor: pointer;
+    margin-top: 15px;
     text-align: center;
 }
 

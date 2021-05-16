@@ -590,8 +590,21 @@ class FilesDashboard extends React.Component {
                 }}/>
                 {
                     this.state.isLoading ? 
-                    <div></div> :
-                    <div id="files_dashboard_parent_box">
+                    <div style={{
+                        backgroundColor: "#f5f5fa",
+                        float: "left",
+                        height: "100vh",
+                        width: "100%",
+                    }}></div> :
+                    <div style={{
+                        backgroundColor: "#F5F5FA",
+                        height: "100vh",
+                        marginLeft: "250px",
+                        minWidth: "700px",
+                        overflow: "scroll",
+                        position: "absolute",
+                        width: "calc(100% - 250px - 375px)",
+                    }}>
                         {this.state.displayUploadFileBox ? 
                             <div className="files_dashboard_display_add_file_box">
                                 <UploadFileModal
