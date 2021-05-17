@@ -14,6 +14,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
+	"github.com/lib/pq"
 	"github.com/rs/zerolog/log"
 )
 
@@ -147,6 +148,12 @@ func (s *Server) addUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if !IsValidEmail(user.Email) {
+		log.Warn().Str("email", user.Email).Msg("not an email")
+		http.Error(w, "not a valid email", http.StatusBadRequest)
+		return 
+	}
+
 	sanitizeNewUser(&user)
 
 	// Fill in required information.
@@ -164,8 +171,16 @@ func (s *Server) addUser(w http.ResponseWriter, r *http.Request) {
 	user.Email = strings.ToLower(user.Email)
 
 	if err := s.DBHandle.AddUser(&user); err != nil {
+		if pgerr, ok := err.(*pq.Error); ok {
+			// Account already exists.
+			if pgerr.Code == "23505" {
+				log.Error().Err(err).Msg("account already exists")
+				http.Error(w, "account already exists", http.StatusConflict)
+				return
+			}
+		}
 		log.Error().Err(err).Msg("error creating user")
-		http.Error(w, fmt.Sprintf("error creating user: %s", err.Error()), http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf("error creating user: %s", err.Error()), http.StatusInternalServerError)
 		return
 	}
 
@@ -184,6 +199,7 @@ func (s *Server) addUser(w http.ResponseWriter, r *http.Request) {
 		log.Error().Err(err).Msg("error adding initial notification by user")
 	}
 
+	log.Info().Str("user", user.Email).Msg("created user")
 	RespondToRequest(w, user)
 	return
 }
@@ -414,9 +430,9 @@ func validateNewUser(user *db.User) error {
 		return errors.New("user created at is already set")
 	}
 
-	if user.FirstName == "" || user.LastName == "" || user.Password == "" || user.Email == "" {
-		return errors.New("missing required information at user creation")
-	}
+	// if user.FirstName == "" || user.LastName == "" || user.Password == "" || user.Email == "" {
+	// 	return errors.New("missing required information at user creation")
+	// }
 	return nil
 }
 

@@ -45,7 +45,7 @@ class HomePage extends React.Component {
                     <div style={{
                         backgroundColor: "white",
                         // "#EEF0F3",
-                        height: "calc(100vh - 250px)",
+                        height: "calc(100vh - 225px)",
                         paddingTop: "50px",
                         width: "100%"
                         
@@ -153,7 +153,7 @@ class HomePage extends React.Component {
                     </div>
                     <div style={{
                         backgroundColor: "#296cf6",
-                        height: "200px",
+                        height: "175px",
                         width: "100%",
                     }}>
                         <div style={{
@@ -164,7 +164,7 @@ class HomePage extends React.Component {
                             textAlign: "center",
                             width: "64%",
                         }}>
-                            <div style={{
+                            {/* <div style={{
                                 float: "left",
                                 width: "20%",
                             }}>
@@ -182,10 +182,10 @@ class HomePage extends React.Component {
                                 }}>
                                     Overview
                                 </p>
-                            </div>
+                            </div> */}
                             <div style={{
                                 float: "left",
-                                width: "20%",
+                                width: "25%",
                             }}>
                                 <BsFillHouseFill style={{
                                     color: "white",
@@ -204,7 +204,7 @@ class HomePage extends React.Component {
                             </div>
                             <div style={{
                                 float: "left",
-                                width: "20%",
+                                width: "25%",
                             }}>
                                 <SiGoogleanalytics style={{
                                     color: "white",
@@ -223,7 +223,7 @@ class HomePage extends React.Component {
                             </div>
                             <div style={{
                                 float: "left",
-                                width: "20%",
+                                width: "25%",
                             }}>
                                 <FaMoneyCheck style={{
                                     color: "white",
@@ -242,7 +242,7 @@ class HomePage extends React.Component {
                             </div>
                             <div style={{
                                 float: "left",
-                                width: "20%",
+                                width: "25%",
                             }}>
                                 <GoFileDirectory style={{
                                     color: "white",

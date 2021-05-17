@@ -73,7 +73,7 @@ class Login extends React.Component {
                     break;
                 // Not Found: Account not found
                 case 404: 
-                    unsuccessfulLoginAttemptMsg = "No Account Found for Credentialasdfasdfasdfasdfsfdasdfdsafs";
+                    unsuccessfulLoginAttemptMsg = "Invalid Email/Password combination";
                     break;
                 // Internal Server Error: Ask user to retry;
                 // TODO: Retry ourselves.
@@ -128,6 +128,7 @@ class Login extends React.Component {
                             marginLeft: "10px",
                             width: "calc(100% - 30px)",
                             wordBreak: "break-all",
+                            textAlign: "left",
                         }}>
                             {this.state.unsuccessfulLoginAttemptMsg}
                         </p>
